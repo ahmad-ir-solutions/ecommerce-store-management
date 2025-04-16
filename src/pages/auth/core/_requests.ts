@@ -1,7 +1,6 @@
 import api from '../../../services/api';
 import authApi from '../../../lib/axios';
-
-import { IAuthModel, IForgotPasswordForm, ISignUpForm, LoginFormData, OTPFormData, ResetPasswordFormData } from './_models';
+import { ForgotPasswordFormData, IAuthModel, LoginFormData, OTPFormData, RegisterFormData, ResetPasswordFormData } from './_models';
 
 const LOGIN_URL = '/auth/login';
 const REGISTER_URL = '/auth/signup';
@@ -15,11 +14,11 @@ export function login(body: LoginFormData) {
   return authApi.post<IAuthModel>(LOGIN_URL, body);
 }
 
-export function register(body: ISignUpForm) {
+export function register(body: RegisterFormData) {
   return authApi.post<IAuthModel>(REGISTER_URL, body);
 }
 
-export function forgetPassword(body: IForgotPasswordForm) {
+export function forgetPassword(body: ForgotPasswordFormData) {
   return authApi.post<IAuthModel>(FORGOT_PASSWORD_URL, body);
 }
 

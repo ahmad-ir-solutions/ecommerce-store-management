@@ -8,11 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useLogin } from "../core/hooks/useAuth"
 import { loginSchema } from "../core/_schema";
-
-interface LoginFormData {
-  email: string
-  password: string
-}
+import { LoginFormData } from "../core/_models";
 
 export default function LoginPage() {
   const { mutate, isPending: isLoading } = useLogin();
@@ -27,16 +23,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await mutate(data)
-
-      // Redirect based on user role
-      // if (user.role === "admin") {
-      //   router.push("/admin/dashboard")
-      // } else if (user.role === "seller") {
-      //   router.push("/seller/dashboard")
-      // } else {
-      //   router.push("/auth/login")
-      // }
+      await mutate(data);
     } catch (err: unknown) {
       showErrorMessage(err instanceof Error ? err.message : "Login failed. Please try again.")
     }
@@ -74,9 +61,9 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              {/* <Link to="/auth/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+              <Link to="/auth/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
                 Forgot password?
-              </Link> */}
+              </Link>
             </div>
             <PasswordInput
               id="password"

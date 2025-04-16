@@ -1,106 +1,104 @@
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import useBack from "@/hooks/use-back";
-import { PasswordInput } from "@/components/ui/PasswordInput";
-import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils";
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import loginBg from "@/assets/images/login-bg.svg";
+import { PasswordInput } from "@/components/ui/PasswordInput"
+import { showErrorMessage } from "@/lib/utils/messageUtils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useResetPassword } from "../../core/hooks/useAuth"
 import { ResetPasswordFormData } from "../../core/_models";
-import loginBg from "@/assets/images/login-bg.svg"; 
-import { formSchema } from "../../core/_schema";
-import { resetPassword } from "../../core/_requests";
+import { resetPasswordSchema } from "../../core/_schema";
 
-function ResetPassword() {
-  const { handleBack } = useBack();
+export default function ResetPasswordPage() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const email = location.state?.email;
 
-  const forgotEmail = localStorage.getItem("forgotEmail");
-  const verifiedOtp = localStorage.getItem("verifiedOtp");
+  const { mutate, isPending: isLoading } = useResetPassword();
 
-  const form = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      newPassword: "",
-      confirmNewPassword: "",
-    },
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordFormData>({
+    resolver: zodResolver(resetPasswordSchema),
   });
 
-  const onSubmit = async (values: ResetPasswordFormData) => {
-    const body = {
-      email: forgotEmail,
-      newPassword: values.newPassword,
-      otp: verifiedOtp,
-    };
-
-    await resetPassword(body);
-
+  const onSubmit = async (data: ResetPasswordFormData) => {
     try {
-      // await resetPassword(body);
-      showSuccessMessage("Successfully updated!");
-      localStorage.removeItem("forgotEmail");
-      localStorage.removeItem("verifiedOtp");
-      navigate("/auth/login");
-    } catch (error) {
-      showErrorMessage("Error while updating!");
-      console.error("Reset error:", error);
+      await mutate(data);
+      navigate("/auth/login", { state: { message: "Password reset successfully. Please log in with your new password." } });
+    } catch (err: unknown) {
+      showErrorMessage(err instanceof Error ? err.message : "Password reset failed. Please try again.")
     }
-  };
+  }
+
+  if (!email) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900">Invalid Request</h1>
+          <p className="mt-2 text-gray-600">Please start the password reset process from the beginning.</p>
+          <Link to="/auth/forgot-password" className="mt-4 inline-block text-blue-500 hover:text-blue-400">
+            Go to Forgot Password
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <section className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat" 
+    <div className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat" 
     style={{ backgroundImage: `url(${loginBg})` }}>
       <div className="w-full max-w-lg rounded-3xl bg-white p-8 shadow-md">
-        <h1 className="text-3xl pb-10 font-semibold text-black">Set New Password</h1>
+        <div className="mb-6 text-start">
+          <h1 className="text-2xl font-bold text-gray-900">Reset Your Password</h1>
+          <p className="mt-2 text-gray-600">
+            Please enter your new password below.
+          </p>
+        </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="newPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <Label htmlFor="newPassword">New Password</Label>
-                  <FormControl>
-                    <PasswordInput type="password" placeholder="New Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+              New Password*
+            </label>
+            <PasswordInput
+              id="newPassword"
+              type="password"
+              {...register("newPassword")}
+              className={`w-full ${errors.newPassword ? "border-red-500" : ""}`}
             />
+            {errors.newPassword && <p className="mt-1 text-xs text-red-600">{errors.newPassword.message}</p>}
+          </div>
 
-            <FormField
-              control={form.control}
-              name="confirmNewPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <Label htmlFor="confirmNewPassword">Confirm New Password</Label>
-                  <FormControl>
-                    <PasswordInput type="password" placeholder="Confirm Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          <div className="space-y-2">
+            <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-700">
+              Confirm New Password*
+            </label>
+            <PasswordInput
+              id="confirmNewPassword"
+              type="password"
+              {...register("confirmNewPassword")}
+              className={`w-full ${errors.confirmNewPassword ? "border-red-500" : ""}`}
             />
-            <Button variant="primary" type="submit" className="w-full mt-4">
-              Submit
-            </Button>
-            <Button variant="outline" onClick={handleBack} type="button" className="w-full rounded-3xl">
-              Cancel
-            </Button>
-          </form>
-        </Form>
+            {errors.confirmNewPassword && <p className="mt-1 text-xs text-red-600">{errors.confirmNewPassword.message}</p>}
+          </div>
+
+          <Button variant="primary" type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Resetting..." : "Reset Password"}
+          </Button>
+        </form>
+
+        <div className="mt-6 text-center text-sm">
+          <p className="text-gray-600">
+            Remember your password?{" "}
+            <Link to="/auth/login" className="font-medium text-blue-500 hover:text-blue-400">
+              Sign in
+            </Link>
+          </p>
+        </div>
       </div>
-    </section>
-  );
+    </div>
+  )
 }
-
-export default ResetPassword;

@@ -1,44 +1,11 @@
-// import { create } from 'zustand';
-
-// type User = {
-//   id: string;
-//   email: string;
-//   name: string;
-//   role: string;
-// };
-
-// type AuthState = {
-//   user: User | null;
-//   token: string | null;
-//   setUser: (user: User) => void;
-//   setToken: (token: string) => void;
-//   logout: () => void;
-// };
-
-// export const useAuthStore = create<AuthState>((set) => ({
-//   user: null,
-//   token: null,
-//   setUser: (user) => set({ user }),
-//   setToken: (token) => set({ token }),
-//   logout: () => set({ user: null, token: null }),
-// }));
-
-
-
+import { IUserModel } from '@/pages/auth/core/_models';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type User = {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-};
-
 type AuthState = {
-  user: User | null;
+  user: IUserModel | null;
   token: string | null;
-  setUser: (user: User) => void;
+  setUser: (user: IUserModel) => void;
   setToken: (token: string) => void;
   logout: () => void;
 };

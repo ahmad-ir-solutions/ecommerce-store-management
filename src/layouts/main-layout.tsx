@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom"
 import { useAuthStore } from "@/store/userStore"
 import { useNavigate } from "react-router-dom"
-import { logoutUser } from "@/pages/auth/core/_requests"
+import { logout } from "@/pages/auth/core/_requests"
 
 export default function MainLayout() {
-  const { user, clearUser } = useAuthStore()
+  const { user} = useAuthStore()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
-    await logoutUser()
-    // clearUser()
+    await logout()
     navigate("/auth/login")
   }
 

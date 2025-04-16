@@ -1,150 +1,111 @@
-import type React from "react"
-
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import registerBg from "@/assets/images/login-bg.svg";
 import { PasswordInput } from "@/components/ui/PasswordInput"
-import PasswordRequirements from "../components/passwordRequirements"
-import loginBg from "@/assets/images/login-bg.svg";
-
-interface RegisterFormData {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-}
+import { showErrorMessage } from "@/lib/utils/messageUtils"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { useRegister } from "../core/hooks/useAuth"
+import { RegisterFormData, UserRole } from "../core/_models";
+import { registerSchema } from "../core/_schema";
 
 export default function RegisterPage() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState<RegisterFormData>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  })
-  const [error, setError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { mutate, isPending: isLoading } = useRegister();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-
-    // Validate form
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      return
-    }
-
-    setIsSubmitting(true)
-
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      // In a real app, you would call an API to register the user
-      // For now, we'll just simulate a successful registration
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Redirect to login page
-      navigate("/auth/login", {
-        state: { message: "Registration successful. Please log in." },
-      })
+      await mutate(data);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message)
-      } else {
-        setError("Registration failed. Please try again.")
-      }
-    } finally {
-      setIsSubmitting(false)
+      showErrorMessage(err instanceof Error ? err.message : "Registration failed. Please try again.")
     }
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat" 
-    style={{ backgroundImage: `url(${loginBg})` }}>
+    style={{ backgroundImage: `url(${registerBg})` }}>
       <div className="w-full max-w-lg rounded-3xl bg-white p-8 shadow-md">
         <div className="mb-6 text-start">
-          <h1 className="text-2xl font-bold text-[#333333] font-sans">Create an account</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Create an account</h1>
           <p className="mt-2 text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing 
           elit. Morbi lobortis maximus</p>
         </div>
 
-        {error && <div className="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Name
+              Full Name*
             </label>
             <Input
               id="name"
-              name="name"
               type="text"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="w-full"
+              placeholder="John Doe"
+              {...register("name")}
+              className={`w-full ${errors.name ? "border-red-500" : ""}`}
             />
+            {errors.name && <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email address*
+              Email address*
             </label>
             <Input
               id="email"
-              name="email"
               type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full"
+              placeholder="your@email.com"
+              {...register("email")}
+              className={`w-full ${errors.email ? "border-red-500" : ""}`}
             />
+            {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Password
+              Password*
             </label>
             <PasswordInput
               id="password"
-              name="password"
               type="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full"
+              {...register("password")}
+              className={`w-full ${errors.password ? "border-red-500" : ""}`}
             />
+            {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              Confirm Password
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+              Role (Optional)
             </label>
-            <PasswordInput
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="w-full"
-            />
+            <select
+              id="role"
+              {...register("role")}
+              className={`w-full rounded-md border ${errors.role ? "border-red-500" : "border-gray-300"} p-2`}
+            >
+              <option value="">Select a role</option>
+              <option value={UserRole.ADMIN}>Admin</option>
+              <option value={UserRole.SELLER}>Seller</option>
+            </select>
+            {errors.role && <p className="mt-1 text-xs text-red-600">{errors.role.message}</p>}
           </div>
-          <PasswordRequirements />
-          <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Creating account..." : "Create account"}
+
+          <Button variant="primary" type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Creating account..." : "Create account"}
           </Button>
         </form>
 
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-600">
             Already have an account?{" "}
-            <Link to="/auth/login" className="font-medium text-blue-600 hover:text-blue-500">
+            <Link to="/auth/login" className="font-medium text-blue-500 hover:text-blue-400">
               Sign in
             </Link>
           </p>
