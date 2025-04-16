@@ -8,11 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Form, FormField, FormItem, FormControl, FormMessage } from "@/components/ui/form";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import useBack from "@/hooks/use-back";
-// import { verifyOtp } from "../../core/_requests";
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils";
 import { OTPFormData } from "../../core/_models";
 import { otpSchema } from "../../core/_schema";
 import loginBg from "@/assets/images/login-bg.svg";
+import { verifyOtp } from "../../core/_requests";
 
 function Verification() {
   const navigate = useNavigate();
