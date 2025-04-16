@@ -1,9 +1,15 @@
 import { Outlet } from "react-router-dom"
+import { BaseLayout } from "@/components/layouts/BaseLayout"
 
 export default function AuthLayout() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <BaseLayout
+      title="Authentication"
+      showHeader={false}
+      showUserInfo={false}
+      className="bg-[#E6EDF3]"
+    >
       <Outlet />
-    </div>
+    </BaseLayout>
   )
 }

@@ -1,45 +1,63 @@
-import { Outlet } from "react-router-dom"
-import { useAuthStore } from "@/store/userStore"
-import { useNavigate } from "react-router-dom"
-import { logout } from "@/pages/auth/core/_requests"
+import { Outlet, useLocation } from "react-router-dom"
+import { BaseLayout } from "@/components/layouts/BaseLayout"
+import { CreditCard, FileText, LayoutDashboard, PackageSearch, Store, Tags } from "lucide-react";
+import { Sidebar } from "@/components/layouts/Sidebar";
+import { useState } from "react";
 
 export default function MainLayout() {
-  const { user} = useAuthStore()
-  const navigate = useNavigate()
+  const pathname = useLocation()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
-  const handleLogout = async () => {
-    await logout()
-    navigate("/auth/login")
-  }
+
+  const sellerNavItems = [
+    {
+      title: "Dashboard",
+      href: "/seller/dashboard",
+      icon: LayoutDashboard,
+      isActive: pathname.pathname === "/seller/dashboard" || pathname.pathname === "/seller",
+    },
+    {
+      title: "Products",
+      href: "/seller/products",
+      icon: PackageSearch,
+      isActive: pathname.pathname === "/seller/products",
+    },
+    {
+      title: "Listings",
+      href: "/seller/listings",
+      icon: Tags,
+      isActive: pathname.pathname === "/seller/listings",
+    },
+    {
+      title: "Shops",
+      href: "/seller/shops",
+      icon: Store,
+      isActive: pathname.pathname === "/seller/shops",
+    },
+    {
+      title: "Payments",
+      href: "/seller/payments",
+      icon: CreditCard,
+      isActive: pathname.pathname === "/seller/payments",
+    },
+    {
+      title: "Orders",
+      href: "/seller/orders",
+      icon: FileText,
+      isActive: pathname.pathname === "/seller/orders",
+    },
+  ];
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-b bg-white shadow-sm">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold">E-commerce Store Management</h1>
+    <div className="flex min-h-screen">
+      <Sidebar mainNavItems={sellerNavItems} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
+      <div className="flex flex-1 flex-col">
+        <BaseLayout title="Seller Dashboard">
+          <div className="p-6">
+            <Outlet />
           </div>
-          {user && (
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-600">
-                Welcome, {user.name} ({user.role})
-              </span>
-              <button
-                onClick={handleLogout}
-                className="rounded-md bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-200"
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <footer className="border-t bg-white py-4 text-center text-sm text-gray-600">
-        &copy; {new Date().getFullYear()} E-commerce Store Management. All rights reserved.
-      </footer>
+        </BaseLayout>
+      </div>
     </div>
   )
 }
