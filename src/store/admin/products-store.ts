@@ -22,7 +22,7 @@ export const useProductsStore = create<ProductsState>((set) => ({
     },
     {
       id: 2,
-      sku: "608501004712",
+      sku: "608501004713",
       name: "Armaf Club De Nuit Intense Man 105ml Edt Spr",
       quantity: 102,
       revenue: 2106.96,

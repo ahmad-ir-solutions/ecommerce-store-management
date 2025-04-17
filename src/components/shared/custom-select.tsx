@@ -18,6 +18,7 @@ interface CustomSelectProps {
   options: Option[];
   onChange?: (value: string) => void;
   className?: string;
+  title?: string;
 }
 
 export const CustomSelect = ({
@@ -26,13 +27,15 @@ export const CustomSelect = ({
   options,
   onChange,
   className,
+  title,
 }: CustomSelectProps) => {
   return (
     <Select defaultValue={defaultValue} onValueChange={onChange}>
-      <SelectTrigger className={cn("w-full", className)}>
+      <div className="text-sm font-normal text-gray-500 whitespace-nowrap">{title}</div>
+      <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
-      <SelectContent className="w-full border-none bg-white">
+      <SelectContent className="w-full border-gray-100 bg-white">
         {options.map((opt) => (
           <SelectItem key={opt.value} value={opt.value}>
             {opt.label}

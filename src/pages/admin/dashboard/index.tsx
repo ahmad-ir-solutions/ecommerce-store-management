@@ -1,18 +1,19 @@
 import { useState } from "react"
 // import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { SalesChart } from "./components/sales-chart"
 import { StatsCards } from "./components/stats-cards"
 import { TopSellingProducts } from "./components/top-selling-products"
 import { SalesByChannel } from "./components/sales-by-channel"
-import { DateRangePicker } from "@/components/ui/date-range-picker"
 // import { fetchDashboardData } from "@/lib/api"
 import { TabsStats } from "./components/tabs-stats"
 import { Header } from "@/components/shared/Header"
 import { CustomSelect } from "@/components/shared/custom-select"
 // import { useQuery } from "@tanstack/react-query"
+import { subDays } from "date-fns"
+import { DatePickerWithRange } from "@/components/ui/date-range-picker"
+import { DateRange } from "react-day-picker"
 
 const companyOptions = [
   { label: 'All', value: 'all' },
@@ -27,18 +28,27 @@ const channelOptions = [
   { label: 'Onbuy', value: 'onbuy' },
 ];
 
+const unitSoldOptions = [
+  { label: 'Units', value: 'units' },
+  { label: 'Revenue', value: 'revenue' },
+  { label: 'Orders', value: 'orders' },
+  { label: 'Average Order Value', value: 'average_order_value' },
+];
+
+const graphTypeOptions = [
+  { label: 'Line', value: 'line' },
+  { label: 'Area', value: 'area' },
+];
+
 export function AdminDashboardPage() {
-  const [dateRange, setDateRange] = useState<{
-    from: Date
-    to: Date
-  }>({
-    from: new Date(2025, 1, 28),
-    to: new Date(2025, 2, 7),
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 30),
+    to: new Date(),
   })
 
   const [chartType, setChartType] = useState<"line" | "area">("area")
-  const [unitSold, setUnitSold] = useState("line")
-
+  const [unitSold, setUnitSold] = useState<"units" | "revenue" | "orders" | "average_order_value">("units")
+ 
   // const { data, isLoading } = useQuery({
   //   queryKey: ["dashboardData", dateRange],
   //   queryFn: () => fetchDashboardData(dateRange),
@@ -55,6 +65,7 @@ export function AdminDashboardPage() {
               placeholder="Company Identity"
               defaultValue="all"
               options={companyOptions}
+              title="Company Identity"
             />
           </div>
           <div className="w-0.5 h-9 bg-gray-200 bg-opacity-50 border-dashed" />
@@ -63,45 +74,50 @@ export function AdminDashboardPage() {
               placeholder="Channel"
               defaultValue="all"
               options={channelOptions}
+              title="Channel"
             />
           </div>
-        </Header>
+       </Header>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2 bg-white rounded-2xl border-none shadow-none">
-          <CardHeader className="pb-2">
+        <Card className="md:col-span-2 bg-white rounded-2xl border-none shadow-none gap-0">
+          <CardHeader className="pb-0">
             <StatsCards />
             <CardTitle className="text-lg font-medium">Sales by channel</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-between mb-4">
-              <div className="flex gap-4">
-                <Select value={unitSold} onValueChange={setUnitSold}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Unit Sold" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="line">Line</SelectItem>
-                    <SelectItem value="bar">Bar</SelectItem>
-                    <SelectItem value="area">Area</SelectItem>
-                  </SelectContent>
-                </Select>
-                <DateRangePicker dateRange={dateRange} setDateRange={setDateRange} />
-              </div>
-              <div>
-                <Select value={chartType} onValueChange={(value) => setChartType(value as "line" | "area")}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Graph Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="area">Area</SelectItem>
-                    <SelectItem value="line">Line</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="w-full flex flex-row justify-end overflow-auto">
+              <div className="flex justify-between mb-4 space-x-2">
+                <div>
+                  <CustomSelect
+                    placeholder="Unit Sold"
+                    defaultValue={unitSold}
+                    onChange={(value) => setUnitSold(value as "units" | "revenue" | "orders" | "average_order_value")}
+                    options={unitSoldOptions}
+                    title="Unit Sold"
+                    className="w-32"
+                  />
+                </div>
+                <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
+                <DatePickerWithRange date={date} setDate={setDate} className="w-62" title="Time Frame:" />
+                <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
+                <div>
+                  <CustomSelect
+                    placeholder="Graph Type:"
+                    defaultValue={chartType}
+                    onChange={(value) => setChartType(value as "line" | "area")}
+                    options={graphTypeOptions}
+                    title="Graph Type:"
+                    className="w-32"
+                  />
+                </div>
               </div>
             </div>
-            <SalesChart chartType={chartType} />
+            <SalesChart 
+              chartType={chartType} 
+              unitSold={unitSold} 
+              dateRange={date?.from && date?.to ? { from: date.from, to: date.to } : undefined} 
+            />
             <div className="flex items-center justify-center gap-8 mt-6">
               <div className="flex items-center gap-2">
                 <Checkbox id="amazon" />
