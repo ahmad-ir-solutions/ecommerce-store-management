@@ -1,6 +1,6 @@
 // src/routes/sellerRoutes.tsx
 import { lazy } from "react";
-import MainLayout from "@/layouts/main-layout";
+import MainLayout from "@/layouts/seller-layout";
 import WithSuspense from "@/routes/withSuspense";
 // import { ProtectedRoute } from "./ProtectedRoute";
 import { Navigate } from "react-router-dom";

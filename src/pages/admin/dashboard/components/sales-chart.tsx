@@ -9,12 +9,22 @@ interface SalesChartProps {
 export function SalesChart({ chartType }: SalesChartProps) {
   const { salesData } = useSalesStore()
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface TooltipProps {
+    active?: boolean;
+    payload?: {
+      name: string;
+      value: number;
+    }[];
+    label?: string;
+  }
+
+  const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
     if (active && payload && payload.length) {
       return (
+        <>
         <Card className="bg-blue-500 text-white p-2 text-sm">
           <div className="font-medium">{label}, 2025</div>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: { name: string; value: number }, index: number) => (
             <div key={`item-${index}`} className="flex justify-between gap-8 mt-1">
               <span>{entry.name}</span>
               <span>{entry.value.toString().padStart(2, "0")}</span>
@@ -24,11 +34,14 @@ export function SalesChart({ chartType }: SalesChartProps) {
             <div className="flex justify-between gap-8">
               <span>Total</span>
               <span>
-                {payload.reduce((sum: number, entry: any) => sum + (entry.value as number), 0).toLocaleString()}
+                {payload.reduce((sum: number, entry: { name: string; value: number }) => sum + entry.value, 0).toLocaleString()}
               </span>
             </div>
           </div>
         </Card>
+        <div className="w-3 h-3 bg-blue-500 rounded-full mx-auto mt-1"></div>
+        <div className="w-0.5 h-20 bg-blue-300 bg-opacity-50 mx-auto mt-1 border-dashed border-blue-300"></div>
+        </>
       )
     }
     return null
@@ -76,9 +89,9 @@ export function SalesChart({ chartType }: SalesChartProps) {
   }
 
   return (
-    <div className="w-full h-64">
+     <div className="w-full h-64">
       <ResponsiveContainer width="100%" height="100%">
-        {renderChart()}
+        {renderChart() || <div>No chart data</div>}
       </ResponsiveContainer>
     </div>
   )

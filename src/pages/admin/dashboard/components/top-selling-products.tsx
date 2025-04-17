@@ -38,7 +38,7 @@ export function TopSellingProducts() {
   ]
 
   return (
-    <Card>
+    <Card className="bg-white rounded-2xl border-none shadow-none">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-medium">Top Selling Products</CardTitle>
         <Select defaultValue="7days">

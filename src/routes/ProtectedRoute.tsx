@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/store/userStore"
+import { useAuthStore } from "@/store/authStore"
 import { Navigate } from "react-router-dom"
 
 interface ProtectedRouteProps {

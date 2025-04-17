@@ -5,12 +5,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { SalesChart } from "./components/sales-chart"
 import { StatsCards } from "./components/stats-cards"
-import { ProductStats } from "./components/product-stats"
 import { TopSellingProducts } from "./components/top-selling-products"
 import { SalesByChannel } from "./components/sales-by-channel"
 import { DateRangePicker } from "@/components/ui/date-range-picker"
 // import { fetchDashboardData } from "@/lib/api"
-import { QuickLinks } from "./components/quick-links"
+import { TabsStats } from "./components/tabs-stats"
+import { Header } from "@/components/shared/Header"
+import { CustomSelect } from "@/components/shared/custom-select"
+// import { useQuery } from "@tanstack/react-query"
+
+const companyOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Company 1', value: 'company1' },
+  { label: 'Company 2', value: 'company2' },
+];
+
+const channelOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Amazon', value: 'amazon' },
+  { label: 'Ebay', value: 'ebay' },
+  { label: 'Onbuy', value: 'onbuy' },
+];
 
 export function AdminDashboardPage() {
   const [dateRange, setDateRange] = useState<{
@@ -32,58 +47,31 @@ export function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col">
-        <div className="flex items-center justify-between bg-white p-4 rounded-3xl">
-          <div>
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            {/* <Breadcrumb /> */}
-            <div className="flex items-center text-sm text-blue-500 font-medium mt-1">
-              <span>DASHBOARD</span>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                <path
-                  fillRule="evenodd"
-                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
+       <Header
+          title="Dashboard"
+        >
+          <div className="w-48">
+            <CustomSelect
+              placeholder="Company Identity"
+              defaultValue="all"
+              options={companyOptions}
+            />
           </div>
-          <div className="flex gap-4">
-            <div className="w-48">
-              <Select defaultValue="all">
-                <SelectTrigger>
-                  <SelectValue placeholder="Company Identity" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="company1">Company 1</SelectItem>
-                  <SelectItem value="company2">Company 2</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-48">
-              <Select defaultValue="all">
-                <SelectTrigger>
-                  <SelectValue placeholder="Channel" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="amazon">Amazon</SelectItem>
-                  <SelectItem value="ebay">Ebay</SelectItem>
-                  <SelectItem value="onbuy">Onbuy</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="w-0.5 h-9 bg-gray-200 bg-opacity-50 border-dashed" />
+          <div className="w-48">
+            <CustomSelect
+              placeholder="Channel"
+              defaultValue="all"
+              options={channelOptions}
+            />
           </div>
-        </div>
+        </Header>
       </div>
 
-      <StatsCards />
-
-      <QuickLinks />
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
+        <Card className="md:col-span-2 bg-white rounded-2xl border-none shadow-none">
           <CardHeader className="pb-2">
+            <StatsCards />
             <CardTitle className="text-lg font-medium">Sales by channel</CardTitle>
           </CardHeader>
           <CardContent>
@@ -142,10 +130,8 @@ export function AdminDashboardPage() {
             </div>
           </CardContent>
         </Card>
-
-        <ProductStats />
+      <TabsStats />
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <TopSellingProducts />
         <SalesByChannel />

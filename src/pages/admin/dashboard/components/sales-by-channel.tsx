@@ -56,7 +56,7 @@ export function SalesByChannel() {
   ]
 
   return (
-    <Card>
+    <Card className="bg-white rounded-2xl border-none shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium">Overview of sales by channel</CardTitle>
       </CardHeader>

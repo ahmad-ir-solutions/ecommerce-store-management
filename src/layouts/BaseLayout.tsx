@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Header } from "./Header";
+import { TopHeader } from "../components/shared/top-header";
 
 interface BaseLayoutProps {
   children: ReactNode;
@@ -18,7 +18,7 @@ export function BaseLayout({
   return (
     <div className="flex h-screen bg-[#E6EDF3]">
       <div className="flex flex-col flex-1 overflow-hidden">
-      {showHeader && <Header />}
+      {showHeader && <TopHeader />}
         <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </div>

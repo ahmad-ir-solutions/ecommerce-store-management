@@ -1,5 +1,5 @@
 // src/routes/mainRoutes.tsx
-import MainLayout from "@/layouts/main-layout";
+import MainLayout from "@/layouts/seller-layout";
 import { Navigate } from "react-router-dom";
 
 export const mainRoutes = {

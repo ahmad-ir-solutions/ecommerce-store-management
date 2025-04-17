@@ -9,6 +9,7 @@ import {
   LucideIcon,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import logo from "@/assets/images/logo.svg"
 
 interface NavChildItem {
   title: string;
@@ -35,7 +36,7 @@ interface SidebarNavProps {
 export function Sidebar({ isOpen, 
   // setIsOpen,
    mainNavItems }: SidebarNavProps) {
-  const pathname = useLocation()
+  const location = useLocation()
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     orders: false,
     warehouse: false,
@@ -80,9 +81,18 @@ export function Sidebar({ isOpen,
         isOpen ? "w-64" : "w-16",
       )}
     >
-      <div className="flex items-center justify-start h-24">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-500">
-          <span className="text-2xl font-bold">D</span>
+      <div className="flex items-center justify-start h-24 px-4">
+        <div className="relative w-12 h-12">
+          <img 
+            src={logo} 
+            alt="Logo" 
+            className="w-full h-full object-contain"
+            style={{ 
+              imageRendering: 'crisp-edges',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden'
+            }}
+          />
         </div>
       </div>
 
@@ -118,8 +128,8 @@ export function Sidebar({ isOpen,
                         to={child.href}
                         className={cn(
                           "flex items-center px-4 py-2 text-sm rounded-md transition-colors",
-                          pathname.pathname.startsWith(child.href)
-                            ? "bg-slate-800"
+                          location.pathname.startsWith(child.href)
+                            ? "bg-slate-800 text-white"
                             : "hover:bg-slate-800 hover:text-white",
                         )}
                       >
@@ -134,7 +144,7 @@ export function Sidebar({ isOpen,
                 to={item.href || "#"}
                 className={cn(
                   "flex items-center px-4 py-3 text-sm rounded-md transition-colors",
-                  pathname.pathname.startsWith(item.href || '') || item.isActive
+                  location.pathname.startsWith(item.href || '') || item.isActive
                     ? "bg-slate-800 text-white"
                     : "hover:bg-slate-800 hover:text-white",
                 )}
@@ -155,7 +165,7 @@ export function Sidebar({ isOpen,
             to={item.href}
             className={cn(
               "flex items-center px-4 py-3 text-sm rounded-md transition-colors",
-              pathname.pathname === item.href ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white",
+              location.pathname === item.href ? "bg-slate-800 text-white" : "hover:bg-slate-800 hover:text-white",
             )}
           >
             {item.icon && <item.icon className="h-5 w-5 mr-3" />}

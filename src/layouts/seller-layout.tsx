@@ -1,10 +1,10 @@
 import { Outlet, useLocation } from "react-router-dom"
-import { BaseLayout } from "@/components/layouts/BaseLayout"
+import { BaseLayout } from "@/layouts/BaseLayout"
 import { CreditCard, FileText, LayoutDashboard, PackageSearch, Store, Tags } from "lucide-react";
-import { Sidebar } from "@/components/layouts/Sidebar";
+import { Sidebar } from "@/components/shared/Sidebar";
 import { useState } from "react";
 
-export default function MainLayout() {
+export default function SellerLayout() {
   const pathname = useLocation()
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 

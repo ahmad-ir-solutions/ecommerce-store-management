@@ -5,17 +5,19 @@ export function StatsCards() {
   const { stats } = useStatsStore()
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <Card>
-        <CardContent className="p-6">
+    <div className="flex justify-between  gap-6 border-b border-gray-200">
+      <Card className="rounded-2xl border-none shadow-none pt-0">
+        <CardContent className="p-0">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Sale</p>
             <h2 className="text-3xl font-bold">{stats.sales.toLocaleString()}</h2>
           </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent className="p-6">
+      <div className="w-0.5 h-20 bg-gray-200 bg-opacity-50 border-dashed"></div>
+
+        <Card className="rounded-2xl border-none shadow-none pt-0">
+        <CardContent className="p-0">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Revenue</p>
             <h2 className="text-3xl font-bold">
@@ -28,8 +30,10 @@ export function StatsCards() {
           </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent className="p-6">
+      <div className="w-0.5 h-20 bg-gray-200 bg-opacity-50 border-dashed"></div>
+       
+      <Card className="rounded-2xl border-none shadow-none pt-0">
+        <CardContent className="p-0">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Tax & Shipping</p>
             <h2 className="text-3xl font-bold">

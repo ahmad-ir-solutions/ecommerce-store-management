@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom"
-import { BaseLayout } from "@/components/layouts/BaseLayout"
-import { Sidebar } from "@/components/layouts/Sidebar"
+import { BaseLayout } from "@/layouts/BaseLayout"
+import { Sidebar } from "@/components/shared/Sidebar"
 import { useState } from "react"
 import { LayoutDashboard, Package, ShoppingCart, Users, Warehouse } from "lucide-react"
 
@@ -21,9 +21,8 @@ export default function AdminLayout() {
       icon: ShoppingCart,
       hasChildren: true,
       children: [
-        { title: "All Orders", href: "/admin/orders" },
-        { title: "Pending", href: "/admin/orders/pending" },
-        { title: "Completed", href: "/admin/orders/completed" },
+        { title: "Manage Order", href: "/admin/orders/manage" },
+        { title: "CSV", href: "/admin/orders/csv" },
       ],
     },
     {
@@ -37,8 +36,9 @@ export default function AdminLayout() {
       icon: Warehouse,
       hasChildren: true,
       children: [
-        { title: "Inventory", href: "/admin/warehouse/inventory" },
-        { title: "Stock Control", href: "/admin/warehouse/stock" },
+        { title: "Picking", href: "/admin/warehouse/picking" },
+        { title: "Deliveries", href: "/admin/warehouse/deliveries" },
+        { title: "Manifests", href: "/admin/warehouse/manifests" },
       ],
     },
     {
@@ -47,8 +47,8 @@ export default function AdminLayout() {
       icon: Package,
       hasChildren: true,
       children: [
-        { title: "All Products", href: "/admin/products" },
-        { title: "Categories", href: "/admin/products/categories" },
+        { title: "Suppliers", href: "/admin/products/suppliers" },
+        { title: "CSV", href: "/admin/products/csv" },
       ],
     },
   ]

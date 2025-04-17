@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import { BaseLayout } from "@/components/layouts/BaseLayout"
+import { BaseLayout } from "@/layouts/BaseLayout"
 
 export default function AuthLayout() {
   return (

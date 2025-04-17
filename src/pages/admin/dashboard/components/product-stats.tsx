@@ -40,8 +40,8 @@ export function ProductStats() {
   ]
 
   return (
-    <Card>
-      <CardContent className="p-6">
+    <Card className="border-none shadow-none pb-0">
+      <CardContent className="px-0">
         <div className="grid grid-cols-2 gap-4">
           {stats.map((stat, index) => (
             <div key={index} className="bg-slate-50 rounded-lg p-4">
