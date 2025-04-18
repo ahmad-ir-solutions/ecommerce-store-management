@@ -5,6 +5,7 @@ const authApi = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
 });
 
@@ -14,6 +15,7 @@ authApi.interceptors.request.use(
     const token = useAuthStore.getState().token;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
+      config.headers.set("ngrok-skip-browser-warning", true);
     }
     return config;
   },

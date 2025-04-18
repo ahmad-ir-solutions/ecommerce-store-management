@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/authStore';
-import { login, register, forgetPassword, verifyOtp, resetPassword, logout } from '../_requests';
+import { login, register, forgetPassword, verifyOtp, resetPassword, logout, getUser } from '../_requests';
 import { showSuccessMessage, showErrorMessage } from '@/lib/utils/messageUtils';
 import { useNavigate } from 'react-router-dom';
-import { LoginFormData, OTPFormData, ResetPasswordFormData, RegisterFormData, ForgotPasswordFormData, IAuthModel } from '../_models';
+import { LoginFormData, OTPFormData, ResetPasswordFormData, RegisterFormData, ForgotPasswordFormData, UserRole, IUserModel } from '../_models';
 import { AxiosError } from 'axios';
 
 export const useLogin = () => {
@@ -12,12 +12,39 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (data: LoginFormData) => login(data),
-    onSuccess: (res: { data: IAuthModel }) => {
-      const { user, token, message } = res.data.data;
-      setUser(user);
+    onSuccess: async (response) => {
+      const { token, message } = response.data;
+      
+      if (!token) {
+        showErrorMessage('Missing token in response');
+        return;
+      }
+
+      // First set the token so subsequent requests can use it
       setToken(token);
-      showSuccessMessage(message ? message.toString() : 'Login successful!');
-      navigate('/dashboard');
+
+      try {
+        // Fetch user data
+        const userResponse = await getUser();
+        const userData = userResponse.data;
+
+        // Add token to user data
+        const userInfo: IUserModel = {
+          ...userData,
+          token
+        };
+
+        setUser(userInfo);
+        showSuccessMessage(message || 'Login successful!');
+        
+        // Redirect based on user role
+        const dashboardPath = userData.role === UserRole.ADMIN ? '/admin/dashboard' : '/seller/dashboard';
+        navigate(dashboardPath);
+      } catch (err) {
+        console.error('Failed to fetch user data:', err);
+        showErrorMessage('Failed to fetch user data');
+        setToken('');
+      }
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || 'Login failed. Please try again.');
@@ -26,29 +53,35 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
-  const { setUser, setToken } = useAuthStore();
   const navigate = useNavigate();
 
   return useMutation({
     mutationFn: (data: RegisterFormData) => register(data),
-    onSuccess: (res: { data: IAuthModel }) => {
-      const { user, token, message } = res.data.data;
-      setUser(user);
-      setToken(token);
-      showSuccessMessage(message ? message.toString() : 'Registration successful!');
-      navigate('/dashboard');
+    onSuccess: (response) => {
+      const { message } = response.data;
+      showSuccessMessage(message || 'Registration successful! Please login.');
+      navigate('/auth/login');
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      showErrorMessage(error.response?.data?.message || 'Registration failed. Please try again.');
+    onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
+      if (error.response?.data.errors) {
+        // Show all validation errors
+        Object.values(error.response.data.errors).forEach(errorMessage => {
+          showErrorMessage(errorMessage);
+        });
+      } else {
+        showErrorMessage(error.response?.data?.message || 'Registration failed. Please try again.');
+      }
     }
   });
 };
 
 export const useForgotPassword = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: ForgotPasswordFormData) => forgetPassword(data),
-    onSuccess: (res: { data: IAuthModel }) => {
-      showSuccessMessage(res.data.data.message?.toString() || 'Password reset instructions sent to your email.');
+    onSuccess: (response) => {
+      navigate('/auth/verification');
+      showSuccessMessage(response.data.message || 'Password reset instructions sent to your email.');
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || 'Failed to send reset instructions. Please try again.');
@@ -57,10 +90,12 @@ export const useForgotPassword = () => {
 };
 
 export const useVerifyOtp = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: OTPFormData) => verifyOtp(data),
-    onSuccess: (res: { data: IAuthModel }) => {
-      showSuccessMessage(res.data.data.message?.toString() || 'OTP verified successfully.');
+    onSuccess: (response) => {
+      showSuccessMessage(response.data.message || 'OTP verified successfully.');
+      navigate('/auth/reset-password');
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || 'OTP verification failed. Please try again.');
@@ -69,10 +104,12 @@ export const useVerifyOtp = () => {
 };
 
 export const useResetPassword = () => {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: ResetPasswordFormData) => resetPassword(data),
-    onSuccess: (res: { data: IAuthModel }) => {
-      showSuccessMessage(res.data.data.message?.toString() || 'Password reset successfully.');
+    onSuccess: (response) => {
+      showSuccessMessage(response.data.message || 'Password reset successfully.');
+      navigate('/auth/login');
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || 'Password reset failed. Please try again.');

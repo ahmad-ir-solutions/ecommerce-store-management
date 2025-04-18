@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import AdminLayout from "@/layouts/admin-layout";
 import WithSuspense from "@/routes/withSuspense";
-// import { ProtectedRoute } from "./ProtectedRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { Navigate } from "react-router-dom";
 
 // Lazy load all admin pages
@@ -18,9 +18,9 @@ const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").th
 export const adminRoutes = {
   path: "/admin",
   element: (
-    // <ProtectedRoute allowedRoles={["admin"]}>
+    <ProtectedRoute allowedRoles={["ADMIN"]}>
       <AdminLayout />
-    // </ProtectedRoute>
+    </ProtectedRoute>
   ),
   children: [
     // Redirect root /admin to dashboard

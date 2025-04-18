@@ -1,223 +1,165 @@
-
-import { useEffect, useState } from "react"
-import { useQuery } from "@tanstack/react-query"
-import { useSalesStore } from "@/store/admin/sales-store"
-import { fetchDashboardData } from "@/lib/api"
+import { useState } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { ProductStats } from "./product-stats"
+import { Card, CardContent } from "@/components/ui/card"
+import { Package, ShoppingCart, Warehouse, ListFilter, MoreHorizontal } from "lucide-react"
+
 export function TabsStats() {
-  const [activeTab, setActiveTab] = useState("overview")
-  const [dateRange, setDateRange] = useState<{
-    from: Date
-    to: Date
-  }>({
-    from: new Date(2025, 1, 28),
-    to: new Date(2025, 2, 7),
-  })
+  const [activeTab, setActiveTab] = useState("products")
 
-  const { setSalesData } = useSalesStore()
+  // Mock product stats data
+  const productStats = {
+    total: 934,
+    outOfStock: 116,
+    onPurchaseOrder: 0,
+    onBackOrder: 0,
+    noWeights: 1,
+    noDimensions: 934,
+    noCountryOfManufacture: 934,
+    unitsInUnknownLocations: 0,
+  }
 
-  const { data } = useQuery({
-    queryKey: ["dashboardData", dateRange],
-    queryFn: () => fetchDashboardData(dateRange),
-  })
-
-  useEffect(() => {
-    if (data) {
-      setSalesData(data.salesData)
-    }
-  }, [data, setSalesData])
-
-  // const [selectedChannels, setSelectedChannels] = useState({
-  //   amazon: true,
-  //   ebay: true,
-  //   woocommerce: true,
-  //   shopify: true,
-  // })
-
-  // const handleChannelChange = (channel: keyof typeof selectedChannels) => {
-  //   setSelectedChannels((prev) => ({
-  //     ...prev,
-  //     [channel]: !prev[channel],
-  //   }))
-  // }
+  const stats = [
+    {
+      title: "Total Products",
+      value: productStats.total,
+      highlight: false,
+    },
+    {
+      title: "Out Of Stock Products",
+      value: productStats.outOfStock,
+      highlight: false,
+    },
+    {
+      title: "Products On Purchase Order",
+      value: productStats.onPurchaseOrder,
+      highlight: false,
+    },
+    {
+      title: "Products On Back Order",
+      value: productStats.onBackOrder,
+      highlight: false,
+    },
+    {
+      title: "No Weight",
+      value: productStats.noWeights,
+      highlight: true,
+    },
+    {
+      title: "No Dimensions",
+      value: productStats.noDimensions,
+      highlight: true,
+    },
+    {
+      title: "No Country Of Manufacture",
+      value: productStats.noCountryOfManufacture,
+      highlight: false,
+    },
+    {
+      title: "Units In Unknown Locations",
+      value: productStats.unitsInUnknownLocations,
+      highlight: false,
+    },
+  ]
 
   return (
-    <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full bg-white rounded-2xl p-4">
-    <TabsList className="grid w-full grid-cols-4 mb-4">
-      <TabsTrigger value="overview">Overview</TabsTrigger>
-      <TabsTrigger value="sales">Sales</TabsTrigger>
-      <TabsTrigger value="products">Products</TabsTrigger>
-      <TabsTrigger value="orders">Orders</TabsTrigger>
-    </TabsList>
+    <div className="w-full bg-white rounded-2xl p-4">
+      {/* Navigation Tabs */}
+      <div className="sticky top-0 bg-white z-10 pb-2">
+        <Tabs defaultValue="products" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-5 h-16 bg-white">
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <TabsTrigger
+              value="products"
+              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF] data-[state=active]:rounded-md"
+              >
+              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <Package className="h-5 w-5" />
+              </div>
+              </TabsTrigger>
+              <p className="text-xs">Products</p>
+            </div>
 
-    <TabsContent value="overview" className="space-y-6">
-    overview
-    </TabsContent>
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <TabsTrigger
+              value="orders"
+              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+              >
+              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <ShoppingCart className="h-5 w-5" />
+              </div>
+              </TabsTrigger>
+              <p className="text-xs">orders</p>
+            </div>
 
-    <TabsContent value="sales" className="space-y-6">
-    sales
-    </TabsContent>
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <TabsTrigger
+              value="warehouse"
+              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+              >
+              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <Warehouse className="h-5 w-5" />
+              </div>
+              </TabsTrigger>
+              <p className="text-xs">warehouse</p>
+            </div>
 
-    <TabsContent value="products" className="space-y-6">
-      <ProductStats />
-    </TabsContent>
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <TabsTrigger
+              value="listings"
+              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+              >
+              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <ListFilter className="h-5 w-5" />
+              </div>
+              </TabsTrigger>
+              <p className="text-xs">listings</p>
+            </div>
 
-    <TabsContent value="orders" className="space-y-6">
-    orders
-    </TabsContent>
-  </Tabs>
+            <div className="flex flex-col items-center justify-center space-y-1">
+              <TabsTrigger
+              value="others"
+              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+              >
+              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <MoreHorizontal className="h-5 w-5" />
+              </div>
+              </TabsTrigger>
+              <p className="text-xs">others</p>
+            </div>
+          </TabsList>
+
+          <TabsContent value="products" className="mt-0">
+            <Card className="border-none shadow-none">
+              <CardContent className="p-4">
+                <div className="grid grid-cols-2 gap-3">
+                  {stats.map((stat, index) => (
+                    <div key={index} className={`rounded-lg p-3 ${stat.highlight ? "bg-red-50" : "bg-slate-50"}`}>
+                      <p className="text-xs text-slate-500 mb-1">{stat.title}</p>
+                      <p className="text-2xl font-semibold">{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="orders" className="mt-0">
+            <div className="p-4 text-center text-slate-500">Orders content</div>
+          </TabsContent>
+
+          <TabsContent value="warehouse" className="mt-0">
+            <div className="p-4 text-center text-slate-500">Warehouse content</div>
+          </TabsContent>
+
+          <TabsContent value="listings" className="mt-0">
+            <div className="p-4 text-center text-slate-500">Listings content</div>
+          </TabsContent>
+
+          <TabsContent value="others" className="mt-0">
+            <div className="p-4 text-center text-slate-500">Others content</div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   )
 }
-
-// import { useState } from "react"
-// import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-// import { Card, CardContent } from "@/components/ui/card"
-// import { Package, ShoppingCart, Warehouse, ListFilter, MoreHorizontal } from "lucide-react"
-
-// export function TabsStats() {
-//   const [activeTab, setActiveTab] = useState("products")
-
-//   // Mock product stats data
-//   const productStats = {
-//     total: 934,
-//     outOfStock: 116,
-//     onPurchaseOrder: 0,
-//     onBackOrder: 0,
-//     noWeights: 1,
-//     noDimensions: 934,
-//     noCountryOfManufacture: 934,
-//     unitsInUnknownLocations: 0,
-//   }
-
-//   const stats = [
-//     {
-//       title: "Total Products",
-//       value: productStats.total,
-//       highlight: false,
-//     },
-//     {
-//       title: "Out Of Stock Products",
-//       value: productStats.outOfStock,
-//       highlight: false,
-//     },
-//     {
-//       title: "Products On Purchase Order",
-//       value: productStats.onPurchaseOrder,
-//       highlight: false,
-//     },
-//     {
-//       title: "Products On Back Order",
-//       value: productStats.onBackOrder,
-//       highlight: false,
-//     },
-//     {
-//       title: "No Weight",
-//       value: productStats.noWeights,
-//       highlight: true,
-//     },
-//     {
-//       title: "No Dimensions",
-//       value: productStats.noDimensions,
-//       highlight: true,
-//     },
-//     {
-//       title: "No Country Of Manufacture",
-//       value: productStats.noCountryOfManufacture,
-//       highlight: false,
-//     },
-//     {
-//       title: "Units In Unknown Locations",
-//       value: productStats.unitsInUnknownLocations,
-//       highlight: false,
-//     },
-//   ]
-
-//   return (
-//     <div className="w-full max-w-md mx-auto bg-white min-h-screen">
-//       {/* Navigation Tabs */}
-//       <div className="sticky top-0 bg-white z-10 pb-2">
-//         <Tabs defaultValue="products" value={activeTab} onValueChange={setActiveTab} className="w-full">
-//           <TabsList className="grid w-full grid-cols-5 h-16 bg-white">
-//             <TabsTrigger
-//               value="products"
-//               className="flex flex-col items-center justify-center space-y-1 h-full data-[state=active]:bg-transparent data-[state=active]:text-blue-600"
-//             >
-//               <div className="p-2 rounded-full data-[state=active]:bg-blue-100 flex items-center justify-center">
-//                 <Package className="h-5 w-5" />
-//               </div>
-//               <span className="text-xs">Products</span>
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="orders"
-//               className="flex flex-col items-center justify-center space-y-1 h-full data-[state=active]:bg-transparent"
-//             >
-//               <div className="p-2 rounded-full data-[state=active]:bg-blue-100 flex items-center justify-center">
-//                 <ShoppingCart className="h-5 w-5" />
-//               </div>
-//               <span className="text-xs">Orders</span>
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="warehouse"
-//               className="flex flex-col items-center justify-center space-y-1 h-full data-[state=active]:bg-transparent"
-//             >
-//               <div className="p-2 rounded-full data-[state=active]:bg-blue-100 flex items-center justify-center">
-//                 <Warehouse className="h-5 w-5" />
-//               </div>
-//               <span className="text-xs">Warehouse</span>
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="listings"
-//               className="flex flex-col items-center justify-center space-y-1 h-full data-[state=active]:bg-transparent"
-//             >
-//               <div className="p-2 rounded-full data-[state=active]:bg-blue-100 flex items-center justify-center">
-//                 <ListFilter className="h-5 w-5" />
-//               </div>
-//               <span className="text-xs">Listings</span>
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="others"
-//               className="flex flex-col items-center justify-center space-y-1 h-full data-[state=active]:bg-transparent"
-//             >
-//               <div className="p-2 rounded-full data-[state=active]:bg-blue-100 flex items-center justify-center">
-//                 <MoreHorizontal className="h-5 w-5" />
-//               </div>
-//               <span className="text-xs">Others</span>
-//             </TabsTrigger>
-//           </TabsList>
-
-//           <TabsContent value="products" className="mt-0">
-//             <Card className="border-none shadow-none">
-//               <CardContent className="p-4">
-//                 <div className="grid grid-cols-2 gap-3">
-//                   {stats.map((stat, index) => (
-//                     <div key={index} className={`rounded-lg p-3 ${stat.highlight ? "bg-red-50" : "bg-slate-50"}`}>
-//                       <p className="text-xs text-slate-500 mb-1">{stat.title}</p>
-//                       <p className="text-2xl font-semibold">{stat.value}</p>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </TabsContent>
-
-//           <TabsContent value="orders" className="mt-0">
-//             <div className="p-4 text-center text-slate-500">Orders content</div>
-//           </TabsContent>
-
-//           <TabsContent value="warehouse" className="mt-0">
-//             <div className="p-4 text-center text-slate-500">Warehouse content</div>
-//           </TabsContent>
-
-//           <TabsContent value="listings" className="mt-0">
-//             <div className="p-4 text-center text-slate-500">Listings content</div>
-//           </TabsContent>
-
-//           <TabsContent value="others" className="mt-0">
-//             <div className="p-4 text-center text-slate-500">Others content</div>
-//           </TabsContent>
-//         </Tabs>
-//       </div>
-//     </div>
-//   )
-// }

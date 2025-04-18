@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import loginBg from "@/assets/images/login-bg.svg";
@@ -9,10 +9,9 @@ import { useForgotPassword } from "../../core/hooks/useAuth"
 import { ForgotPasswordFormData } from "../../core/_models";
 import { forgotPasswordSchema } from "../../core/_schema";
 
-
 export default function ForgotPasswordPage() {
-  const { mutate, isPending: isLoading } = useForgotPassword();
-
+  const { mutate: forgotPassword, isPending: isLoading } = useForgotPassword();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,7 +22,11 @@ export default function ForgotPasswordPage() {
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      await mutate(data);
+      await forgotPassword(data, {
+        onSuccess: () => {
+          navigate('/auth/verification', { state: { email: data.email } });
+        }
+      });
     } catch (err: unknown) {
       showErrorMessage(err instanceof Error ? err.message : "Failed to send reset instructions. Please try again.")
     }

@@ -10,11 +10,13 @@ import { ResetPasswordFormData } from "../../core/_models";
 import { resetPasswordSchema } from "../../core/_schema";
 
 export default function ResetPasswordPage() {
-  const location = useLocation();
+  const { mutate: resetPassword, isPending: isLoading } = useResetPassword();
   const navigate = useNavigate();
+  const location = useLocation();
+  // Attempt to get email and OTP from location state
   const email = location.state?.email;
+  const otp = location.state?.otp; 
 
-  const { mutate, isPending: isLoading } = useResetPassword();
 
   const {
     register,
@@ -25,27 +27,26 @@ export default function ResetPasswordPage() {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    try {
-      await mutate(data);
-      navigate("/auth/login", { state: { message: "Password reset successfully. Please log in with your new password." } });
-    } catch (err: unknown) {
-      showErrorMessage(err instanceof Error ? err.message : "Password reset failed. Please try again.")
+    // Check if API requires email/otp. Adjust payload accordingly.
+    const payload = { 
+      ...data,
+      email: email, // Include email if needed by API
+      otp: otp      // Include OTP if needed by API
+    };
+    
+    if (!email || !otp) {
+      showErrorMessage("Missing required information. Please try the forgot password process again.");
+      navigate('/auth/forgot-password');
+      return;
     }
-  }
 
-  if (!email) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Invalid Request</h1>
-          <p className="mt-2 text-gray-600">Please start the password reset process from the beginning.</p>
-          <Link to="/auth/forgot-password" className="mt-4 inline-block text-blue-500 hover:text-blue-400">
-            Go to Forgot Password
-          </Link>
-        </div>
-      </div>
-    );
-  }
+    try {
+      await resetPassword(payload);
+    } catch (err: unknown) {
+      showErrorMessage(err instanceof Error ? err.message : "Password reset failed.");
+    }
+  };
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat" 

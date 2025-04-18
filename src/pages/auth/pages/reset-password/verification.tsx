@@ -9,13 +9,14 @@ import { OTPFormData } from "../../core/_models";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { otpSchema } from "../../core/_schema";
 
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 export default function VerificationPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email;
 
-  const { mutate, isPending: isLoading } = useVerifyOtp();
+  const { mutate: verifyOtp, isPending: isLoading } = useVerifyOtp();
 
   const {
     handleSubmit,
@@ -23,34 +24,27 @@ export default function VerificationPage() {
     setValue,
   } = useForm<OTPFormData>({
     resolver: zodResolver(otpSchema),
+    defaultValues: {
+      otp: '',
+    },
   });
 
   const onSubmit = async (data: OTPFormData) => {
+    const payload = { ...data, email }; 
     try {
-      await mutate(data);
-      navigate("/auth/reset-password", { state: { email } });
+      await verifyOtp(payload, {
+        onSuccess: () => {
+          navigate('/auth/reset-password', { state: { email: email, otp: data.otp } }); 
+        }
+      });
     } catch (err: unknown) {
-      showErrorMessage(err instanceof Error ? err.message : "OTP verification failed. Please try again.")
+      showErrorMessage(err instanceof Error ? err.message : "OTP verification failed.");
     }
-  }
+  };
 
   const handleOTPComplete = (value: string) => {
     setValue("otp", value);
   };
-
-  if (!email) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Invalid Request</h1>
-          <p className="mt-2 text-gray-600">Please start the password reset process from the beginning.</p>
-          <Link to="/auth/forgot-password" className="mt-4 inline-block text-blue-500 hover:text-blue-400">
-            Go to Forgot Password
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat" 
@@ -69,7 +63,7 @@ export default function VerificationPage() {
             <label className="block text-sm font-medium text-gray-700">
               Verification Code*
             </label>
-            <InputOTP
+            {/* <InputOTP
               maxLength={6}
               onComplete={handleOTPComplete}
               render={({ slots }) => (
@@ -79,7 +73,17 @@ export default function VerificationPage() {
                   ))}
                 </InputOTPGroup>
               )}
-            />
+            /> */}
+           <InputOTP maxLength={6} onComplete={handleOTPComplete} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
             {errors.otp && <p className="mt-1 text-xs text-red-600">{errors.otp.message}</p>}
           </div>
 
