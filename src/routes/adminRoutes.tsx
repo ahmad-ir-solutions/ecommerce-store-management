@@ -12,6 +12,7 @@ const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(mod
 const PickingPage = lazy(() => import("@/pages/admin/warehouse/pages/picking").then(module => ({ default: module.PickingPage })));
 const DeliveriesPage = lazy(() => import("@/pages/admin/warehouse/pages/deliveries").then(module => ({ default: module.DeliveriesPage })));
 const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests").then(module => ({ default: module.ManifestsPage })));
+const AllProductsPage = lazy(() => import("@/pages/admin/products/pages/all-products").then(module => ({ default: module.AllProductsPage })));
 const SuppliersPage = lazy(() => import("@/pages/admin/products/pages/suppliers").then(module => ({ default: module.SuppliersPage })));
 const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").then(module => ({ default: module.ProductsCsvPage })));
           
@@ -58,7 +59,8 @@ export const adminRoutes = {
       path: "products",
       children: [
         // Redirect /admin/products to /admin/products/suppliers
-        { index: true, element: <Navigate to="/admin/products/suppliers" replace /> },
+        { index: true, element: <Navigate to="/admin/products/all-products" replace /> },
+        { path: "all-products", element: <WithSuspense><AllProductsPage /></WithSuspense> },
         { path: "suppliers", element: <WithSuspense><SuppliersPage /></WithSuspense> },
         { path: "csv", element: <WithSuspense><ProductsCsvPage /></WithSuspense> },
       ]

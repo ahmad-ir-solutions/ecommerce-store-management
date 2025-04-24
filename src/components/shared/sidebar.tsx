@@ -10,6 +10,8 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import logo from "@/assets/images/logo.svg"
+import { Button } from "../ui/button"
+import { useAuthStore } from "@/store/authStore"
 
 interface NavChildItem {
   title: string;
@@ -43,6 +45,10 @@ export function Sidebar({ isOpen,
     products: false,
   })
 
+  const handleLogout = () => {
+    useAuthStore.getState().logout()
+  }
+
   const toggleItem = (key: string) => {
     setExpandedItems((prev) => ({
       ...prev,
@@ -66,11 +72,6 @@ export function Sidebar({ isOpen,
       title: "Billing",
       href: "/billing",
       icon: CreditCard,
-    },
-    {
-      title: "Logout",
-      href: "/logout",
-      icon: LogOut,
     },
   ]
 
@@ -158,7 +159,7 @@ export function Sidebar({ isOpen,
       </nav>
 
       {/* Bottom navigation items */}
-      <nav className="space-y-1 px-2 py-4 mt-auto">
+      <nav className="space-y-1 px-2 mt-auto">
         {bottomNavItems.map((item) => (
           <Link
             key={item.href}
@@ -173,6 +174,12 @@ export function Sidebar({ isOpen,
           </Link>
         ))}
       </nav>
+      <Button className="mx-2 mt-2 mb-4 shadow-none hover:bg-[#1d293d] hover:text-white text-center cursor-pointer py-3 px-4 h-11"	 onClick={handleLogout}>
+        <div className="flex items-center justify-start w-full">
+          <LogOut className="h-5 w-5 mr-3" />
+          Logout
+        </div>
+      </Button>
     </div>
   )
 }

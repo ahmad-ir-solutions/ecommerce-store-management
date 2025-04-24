@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { BaseLayout } from "@/layouts/BaseLayout"
-import { Sidebar } from "@/components/shared/Sidebar"
+import { Sidebar } from "@/components/shared/sidebar"
 import { useState } from "react"
 import { LayoutDashboard, Package, ShoppingCart, Users, Warehouse } from "lucide-react"
 
@@ -47,6 +47,7 @@ export default function AdminLayout() {
       icon: Package,
       hasChildren: true,
       children: [
+        { title: "All Products", href: "/admin/products/all-products" },
         { title: "Suppliers", href: "/admin/products/suppliers" },
         { title: "CSV", href: "/admin/products/csv" },
       ],
