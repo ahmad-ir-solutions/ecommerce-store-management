@@ -2,6 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Settings, Trash2 } from "lucide-react";
 import { CustomSelect } from "@/components/shared/custom-select";
+import { Link } from "react-router-dom";
 
 
 interface SupplierInformationProps {
@@ -73,10 +74,10 @@ export const SupplierInformation: React.FC<SupplierInformationProps> = ({ isEdit
                       <td className="p-2">
                         {/* {!isEditing && ( */}
                             <div className="flex items-center space-x-3 justify-end">
-                          <Button variant="filter" size="sm" className="rounded-lg">
+                          <Link to="/admin/products/add-supplier" className="flex items-center rounded-lg bg-gray-300 text-[#11263C] px-3 py-[6.5px] font-medium whitespace-nowrap text-sm">
                             + Add Supplier
-                          </Button>
-                          <Button variant="primary" size="sm" className="rounded-sm"><Trash2/></Button>
+                          </Link>
+                          <Button variant="primary" size="sm" className="rounded-lg"><Trash2/></Button>
                           </div>
                         {/* )} */}
                       </td>
@@ -84,13 +85,6 @@ export const SupplierInformation: React.FC<SupplierInformationProps> = ({ isEdit
                   </tbody>
                 </table>
               </div>
-              {isEditing && (
-                <div className="mt-4 text-right">
-                  <Button variant="outline" size="sm" className="text-blue-500">
-                    + Add Supplier
-                  </Button>
-                </div>
-              )}
             </div>
     );
   };

@@ -4,14 +4,6 @@ import { CustomSelect } from "@/components/shared/custom-select"
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-interface Product {
-  id: number
-  sku: string
-  name: string
-  quantity: number
-  revenue: number
-}
-
 export function TopSellingProducts() {
   const { topSellingProducts } = useProductsStore()
   const [timePeriod, setTimePeriod] = useState("7days")
@@ -44,9 +36,18 @@ export function TopSellingProducts() {
         <CustomSelect
           placeholder="Select time period"
           options={[
-            { label: "Last 7 Days", value: "7days" },
-            { label: "Last 30 Days", value: "30days" },
-            { label: "Last 90 Days", value: "90days" },
+            {
+              label: "Last 7 Days", value: "7days",
+              id: "1"
+            },
+            {
+              label: "Last 30 Days", value: "30days",
+              id: "2"
+            },
+            {
+              label: "Last 90 Days", value: "90days",
+              id: "3"
+            },
           ]}
           onChange={(value) => setTimePeriod(value)}
           className="w-[180px]"

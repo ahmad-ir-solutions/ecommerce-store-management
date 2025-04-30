@@ -14,6 +14,8 @@ const DeliveriesPage = lazy(() => import("@/pages/admin/warehouse/pages/deliveri
 const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests").then(module => ({ default: module.ManifestsPage })));
 const AllProductsPage = lazy(() => import("@/pages/admin/products/pages/all-products").then(module => ({ default: module.AllProductsPage })));
 const SuppliersPage = lazy(() => import("@/pages/admin/products/pages/suppliers").then(module => ({ default: module.SuppliersPage })));
+const AddSupplierPage = lazy(() => import("@/pages/admin/products/pages/add-supplier").then(module => ({ default: module.AddSupplierPage })));
+const SupplierDetailsPage = lazy(() => import("@/pages/admin/products/pages/supplier-details").then(module => ({ default: module.SupplierDetailsPage })));
 const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").then(module => ({ default: module.ProductsCsvPage })));
 const ProductDetailsPage = lazy(() => import("@/pages/admin/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
           
@@ -64,8 +66,10 @@ export const adminRoutes = {
         { path: "all-products", element: <WithSuspense><AllProductsPage /></WithSuspense> },
         { path: "suppliers", element: <WithSuspense><SuppliersPage /></WithSuspense> },
         { path: "csv", element: <WithSuspense><ProductsCsvPage /></WithSuspense> },
+        { path: "add-supplier", element: <WithSuspense><AddSupplierPage /></WithSuspense> },
         // Dynamic product route
         { path: ":productId", element: <WithSuspense><ProductDetailsPage /></WithSuspense> },
+        { path: "supplier-details/:supplierId", element: <WithSuspense><SupplierDetailsPage /></WithSuspense> },
       ]
     },
   ],

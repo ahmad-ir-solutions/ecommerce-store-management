@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { productSchema } from "./_schema"
+import { csvFormSchema, productSchema } from "./_schema"
 
 export interface topSellingProduct {
   id: number
@@ -81,3 +81,88 @@ export interface FilterCondition {
   
 
 export type ProductFormValues = z.infer<typeof productSchema>
+
+
+export type FormValues = z.infer<typeof csvFormSchema>
+
+// ------------suppliers
+
+// Define the supplier type based on our form schema
+export type Supplier = {
+  supplierName: string
+  address: string
+  address2?: string
+  city: string
+  countryState?: string
+  country: string
+  postcode: string
+  phone?: string
+  supplierCode?: string
+  supplierCurrency: string
+  supplierReference?: string
+  supplierEmail?: string
+  commaDelimitedEmails?: string
+  leadTime?: string
+  minimumOrderValue?: string
+  purchaseOrderMode?: string
+  isManufacturer: boolean
+  contactEmail?: string
+  sendEmailWhenProductBelowReorderLevel: boolean
+  sendEmailWhenProductBelowOutOfStockThreshold: boolean
+  includeProductsEqualToReorderLevel: boolean
+  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean
+  purchaseOrderShippingCostType?: string
+  purchaseOrderChangeToStatus?: string
+  totalPurchaseOrderShippingCost?: string
+  dropShipmentShippingCostType?: string
+  dropShipmentChangeToStatus?: string
+  totalDropShipmentShippingCost?: string
+  includeSupplierInRequisitions: boolean
+  consolidateDropshipSupplierEmails: boolean
+  transferMethod?: string
+  exportMethod?: string
+  templateType?: string
+  defaultExportMethod: boolean
+  exportDelimiter?: string
+  exportHeaders: boolean
+  id?: string
+}
+
+export interface SupplierFormValues {
+  supplierName: string;
+  address: string;
+  city: string;
+  country: string;
+  postcode: string;
+  supplierCurrency: string;
+  isManufacturer: boolean;
+  sendEmailWhenProductBelowReorderLevel: boolean;
+  sendEmailWhenProductBelowOutOfStockThreshold: boolean;
+  includeProductsEqualToReorderLevel: boolean;
+  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean;
+  includeSupplierInRequisitions: boolean;
+  consolidateDropshipSupplierEmails: boolean;
+  address2?: string;
+  countryState?: string;
+  phone?: string;
+  supplierCode?: string;
+  supplierReference?: string;
+  commaDelimitedEmails?: string;
+  minimumOrderValue?: string;
+  supplierEmail?: string;
+  contactEmail?: string;
+  leadTime?: string;
+  purchaseOrderMode?: string;
+  purchaseOrderShippingCostType?: string;
+  purchaseOrderChangeToStatus?: string;
+  totalPurchaseOrderShippingCost?: string;
+  dropShipmentShippingCostType?: string;
+  dropShipmentChangeToStatus?: string;
+  totalDropShipmentShippingCost?: string;
+  transferMethod?: string;
+  exportMethod?: string;
+  templateType?: string;
+  defaultExportMethod?: boolean;
+  exportDelimiter?: string;
+  exportHeaders?: boolean;
+}
