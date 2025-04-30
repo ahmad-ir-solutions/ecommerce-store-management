@@ -1,4 +1,5 @@
-import { ProductItem } from "@/types/product"
+import { ProductItem } from "./_modals"
+
 
 export async function fetchInventory(): Promise<ProductItem[]> {
   // In a real app, this would be an API call

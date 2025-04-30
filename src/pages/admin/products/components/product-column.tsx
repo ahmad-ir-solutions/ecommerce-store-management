@@ -3,8 +3,8 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
 import UserProfile from "../../../../assets/images/avatar.png"
-import { Button } from "@/components/ui/button"
 import { ProductItem } from "../core/_modals"
+import { Link } from "react-router-dom"
 
 export function useProductColumns(): ColumnDef<ProductItem>[] {
   return [
@@ -69,17 +69,17 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
             onMouseLeave={() => setIsHovered(false)}
           >
             <div>
-              <Button variant="link" onClick={() => (window.location.href = `/products/edit/${row.original.sku}`)} className="font-medium">{row.original.sku}</Button>
+              <Link to={`/admin/products/${row.original.id}`}  className="text-blue-500 hover:text-blue-700 hover:underline">{row.original.sku}</Link>
             </div>
 
             {isHovered && (
               <div className="absolute left-0 -bottom-8 flex space-x-2 bg-white shadow-sm p-2 rounded z-10">
-                <button
-                  onClick={() => (window.location.href = `/products/edit/${row.original.sku}`)}
+                <Link
+                  to={`/admin/products/${row.original.id}`}
                   className="text-blue-500 hover:text-blue-700 text-xs"
                 >
                   Edit
-                </button>
+                </Link>
                 <button
                   onClick={() =>
                     window.dispatchEvent(new CustomEvent("open-delete-modal", { detail: row.original }))

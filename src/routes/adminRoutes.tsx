@@ -15,6 +15,7 @@ const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests
 const AllProductsPage = lazy(() => import("@/pages/admin/products/pages/all-products").then(module => ({ default: module.AllProductsPage })));
 const SuppliersPage = lazy(() => import("@/pages/admin/products/pages/suppliers").then(module => ({ default: module.SuppliersPage })));
 const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").then(module => ({ default: module.ProductsCsvPage })));
+const ProductDetailsPage = lazy(() => import("@/pages/admin/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
           
 export const adminRoutes = {
   path: "/admin",
@@ -63,6 +64,8 @@ export const adminRoutes = {
         { path: "all-products", element: <WithSuspense><AllProductsPage /></WithSuspense> },
         { path: "suppliers", element: <WithSuspense><SuppliersPage /></WithSuspense> },
         { path: "csv", element: <WithSuspense><ProductsCsvPage /></WithSuspense> },
+        // Dynamic product route
+        { path: ":productId", element: <WithSuspense><ProductDetailsPage /></WithSuspense> },
       ]
     },
   ],

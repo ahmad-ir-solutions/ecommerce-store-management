@@ -24,16 +24,16 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
   return (
       <div>
         <h1 className="text-3xl font-semibold mb-1">{title}</h1>
-        <Breadcrumb className='flex items-center text-sm font-medium'>
+        <Breadcrumb className='flex items-center text-sm font-medium flex-now-wrap'>
           {breadcrumbs.map((crumb, index) => (
-            <span key={crumb.href} className="flex items-center text-sm font-medium uppercase">
+            <span key={crumb.href} className="flex items-center text-xs font-medium uppercase">
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
                   <Link
                     to={crumb.href}
                     className={cn(
-                      'text-gray-500 hover:text-gray-700',
-                      index === breadcrumbs.length - 1 && 'text-blue-500 font-medium'
+                      'text-gray-400 hover:text-gray-700',
+                      index === breadcrumbs.length - 1 && 'text-blue-500 text-xs font-semibold whitespace-nowrap'
                     )}
                   >
                     {crumb.label}
@@ -41,7 +41,7 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {index < breadcrumbs.length - 1 && (
-                <ChevronRightIcon className='w-4 h-4 text-gray-500 mx-2' />
+                <ChevronRightIcon className='w-4 h-4 text-gray-400 mx-1' />
               )}
             </span>
           ))}

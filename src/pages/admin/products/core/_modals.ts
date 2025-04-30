@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { productSchema } from "./_schema"
+
 export interface topSellingProduct {
   id: number
   sku: string
@@ -76,3 +79,5 @@ export interface FilterCondition {
   value: string
 }
   
+
+export type ProductFormValues = z.infer<typeof productSchema>
