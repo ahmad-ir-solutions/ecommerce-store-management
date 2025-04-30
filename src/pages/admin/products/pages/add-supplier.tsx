@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
 import { ChevronDown, Plus } from "lucide-react"
 
 import { Header } from "@/components/shared/header"
@@ -18,7 +17,6 @@ import { showErrorMessage, showInfoMessage, showSuccessMessage } from "@/lib/uti
 import { SupplierFormValues } from "../core/_modals"
 
 export const AddSupplierPage = () => {
-  const navigate = useNavigate()
   const addSupplier = useSupplierStore((state) => state.addSupplier)
 
   const form = useForm<SupplierFormValues>({

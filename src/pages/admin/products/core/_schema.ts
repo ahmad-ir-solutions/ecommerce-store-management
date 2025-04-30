@@ -54,9 +54,9 @@ export const supplierSchema = z.object({
   transferMethod: z.string().optional(),
   exportMethod: z.string().optional(),
   templateType: z.string().optional(),
-  defaultExportMethod: z.boolean().optional(),
+  defaultExportMethod: z.boolean(),
   exportDelimiter: z.string().optional(),
-  exportHeaders: z.boolean().optional(),
+  exportHeaders: z.boolean(),
 });
 
 

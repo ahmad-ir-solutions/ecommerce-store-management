@@ -162,7 +162,7 @@ export interface SupplierFormValues {
   transferMethod?: string;
   exportMethod?: string;
   templateType?: string;
-  defaultExportMethod?: boolean;
+  defaultExportMethod: boolean;
   exportDelimiter?: string;
-  exportHeaders?: boolean;
+  exportHeaders: boolean;
 }
