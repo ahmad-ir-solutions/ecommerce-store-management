@@ -8,10 +8,10 @@ import {
 import { cn } from '@/lib/utils';
 
 interface Option {
+  id: string;
   label: string;
   value: string;
 }
-
 interface CustomSelectProps {
   placeholder: string;
   defaultValue?: string;
@@ -33,7 +33,7 @@ export const CustomSelect = ({
     <Select defaultValue={defaultValue} onValueChange={onChange}>
       <div className="text-sm font-normal text-gray-500 whitespace-nowrap">{title}</div>
       <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder}/>
       </SelectTrigger>
       <SelectContent className="w-full border-gray-100 bg-white">
         {options.map((opt) => (

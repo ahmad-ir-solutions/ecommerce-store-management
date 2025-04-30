@@ -1,5 +1,5 @@
+import AllProductsPage from "./pages/all-products";
 import SuppliersPage from "./pages/suppliers";
 import ProductsCsvPage from "./pages/csv";
 
-
-export { SuppliersPage, ProductsCsvPage };
+export {AllProductsPage ,SuppliersPage, ProductsCsvPage };

@@ -21,6 +21,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         primary:
         "bg-[#3D8BFF] text-white shadow-xs rounded-3xl hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        filter:
+        "bg-[#E6EDF3] text-[#11263C] shadow-xs rounded-md hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

@@ -1,6 +1,5 @@
 import { useState } from "react"
-import { Bell, ChevronDown, ChevronLeft, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Bell, ChevronDown, ChevronLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import UserProfile from "../../assets/images/avatar.png"
 import useBack from "@/hooks/use-back"
+import { CustomSearch } from "./custom-search"
 
 export function TopHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,14 +24,7 @@ export function TopHeader() {
         <ChevronLeft />
       </Button>
       <div className="flex items-center justify-end h-16 px-6 gap-6">
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-          <Input
-            type="search"
-            placeholder="Search for orders, products, pages, actions & help"
-            className="w-full pl-9 rounded-md border-slate-100 bg-white"
-          />
-        </div>
+        <CustomSearch onClick={() => {}} placeholder="Search for orders, products, pages, actions & help" />
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="text-[#172E45] relative bg-white">
             <Bell className="h-6 w-6" />
