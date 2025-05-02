@@ -1,47 +1,42 @@
-export interface DashboardData {
-    data: any;
-    currentPage: number;
-    pageSize: number;
-    totalItems: number;
-    totalPages: number;
-    isSuccess: boolean;
+export interface Customer {
+  id: string
+  name: string
+  firstName?: string
+  lastName?: string
+  email: string
+  ccEmail?: string
+  phoneNumber?: string
+  reference: string
+  vatNumber?: string
+  eori?: string
+  tags?: string[]
+  notes?: string
+  order: {
+    numbers: number
+    average: number
+    total: number
   }
-  
-  export interface DashboardDataParams {
-    limit: number;
-    page: number;
-    search: string;
-  }
-
-
-  interface ClientDetails {
-    _id: string;
-    name: string;
+  channel: string
+  shippingAddress?: Address
+  billingAddress: Address
+  orders?: Order[]
 }
 
-interface Case {
-    _id: string;
-    serviceId: string;
-    client: string;
-    clientDetails: ClientDetails;
-    caseType: string;
-    status: number;
-    isActive: boolean;
-    isDeleted: boolean;
-    createdAt: string; // ISO date string
-    updatedAt: string; // ISO date string
+export interface Address {
+  firstName?: string
+  lastName?: string
+  company?: string
+  line1: string
+  line2?: string
+  city?: string
+  state?: string
+  postalCode?: string
+  country: string
 }
 
-interface LatestCases {
-    message: string;
-    data: Case[];
-}
-
-export interface CaseCounts {
-    completedCount: number;
-    inProgressCount: number;
-    pendingCount: number;
-    latestCreatedCases: LatestCases;
-    latestUpdatedCases: LatestCases;
-    caseTypeCounts: any;
+export interface Order {
+  id: string
+  date: string
+  status: string
+  total: number
 }

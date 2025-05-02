@@ -1,12 +1,15 @@
-import { Header } from "@/components/shared/Header";
+import { Header } from "@/components/shared/header";
+import { Customers } from "./components/customers";
+import { CustomerDetails } from "./components/customer-details";
 
-export function AdminCustomersPage() {
+export function AdminCustomersPage({ params }: { params: { id: string } }) {
   return (
     <div>
       <Header title="Customers" />
       <div className="mt-6">
         {/* Add your customers table or list component here */}
-        <h2 className="text-2xl font-semibold">Customers</h2>
+        <Customers/>
+        <CustomerDetails customerId="cust_2" />
       </div>
     </div>
   );
