@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
-import { ChevronDown, Plus } from "lucide-react"
 
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
@@ -9,12 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useSupplierStore } from "@/store/admin/supplier-store"
 import { supplierSchema } from "../core/_schema"
 import { showErrorMessage, showInfoMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { SupplierFormValues } from "../core/_modals"
+import { CustomSelect } from "@/components/shared/custom-select"
 
 export const AddSupplierPage = () => {
   const addSupplier = useSupplierStore((state) => state.addSupplier)
@@ -78,6 +77,8 @@ export const AddSupplierPage = () => {
   })
 
   const onSubmit = (data: SupplierFormValues) => {
+    console.log(data, "data")	;
+    
     mutate(data)
   }
 
@@ -86,109 +87,111 @@ export const AddSupplierPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="flex justify-between items-center mb-6">
-        <Header title="Products" />
-        <div className="flex items-center">
-          <span className="text-sm text-muted-foreground mr-2">Suppliers</span>
-          <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        </div>
-        <Button className="bg-blue-500 hover:bg-blue-600">
-          <Plus className="h-4 w-4 mr-2" /> Add Supplier
-        </Button>
-      </div>
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <div>
+      <Header title="Products"/>
+      <div className="mt-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-[#4E5967]">
         {/* Order Information */}
-        <Card>
+        <Card className="bg-white border-0 shadow-xs rounded-2xl">
           <CardHeader>
-            <CardTitle>Order Information</CardTitle>
+            <CardTitle className="text-[#11263C]">Order Information</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
             <div className="space-y-4">
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="supplierName">Supplier Name *</Label>
-                <Input
-                  id="supplierName"
-                  {...form.register("supplierName")}
-                  className={form.formState.errors.supplierName ? "border-red-500" : ""}
-                />
-                {form.formState.errors.supplierName && (
-                  <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierName.message}</p>
-                )}
+                <div>
+                  <Input
+                    id="supplierName"
+                    {...form.register("supplierName")}
+                    className={form.formState.errors.supplierName ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
+                  />
+                  {form.formState.errors.supplierName && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierName.message}</p>
+                  )}
+                </div>
+                
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4" >
                 <Label htmlFor="address2">Address 2</Label>
-                <Input id="address2" {...form.register("address2")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="countryState">Country/State</Label>
-                <Input id="countryState" {...form.register("countryState")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="countryState" {...form.register("countryState")} />
               </div>
 
               <div className="flex items-end gap-2">
-                <div className="flex-1">
+                <div className="flex-1 grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="postcode">Postcode/Zip Code *</Label>
-                  <Input
+                 <div>
+                 <div className="flex items-center gap-3">
+                 <Input
                     id="postcode"
                     {...form.register("postcode")}
-                    className={form.formState.errors.postcode ? "border-red-500" : ""}
+                    className={form.formState.errors.postcode ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
                   />
+                 <Button type="button" variant="link" className="underline text-[#4E5967] p-0 text-md" onClick={findEmail}>
+                  Find Email
+                </Button>
+                 </div>
                   {form.formState.errors.postcode && (
                     <p className="text-red-500 text-sm mt-1">{form.formState.errors.postcode.message}</p>
                   )}
+                 </div>
                 </div>
-                <Button type="button" variant="outline" onClick={findEmail} className="mb-[2px]">
-                  Find Email
-                </Button>
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="supplierCode">Supplier Code</Label>
-                <Input id="supplierCode" {...form.register("supplierCode")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
               </div>
 
-              <div>
-                <Label htmlFor="supplierCurrency">Supplier Currency</Label>
-                <Select
-                  defaultValue={form.getValues("supplierCurrency")}
-                  onValueChange={(value) => form.setValue("supplierCurrency", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select currency" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="British Pound">British Pound</SelectItem>
-                    <SelectItem value="US Dollar">US Dollar</SelectItem>
-                    <SelectItem value="Euro">Euro</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="supplierCurrency">Supplier Currency</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("supplierCurrency")}
+                    placeholder="Select currency"
+                    options={[
+                      { id: "GBP", label: "British Pound", value: "British Pound" },
+                      { id: "USD", label: "US Dollar", value: "US Dollar" },
+                      { id: "EUR", label: "Euro", value: "Euro" },
+                    ]}
+                    onChange={(value) => form.setValue("supplierCurrency", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="commaDelimitedEmails">Comma Delimited Email Addresses To Send To</Label>
-                <Input id="commaDelimitedEmails" {...form.register("commaDelimitedEmails")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="commaDelimitedEmails" {...form.register("commaDelimitedEmails")} />
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="minimumOrderValue">Minimum Order Value</Label>
-                <Input id="minimumOrderValue" {...form.register("minimumOrderValue")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="minimumOrderValue" {...form.register("minimumOrderValue")} />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel">
                   Send Email When Product Below Reorder Level
                 </Label>
                 <Switch
                   id="sendEmailWhenProductBelowReorderLevel"
                   checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
-                  onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowReorderLevel", checked)}
+                  onCheckedChange={(checked) =>
+                    form.setValue("sendEmailWhenProductBelowReorderLevel", checked)
+                  }
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowOutOfStockThreshold">
                   Send Email When Product Below Out of Stock Threshold
                 </Label>
@@ -199,7 +202,7 @@ export const AddSupplierPage = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="includeProductsEqualToReorderLevel">Include Products Equal To Reorder Level</Label>
                 <Switch
                   id="includeProductsEqualToReorderLevel"
@@ -208,7 +211,7 @@ export const AddSupplierPage = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="excludeOutOfStockProductsWithZeroManualReorderLevel" className="text-sm">
                   Exclude Out of Stock Products With Zero Manual Reorder Level
                 </Label>
@@ -223,94 +226,105 @@ export const AddSupplierPage = () => {
             </div>
 
             <div className="space-y-4">
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="address">Address *</Label>
+                <div>
                 <Input
                   id="address"
                   {...form.register("address")}
-                  className={form.formState.errors.address ? "border-red-500" : ""}
+                  className={form.formState.errors.address ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
                 />
                 {form.formState.errors.address && (
                   <p className="text-red-500 text-sm mt-1">{form.formState.errors.address.message}</p>
                 )}
+                </div>
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="city">City *</Label>
+                <div>
                 <Input
                   id="city"
                   {...form.register("city")}
-                  className={form.formState.errors.city ? "border-red-500" : ""}
+                  className={form.formState.errors.city ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
                 />
                 {form.formState.errors.city && (
                   <p className="text-red-500 text-sm mt-1">{form.formState.errors.city.message}</p>
                 )}
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="country">Country</Label>
-                <Select
-                  defaultValue={form.getValues("country")}
-                  onValueChange={(value) => form.setValue("country", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="UK">UK</SelectItem>
-                    <SelectItem value="US">US</SelectItem>
-                    <SelectItem value="Canada">Canada</SelectItem>
-                    <SelectItem value="Australia">Australia</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="country">Country</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("country")}
+                    placeholder="Select country"
+                    options={[
+                      { id: "UK", label: "UK", value: "UK" },
+                      { id: "US", label: "US", value: "US" },
+                      { id: "Canada", label: "Canada", value: "Canada" },
+                      { id: "Australia", label: "Australia", value: "Australia" },
+                    ]}
+                    onChange={(value) => form.setValue("country", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" {...form.register("phone")} />
+                <Input className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="supplierReference">Suppliers Reference</Label>
-                <Input id="supplierReference" {...form.register("supplierReference")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="supplierReference" {...form.register("supplierReference")} />
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="supplierEmail">Supplier E-mail Address</Label>
+                <div>
                 <Input
                   id="supplierEmail"
                   type="email"
                   {...form.register("supplierEmail")}
-                  className={form.formState.errors.supplierEmail ? "border-red-500" : ""}
+                  className={form.formState.errors.supplierEmail ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
                 />
                 {form.formState.errors.supplierEmail && (
                   <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierEmail.message}</p>
                 )}
+                </div>
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="leadTime">Lead Time</Label>
-                <Input id="leadTime" {...form.register("leadTime")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="leadTime" {...form.register("leadTime")} />
               </div>
 
-              <div>
-                <Label htmlFor="purchaseOrderMode">Purchase Order Mode</Label>
-                <Select
-                  defaultValue={form.getValues("purchaseOrderMode")}
-                  onValueChange={(value) => form.setValue("purchaseOrderMode", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select mode" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Standard">Standard</SelectItem>
-                    <SelectItem value="Express">Express</SelectItem>
-                    <SelectItem value="Urgent">Urgent</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="purchaseOrderMode">Purchase Order Mode</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("purchaseOrderMode")}
+                    placeholder="Select mode"
+                    options={[
+                      { id: "Standard", label: "Standard", value: "Standard" },
+                      { id: "Express", label: "Express", value: "Express" },
+                      { id: "Urgent", label: "Urgent", value: "Urgent" },
+                    ]}
+                    onChange={(value) => form.setValue("purchaseOrderMode", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div className="flex items-center justify-between">
+
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="isManufacturer">Is Manufacturer</Label>
                 <Switch
                   id="isManufacturer"
@@ -319,69 +333,76 @@ export const AddSupplierPage = () => {
                 />
               </div>
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="contactEmail">Contact Email</Label>
+                <div>
                 <Input
                   id="contactEmail"
                   type="email"
                   {...form.register("contactEmail")}
-                  className={form.formState.errors.contactEmail ? "border-red-500" : ""}
+                  className={form.formState.errors.contactEmail ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
                 />
                 {form.formState.errors.contactEmail && (
                   <p className="text-red-500 text-sm mt-1">{form.formState.errors.contactEmail.message}</p>
                 )}
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Purchase Order / Drop Shipment Information */}
-        <Card>
+        <Card className="bg-white border-0 shadow-xs rounded-2xl">
           <CardHeader>
-            <CardTitle>Purchase Order / Drop Shipment Information</CardTitle>
+            <CardTitle className="text-[#11263C]">Purchase Order / Drop Shipment Information</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="purchaseOrderShippingCostType">Purchase Order Shipping Cost Type</Label>
-                <Select
-                  defaultValue={form.getValues("purchaseOrderShippingCostType")}
-                  onValueChange={(value) => form.setValue("purchaseOrderShippingCostType", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="British Pound">British Pound</SelectItem>
-                    <SelectItem value="US Dollar">US Dollar</SelectItem>
-                    <SelectItem value="Euro">Euro</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="purchaseOrderShippingCostType">Purchase Order Shipping Cost Type</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("purchaseOrderShippingCostType")}
+                    placeholder="Select type"
+                    options={[
+                      { id: "British Pound", label: "British Pound", value: "British Pound" },
+                      { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
+                      { id: "Euro", label: "Euro", value: "Euro" },
+                    ]}
+                    onChange={(value) => form.setValue("purchaseOrderShippingCostType", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="purchaseOrderChangeToStatus">Purchase Order Change to Status</Label>
-                <Select
-                  defaultValue={form.getValues("purchaseOrderChangeToStatus")}
-                  onValueChange={(value) => form.setValue("purchaseOrderChangeToStatus", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Please Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Pending">Pending</SelectItem>
-                    <SelectItem value="Processing">Processing</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="purchaseOrderChangeToStatus">Purchase Order Change to Status</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("purchaseOrderChangeToStatus")}
+                    placeholder="Please Select"
+                    options={[
+                      { id: "Pending", label: "Pending", value: "Pending" },
+                      { id: "Processing", label: "Processing", value: "Processing" },
+                      { id: "Completed", label: "Completed", value: "Completed" },
+                    ]}
+                    onChange={(value) => form.setValue("purchaseOrderChangeToStatus", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
+
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="totalPurchaseOrderShippingCost">Total Purchase Order Shipping Cost</Label>
-                <Input id="totalPurchaseOrderShippingCost" {...form.register("totalPurchaseOrderShippingCost")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="totalPurchaseOrderShippingCost" {...form.register("totalPurchaseOrderShippingCost")} />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel2">
                   Send Email When Product Below Reorder Level
                 </Label>
@@ -392,7 +413,7 @@ export const AddSupplierPage = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel3">
                   Send Email When Product Below Reorder Level
                 </Label>
@@ -405,47 +426,51 @@ export const AddSupplierPage = () => {
             </div>
 
             <div className="space-y-4">
-              <div>
-                <Label htmlFor="dropShipmentShippingCostType">Drop Shipment Shipping Cost Type</Label>
-                <Select
-                  defaultValue={form.getValues("dropShipmentShippingCostType")}
-                  onValueChange={(value) => form.setValue("dropShipmentShippingCostType", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="British Pound">British Pound</SelectItem>
-                    <SelectItem value="US Dollar">US Dollar</SelectItem>
-                    <SelectItem value="Euro">Euro</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="dropShipmentShippingCostType">Drop Shipment Shipping Cost Type</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("dropShipmentShippingCostType")}
+                    placeholder="Select type"
+                    options={[
+                      { id: "British Pound", label: "British Pound", value: "British Pound" },
+                      { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
+                      { id: "Euro", label: "Euro", value: "Euro" },
+                    ]}
+                    onChange={(value) => form.setValue("dropShipmentShippingCostType", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="dropShipmentChangeToStatus">Drop Shipment Change to Status</Label>
-                <Select
-                  defaultValue={form.getValues("dropShipmentChangeToStatus")}
-                  onValueChange={(value) => form.setValue("dropShipmentChangeToStatus", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="British Pound">British Pound</SelectItem>
-                    <SelectItem value="Pending">Pending</SelectItem>
-                    <SelectItem value="Processing">Processing</SelectItem>
-                    <SelectItem value="Completed">Completed</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="dropShipmentChangeToStatus">Drop Shipment Change to Status</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("dropShipmentChangeToStatus")}
+                    placeholder="Select status"
+                    options={[
+                      { id: "Pending", label: "Pending", value: "Pending" },
+                      { id: "Processing", label: "Processing", value: "Processing" },
+                      { id: "Completed", label: "Completed", value: "Completed" },
+                    ]}
+                    onChange={(value) => form.setValue("dropShipmentChangeToStatus", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
+
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="totalDropShipmentShippingCost">Total Drop Shipment Shipping Cost</Label>
-                <Input id="totalDropShipmentShippingCost" {...form.register("totalDropShipmentShippingCost")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="totalDropShipmentShippingCost" {...form.register("totalDropShipmentShippingCost")} />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="includeSupplierInRequisitions">Include Supplier in Requisitions</Label>
                 <Switch
                   id="includeSupplierInRequisitions"
@@ -454,7 +479,7 @@ export const AddSupplierPage = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="consolidateDropshipSupplierEmails">Consolidate Dropship Supplier Emails</Label>
                 <Switch
                   id="consolidateDropshipSupplierEmails"
@@ -468,89 +493,103 @@ export const AddSupplierPage = () => {
 
         {/* Export Templates and CSV Export Configuration */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
+          <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
-              <CardTitle>Export Templates</CardTitle>
+              <CardTitle className="text-[#11263C] text-xl">Export Templates</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="transferMethod">Transfer Method</Label>
-                <Select
-                  defaultValue={form.getValues("transferMethod")}
-                  onValueChange={(value) => form.setValue("transferMethod", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Manual">Manual</SelectItem>
-                    <SelectItem value="Automatic">Automatic</SelectItem>
-                  </SelectContent>
-                </Select>
+            <CardContent className="space-y-4 mx-5">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="transferMethod">Transfer Method</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                   defaultValue={form.getValues("transferMethod")}
+                  placeholder="Select method"
+                  options={[
+                    { id: "Manual", label: "Manual", value: "Manual" },
+                    { id: "Automatic", label: "Automatic", value: "Automatic" },
+                  ]}
+                  onChange={(value) => form.setValue("transferMethod", value)}
+                  className="border-[#BBC2CB] bg-white max-w-52"
+                />
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="exportMethod">Export Method</Label>
-                <Select
-                  defaultValue={form.getValues("exportMethod")}
-                  onValueChange={(value) => form.setValue("exportMethod", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select method" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CSV">CSV</SelectItem>
-                    <SelectItem value="XML">XML</SelectItem>
-                    <SelectItem value="JSON">JSON</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="exportMethod">Export Method</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("exportMethod")}
+                    placeholder="Select method"
+                    options={[
+                      { id: "CSV", label: "CSV", value: "CSV" },
+                      { id: "XML", label: "XML", value: "XML" },
+                      { id: "JSON", label: "JSON", value: "JSON" },
+                    ]}
+                    onChange={(value) => form.setValue("exportMethod", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="templateType">Template Type</Label>
-                <Select
-                  defaultValue={form.getValues("templateType")}
-                  onValueChange={(value) => form.setValue("templateType", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CSV">CSV</SelectItem>
-                    <SelectItem value="XML">XML</SelectItem>
-                    <SelectItem value="JSON">JSON</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <div>
+                  <Label htmlFor="templateType">Template Type</Label>
+                </div>
+                <div>
+                  <CustomSelect
+                    defaultValue={form.getValues("templateType")}
+                    placeholder="Select type"
+                    options={[
+                      { id: "CSV", label: "CSV", value: "CSV" },
+                      { id: "XML", label: "XML", value: "XML" },
+                      { id: "JSON", label: "JSON", value: "JSON" },
+                    ]}
+                    onChange={(value) => form.setValue("templateType", value)}
+                    className="border-[#BBC2CB] bg-white max-w-52"
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
-              <CardTitle>CSV Export Configuration</CardTitle>
+              <CardTitle className="text-[#11263C] text-xl">CSV Export Configuration</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center space-x-2">
+            <CardContent className="space-y-4 mx-5">
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <label htmlFor="defaultExportMethod">Default Export Method</label>
+                <div className="flex items-center space-x-2">
                 <Checkbox
                   id="defaultExportMethod"
                   checked={form.watch("defaultExportMethod")}
                   onCheckedChange={(checked) => form.setValue("defaultExportMethod", checked as boolean)}
                 />
-                <Label htmlFor="defaultExportMethod">Default Export Method</Label>
+                <p className="text-[#11263C] m-0 leading-normal text-sm">Default Export Method</p>
               </div>
+              </div>
+              
 
-              <div>
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="exportDelimiter">Export Delimiter</Label>
-                <Input id="exportDelimiter" {...form.register("exportDelimiter")} />
+               <Input className="border-[#BBC2CB] max-w-52" id="exportDelimiter" {...form.register("exportDelimiter")} />
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
+              <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                <Label htmlFor="exportHeaders">Export Headers</Label>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
                   id="exportHeaders"
                   checked={form.watch("exportHeaders")}
                   onCheckedChange={(checked) => form.setValue("exportHeaders", checked as boolean)}
-                />
-                <Label htmlFor="exportHeaders">Export Headers</Label>
+                  />
+                  <p className="text-[#11263C] m-0 leading-normal text-sm">Export Headers</p>
+                </div>
+               
               </div>
             </CardContent>
           </Card>
@@ -561,11 +600,12 @@ export const AddSupplierPage = () => {
           <Button type="button" variant="outline">
             Cancel
           </Button>
-          <Button type="submit" disabled={isPending} className="bg-blue-500 hover:bg-blue-600">
+          <Button type="submit" disabled={isPending} variant="primary" className="rounded-lg">
             {isPending ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>
+      </div>
     </div>
   )
 }
