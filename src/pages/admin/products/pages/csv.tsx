@@ -1,37 +1,3 @@
-// import { Header } from "@/components/shared/header";
-// import {
-//   Card,
-//   CardContent,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card";
-
-// export function ProductsCsvPage() {
-//   return (
-//     <div>
-//       <Header title="Products" />
-
-//       <div className="mt-6">
-//         <Card className="bg-white rounded-2xl border-none shadow-none">
-//           <CardHeader className="flex flex-row items-center justify-between pb-2">
-//             <CardTitle className="text-lg font-medium">
-//             Upload Template
-//             </CardTitle>
-//           </CardHeader>
-//           <CardContent>
-//           {/* form here */}sdfsdf
-//           </CardContent>
-//         </Card>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default ProductsCsvPage;
-
-
-
-
 import type React from "react"
 
 import { useState } from "react"
@@ -49,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
-import { FormValues } from "../core/_modals"
+import { CsvProductFormValues } from "../core/_modals"
 import { csvFormSchema } from "../core/_schema"
 import { CustomSelect } from "@/components/shared/custom-select"
 
@@ -69,7 +35,7 @@ const warehouses = [
 export function ProductsCsvPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const form = useForm<FormValues>({
+  const form = useForm<CsvProductFormValues>({
     resolver: zodResolver(csvFormSchema),
     defaultValues: {
       poReference: "",
@@ -80,14 +46,14 @@ export function ProductsCsvPage() {
   })
 
   const uploadMutation = useMutation({
-    mutationFn: async (data: FormValues) => {
+    mutationFn: async (data: CsvProductFormValues) => {
       // Mock API call
       console.log("Uploading data:", data)
       return new Promise((resolve) => setTimeout(resolve, 1000))
     },
   })
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: CsvProductFormValues) => {
     uploadMutation.mutate(data)
   }
 

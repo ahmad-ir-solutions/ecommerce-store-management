@@ -60,7 +60,7 @@ export const supplierSchema = z.object({
 });
 
 
-// csv Form schema----------------
+// csv product Form schema----------------
 export const csvFormSchema = z.object({
     poReference: z.string().min(1, "PO Reference is required"),
     deliveryCost: z.string().min(1, "Delivery Cost is required"),

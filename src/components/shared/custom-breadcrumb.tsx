@@ -23,7 +23,7 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
 
   return (
       <div>
-        <h1 className="text-3xl font-semibold mb-1">{title}</h1>
+        <h1 className="text-3xl font-semibold mb-1 text-[#11263C]">{title}</h1>
         <Breadcrumb className='flex items-center text-sm font-medium flex-now-wrap'>
           {breadcrumbs.map((crumb, index) => (
             <span key={crumb.href} className="flex items-center text-xs font-medium uppercase">

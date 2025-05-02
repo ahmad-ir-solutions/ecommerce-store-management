@@ -83,7 +83,7 @@ export interface FilterCondition {
 export type ProductFormValues = z.infer<typeof productSchema>
 
 
-export type FormValues = z.infer<typeof csvFormSchema>
+export type CsvProductFormValues = z.infer<typeof csvFormSchema>
 
 // ------------suppliers
 
