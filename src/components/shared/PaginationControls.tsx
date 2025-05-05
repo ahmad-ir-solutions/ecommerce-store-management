@@ -5,8 +5,6 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 

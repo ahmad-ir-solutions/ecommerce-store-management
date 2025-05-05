@@ -8,8 +8,9 @@ import { Navigate } from "react-router-dom";
 const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard").then(module => ({ default: module.AdminDashboardPage })));
 const ManageOrderPage = lazy(() => import("@/pages/admin/orders/pages/manage").then(module => ({ default: module.ManageOrderPage })));
 const OrdersCsvPage = lazy(() => import("@/pages/admin/orders/pages/csv").then(module => ({ default: module.OrdersCsvPage })));
+const EditOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.EditOrderPage })));
 const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(module => ({ default: module.AdminCustomersPage })));
-const CustomerDetails = lazy(() => import("@/pages/admin/customers/components/customer-details").then(module => ({ default: module.CustomerDetails })));
+const CustomerDetails = lazy(() => import("@/pages/admin/customers/pages/customer-details").then(module => ({ default: module.CustomerDetails })));
 const PickingPage = lazy(() => import("@/pages/admin/warehouse/pages/picking").then(module => ({ default: module.PickingPage })));
 const DeliveriesPage = lazy(() => import("@/pages/admin/warehouse/pages/deliveries").then(module => ({ default: module.DeliveriesPage })));
 const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests").then(module => ({ default: module.ManifestsPage })));
@@ -40,9 +41,10 @@ export const adminRoutes = {
         { index: true, element: <Navigate to="/admin/orders/manage" replace /> },
         { path: "manage", element: <WithSuspense><ManageOrderPage /></WithSuspense> },
         { path: "csv", element: <WithSuspense><OrdersCsvPage /></WithSuspense> },
-      ]
-    },
-    
+        // Dynamic order route
+        { path: "edit-order/:orderId", element: <WithSuspense><EditOrderPage /></WithSuspense> },
+      ]},
+
     // Customers route
     { path: "customers", element: <WithSuspense><AdminCustomersPage /></WithSuspense> },
     // Dynamic customer route

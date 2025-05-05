@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { CustomersTable } from "./customers-table"
 import { Button } from "@/components/ui/button"
 import { Filter, Settings, RotateCw } from "lucide-react"
 import { fetchCustomers } from "../core/dummy"
+import { CustomersTable } from "../components/customers-table"
 
 export function Customers() {
   const [filterText, setFilterText] = useState("")

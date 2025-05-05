@@ -1,5 +1,5 @@
 import { Header } from "@/components/shared/header";
-import { Customers } from "./components/customers";
+import { Customers } from "./pages/customers";
 
 export function AdminCustomersPage() {
   return (

@@ -19,11 +19,12 @@ import { CustomSelect } from "@/components/shared/custom-select"
 import { useProductsStore } from "@/store/admin/products-store"
 import { SimpleDropdownFilter } from "./simple-dropdown-filter"
 import { ComparisonOperatorFilter } from "./comparison-operator-filter"
-import { DateRangePickerFilter } from "./date-range-picker-filter"
-import { CheckboxListFilter } from "./checkbox-list-filter"
+import { DateRangePickerFilter } from "../../../../components/shared/date-range-picker-filter"
+import { CheckboxListFilter } from "../../../../components/shared/checkbox-list-filter"
 import { SaveFilterModal } from "./modals/save-filter-modal"
 import { DeleteConfirmationModal } from "./modals/delete-confirmation-modal"
 import { ArchiveConfirmationModal } from "./modals/archive-confirmation-modal"
+import { PaginationControls } from "@/components/shared/PaginationControls"
 
 export default function ProductTable() {
  const { savedFilters, applySavedFilter, activeFilters, resetFilters } = useProductsStore()
@@ -125,6 +126,15 @@ export default function ProductTable() {
     // After successful archiving, refetch the data
     // queryClient.invalidateQueries(["inventory"])
   }
+
+   // Calculate total pages
+   const totalPages = table.getPageCount()
+   const currentPage = table.getState().pagination.pageIndex + 1
+ 
+   // Handle page change
+   const handlePageChange = (page: number) => {
+     table.setPageIndex(page - 1)
+   }
 
   return (
     <div className="space-y-4">
@@ -229,13 +239,49 @@ export default function ProductTable() {
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => table.setPageIndex(0)}
+            disabled={!table.getCanPreviousPage()}
+            className="max-w-24"
+          >
+            First
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="max-w-24"
+          >
+            Previous
+          </Button>
+          <span className="text-sm border border-[#BBC2CB] rounded-md p-1 px-5 max-w-24">
+            {table.getState().pagination.pageIndex + 1}
+          </span>
+          <Button variant="primary" className="max-w-24" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+            disabled={!table.getCanNextPage()}
+            className="max-w-24"
+          >
+            Last
+          </Button>
+        </div>
+        <div className="flex items-center justify-between">
+          <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        </div>
+        <div className="text-sm text-muted-foreground">
+          Page {currentPage} of {totalPages} - Items {(currentPage - 1) * table.getState().pagination.pageSize + 1} to{" "}
+          {Math.min(currentPage * table.getState().pagination.pageSize, (data?.length ?? 0))} of {data?.length ?? 0}
+        </div>
       </div>
 
       <SaveFilterModal

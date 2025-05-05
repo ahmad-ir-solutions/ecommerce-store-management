@@ -2,12 +2,12 @@ import { useState, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useParams } from "react-router-dom"
-import { CustomerOverview } from "./customer-overview"
-import { CustomerBasicDetails } from "./customer-basic-details"
 import { fetchCustomerById } from "../core/dummy"
 import { useCustomerStore } from "@/store/admin/customer-store"
-import { CustomerAddresses } from "./customer-adresses"
 import { Header } from "@/components/shared/header"
+import { CustomerOverview } from "../components/customer-overview"
+import { CustomerBasicDetails } from "../components/customer-basic-details"
+import { CustomerAddresses } from "../components/customer-adresses"
 
 export function CustomerDetails() {
   const [activeTab, setActiveTab] = useState("overview")

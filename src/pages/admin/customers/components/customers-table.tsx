@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Customer } from "../core/_modals"
-import { PaginationControls } from "./PaginationControls"
+import { PaginationControls } from "../../../../components/shared/PaginationControls"
 import { useNavigate } from "react-router-dom"
 
 export function CustomersTable({

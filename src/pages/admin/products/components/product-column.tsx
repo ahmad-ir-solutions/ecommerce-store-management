@@ -12,22 +12,23 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
       accessorKey: "checked",
       header: ({ table }) => (
         <Checkbox
-          className="w-5 h-5 rounded-sm border-[#BBC2CB]"
-          checked={table.getIsAllRowsSelected()}
-          onCheckedChange={table.getToggleAllRowsSelectedHandler()}
-        />
+        className="w-5 h-5 rounded-sm border-[#BBC2CB]"
+         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+         aria-label="Select all"
+       />
       ),
       cell: ({ row }) => (
-        <div>
           <Checkbox
-            className="w-5 h-5 rounded-sm border-[#BBC2CB]"
-            checked={row.getIsSelected()}
-            onCheckedChange={row.getToggleSelectedHandler()}
-          />
-        </div>
+          className="w-5 h-5 rounded-sm border-[#BBC2CB]"
+           checked={row.getIsSelected()}
+           onCheckedChange={(value) => row.toggleSelected(!!value)}
+           aria-label="Select row"
+         />
       ),
-      enableSorting: false,
       enableColumnFilter: false,
+      enableSorting: false,
+      enableHiding: false,
     },
     {
       accessorKey: "type",
