@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { addressSchema } from "./_schema"
+
 export interface Customer {
   id: string
   name: string
@@ -40,3 +43,5 @@ export interface Order {
   status: string
   total: number
 }
+
+export type AddressFormValues = z.infer<typeof addressSchema>

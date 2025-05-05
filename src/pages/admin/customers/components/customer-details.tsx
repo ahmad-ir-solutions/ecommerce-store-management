@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
+import { useParams } from "react-router-dom"
 import { CustomerOverview } from "./customer-overview"
 import { CustomerBasicDetails } from "./customer-basic-details"
-import { Skeleton } from "@/components/ui/skeleton"
 import { fetchCustomerById } from "../core/dummy"
 import { useCustomerStore } from "@/store/admin/customer-store"
 import { CustomerAddresses } from "./customer-adresses"
+import { Header } from "@/components/shared/header"
 
-export function CustomerDetails({ customerId }: { customerId: string }) {
+export function CustomerDetails() {
   const [activeTab, setActiveTab] = useState("overview")
+  const { customerId } = useParams<{ customerId: string }>()
 
   const { data: customer, isLoading } = useQuery({
     queryKey: ["customer", customerId],
-    queryFn: () => fetchCustomerById(customerId),
+    queryFn: () => fetchCustomerById(customerId as string),
+    enabled: !!customerId,
   })
 
   // Get the address form focus from the store
@@ -33,7 +35,7 @@ export function CustomerDetails({ customerId }: { customerId: string }) {
   }, [activeTab, addressFormFocus])
 
   if (isLoading) {
-    return <CustomerDetailsSkeleton />
+    return <div>Loading...</div>
   }
 
   if (!customer) {
@@ -41,68 +43,47 @@ export function CustomerDetails({ customerId }: { customerId: string }) {
   }
 
   return (
-    <div className="space-y-4">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <div className="border rounded-lg">
-          <TabsList className="w-full justify-start rounded-none border-b bg-transparent p-0">
-            <TabsTrigger
-              value="overview"
-              className="rounded-none border-b-2 border-transparent px-4 py-3 data-[state=active]:border-primary data-[state=active]:bg-transparent"
-            >
-              Overview
-            </TabsTrigger>
-            <TabsTrigger
-              value="basic-details"
-              className="rounded-none border-b-2 border-transparent px-4 py-3 data-[state=active]:border-primary data-[state=active]:bg-transparent"
-            >
-              Basic Details
-            </TabsTrigger>
-            <TabsTrigger
-              value="addresses"
-              className="rounded-none border-b-2 border-transparent px-4 py-3 data-[state=active]:border-primary data-[state=active]:bg-transparent"
-            >
-              Addresses
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value="overview" className="mt-4">
-          <CustomerOverview customer={customer} setActiveTab={setActiveTab} />
-        </TabsContent>
-
-        <TabsContent value="basic-details" className="mt-4">
-          <CustomerBasicDetails customer={customer} />
-        </TabsContent>
-
-        <TabsContent value="addresses" className="mt-4">
-          <CustomerAddresses customer={customer} />
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-}
-
-function CustomerDetailsSkeleton() {
-  return (
-    <div className="space-y-4">
-      <div className="border rounded-lg">
-        <div className="flex border-b">
-          {["Overview", "Basic Details", "Addresses"].map((tab, i) => (
-            <div key={i} className="px-4 py-3">
-              <Skeleton className="h-5 w-24" />
+    <div>
+      <Header title="Customers" />
+      <div className="mt-4">
+        <div className="space-y-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="rounded-xl bg-white px-4 py-2 shadow-none">
+              <TabsList className="justify-start rounded-none">
+                <TabsTrigger
+                  value="overview"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="basic-details"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                >
+                  Basic Details
+                </TabsTrigger>
+                <TabsTrigger
+                  value="addresses"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                >
+                  Addresses
+                </TabsTrigger>
+              </TabsList>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Card key={i}>
-            <CardContent className="p-6">
-              <Skeleton className="h-32 w-full" />
-            </CardContent>
-          </Card>
-        ))}
+            <TabsContent value="overview" className="mt-4">
+              <CustomerOverview customer={customer} setActiveTab={setActiveTab} />
+            </TabsContent>
+
+            <TabsContent value="basic-details" className="mt-4">
+              <CustomerBasicDetails customer={customer} />
+            </TabsContent>
+
+            <TabsContent value="addresses" className="mt-4">
+              <CustomerAddresses customer={customer} />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   )

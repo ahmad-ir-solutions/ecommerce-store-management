@@ -4,8 +4,10 @@ import { Customer } from "./_modals"
 const mockCustomers: Customer[] = Array.from({ length: 20 }).map((_, i) => ({
   id: `cust_${i + 1}`,
   name: "Hammad Al-Khader",
-  email: "hammad@example.com",
-  reference: `abcdefgh${i}`,
+  email: "3hl1q3nyg85sfqv@marketpla......",
+  phoneNumber: "07511742114",
+  reference: `3EFECF13-D384-48DC-${i}........`,
+  date: "Today",
   order: {
     numbers: 1,
     average: 25.99,

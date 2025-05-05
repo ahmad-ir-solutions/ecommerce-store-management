@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Customer } from "../core/_modals"
-import { Skeleton } from "@/components/ui/skeleton"
+import { PaginationControls } from "./PaginationControls"
+import { useNavigate } from "react-router-dom"
 
 export function CustomersTable({
   customers,
@@ -21,7 +22,7 @@ export function CustomersTable({
   isLoading: boolean
 }) {
   const [rowSelection, setRowSelection] = useState({})
-
+  const navigate = useNavigate()
   const columns: ColumnDef<Customer>[] = [
     {
       id: "select",
@@ -30,6 +31,7 @@ export function CustomersTable({
           checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
+          className="border-[#BBC2CB] w-4.5 h-4.5"
         />
       ),
       cell: ({ row }) => (
@@ -38,6 +40,7 @@ export function CustomersTable({
           onCheckedChange={(value) => row.toggleSelected(!!value)}
           aria-label="Select row"
           onClick={(e) => e.stopPropagation()}
+          className="border-[#BBC2CB] w-4.5 h-4.5"
         />
       ),
       enableSorting: false,
@@ -60,7 +63,8 @@ export function CustomersTable({
             </Avatar>
             <div className="flex flex-col">
               <span className="font-medium">{row.original.name}</span>
-              <span className="text-xs text-muted-foreground">{row.original.email}</span>
+              <span className="text-xs text-[#4E5967]">{row.original.email}</span>
+              <span className="text-xs text-[#4E5967]">{row.original.phoneNumber}</span>
             </div>
           </div>
         )
@@ -99,9 +103,18 @@ export function CustomersTable({
         const order = row.original.order
         return (
           <div className="flex flex-col">
-            <span>Numbers: {order.numbers}</span>
-            <span>Average: £{order.average.toFixed(2)}</span>
-            <span>Total: £{order.total.toFixed(2)}</span>
+              <div className="grid grid-cols-[65px_1fr] items-center">
+                <span className="text-[#4E5967]">Number</span>
+                <span className="font-medium">{order.numbers}</span>
+              </div>
+              <div className="grid grid-cols-[65px_1fr] items-center">
+                <span className="text-[#4E5967]">Average</span>
+                <span className="font-medium">£{order.average.toFixed(2)}</span>
+              </div>
+              <div className="grid grid-cols-[65px_1fr] items-center">
+                <span className="text-[#4E5967]">Total</span>
+                <span className="font-medium">£{order.total.toFixed(2)}</span>
+              </div>
           </div>
         )
       },
@@ -116,7 +129,7 @@ export function CustomersTable({
             <Avatar className="h-8 w-8 bg-green-500 text-white">
               <AvatarFallback>AM</AvatarFallback>
             </Avatar>
-            <span>{channel}</span>
+            <span className="underline">{channel}</span>
           </div>
         )
       },
@@ -124,10 +137,24 @@ export function CustomersTable({
     {
       accessorKey: "tags",
       header: "Tags",
+      cell: () => {
+        return (
+          <div className="flex items-center gap-2">
+            <span>-</span>
+          </div>
+        )
+      },
     },
     {
       accessorKey: "notes",
       header: "Notes",
+      cell: () => {
+        return (
+          <div className="flex items-center gap-2">
+            <span>-</span>
+          </div>
+        )
+      },
     },
   ]
 
@@ -143,21 +170,38 @@ export function CustomersTable({
   })
 
   if (isLoading) {
-    return <TableSkeleton />
+    return <div>Loading...</div>
   }
+
+   // Calculate total pages
+   const totalPages = table.getPageCount()
+   const currentPage = table.getState().pagination.pageIndex + 1
+ 
+   // Handle page change
+   const handlePageChange = (page: number) => {
+     table.setPageIndex(page - 1)
+   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border">
+      <div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
+              <TableRow key={headerGroup.id} className="bg-[#ECF6FF] border-b-0">
+               {headerGroup.headers.map((header, index) => {
+                  const isFirst = index === 0;
+                  const isLast = index === headerGroup.headers.length - 1;
+
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={`${isFirst ? "rounded-tl-xl rounded-bl-xl" : ""} ${isLast ? "rounded-tr-xl rounded-br-xl" : ""} py-3 border-b border-b-white`}
+                    >
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
@@ -167,8 +211,8 @@ export function CustomersTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                //   onClick={() => router.push(`/customers/${row.original.id}`)}
-                  className="cursor-pointer"
+                  onClick={() => navigate(`/admin/customer-details/${row.original.id}`)}
+                  className="cursor-pointer border-b-[#ECE9F1]"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
@@ -188,67 +232,47 @@ export function CustomersTable({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
-            variant="outline"
+            variant="primary"
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
+            className="max-w-24"
           >
             First
           </Button>
           <Button
-            variant="outline"
+            variant="primary"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
+            className="max-w-24"
           >
             Previous
           </Button>
-          <span className="text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          <span className="text-sm border border-[#BBC2CB] rounded-md p-1 px-5 max-w-24">
+            {table.getState().pagination.pageIndex + 1}
           </span>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button variant="primary" className="max-w-24" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
             Next
           </Button>
           <Button
-            variant="outline"
+            variant="primary"
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
+            className="max-w-24"
           >
             Last
           </Button>
         </div>
-        <div className="text-sm text-muted-foreground">Page 1 of 18 · Items 1 to 25 of 337</div>
+        <div className="flex items-center justify-between">
+          <PaginationControls currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        </div>
+        <div className="text-sm text-muted-foreground">
+          Page {currentPage} of {totalPages} - Items {(currentPage - 1) * table.getState().pagination.pageSize + 1} to{" "}
+          {Math.min(currentPage * table.getState().pagination.pageSize, customers.length)} of {customers.length}
+        </div>
       </div>
-    </div>
-  )
-}
-
-function TableSkeleton() {
-  return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {Array.from({ length: 8 }).map((_, i) => (
-              <TableHead key={i}>
-                <Skeleton className="h-6 w-full" />
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <TableRow key={i}>
-              {Array.from({ length: 8 }).map((_, j) => (
-                <TableCell key={j}>
-                  <Skeleton className="h-8 w-full" />
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
   )
 }

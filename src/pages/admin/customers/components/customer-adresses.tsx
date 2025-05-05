@@ -1,28 +1,14 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { z } from "zod"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { Customer } from "../core/_modals"
+import { AddressFormValues, Customer } from "../core/_modals"
 import { updateCustomer } from "../core/dummy"
-
-const addressSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  company: z.string().optional(),
-  addressLine1: z.string().min(1, "Address line 1 is required"),
-  addressLine2: z.string().optional(),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  postalCode: z.string().min(1, "Postal code is required"),
-  country: z.string().min(1, "Country is required"),
-})
-
-type AddressFormValues = z.infer<typeof addressSchema>
+import { addressSchema } from "../core/_schema"
 
 export function CustomerAddresses({ customer }: { customer: Customer }) {
   const queryClient = useQueryClient()
@@ -105,14 +91,14 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="UK Address Search" className="pl-8" />
+        <div className="relative w-full max-w-sm bg-white border-none rounded-lg shadow-none">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4" />
+          <Input placeholder="UK Address Search" className="pl-8 border-gray-300" />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card className="bg-white border-none rounded-2xl shadow-none">
           <CardHeader>
             <CardTitle>Shipping address</CardTitle>
           </CardHeader>
@@ -131,7 +117,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>First name *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -144,7 +130,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Last name *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -159,7 +145,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Company</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -173,7 +159,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 1 *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -187,7 +173,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 2 *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -202,7 +188,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>City *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -215,7 +201,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>State/County *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -231,7 +217,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Postal code *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -244,7 +230,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Country *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -262,7 +248,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white border-none rounded-2xl shadow-none">
           <CardHeader>
             <CardTitle>Billing address</CardTitle>
           </CardHeader>
@@ -281,7 +267,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>First name *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 " />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -294,7 +280,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Last name *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -309,7 +295,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Company</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -323,7 +309,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 1 *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -337,7 +323,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 2 *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="border-gray-300 "/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -352,7 +338,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>City *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -365,7 +351,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>State/County *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -381,7 +367,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Postal code *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -394,7 +380,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Country *</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input {...field} className="border-gray-300 "/>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

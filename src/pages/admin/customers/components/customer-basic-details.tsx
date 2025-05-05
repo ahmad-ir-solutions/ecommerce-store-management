@@ -62,120 +62,125 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Name & contact details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>First name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Last name *</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone number</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="md:col-span-2 border-t pt-4 mt-2"></div>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email address</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="ccEmail"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email CC address</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="customerReference"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Customer reference</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-3 gap-4">
+          <Card className="col-span-2 bg-white border-none rounded-2xl shadow-none">
+            <CardHeader>
+              <CardTitle>Name & contact details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First name</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last name *</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone number</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email address</FormLabel>
+                      <FormControl>
+                        <Input {...field}  className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="ccEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email CC address</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="customerReference"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Customer reference</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="border-gray-300"/>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Tax & customs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormItem>
-                <FormLabel>VAT Number</FormLabel>
-                <FormControl>
-                  <Input placeholder="Add a new tag" />
-                </FormControl>
-              </FormItem>
-              <FormItem>
-                <FormLabel>EORI</FormLabel>
-                <FormControl>
-                  <Input placeholder="Add a new tag" />
-                </FormControl>
-              </FormItem>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex justify-end">
-          <Button type="submit" disabled={updateMutation.isPending}>
-            {updateMutation.isPending ? "Saving..." : "Save changes"}
+          <div>
+            <Card className="bg-white border-none rounded-2xl shadow-none h-fit">
+              <CardHeader>
+                <CardTitle>Tax & customs</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormItem>
+                    <FormLabel>VAT Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Add a new tag" className="border-gray-300"/>
+                    </FormControl>
+                  </FormItem>
+                  <FormItem>
+                    <FormLabel>EORI</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Add a new tag" className="border-gray-300"/>
+                    </FormControl>
+                  </FormItem>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <div className="flex justify-end gap-4 w-full mt-9">
+          <Button type="submit" disabled={updateMutation.isPending} variant="outline" className="rounded-lg" size="lg">
+            Cancel
+          </Button>
+          <Button type="submit" disabled={updateMutation.isPending} variant="primary" className="rounded-lg" size="lg">
+            {updateMutation.isPending ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>

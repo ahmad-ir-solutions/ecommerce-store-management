@@ -9,6 +9,7 @@ const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard").then(mod
 const ManageOrderPage = lazy(() => import("@/pages/admin/orders/pages/manage").then(module => ({ default: module.ManageOrderPage })));
 const OrdersCsvPage = lazy(() => import("@/pages/admin/orders/pages/csv").then(module => ({ default: module.OrdersCsvPage })));
 const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(module => ({ default: module.AdminCustomersPage })));
+const CustomerDetails = lazy(() => import("@/pages/admin/customers/components/customer-details").then(module => ({ default: module.CustomerDetails })));
 const PickingPage = lazy(() => import("@/pages/admin/warehouse/pages/picking").then(module => ({ default: module.PickingPage })));
 const DeliveriesPage = lazy(() => import("@/pages/admin/warehouse/pages/deliveries").then(module => ({ default: module.DeliveriesPage })));
 const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests").then(module => ({ default: module.ManifestsPage })));
@@ -44,6 +45,8 @@ export const adminRoutes = {
     
     // Customers route
     { path: "customers", element: <WithSuspense><AdminCustomersPage /></WithSuspense> },
+    // Dynamic customer route
+    { path: "customer-details/:customerId", element: <WithSuspense><CustomerDetails /></WithSuspense> },
     
     // Warehouse routes
     {
