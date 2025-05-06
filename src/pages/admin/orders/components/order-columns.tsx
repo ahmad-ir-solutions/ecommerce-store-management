@@ -45,7 +45,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
       const navigate = useNavigate()
 
       const handleClick = () => {
-        navigate(`/orders/edit-order/${row.original.orderId}`)
+        navigate(`/admin/orders/edit-order/${row.original.orderId}`)
       }
 
       return (

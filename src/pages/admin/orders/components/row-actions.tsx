@@ -12,7 +12,7 @@ const navigate = useNavigate();
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false)
 
   const handleEdit = () => {
-    navigate(`/orders/edit/${orderId}`)
+    navigate(`/admin/orders/edit-order/${orderId}`)
   }
 
   const handleView = () => {
