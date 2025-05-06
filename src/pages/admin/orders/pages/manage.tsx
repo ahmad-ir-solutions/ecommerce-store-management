@@ -16,16 +16,16 @@ import { exportOrders, fetchOrders } from "../core/_dummy"
 import { SavedFilters } from "../../products/components/saved-filter"
 import { CheckboxListFilter } from "../../../../components/shared/checkbox-list-filter"
 import { DateRangePickerFilter } from "../../../../components/shared/date-range-picker-filter"
-import { useOrdersStore } from "@/store/admin/order-store"
 import { PaginationControls } from "@/components/shared/PaginationControls"
 import { SaveFilterModal } from "../../products/components/modals/save-filter-modal"
+import { useOrderFilterStore } from "@/store/admin/order-filter-store"
 import { useOrderColumns as columns } from "../components/order-columns"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
 
 export function ManageOrderPage() {
-  const { savedFilters, applySavedFilter, activeFilters, resetFilters, setActiveFilters } = useOrdersStore()
+  const { savedFilters, applySavedFilter, activeFilters, resetFilters, setActiveFilters } = useOrderFilterStore()
   const [columnFilters, setColumnFilters] = useState<any[]>(activeFilters.columnFilters || [])
   const [globalFilter, setGlobalFilter] = useState(activeFilters.globalFilter || "")
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)

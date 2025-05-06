@@ -10,29 +10,38 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Check } from "lucide-react"
-import { useProductColumns } from "./product-column"
-import { SavedFilters } from "./saved-filter"
-import { useQuery } from "@tanstack/react-query"
-import { fetchInventory } from "../core/_request"
-import { CustomSelect } from "@/components/shared/custom-select"
+import { Plus } from "lucide-react"
 import { useProductsStore } from "@/store/admin/products-store"
-import { SimpleDropdownFilter } from "./simple-dropdown-filter"
-import { ComparisonOperatorFilter } from "./comparison-operator-filter"
 import { DateRangePickerFilter } from "../../../../components/shared/date-range-picker-filter"
 import { CheckboxListFilter } from "../../../../components/shared/checkbox-list-filter"
-import { SaveFilterModal } from "./modals/save-filter-modal"
-import { DeleteConfirmationModal } from "./modals/delete-confirmation-modal"
-import { ArchiveConfirmationModal } from "./modals/archive-confirmation-modal"
 import { PaginationControls } from "@/components/shared/PaginationControls"
+import { useQuery } from "@tanstack/react-query"
+import { fetchInventory } from "../../products/core/_request"
+import { SimpleDropdownFilter } from "../../products/components/simple-dropdown-filter"
+import { ComparisonOperatorFilter } from "../../products/components/comparison-operator-filter"
+import { OrderDetails } from "../core/_modals"
+import { useOrderProductColumns } from "./order-product-column"
+
+interface Product {
+  id: string
+  sku: string
+  name: string
+  mpn: string
+  ean: string
+  inventory: number
+  price: number
+}
+
+interface ProductsTableProps {
+  onAddProducts: (products: any[]) => Promise<OrderDetails>
+}
 
 export default function ProductTable() {
- const { savedFilters, applySavedFilter, activeFilters, resetFilters } = useProductsStore()
+ const { resetFilters } = useProductsStore()
 
-  const columns = useProductColumns()
+  const columns = useOrderProductColumns()
   const [columnFilters, setColumnFilters] = useState<any[]>([])
   const [globalFilter, setGlobalFilter] = useState("")
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["inventory"],
@@ -98,32 +107,14 @@ export default function ProductTable() {
     return <div>Loading inventory data...</div>
   }
 
-  const handleSelectChange = (value: string) => {
-    console.log(value, "value");
+  // const handleSelectChange = (value: string) => {
+  //   console.log(value, "value");
     
-    applySavedFilter(value)
-  }
-
-  const handleSaveFilters = () => {
-    setIsSaveModalOpen(true)
-  }
+  //   applySavedFilter(value)
+  // }
 
   const handleResetFilters = () => {
     resetFilters()
-  }
-
-  const handleDeleteProduct = (product: any) => {
-    // Here you would call your API to delete the product
-    console.log("Deleting product:", product)
-    // After successful deletion, refetch the data
-    // queryClient.invalidateQueries(["inventory"])
-  }
-
-  const handleArchiveProduct = (product: any) => {
-    // Here you would call your API to archive the product
-    console.log("Archiving product:", product)
-    // After successful archiving, refetch the data
-    // queryClient.invalidateQueries(["inventory"])
   }
 
    // Calculate total pages
@@ -136,40 +127,35 @@ export default function ProductTable() {
    }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between bg-white py-4 px-6 rounded-2xl">
-        <div className="flex items-center space-x-2">
-           <CustomSelect
-             placeholder="Please select"
-            //  defaultValue="low-stock-items"
-             options={[
-              { id: "export", label: "Export", value: "export" },
-            ]}
-             className="w-[200px]"
-             onChange={handleSelectChange}
-            />
-          <Button variant="default" size="icon" className="bg-blue-500 hover:bg-blue-600">
-            <Check className="h-4 w-4 text-white" />
-          </Button>
-        </div>
-        <div className="flex items-center space-x-2">
-          <SavedFilters />
-          <Button variant="filter" onClick={handleSaveFilters}>
-            Save Filters
-          </Button>
-          <Button variant="filter" onClick={handleResetFilters}>
-            Reset Filters
+    <div className="flex items-center justify-between bg-white py-3 px-6 rounded-2xl">
+      <div className="bg-white rounded-2xl overflow-hidden mb-4 px-6">
+      <div className="py-4 flex justify-between items-center">
+        <Button
+          type="button"
+          variant="filter"
+          size="sm"
+          className="h-10 shadow-none"
+          // onClick={handleAddSelectedProducts}
+          // disabled={isSubmitting}
+        >
+          <Plus className="h-4 w-4 mx-1" />
+          {"Add Selected Products"}
+        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="filter"
+            size="sm"
+            className="h-10 shadow-none"
+            onClick={handleResetFilters}
+          >
+            Clear Filters
           </Button>
         </div>
       </div>
-
-      <div className="flex items-center justify-between bg-white py-3 px-6 rounded-2xl">
         <Table>
           <TableHeader className="">
             <TableRow className="border-none">
-                {/* <TableHead className="whitespace-nowrap leading-0">
-                  <Checkbox className="w-5 h-5 rounded-sm border-[#BBC2CB]" checked={table.getIsAllRowsSelected()} onCheckedChange={table.getToggleAllRowsSelectedHandler()} />
-                </TableHead> */}
               {table.getFlatHeaders().map((header) => (
                 <TableHead key={header.id} className="whitespace-nowrap leading-0">
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -236,11 +222,10 @@ export default function ProductTable() {
             )}
           </TableBody>
         </Table>
-      </div>
-
-      <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
+            type="button"
             variant="primary"
             size="sm"
             onClick={() => table.setPageIndex(0)}
@@ -250,6 +235,7 @@ export default function ProductTable() {
             First
           </Button>
           <Button
+            type="button"
             variant="primary"
             size="sm"
             onClick={() => table.previousPage()}
@@ -261,10 +247,11 @@ export default function ProductTable() {
           <span className="text-sm border border-[#BBC2CB] rounded-md p-1 px-5 max-w-24">
             {table.getState().pagination.pageIndex + 1}
           </span>
-          <Button variant="primary" className="max-w-24" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <Button type="button" variant="primary" className="max-w-24" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
             Next
           </Button>
           <Button
+          type="button"
             variant="primary"
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
@@ -282,14 +269,7 @@ export default function ProductTable() {
           {Math.min(currentPage * table.getState().pagination.pageSize, (data?.length ?? 0))} of {data?.length ?? 0}
         </div>
       </div>
-
-      <SaveFilterModal
-        isOpen={isSaveModalOpen}
-        onClose={() => setIsSaveModalOpen(false)}
-        currentFilters={{ columnFilters, globalFilter }}
-      />
-        <DeleteConfirmationModal onConfirm={handleDeleteProduct} onCancel={() => console.log("Delete cancelled")} />
-        <ArchiveConfirmationModal onConfirm={handleArchiveProduct} onCancel={() => console.log("Archive cancelled")} />
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Order, OrderDetails } from "./_modals"
+import { Order, OrderDetails,  } from "./_modals"
 
 // Mock data based on the screenshot
 export const fetchOrders = async (): Promise<Order[]> => {
@@ -108,81 +108,104 @@ export const fetchOrders = async (): Promise<Order[]> => {
   ]
 }
 
-export const fetchOrderDetails = async (orderId: string): Promise<OrderDetails> => {
-  // In a real application, this would be an API call
-  // return await fetch(`/api/orders/${orderId}`).then(res => res.json())
-  
-  // For demo purposes, we'll return mock data
-  return {
-    id: "1",
-    ordersFlags: "All",
-    orderId: orderId,
-    channel: "Ebay DCUK",
-    channelOrderId: "18-12798-77213",
-    productSKUs: "608501004712",
-    orderDate: new Date("2025-10-03T09:40:00"),
-    dispatchDate: null,
-    channelDispatchDate: null,
-    customerName: "Emma Hogan / em7250153",
-    company: "Designers Collection",
-    postcode: "WA12 8HW",
-    shippingCountry: "UNITED KINGDOM",
-    emailAddress: "01663448748988e37f63@members.ebay.com",
-    total: 7.72,
-    shippingMethod: "Complete (Ready to pick)",
-    status: "Complete",
-    billingAddress: {
-      name: "EMMA HOGAN",
-      company: null,
-      address1: "67 ALDER STREET",
-      address2: null,
-      city: "NEWTON-LE-WILLOWS",
-      county: "MERSEYSIDE",
-      postcode: "WA12 8HW",
-      country: "UNITED KINGDOM",
-      phone: "07784867400"
-    },
-    shippingAddress: {
-      name: "EMMA HOGAN",
-      company: null,
-      address1: "67 ALDER STREET",
-      address2: null,
-      city: "NEWTON-LE-WILLOWS",
-      county: "MERSEYSIDE",
-      postcode: "WA12 8HW",
-      country: "UNITED KINGDOM",
-      phone: "07784867400"
-    },
-    items: [
-      {
-        sku: "608501004712",
-        name: "Armaf Club De Nuit Intense Man 105ml Edt Spr",
-        quantity: 1,
-        options: null,
-        quantityAllocated: 1,
-        unitSubtotal: 6.43,
-        taxRate: 20.00,
-        taxTotal: 1.29,
-        discount: 0.00,
-        total: 7.72,
-        status: "Allocated"
-      }
-    ],
-    totals: {
-      subtotal: 6.43,
-      shippingCosts: 6.43,
-      shippingTax: 6.43,
-      discount: 6.43,
-      lineItemsTax: 6.43,
-      total: 7.72,
-      refundedAmount: 6.43
-    },
-    notes: []
-  }
-}
-
 export const exportOrders = async (selectedOrders: string[]) => {
   // In a real application, this would be an API call
   console.log("Exporting orders:", selectedOrders)
   return { success: true }
+}
+
+
+// Mock data for testing
+export const mockOrder: OrderDetails = {
+  orderId: "ORD-12345",
+  status: "Complete (Ready to pick)",
+  customerName: "Emma Hogan / em7250153",
+  emailAddress: "01663448748988e37f63@members.ebay.com",
+  channelOrderId: "18-12798-77213",
+  shippingMethod: "Complete (Ready to pick)",
+  attentionRequired: false,
+  billingAddress: {
+    name: "EMMA HOGAN",
+    company: "",
+    address1: "67 ALDER STREET",
+    address2: "",
+    city: "NEWTON-LE-WILLOWS",
+    county: "MERSEYSIDE",
+    postcode: "WA12 8HW",
+    country: "UNITED KINGDOM",
+    phone: "07784867400",
+  },
+  shippingAddress: {
+    name: "EMMA HOGAN",
+    company: "",
+    address1: "67 ALDER STREET",
+    address2: "",
+    city: "NEWTON-LE-WILLOWS",
+    county: "MERSEYSIDE",
+    postcode: "WA12 8HW",
+    country: "UNITED KINGDOM",
+    phone: "07784867400",
+  },
+  items: [
+    {
+      id: "item-1",
+      sku: "608501004712",
+      name: "Armaf Club De Nuit Intense Man 105ml Edt Spr",
+      quantity: 1,
+      unitSubtotal: 6.43,
+      taxRate: 20,
+      taxTotal: 1.29,
+      discount: 0,
+      status: "Allocated",
+      quantityAllocated: 1,
+    },
+  ],
+  totals: {
+    subtotal: 6.43,
+    shippingCosts: 3.99,
+    shippingTax: 0.8,
+    discount: 0,
+    lineItemsTax: 1.29,
+    total: 12.51,
+    refundedAmount: 0,
+  },
+  notes: [],
+  orderDate: new Date("2023-03-10T09:40:00"),
+  importedDate: new Date("2023-03-10T09:45:00"),
+}
+
+// Simulate API calls
+export const fetchOrderDetails = async (orderId: string): Promise<OrderDetails> => {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 500))
+
+  // Return mock data
+  return { ...mockOrder, orderId }
+}
+
+export const updateOrder = async (orderId: string, data: Partial<OrderDetails>): Promise<OrderDetails> => {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 800))
+
+  // Return updated data
+  return { ...mockOrder, ...data, orderId }
+}
+
+export const cancelOrder = async (orderId: string): Promise<void> => {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 600))
+
+  // In a real app, this would cancel the order
+  console.log(`Order ${orderId} cancelled`)
+}
+
+export const cloneOrder = async (orderId: string): Promise<string> => {
+  // Simulate network delay
+  await new Promise((resolve) => setTimeout(resolve, 700))
+
+  // In a real app, this would clone the order and return the new order ID
+  const newOrderId = `ORD-CLONE-${Math.floor(Math.random() * 10000)}`
+  console.log(`Order ${orderId} cloned to ${newOrderId}`)
+
+  return newOrderId
 }

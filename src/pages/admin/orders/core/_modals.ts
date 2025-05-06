@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { csvOrderFormSchema } from "./_schema";
+import { addressSchema, csvOrderFormSchema, editOrderSchema } from "./_schema";
 
 export interface Order {
     id: string
@@ -22,31 +22,33 @@ export interface Order {
     flagType?: "P" | null // P for processing, could have other values
   }
   
-export interface OrderDetails extends Order {
-  billingAddress: {
+  export interface Address {
     name: string
-    company: string | null
+    company?: string
     address1: string
-    address2: string | null
+    address2?: string
     city: string
     county: string
     postcode: string
     country: string
     phone: string
   }
-  shippingAddress: {
+  
+  export interface OrderItem {
+    id: string
+    sku: string
     name: string
-    company: string | null
-    address1: string
-    address2: string | null
-    city: string
-    county: string
-    postcode: string
-    country: string
-    phone: string
+    quantity: number
+    unitSubtotal: number
+    taxRate: number
+    taxTotal: number
+    discount: number
+    status: string
+    quantityAllocated: number
+    options?: string
   }
-  items: OrderItem[]
-  totals: {
+  
+  export interface OrderTotals {
     subtotal: number
     shippingCosts: number
     shippingTax: number
@@ -55,32 +57,43 @@ export interface OrderDetails extends Order {
     total: number
     refundedAmount: number
   }
-  notes: OrderNote[]
-}
+  
+  export interface OrderNote {
+    id: string
+    subject: string
+    note: string
+    createdOn: Date
+    createdBy: string
+  }
 
-export interface OrderItem {
-  sku: string
-  name: string
-  quantity: number
-  options: string | null
-  quantityAllocated: number
-  unitSubtotal: number
-  taxRate: number
-  taxTotal: number
-  discount: number
-  total: number
+export interface OrderDetails {
+  orderId: string
   status: string
+  customerName: string
+  emailAddress: string
+  channelOrderId: string
+  shippingMethod: string
+  attentionRequired?: boolean
+  billingAddress: Address
+  shippingAddress: Address
+  items: OrderItem[]
+  totals: OrderTotals
+  notes: OrderNote[]
+  orderDate: Date
+  importedDate: Date
+
+  trackingNumber?: string
+  specialInstructions?: string
+  pickerInstructions?: string
+  orderWeight?: string
+  packageSize?: string
+  numberOfParcels?: string
+  airNumber?: string
 }
-
-export interface OrderNote {
-  id: string
-  subject: string
-  note: string
-  createdOn: Date
-  createdBy: string
-}
-
-
 
 // csv order type----------------
 export type CsvOrderFormValues = z.infer<typeof csvOrderFormSchema>
+
+export type EditOrderFormValues = z.infer<typeof editOrderSchema>
+
+export type AddressFormValues = z.infer<typeof addressSchema>
