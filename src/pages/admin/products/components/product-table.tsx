@@ -25,16 +25,22 @@ import { SaveFilterModal } from "./modals/save-filter-modal"
 import { DeleteConfirmationModal } from "./modals/delete-confirmation-modal"
 import { ArchiveConfirmationModal } from "./modals/archive-confirmation-modal"
 import { PaginationControls } from "@/components/shared/PaginationControls"
+import { AddProductModal } from "./modals/add-product-modal"
 
-export default function ProductTable() {
- const { savedFilters, applySavedFilter, activeFilters, resetFilters } = useProductsStore()
+interface ProductTableProps {
+  isAddProductModalOpen: boolean;
+  setIsAddProductModalOpen: (isOpen: boolean) => void;
+}
+
+export default function ProductTable({ isAddProductModalOpen, setIsAddProductModalOpen }: ProductTableProps) {
+ const { applySavedFilter } = useProductsStore()
 
   const columns = useProductColumns()
   const [columnFilters, setColumnFilters] = useState<any[]>([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["inventory"],
     queryFn: fetchInventory,
   })
@@ -109,7 +115,8 @@ export default function ProductTable() {
   }
 
   const handleResetFilters = () => {
-    resetFilters()
+    setColumnFilters([]); // Clear column filters
+    setGlobalFilter(""); // Clear global filter
   }
 
   const handleDeleteProduct = (product: any) => {
@@ -125,6 +132,10 @@ export default function ProductTable() {
     // After successful archiving, refetch the data
     // queryClient.invalidateQueries(["inventory"])
   }
+
+  const handleCloseAddProduct = () => {
+    setIsAddProductModalOpen(!isAddProductModalOpen);
+  };
 
    // Calculate total pages
    const totalPages = table.getPageCount()
@@ -290,6 +301,7 @@ export default function ProductTable() {
       />
         <DeleteConfirmationModal onConfirm={handleDeleteProduct} onCancel={() => console.log("Delete cancelled")} />
         <ArchiveConfirmationModal onConfirm={handleArchiveProduct} onCancel={() => console.log("Archive cancelled")} />
+        <AddProductModal isOpen={isAddProductModalOpen} onClose={handleCloseAddProduct} isSubmitting={false} />
     </div>
   )
 }

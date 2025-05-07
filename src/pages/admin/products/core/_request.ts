@@ -9,8 +9,9 @@ export async function fetchInventory(): Promise<ProductItem[]> {
         Array(50)
           .fill(null)
           .map((_, index) => ({
-            id: `${index + 101}`, // Different IDs
+            id: `${index + 101}`,
             type: "product",
+            qty: `0.${index}`,
             image: `/placeholder-${index + 1}.svg?height=40&width=40`,
             sku: `SKU-${80543209 + index}`,
             name: `Product ${index + 1}`,

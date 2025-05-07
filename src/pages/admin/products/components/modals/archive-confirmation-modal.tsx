@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Archive } from "lucide-react"
-import type { ProductItem } from "@/types/product"
+import { ProductItem } from "../../core/_modals"
 
 interface ArchiveConfirmationModalProps {
   onConfirm: (product: ProductItem) => void

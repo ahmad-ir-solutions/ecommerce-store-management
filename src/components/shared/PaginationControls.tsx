@@ -59,7 +59,7 @@ export function PaginationControls({ currentPage, totalPages, onPageChange }: Pa
             onClick={() => onPageChange(Math.max(1, currentPage - 1))}
             className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
           /> */}
-          <Button className={`${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""} flex items-center justify-center border rounded-md w-8.5 h-8.5 bg-[#E6EDF3]`}   onClick={() => onPageChange(Math.max(1, currentPage - 1))}>
+          <Button type="button" className={`${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""} flex items-center justify-center border rounded-md w-8.5 h-8.5 bg-[#E6EDF3]`}   onClick={() => onPageChange(Math.max(1, currentPage - 1))}>
           <ChevronLeft />
           </Button>
         </PaginationItem>
@@ -83,7 +83,7 @@ export function PaginationControls({ currentPage, totalPages, onPageChange }: Pa
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
             className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
           /> */}
-           <Button className={`${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""} flex items-center justify-center border rounded-md w-8.5 h-8.5 bg-[#E6EDF3]`} onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}>
+           <Button type="button" className={`${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""} flex items-center justify-center border rounded-md w-8.5 h-8.5 bg-[#E6EDF3]`} onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}>
              <ChevronRight />
            </Button>
         </PaginationItem>

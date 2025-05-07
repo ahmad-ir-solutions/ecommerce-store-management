@@ -37,10 +37,10 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-none overflow-hidden">
       <div className="p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-medium">Order Notes</h2>
+          <h2 className="text-lg font-semibold mb-4">Order Notes</h2>
           <Button
             type="button"
             variant="primary"
@@ -53,18 +53,18 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
         </div>
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-[#f5f8fa]">
-              <TableRow className="border-b border-gray-300">
-                <TableHead className="text-gray-500 font-medium">Subject</TableHead>
-                <TableHead className="text-gray-500 font-medium">Note</TableHead>
-                <TableHead className="text-gray-500 font-medium">Created On</TableHead>
-                <TableHead className="text-gray-500 font-medium">Created By</TableHead>
+            <TableHeader className="">
+              <TableRow className="bg-[#ECF6FF] border-none">
+                <TableHead className="font-medium rounded-l-lg">Subject</TableHead>
+                <TableHead className="font-medium">Note</TableHead>
+                <TableHead className="font-medium">Created On</TableHead>
+                <TableHead className="font-medium rounded-r-lg">Created By</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {notes.length > 0 ? (
                 notes.map((note, index) => (
-                  <TableRow key={index} className="border-b border-gray-200">
+                  <TableRow key={index} className="">
                     <TableCell className="p-2">{note.subject}</TableCell>
                     <TableCell className="p-2">{note.note}</TableCell>
                     <TableCell className="p-2">{note.createdOn.toLocaleDateString()}</TableCell>

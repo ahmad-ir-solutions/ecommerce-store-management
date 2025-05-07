@@ -42,6 +42,7 @@ export interface topSellingProduct {
 export interface ProductItem {
   id: string
   type?: string
+  qty?: string
   image?: string
   name: string
   sku: string

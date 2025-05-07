@@ -6,7 +6,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { OrderDetails, OrderItem } from "../core/_modals"
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 
-
 interface ItemsOrderedProps {
   items: OrderItem[]
   onUpdateItems: (items: OrderItem[]) => Promise<OrderDetails>
@@ -75,9 +74,9 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden mb-4">
-      <div className="p-4 flex justify-between items-center bg-[#f5f8fa]">
-        <h2 className="text-lg font-medium">Items Ordered</h2>
+    <div className="bg-white rounded-2xl shadow-none overflow-hidden my-4 px-6 py-4">
+      <div className="p-4 flex justify-between items-center">
+        <h2 className="text-lg font-semibold mb-4">Items Ordered</h2>
         <div className="flex items-center gap-2">
           <Button
             type="button"
@@ -103,26 +102,26 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
       {!isCollapsed && (
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-[#f5f8fa]">
-              <TableRow className="border-b border-gray-300">
-                <TableHead className="text-gray-500 font-medium">Product SKU</TableHead>
-                <TableHead className="text-gray-500 font-medium">Name</TableHead>
-                <TableHead className="text-gray-500 font-medium">Quantity</TableHead>
-                <TableHead className="text-gray-500 font-medium">Item Options</TableHead>
-                <TableHead className="text-gray-500 font-medium">Quantity Allocated</TableHead>
-                <TableHead className="text-gray-500 font-medium">Unit Subtotal</TableHead>
-                <TableHead className="text-gray-500 font-medium">Tax Rate</TableHead>
-                <TableHead className="text-gray-500 font-medium">Tax Total</TableHead>
-                <TableHead className="text-gray-500 font-medium">Discount</TableHead>
-                <TableHead className="text-gray-500 font-medium">Total</TableHead>
-                <TableHead className="text-gray-500 font-medium">Status</TableHead>
+            <TableHeader className="bg-[#ECF6FF]">
+              <TableRow className="border-none">
+                <TableHead className="font-medium rounded-l-lg py-3">Product SKU</TableHead>
+                <TableHead className="font-medium rounded-l-lg py-3">Name</TableHead>
+                <TableHead className="font-medium py-3">Quantity</TableHead>
+                <TableHead className="font-medium py-3">Item Options</TableHead>
+                <TableHead className="font-medium py-3">Quantity Allocated</TableHead>
+                <TableHead className="font-medium py-3">Unit Subtotal</TableHead>
+                <TableHead className="font-medium py-3">Tax Rate</TableHead>
+                <TableHead className="font-medium py-3">Tax Total</TableHead>
+                <TableHead className="font-medium py-3">Discount</TableHead>
+                <TableHead className="font-medium py-3">Total</TableHead>
+                <TableHead className="font-medium rounded-r-lg py-3">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {orderItems.map((item, index) => (
                 <TableRow key={index} className="border-b border-gray-200">
                   <TableCell className="p-2">{item.sku}</TableCell>
-                  <TableCell className="p-2">{item.name}</TableCell>
+                  <TableCell className="p-2 text-gray-400">{item.name}</TableCell>
                   <TableCell className="p-2">
                     <Input
                       className="h-8 w-16 border-gray-300"
@@ -132,11 +131,12 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                   </TableCell>
                   <TableCell className="p-2">{item.options || "01"}</TableCell>
                   <TableCell className="p-2">
-                    <Input
+                    {/* <Input
                       className="h-8 w-16 border-gray-300"
                       value={item.quantityAllocated.toString()}
                       onChange={(e) => handleQuantityAllocatedChange(index, e.target.value)}
-                    />
+                    /> */}
+                    {item.quantityAllocated}
                   </TableCell>
                   <TableCell className="p-2">
                     <Input
@@ -153,11 +153,7 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                    <Input
-                      className="h-8 w-16 border-gray-300"
-                      value={`£ ${item.taxTotal.toFixed(2)}`}
-                      onChange={(e) => handleTaxTotalChange(index, e.target.value)}
-                    />
+                  {`£ ${item.taxTotal.toFixed(2)}`}
                   </TableCell>
                   <TableCell className="p-2">
                     <Input

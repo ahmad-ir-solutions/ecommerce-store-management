@@ -14,7 +14,7 @@ import { OrderTotals } from "../components/order-total"
 import { OrderNotes } from "../components/order-notes"
 import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
-import ProductTable from "../components/product-table"
+import { OrderProductTable } from "../components/order-product-table"
 
 export default function EditOrderPage() {
   const { orderId } = useParams<{ orderId: string }>()
@@ -29,7 +29,6 @@ export default function EditOrderPage() {
     updateShippingAddress,
     updateOrderItems,
     addOrderNote,
-    addProductsToOrder,
     cancelOrder,
     cloneOrder,
     isCancelling,
@@ -93,8 +92,7 @@ export default function EditOrderPage() {
           onUpdateShippingAddress={updateShippingAddress} />
 
         {/* <ShippingHandling control={control} register={register} /> */}
-
-        <ProductTable />
+        <OrderProductTable />
 
         <ItemsOrdered items={order.items} onUpdateItems={updateOrderItems} />
 
