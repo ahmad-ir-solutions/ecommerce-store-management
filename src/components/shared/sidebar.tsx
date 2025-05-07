@@ -58,11 +58,11 @@ export function Sidebar({ isOpen,
 
 
   const bottomNavItems = [
-    {
-      title: "Settings",
-      href: "/settings",
-      icon: Settings,
-    },
+    // {
+    //   title: "Settings",
+    //   href: "/settings",
+    //   icon: Settings,
+    // },
     {
       title: "Support",
       href: "/support",

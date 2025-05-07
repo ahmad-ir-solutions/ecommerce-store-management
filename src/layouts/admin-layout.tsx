@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom"
 import { BaseLayout } from "@/layouts/BaseLayout"
 import { Sidebar } from "@/components/shared/sidebar"
 import { useState } from "react"
-import { LayoutDashboard, Package, ShoppingCart, Users, Warehouse } from "lucide-react"
+import { LayoutDashboard, Package, Settings, ShoppingCart, Users, Warehouse } from "lucide-react"
 
 export default function AdminLayout() {
   const pathname = useLocation()
@@ -50,6 +50,18 @@ export default function AdminLayout() {
         { title: "All Products", href: "/admin/products/all-products" },
         { title: "Suppliers", href: "/admin/products/suppliers" },
         { title: "CSV", href: "/admin/products/csv" },
+      ],
+    },
+    {
+      title: "Settings",
+      key: "settings",
+      icon: Settings,
+      hasChildren: true,
+      children: [
+        { title: "Company", href: "/admin/settings/company" },
+        { title: "Users", href: "/admin/settings/users" },
+        { title: "Integrations", href: "/admin/settings/integrations" },
+        { title: "Warehouse", href: "/admin/settings/warehouse" },
       ],
     },
   ]

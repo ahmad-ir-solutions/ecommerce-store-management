@@ -20,7 +20,11 @@ const AddSupplierPage = lazy(() => import("@/pages/admin/products/pages/add-supp
 const SupplierDetailsPage = lazy(() => import("@/pages/admin/products/pages/supplier-details").then(module => ({ default: module.SupplierDetailsPage })));
 const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").then(module => ({ default: module.ProductsCsvPage })));
 const ProductDetailsPage = lazy(() => import("@/pages/admin/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
-          
+const CompanyPage = lazy(() => import("@/pages/admin/settings/company/pages/company").then(module => ({ default: module.CompanyPage })));
+const EditCompanyDetails = lazy(() => import("@/pages/admin/settings/company/pages/edit-company-details").then(module => ({ default: module.EditCompanyDetails })));
+const ExistingUsers = lazy(() => import("@/pages/admin/settings/users/pages/existing-users").then(module => ({ default: module.ExistingUsers })));
+const EditUserDetails = lazy(() => import("@/pages/admin/settings/users/pages/edit-user-details").then(module => ({ default: module.EditUserDetails })));
+
 export const adminRoutes = {
   path: "/admin",
   element: (
@@ -76,6 +80,19 @@ export const adminRoutes = {
         { path: ":productId", element: <WithSuspense><ProductDetailsPage /></WithSuspense> },
         { path: "supplier-details/:supplierId", element: <WithSuspense><SupplierDetailsPage /></WithSuspense> },
       ]
+    },
+
+    // settings routes
+    {
+      path: "settings",
+      children: [
+        // Redirect /admin/settings to /admin/settings/company
+        { index: true, element: <Navigate to="/admin/settings/company" replace /> },
+        { path: "company", element: <WithSuspense><CompanyPage /></WithSuspense> },
+        { path: "company/edit-company-details/:companyId", element: <WithSuspense><EditCompanyDetails /></WithSuspense> },
+        { path: "users", element: <WithSuspense><ExistingUsers /></WithSuspense> },
+        { path: "users/edit-user-details/:userId", element: <WithSuspense><EditUserDetails /></WithSuspense> },
+       ]
     },
   ],
 };
