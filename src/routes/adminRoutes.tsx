@@ -24,6 +24,7 @@ const CompanyPage = lazy(() => import("@/pages/admin/settings/company/pages/comp
 const EditCompanyDetails = lazy(() => import("@/pages/admin/settings/company/pages/edit-company-details").then(module => ({ default: module.EditCompanyDetails })));
 const ExistingUsers = lazy(() => import("@/pages/admin/settings/users/pages/existing-users").then(module => ({ default: module.ExistingUsers })));
 const EditUserDetails = lazy(() => import("@/pages/admin/settings/users/pages/edit-user-details").then(module => ({ default: module.EditUserDetails })));
+const IntegrationPage = lazy(() => import("@/pages/admin/settings/integrations/pages/integration").then(module => ({ default: module.IntegrationPage })));
 
 export const adminRoutes = {
   path: "/admin",
@@ -92,6 +93,7 @@ export const adminRoutes = {
         { path: "company/edit-company-details/:companyId", element: <WithSuspense><EditCompanyDetails /></WithSuspense> },
         { path: "users", element: <WithSuspense><ExistingUsers /></WithSuspense> },
         { path: "users/edit-user-details/:userId", element: <WithSuspense><EditUserDetails /></WithSuspense> },
+        { path: "integrations", element: <WithSuspense><IntegrationPage /></WithSuspense> },
        ]
     },
   ],
