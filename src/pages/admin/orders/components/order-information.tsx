@@ -179,7 +179,6 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
         {/* shipping and handling */}
         <ShippingHandling control={control} register={register} />
       </div>
-      
     </div>
   )
 }

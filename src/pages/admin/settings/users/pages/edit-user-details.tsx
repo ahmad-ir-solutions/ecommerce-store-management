@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useNavigate, useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { PlusCircle } from "lucide-react"
+import { CustomSelect } from "@/components/shared/custom-select"
 
 interface UserFormData {
   email: string
+  confirmEmail: string
   name: string
   designatedPicker: boolean
   accountOwner: boolean
@@ -25,6 +26,7 @@ export function EditUserDetails() {
 
   const [formData, setFormData] = useState<UserFormData>({
     email: "user@example.com",
+    confirmEmail: "",
     name: "John Smith",
     designatedPicker: true,
     accountOwner: true,
@@ -66,27 +68,39 @@ export function EditUserDetails() {
         </Button>
       </Header>
       <div className="mt-6">
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden border-0 shadow-none bg-white rounded-2xl">
             <CardContent className="p-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6">
                 {/* User Information */}
                 <div>
                 <h2 className="text-lg font-semibold mb-4">User Information</h2>
-                <div className="space-y-4 bg-[#f0f8ff] p-4 rounded-md">
-                    <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm">
-                        Contact Email *
+                <div className="space-y-4 bg-[#ECF6FF] p-4 rounded-lg">
+                    <div className="space-y-2 grid grid-cols-3">
+                    <Label htmlFor="email" className="text-sm text-[#4E5967]">
+                        Email *
                     </Label>
                     <Input
                         id="email"
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="bg-white"
+                        className="bg-white border-gray-300 rounded-lg"
                     />
                     </div>
-                    <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm">
+                    <div className="space-y-2 grid grid-cols-3">
+                    <Label htmlFor="confirmEmail" className="text-sm text-[#4E5967]">
+                        Confirm Email *
+                    </Label>
+                    <Input
+                        id="confirmEmail"
+                        name="confirmEmail"
+                        value={formData.confirmEmail}
+                        onChange={handleInputChange}
+                        className="bg-white border-gray-300 rounded-lg"
+                    />
+                    </div>
+                    <div className="space-y-2 grid grid-cols-3">
+                    <Label htmlFor="name" className="text-sm text-[#4E5967]">
                         Name *
                     </Label>
                     <Input
@@ -94,55 +108,73 @@ export function EditUserDetails() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="bg-white"
+                        className="bg-white border-gray-300 rounded-lg"
                     />
                     </div>
                     <div className="space-y-4 mt-4">
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="designatedPicker" className="text-sm">
+                    <div className="grid grid-cols-3">
+                      <div>
+                        <Label htmlFor="designatedPicker" className="text-sm text-[#4E5967]">
                         Designated Picker
                         </Label>
+                      </div>
+                      <div>
                         <Switch
                         id="designatedPicker"
                         checked={formData.designatedPicker}
                         onCheckedChange={(checked) => handleSwitchChange("designatedPicker", checked)}
                         />
+                      </div>
                     </div>
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="accountOwner" className="text-sm">
+                    <div className="grid grid-cols-3">
+                      <div>
+                         <Label htmlFor="accountOwner" className="text-sm text-[#4E5967]">
                         Account Owner
                         </Label>
+                      </div>
+                       <div>
                         <Switch
                         id="accountOwner"
                         checked={formData.accountOwner}
                         onCheckedChange={(checked) => handleSwitchChange("accountOwner", checked)}
                         />
+                       </div>
+                        
                     </div>
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="notifyMe" className="text-sm">
+                    <div className="grid grid-cols-3">
+                      <div>
+                        <Label htmlFor="notifyMe" className="text-sm text-[#4E5967]">
                         Notify Me
                         </Label>
+                      </div>
+                      <div>
                         <Switch
                         id="notifyMe"
                         checked={formData.notifyMe}
                         onCheckedChange={(checked) => handleSwitchChange("notifyMe", checked)}
                         />
+                      </div>
                     </div>
                     </div>
-                    <div className="space-y-2 pt-2">
-                    <Label htmlFor="copyPermissionFrom" className="text-sm">
-                        Copy Permissions From
-                    </Label>
-                    <Select value={formData.copyPermissionFrom} onValueChange={handleSelectChange}>
-                        <SelectTrigger id="copyPermissionFrom" className="bg-white">
-                        <SelectValue placeholder="Select Member" />
-                        </SelectTrigger>
-                        <SelectContent>
-                        <SelectItem value="Select Member">Select Member</SelectItem>
-                        <SelectItem value="John Doe">John Doe</SelectItem>
-                        <SelectItem value="Jane Smith">Jane Smith</SelectItem>
-                        </SelectContent>
-                    </Select>
+                    <div className="space-y-2 grid grid-cols-3 pt-2">
+                      <div>
+                        <Label htmlFor="copyPermissionFrom" className="text-sm text-[#4E5967]">
+                          Copy Permissions From
+                        </Label>
+                      </div>
+                      <div>
+                        <CustomSelect
+                        placeholder="Select Member"
+                        options={[
+                          { id: "1", label: "Select Member", value: "Select Member" },
+                          { id: "2", label: "John Doe", value: "John Doe" },
+                          { id: "3", label: "Jane Smith", value: "Jane Smith" },
+                        ]}
+                        defaultValue={formData.copyPermissionFrom}
+                        onChange={(value) => handleSelectChange(value)}
+                        className="w-full bg-white"
+                      />
+                      </div>
                     </div>
                 </div>
                 </div>
@@ -150,8 +182,8 @@ export function EditUserDetails() {
                 {/* Privacy Statement */}
                 <div>
                 <h2 className="text-lg font-semibold mb-4">Privacy Statement</h2>
-                <div className="bg-[#f0f8ff] p-4 rounded-md h-full">
-                    <div className="text-sm text-gray-600 space-y-4">
+                <div className="bg-[#ECF6FF] p-4 rounded-lg h-full">
+                    <div className="text-sm text-[#4E5967] space-y-4">
                     <p className="font-medium">
                         We collect personal information from you, including information about your:
                     </p>
@@ -177,11 +209,12 @@ export function EditUserDetails() {
             </div>
 
             {/* Form Actions */}
-            <div className="flex justify-end gap-4 p-6">
-                <Button variant="outline" onClick={handleCancel}>
+            <div className="flex justify-end gap-4 px-6
+             mt-16">
+                <Button variant="outline" size="lg" onClick={handleCancel}>
                 Cancel
                 </Button>
-                <Button className="bg-[#3D8BFF]" onClick={handleSave}>
+                <Button className="rounded-lg" variant="primary" size="lg" onClick={handleSave}>
                 Save
                 </Button>
             </div>

@@ -9,7 +9,7 @@ const Switch = React.forwardRef<
   <SwitchPrimitives.Root
     ref={ref}
     className={cn(
-      "relative inline-flex h-6 w-12 items-center rounded-full transition-colors",
+      "relative inline-flex h-6 min-w-12 items-center rounded-full transition-colors",
       "bg-gradient-to-b from-[#A8A8A8] to-[#A8A8A8] data-[state=checked]:from-[#3d88ff] data-[state=checked]:to-[#245399]",
       className
     )}
