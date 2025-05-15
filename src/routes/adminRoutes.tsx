@@ -25,6 +25,8 @@ const EditCompanyDetails = lazy(() => import("@/pages/admin/settings/company/pag
 const ExistingUsers = lazy(() => import("@/pages/admin/settings/users/pages/existing-users").then(module => ({ default: module.ExistingUsers })));
 const EditUserDetails = lazy(() => import("@/pages/admin/settings/users/pages/edit-user-details").then(module => ({ default: module.EditUserDetails })));
 const IntegrationPage = lazy(() => import("@/pages/admin/settings/integrations/pages/integration").then(module => ({ default: module.IntegrationPage })));
+const ExistingWarehouse = lazy(() => import("@/pages/admin/settings/warehouse/pages/existing-warehouse").then(module => ({ default: module.ExistingWarehouse })));
+const EditWarehouseDetails = lazy(() => import('@/pages/admin/settings/warehouse/pages/edit-warehouse-details').then(module => ({ default: module.EditWarehouseDetails })));
 
 export const adminRoutes = {
   path: "/admin",
@@ -94,6 +96,8 @@ export const adminRoutes = {
         { path: "users", element: <WithSuspense><ExistingUsers /></WithSuspense> },
         { path: "users/edit-user-details/:userId", element: <WithSuspense><EditUserDetails /></WithSuspense> },
         { path: "integrations", element: <WithSuspense><IntegrationPage /></WithSuspense> },
+        { path: "warehouse", element: <WithSuspense><ExistingWarehouse /></WithSuspense> },
+        { path: "warehouse/edit-warehouse-details/:warehouseId", element: <WithSuspense><EditWarehouseDetails /></WithSuspense> },
        ]
     },
   ],

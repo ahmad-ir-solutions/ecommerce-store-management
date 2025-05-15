@@ -33,7 +33,7 @@ export function EditUserDetails() {
     notifyMe: true,
     copyPermissionFrom: "Select Member",
   })
-
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -118,7 +118,7 @@ export function EditUserDetails() {
                         Designated Picker
                         </Label>
                       </div>
-                      <div>
+                      <div className='flex justify-end'>
                         <Switch
                         id="designatedPicker"
                         checked={formData.designatedPicker}
@@ -132,7 +132,7 @@ export function EditUserDetails() {
                         Account Owner
                         </Label>
                       </div>
-                       <div>
+                       <div className='flex justify-end'>
                         <Switch
                         id="accountOwner"
                         checked={formData.accountOwner}
@@ -147,7 +147,7 @@ export function EditUserDetails() {
                         Notify Me
                         </Label>
                       </div>
-                      <div>
+                      <div className='flex justify-end'>
                         <Switch
                         id="notifyMe"
                         checked={formData.notifyMe}

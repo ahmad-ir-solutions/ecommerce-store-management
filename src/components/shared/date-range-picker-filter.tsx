@@ -19,9 +19,10 @@ import { Input } from "@/components/ui/input"
 
 interface DateRangePickerFilterProps<TData, TValue> {
   column: Column<TData, TValue>
+  className?: string
 }
 
-export function DateRangePickerFilter<TData, TValue>({ column }: DateRangePickerFilterProps<TData, TValue>) {
+export function DateRangePickerFilter<TData, TValue>({ column, className }: DateRangePickerFilterProps<TData, TValue>) {
   const [open, setOpen] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [selectedRange, setSelectedRange] = useState<string | null>(null)
@@ -198,7 +199,7 @@ export function DateRangePickerFilter<TData, TValue>({ column }: DateRangePicker
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0 bg-white rounded-lg shadow-lg" align="start">
+      <PopoverContent className={`w-[400px] p-0 bg-white rounded-lg shadow-lg ${className}`} align="start">
         <div className="p-4">
           <div className="flex flex-wrap gap-2 mb-6">
             {quickDateOptions.map((option) => (

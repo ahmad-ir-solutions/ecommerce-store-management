@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { BaseLayout } from "@/layouts/BaseLayout"
 import { CreditCard, FileText, LayoutDashboard, PackageSearch, Store, Tags } from "lucide-react";
-import { Sidebar } from "@/components/shared/Sidebar";
+import { Sidebar } from "@/components/shared/sidebar";
 import { useState } from "react";
 
 export default function SellerLayout() {

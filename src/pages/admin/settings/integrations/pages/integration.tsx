@@ -2,15 +2,16 @@ import { Header } from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import ExistingCourier from "../components/existing-courier";
 import ExistingPaymentGatways from "../components/existing-payment-gatways";
+import { IntegrationModal, useIntegrationStore } from '../components/integration-modal';
 
 export function IntegrationPage() {
-    // const { openModal } = useIntegrationStore()
+    const { openModal } = useIntegrationStore()
   
   return (
     <div>
       <Header title="Users">
         <Button 
-        // onClick={openModal} 
+        onClick={openModal} 
         className="rounded-lg" size="lg" variant="primary">
             New Integration
         </Button>
@@ -20,7 +21,7 @@ export function IntegrationPage() {
         <ExistingPaymentGatways/>
       </div>
        {/* New Integration Modal */}
-       {/* <IntegrationModal /> */}
+       <IntegrationModal />
     </div>
   );
 }

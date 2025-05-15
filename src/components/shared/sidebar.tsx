@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
-  Settings,
   HelpCircle,
   CreditCard,
   LogOut,

@@ -182,46 +182,54 @@ export const AddSupplierPage = () => {
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel">
                   Send Email When Product Below Reorder Level
                 </Label>
-                <Switch
-                  id="sendEmailWhenProductBelowReorderLevel"
-                  checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
-                  onCheckedChange={(checked) =>
-                    form.setValue("sendEmailWhenProductBelowReorderLevel", checked)
-                  }
-                />
+                <div>
+                  <Switch
+                    id="sendEmailWhenProductBelowReorderLevel"
+                    checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
+                    onCheckedChange={(checked) =>
+                      form.setValue("sendEmailWhenProductBelowReorderLevel", checked)
+                    }
+                    />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowOutOfStockThreshold">
                   Send Email When Product Below Out of Stock Threshold
                 </Label>
-                <Switch
-                  id="sendEmailWhenProductBelowOutOfStockThreshold"
-                  checked={form.watch("sendEmailWhenProductBelowOutOfStockThreshold")}
-                  onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowOutOfStockThreshold", checked)}
-                />
+                <div>
+                  <Switch
+                    id="sendEmailWhenProductBelowOutOfStockThreshold"
+                    checked={form.watch("sendEmailWhenProductBelowOutOfStockThreshold")}
+                    onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowOutOfStockThreshold", checked)}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="includeProductsEqualToReorderLevel">Include Products Equal To Reorder Level</Label>
-                <Switch
-                  id="includeProductsEqualToReorderLevel"
-                  checked={form.watch("includeProductsEqualToReorderLevel")}
-                  onCheckedChange={(checked) => form.setValue("includeProductsEqualToReorderLevel", checked)}
-                />
+                <div>
+                  <Switch
+                    id="includeProductsEqualToReorderLevel"
+                    checked={form.watch("includeProductsEqualToReorderLevel")}
+                    onCheckedChange={(checked) => form.setValue("includeProductsEqualToReorderLevel", checked)}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="excludeOutOfStockProductsWithZeroManualReorderLevel" className="text-sm">
                   Exclude Out of Stock Products With Zero Manual Reorder Level
                 </Label>
-                <Switch
-                  id="excludeOutOfStockProductsWithZeroManualReorderLevel"
-                  checked={form.watch("excludeOutOfStockProductsWithZeroManualReorderLevel")}
-                  onCheckedChange={(checked) =>
-                    form.setValue("excludeOutOfStockProductsWithZeroManualReorderLevel", checked)
-                  }
-                />
+                <div>
+                  <Switch
+                    id="excludeOutOfStockProductsWithZeroManualReorderLevel"
+                    checked={form.watch("excludeOutOfStockProductsWithZeroManualReorderLevel")}
+                    onCheckedChange={(checked) =>
+                      form.setValue("excludeOutOfStockProductsWithZeroManualReorderLevel", checked)
+                    }
+                    />
+                </div>
               </div>
             </div>
 
@@ -326,11 +334,13 @@ export const AddSupplierPage = () => {
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="isManufacturer">Is Manufacturer</Label>
-                <Switch
-                  id="isManufacturer"
-                  checked={form.watch("isManufacturer")}
-                  onCheckedChange={(checked) => form.setValue("isManufacturer", checked)}
-                />
+                <div>
+                  <Switch
+                    id="isManufacturer"
+                    checked={form.watch("isManufacturer")}
+                    onCheckedChange={(checked) => form.setValue("isManufacturer", checked)}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -406,22 +416,26 @@ export const AddSupplierPage = () => {
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel2">
                   Send Email When Product Below Reorder Level
                 </Label>
-                <Switch
-                  id="sendEmailWhenProductBelowReorderLevel2"
-                  checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
-                  onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowReorderLevel", checked)}
-                />
+                <div>
+                  <Switch
+                    id="sendEmailWhenProductBelowReorderLevel2"
+                    checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
+                    onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowReorderLevel", checked)}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="sendEmailWhenProductBelowReorderLevel3">
                   Send Email When Product Below Reorder Level
                 </Label>
-                <Switch
-                  id="sendEmailWhenProductBelowReorderLevel3"
-                  checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
-                  onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowReorderLevel", checked)}
-                />
+                <div>
+                  <Switch
+                    id="sendEmailWhenProductBelowReorderLevel3"
+                    checked={form.watch("sendEmailWhenProductBelowReorderLevel")}
+                    onCheckedChange={(checked) => form.setValue("sendEmailWhenProductBelowReorderLevel", checked)}
+                  />
+                </div>
               </div>
             </div>
 
@@ -472,20 +486,24 @@ export const AddSupplierPage = () => {
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="includeSupplierInRequisitions">Include Supplier in Requisitions</Label>
-                <Switch
-                  id="includeSupplierInRequisitions"
-                  checked={form.watch("includeSupplierInRequisitions")}
-                  onCheckedChange={(checked) => form.setValue("includeSupplierInRequisitions", checked)}
-                />
+                <div>
+                  <Switch
+                    id="includeSupplierInRequisitions"
+                    checked={form.watch("includeSupplierInRequisitions")}
+                    onCheckedChange={(checked) => form.setValue("includeSupplierInRequisitions", checked)}
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                 <Label htmlFor="consolidateDropshipSupplierEmails">Consolidate Dropship Supplier Emails</Label>
-                <Switch
-                  id="consolidateDropshipSupplierEmails"
-                  checked={form.watch("consolidateDropshipSupplierEmails")}
-                  onCheckedChange={(checked) => form.setValue("consolidateDropshipSupplierEmails", checked)}
-                />
+                <div>
+                  <Switch
+                    id="consolidateDropshipSupplierEmails"
+                    checked={form.watch("consolidateDropshipSupplierEmails")}
+                    onCheckedChange={(checked) => form.setValue("consolidateDropshipSupplierEmails", checked)}
+                  />
+                </div>
               </div>
             </div>
           </CardContent>

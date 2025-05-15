@@ -14,6 +14,7 @@ import { SalesChart } from "../components/sales-chart"
 import { TabsStats } from "../components/tabs-stats"
 import { TopSellingProducts } from "../components/top-selling-products"
 import { SalesByChannel } from "../components/sales-by-channel"
+import { DateRangePickerFilter } from '@/components/shared/date-range-picker-filter'
 
 const companyOptions = [
   { id: '1', label: 'All', value: 'all' },
@@ -100,6 +101,10 @@ export function AdminDashboardPage() {
                 </div>
                 <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
                 <DatePickerWithRange date={date} setDate={setDate} className="w-62" title="Time Frame:" />
+                {/* <DateRangePickerFilter
+                // date={date} 
+                // setDate={setDate} 
+                className="w-62"/> */}
                 <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
                 <div>
                   <CustomSelect
