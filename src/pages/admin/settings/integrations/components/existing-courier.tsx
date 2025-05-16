@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Link } from "react-router-dom";
 
 export function ExistingCourier() {
-    const companyId = "164123126545641231";
+    const courierId = "164123126545641231";
 
   return (
     <div className="mt-6">
@@ -37,7 +37,7 @@ export function ExistingCourier() {
                     </TableCell>
                     <TableCell className="p-3 text-start w-1/2">DPD Local</TableCell>
                     <TableCell className="text-start text-[#3D8BFF] p-3 underline hover:text-[#3d4aff]">
-                    <Link to={`/admin/settings/company/edit-company-details/${companyId}`}>View/Edit Company</Link>
+                    <Link to={`/admin/settings/integrations/edit-courier-details/${courierId}`}>View/Edit Courier</Link>
                     </TableCell>
                 </TableRow>
                 </TableBody>

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { PlusCircle } from "lucide-react"
 import { CustomSelect } from "@/components/shared/custom-select"
@@ -20,9 +20,9 @@ interface UserFormData {
 }
 
 export function EditUserDetails() {
-  let navigate = useNavigate()
-  const params = useParams()
-  const userId = params?.userId as string
+  const navigate = useNavigate()
+  // const params = useParams()
+  // const userId = params?.userId as string
 
   const [formData, setFormData] = useState<UserFormData>({
     email: "user@example.com",
