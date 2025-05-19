@@ -1,5 +1,3 @@
-import { z } from "zod"
-import { csvFormSchema, productSchema } from "./_schema"
 
 export interface topSellingProduct {
   id: number
@@ -9,57 +7,31 @@ export interface topSellingProduct {
   revenue: number
 }
 
-// export interface ProductItem {
-//     id: string
-//     type?: string
-//     image?: string
-//     sku: string
-//     skuSuffix?: string
-//     name: string
-//     description?: string
-//     ean?: string
-//     mpn?: string
-//     supplierSku?: string
-//     inventory?: string
-//     supplierInventory?: string
-//     outOfStockDate?: string
-//     onPurchaseOrder?: string
-//     onBackOrder?: string
-//     soldLast30Days?: string
-//     daysSinceLastOrder?: string
-//     stockLocations?: string
-//     price: string
-//     cost?: string
-//     createDate?: string
-//     createTime?: string
-//     suppliers?: string
-//     suppliersDetail?: string
-//     warehouse?: string
-//     warehouseDetail?: string
-//   }
-  
-
 export interface ProductItem {
-  id: string
-  type?: string
-  qty?: string
-  image?: string
-  name: string
+  _id: string
+  productName: string
   sku: string
-  inventory?: string
-  price: string
-  rrp?: string
-  textClass?: string
-  priceIncludesVat?: string
-  weight?: string
-  length?: string
-  width?: string
-  heightDepth?: string
-  warehouse?: string
+  inventory: number
+  price: number
+  rrp: number
+  taxClass: number
+  priceIncludesVAT: boolean
+  weight: number
+  length: number
+  width: number
+  height: number
+  warehouse: string
+  brand: string
+  ean: string
+  upc: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+  // Additional fields for UI display
+  image?: string
+  type?: string
   warehouseDetail?: string
-  brand?: string
-  ean?: string
-  upc?: string
+  heightDepth?: string // UI alias for height
 }
 
 export interface SavedFilter {
@@ -73,22 +45,18 @@ export interface SavedFilter {
   createdBy?: string
   createdAt?: string
 }
-  
+
 export interface FilterCondition {
   field: keyof ProductItem
   operator: "equals" | "contains" | "greaterThan" | "lessThan"
   value: string
 }
-  
 
-export type ProductFormValues = z.infer<typeof productSchema>
+// If you're using zod schemas
+// export type ProductFormValues = z.infer<typeof productSchema>
+// export type CsvProductFormValues = z.infer<typeof csvFormSchema>
 
-
-export type CsvProductFormValues = z.infer<typeof csvFormSchema>
-
-// ------------suppliers
-
-// Define the supplier type based on our form schema
+// Supplier interfaces
 export type Supplier = {
   supplierName: string
   address: string
@@ -130,40 +98,111 @@ export type Supplier = {
 }
 
 export interface SupplierFormValues {
-  supplierName: string;
-  address: string;
-  city: string;
-  country: string;
-  postcode: string;
-  supplierCurrency: string;
-  isManufacturer: boolean;
-  sendEmailWhenProductBelowReorderLevel: boolean;
-  sendEmailWhenProductBelowOutOfStockThreshold: boolean;
-  includeProductsEqualToReorderLevel: boolean;
-  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean;
-  includeSupplierInRequisitions: boolean;
-  consolidateDropshipSupplierEmails: boolean;
-  address2?: string;
-  countryState?: string;
-  phone?: string;
-  supplierCode?: string;
-  supplierReference?: string;
-  commaDelimitedEmails?: string;
-  minimumOrderValue?: string;
-  supplierEmail?: string;
-  contactEmail?: string;
-  leadTime?: string;
-  purchaseOrderMode?: string;
-  purchaseOrderShippingCostType?: string;
-  purchaseOrderChangeToStatus?: string;
-  totalPurchaseOrderShippingCost?: string;
-  dropShipmentShippingCostType?: string;
-  dropShipmentChangeToStatus?: string;
-  totalDropShipmentShippingCost?: string;
-  transferMethod?: string;
-  exportMethod?: string;
-  templateType?: string;
-  defaultExportMethod: boolean;
-  exportDelimiter?: string;
-  exportHeaders: boolean;
+  supplierName: string
+  address: string
+  city: string
+  country: string
+  postcode: string
+  supplierCurrency: string
+  isManufacturer: boolean
+  sendEmailWhenProductBelowReorderLevel: boolean
+  sendEmailWhenProductBelowOutOfStockThreshold: boolean
+  includeProductsEqualToReorderLevel: boolean
+  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean
+  includeSupplierInRequisitions: boolean
+  consolidateDropshipSupplierEmails: boolean
+  address2?: string
+  countryState?: string
+  phone?: string
+  supplierCode?: string
+  supplierReference?: string
+  commaDelimitedEmails?: string
+  minimumOrderValue?: string
+  supplierEmail?: string
+  contactEmail?: string
+  leadTime?: string
+  purchaseOrderMode?: string
+  purchaseOrderShippingCostType?: string
+  purchaseOrderChangeToStatus?: string
+  totalPurchaseOrderShippingCost?: string
+  dropShipmentShippingCostType?: string
+  dropShipmentChangeToStatus?: string
+  totalDropShipmentShippingCost?: string
+  transferMethod?: string
+  exportMethod?: string
+  templateType?: string
+  defaultExportMethod: boolean
+  exportDelimiter?: string
+  exportHeaders: boolean
+}
+
+
+// ---------------------------------------------------------
+
+
+// API response interfaces
+export interface IProductModel {
+  _id: string
+  productName: string
+  productType: string
+  sku: string
+  inventory: number
+  price: number
+  rrp: number
+  taxClass: number
+  priceIncludesVAT: boolean
+  weight: number
+  length: number
+  width: number
+  height: number
+  warehouse: string
+  brand: string
+  ean: string
+  upc: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+export interface IProductResponse {
+  _id?: string
+  product: IProductModel
+  message: string
+}
+
+export interface IProductsResponse {
+  productsWithOrderCOunt: IProductModel[]
+  total: number
+  page: number
+  limit: number
+  message: string
+}
+
+export type CreateProductData = {
+  productName: string
+  productType: string
+  sku?: string
+  inventory?: number
+  price?: number
+  rrp?: number
+  taxClass?: number
+  priceIncludesVAT?: boolean
+  weight?: number
+  length?: number
+  width?: number
+  height?: number
+  warehouse?: string
+  brand?: string
+  ean?: string
+  upc?: string
+}
+
+export type UpdateProductData = Partial<CreateProductData>
+
+export interface ProductQueryParams {
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
+  limit?: number
+  page?: number
+  search?: string
 }

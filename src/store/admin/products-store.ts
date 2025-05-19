@@ -1,10 +1,6 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { fetchInventory } from "@/pages/admin/products/core/_request"
 import { ProductItem, SavedFilter, topSellingProduct } from "@/pages/admin/products/core/_modals"
-// import { createContext, useContext, type ReactNode, useEffect } from "react"
-// import { useQuery } from "@tanstack/react-query"
-// import { fetchInventory } from "@/pages/admin/products/core/_request"
 
 interface ProductState {
   product: ProductItem[]
@@ -19,7 +15,6 @@ interface ProductState {
   topSellingProducts: topSellingProduct[]
   setActiveFilters: (filters: any) => void
   setTopSellingProducts: (products: topSellingProduct[]) => void
-  fetchInventory: () => Promise<void>
 }
 
 export const useProductsStore = create<ProductState>()(
@@ -74,19 +69,6 @@ export const useProductsStore = create<ProductState>()(
         console.log(filters, "filters");
         
         set({ activeFilters: filters });
-      },
-
-        fetchInventory: async () => {
-        set({ isLoading: true })
-        try {
-          // In a real app, this would be an API call
-          // Simulating API call with timeout
-         const data = await fetchInventory()
-
-          set({ product: data, isLoading: false })
-        } catch (error) {
-          set({ error: error as Error, isLoading: false })
-        }
       },
 
       topSellingProducts: [

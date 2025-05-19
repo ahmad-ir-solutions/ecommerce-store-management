@@ -12,8 +12,8 @@ export default function NotFoundPage() {
       <p className="text-muted-foreground mt-2 max-w-md">
         Oops! The page you’re looking for doesn’t exist. It might have been moved or deleted.
       </p>
-      <Button onClick={handleBack} className="mt-6" variant="default">
-        <Button variant="default">Go to Dashboard</Button>
+      <Button onClick={handleBack} className="mt-6 rounded-lg" size="lg" variant="primary">
+        Go back
       </Button>
     </div>
   );

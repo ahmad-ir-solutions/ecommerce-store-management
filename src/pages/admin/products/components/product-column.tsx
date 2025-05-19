@@ -2,29 +2,66 @@ import { useState } from "react"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Checkbox } from "@/components/ui/checkbox"
-import UserProfile from "../../../../assets/images/avatar.png"
-import { ProductItem } from "../core/_modals"
+// import UserProfile from "@/assets/images/avatar.png"
 import { Link } from "react-router-dom"
+import { IProductModel } from '../core/_modals'
 
-export function useProductColumns(): ColumnDef<ProductItem>[] {
+export function useProductColumns(): ColumnDef<IProductModel>[] {
+  const ProductSkuCell = ({ row }: { row: any }) => {
+    const [isHovered, setIsHovered] = useState(false)
+
+    return (
+      <div className="relative group" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <div>
+          <Link
+            to={`/admin/products/${row.original._id}`}
+            className="text-blue-500 hover:text-blue-700 hover:underline"
+          >
+            {row.original.sku}
+          </Link>
+        </div>
+
+        {isHovered && (
+          <div className="absolute left-0 -bottom-8 flex space-x-2 bg-white shadow-sm p-2 rounded z-10">
+            <Link to={`/admin/products/${row.original._id}`} className="text-blue-500 hover:text-blue-700 text-xs">
+              Edit
+            </Link>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-delete-modal", { detail: row.original }))}
+              className="text-red-500 hover:text-red-700 text-xs"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-archive-modal", { detail: row.original }))}
+              className="text-amber-500 hover:text-amber-700 text-xs"
+            >
+              Archive
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return [
     {
       accessorKey: "checked",
       header: ({ table }) => (
         <Checkbox
-        className="w-5 h-5 rounded-sm border-[#BBC2CB]"
-         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-         aria-label="Select all"
-       />
+          className="w-5 h-5 rounded-sm border-[#BBC2CB]"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
       ),
       cell: ({ row }) => (
-          <Checkbox
+        <Checkbox
           className="w-5 h-5 rounded-sm border-[#BBC2CB]"
-           checked={row.getIsSelected()}
-           onCheckedChange={(value) => row.toggleSelected(!!value)}
-           aria-label="Select row"
-         />
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
       ),
       enableColumnFilter: false,
       enableSorting: false,
@@ -40,7 +77,11 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
       header: "Image",
       cell: ({ row }) => (
         <Avatar className="h-12 w-12 bg-gray-300 rounded-sm">
-          <AvatarImage src={row.original.image || UserProfile} alt="User" />
+          <AvatarImage src='https://picsum.photos/400/300'
+          // src={
+          //   row.original.image || 
+          //   UserProfile}
+             alt="User" />
           <AvatarFallback>img</AvatarFallback>
         </Avatar>
       ),
@@ -48,60 +89,18 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
       enableColumnFilter: false,
     },
     {
-      accessorKey: "name",
-      header: "Name",
+      accessorKey: "productName",
+      header: "Product Name",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.name}</div>
-          {/* <div className="text-sm text-muted-foreground">{row.original.description}</div> */}
+          <div className="font-medium">{row.original?.productName}</div>
         </div>
       ),
     },
     {
       accessorKey: "sku",
       header: "SKU",
-      cell: ({ row }) => {
-        const [isHovered, setIsHovered] = useState(false)
-
-        return (
-          <div
-            className="relative group"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div>
-              <Link to={`/admin/products/${row.original.id}`}  className="text-blue-500 hover:text-blue-700 hover:underline">{row.original.sku}</Link>
-            </div>
-
-            {isHovered && (
-              <div className="absolute left-0 -bottom-8 flex space-x-2 bg-white shadow-sm p-2 rounded z-10">
-                <Link
-                  to={`/admin/products/${row.original.id}`}
-                  className="text-blue-500 hover:text-blue-700 text-xs"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={() =>
-                    window.dispatchEvent(new CustomEvent("open-delete-modal", { detail: row.original }))
-                  }
-                  className="text-red-500 hover:text-red-700 text-xs"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() =>
-                    window.dispatchEvent(new CustomEvent("open-archive-modal", { detail: row.original }))
-                  }
-                  className="text-amber-500 hover:text-amber-700 text-xs"
-                >
-                  Archive
-                </button>
-              </div>
-            )}
-          </div>
-        )
-      },
+      cell: ({ row }) => <ProductSkuCell row={row} />,
     },
     {
       accessorKey: "inventory",
@@ -115,22 +114,22 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
     {
       accessorKey: "price",
       header: "Price",
-      cell: ({ row }) => <div>{row.original.price}</div>,
+      cell: ({ row }) => <div>${row?.original?.price?.toFixed(2)}</div>,
     },
     {
       accessorKey: "rrp",
       header: "RRP",
-      cell: ({ row }) => <div>{row.original.rrp}</div>,
+      cell: ({ row }) => <div>${row?.original?.rrp?.toFixed(2)}</div>,
     },
     {
-      accessorKey: "textClass",
-      header: "Text Class",
-      cell: ({ row }) => <div>{row.original.textClass}</div>,
+      accessorKey: "taxClass",
+      header: "Tax Class",
+      cell: ({ row }) => <div>{row.original.taxClass}%</div>,
     },
     {
-      accessorKey: "priceIncludesVat",
+      accessorKey: "priceIncludesVAT",
       header: "Price Includes VAT",
-      cell: ({ row }) => <div>{row.original.priceIncludesVat}</div>,
+      cell: ({ row }) => <div>{row.original.priceIncludesVAT ? "Yes" : "No"}</div>,
     },
     {
       accessorKey: "weight",
@@ -148,9 +147,9 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
       cell: ({ row }) => <div>{row.original.width} mm</div>,
     },
     {
-      accessorKey: "heightDepth",
+      accessorKey: "height",
       header: "Height/Depth",
-      cell: ({ row }) => <div>{row.original.heightDepth} mm</div>,
+      cell: ({ row }) => <div>{row.original.height} mm</div>,
     },
     {
       accessorKey: "warehouse",
@@ -158,7 +157,6 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
       cell: ({ row }) => (
         <div>
           <div className="font-medium">{row.original.warehouse}</div>
-          <div className="text-sm text-muted-foreground">{row.original.warehouseDetail}</div>
         </div>
       ),
     },
@@ -170,73 +168,12 @@ export function useProductColumns(): ColumnDef<ProductItem>[] {
     {
       accessorKey: "ean",
       header: "EAN",
+      cell: ({ row }) => <div>{row.original.ean || "-"}</div>,
     },
     {
       accessorKey: "upc",
       header: "UPC",
-      cell: ({ row }) => <div>{row.original.upc}</div>,
+      cell: ({ row }) => <div>{row.original.upc || "-"}</div>,
     },
-
-    // {
-    //   accessorKey: "mpn",
-    //   header: "MPN",
-    // },
-    // {
-    //   accessorKey: "supplierSku",
-    //   header: "Supplier SKU",
-    // },
-    // {
-    //   accessorKey: "supplierInventory",
-    //   header: "Supplier Inventory",
-    // },
-    // {
-    //   accessorKey: "outOfStockDate",
-    //   header: "Out Of Stock Date",
-    // },
-    // {
-    //   accessorKey: "onPurchaseOrder",
-    //   header: "On Purchase Order",
-    // },
-    // {
-    //   accessorKey: "onBackOrder",
-    //   header: "On Back Order",
-    // },
-    // {
-    //   accessorKey: "soldLast30Days",
-    //   header: "Sold Last 30 Days",
-    // },
-    // {
-    //   accessorKey: "daysSinceLastOrder",
-    //   header: "Days Since Last Order",
-    // },
-    // {
-    //   accessorKey: "stockLocations",
-    //   header: "Stock Locations",
-    // },
-    // {
-    //   accessorKey: "cost",
-    //   header: "Cost",
-    //   cell: ({ row }) => <div>£{row.original.cost}</div>,
-    // },
-    // {
-    //   accessorKey: "createDate",
-    //   header: "Create Date",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       <div>{row.original.createDate}</div>
-    //       <div className="text-sm text-muted-foreground">{row.original.createTime}</div>
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   accessorKey: "suppliers",
-    //   header: "Suppliers",
-    //   cell: ({ row }) => (
-    //     <div>
-    //       <div className="font-medium">{row.original.suppliers}</div>
-    //       <div className="text-sm text-muted-foreground">{row.original.suppliersDetail}</div>
-    //     </div>
-    //   ),
-    // },
   ]
 }

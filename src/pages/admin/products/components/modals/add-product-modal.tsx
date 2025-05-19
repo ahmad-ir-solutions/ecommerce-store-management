@@ -1,27 +1,27 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { z } from "zod"
+import { useCreateProduct } from '../../core/hooks/useProduct'
 
 interface AddProductModalModalProps {
     isOpen: boolean
     onClose: () => void
-    // onSave: (data: { productSKU: string; productName: string; productType: string }) => void
-    isSubmitting?: boolean
 }
 
 const productSchema = z.object({
-    productSKU: z.string().optional(),
+    sku: z.string().optional(),
     productName: z.string().min(1, "Product Name is required"),
     productType: z.string().min(1, "Product Type is required"),
 })
 
 type ProductFormValues = z.infer<typeof productSchema>
 
-export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddProductModalModalProps) {
+export function AddProductModal({ isOpen, onClose }: AddProductModalModalProps) {
+    const createProductMutation = useCreateProduct()
     const {
         register,
         handleSubmit,
@@ -30,21 +30,19 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
     } = useForm<ProductFormValues>({
         resolver: zodResolver(productSchema),
         defaultValues: {
-            productSKU: "",
-            productName: "",
-            productType: "Complete (Ready to pick)",
+            productType: "simple",
         },
     })
 
     const onSubmit = (data: ProductFormValues) => {
-        console.log(data,"dadadsadas");
-        
-        // onSave(data)
+        createProductMutation.mutate(data)
+        onClose()
         reset()
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogTitle></DialogTitle>
             <DialogContent className="sm:max-w-[500px] p-2 gap-0 bg-white rounded-2xl border-none text-[#4E5967]">
                 <div className="p-6 pb-0">
                     <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
@@ -52,9 +50,9 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
                         <div className="grid grid-cols-[150px_1fr]">
                             <label className="text-sm font-medium whitespace-nowrap">Product SKU</label>
                             <Input
-                                {...register("productSKU")}
+                                {...register("sku")}
                                 placeholder="Enter SKU"
-                                disabled={isSubmitting}
+                                disabled={createProductMutation.isPending}
                                 className="border-gray-300"
                             />
                         </div>
@@ -64,7 +62,7 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
                                 <Input
                                     {...register("productName")}
                                     placeholder="Enter product name"
-                                    disabled={isSubmitting}
+                                    disabled={createProductMutation.isPending}
                                     className="border-gray-300"
                                 />
                                 {errors.productName && (
@@ -79,12 +77,9 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
                                     defaultValue="Complete (Ready to pick)"
                                     placeholder="Select product type"
                                     options={[
-                                        { id: "Complete (Ready to pick)", label: "Complete (Ready to pick)", value: "Complete (Ready to pick)" },
-                                        { id: "Customer Service", label: "Customer Service", value: "Customer Service" },
-                                        { id: "Shipping", label: "Shipping", value: "Shipping" },
-                                        { id: "Payment", label: "Payment", value: "Payment" },
+                                        { id: "simple", label: "Simple", value: "simple" },
+                                        { id: "variation", label: "Variation", value: "variation" },
                                     ]}
-                                    onChange={(value) => reset({ productType: value })}
                                     className="border-gray-200 bg-white"
                                 />
                                 {errors.productType && (
@@ -99,7 +94,6 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
                                 size="lg"
                                 className="rounded-lg mr-2"
                                 onClick={onClose}
-                                disabled={isSubmitting}
                             >
                                 Cancel
                             </Button>
@@ -108,7 +102,7 @@ export function AddProductModal({ isOpen, onClose, isSubmitting = false }: AddPr
                                 variant="primary"
                                 size="lg"
                                 className="rounded-lg"
-                                disabled={isSubmitting}
+                                 disabled={createProductMutation.isPending}
                             >
                                 Create
                             </Button>

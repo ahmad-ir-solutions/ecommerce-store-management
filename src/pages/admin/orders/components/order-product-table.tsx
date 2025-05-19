@@ -13,8 +13,42 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus } from "lucide-react"
 import { PaginationControls } from "@/components/shared/PaginationControls"
 import { useQuery } from "@tanstack/react-query"
-import { fetchInventory } from "../../products/core/_request"
 import { useOrderProductColumns } from "./order-product-column"
+import { ProductItem } from '../../products/core/_modals'
+
+export async function fetchInventory(): Promise<ProductItem[]> {
+  // In a real app, this would be an API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        Array(50)
+          .fill(null)
+          .map((_, index) => ({
+            id: `${index + 101}`,
+            type: "product",
+            qty: `0.${index}`,
+            image: `/placeholder-${index + 1}.svg?height=40&width=40`,
+            sku: `SKU-${80543209 + index}`,
+            name: `Product ${index + 1}`,
+            inventory: `${10 + index}`,
+            price: `${(100 + index * 5).toFixed(2)}`,
+            rrp: `${(120 + index * 5).toFixed(2)}`,
+            textClass: `class-${index + 1}`,
+            priceIncludesVat: index % 2 === 0 ? "Yes" : "No",
+            weight: `${(1 + index * 0.1).toFixed(2)}`,
+            length: `${(10 + index).toFixed(1)}`,
+            width: `${(5 + index).toFixed(1)}`,
+            heightDepth: `${(15 + index).toFixed(1)}`,
+            warehouse: `Warehouse-${index + 1}`,
+            warehouseDetail: `Detail-${index + 1}`,
+            brand: `Brand-${index + 1}`,
+            ean: `EAN-${1000000000 + index}`,
+            upc: `UPC-${2000000000 + index}`,
+          })),
+      )
+    }, 500)
+  })
+}
 
 export function OrderProductTable() {
 
