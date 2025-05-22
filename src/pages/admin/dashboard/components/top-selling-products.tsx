@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useProductsStore } from "@/store/admin/products-store"
 import { CustomSelect } from "@/components/shared/custom-select"
-import { useState } from "react"
+// import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 export function TopSellingProducts() {
   const { topSellingProducts } = useProductsStore()
-  const [timePeriod, setTimePeriod] = useState("7days")
+  // const [timePeriod, setTimePeriod] = useState("7days")
   // const columns: ColumnDef<Product>[] = [
   //   {
   //     accessorKey: "sku",
@@ -49,7 +49,8 @@ export function TopSellingProducts() {
               id: "3"
             },
           ]}
-          onChange={(value) => setTimePeriod(value)}
+          // onChange={(value) => setTimePeriod(value)}
+          onChange={(value) => console.log(value)}
           className="w-[180px]"
         />
       </CardHeader>

@@ -14,7 +14,7 @@ import { SalesChart } from "../components/sales-chart"
 import { TabsStats } from "../components/tabs-stats"
 import { TopSellingProducts } from "../components/top-selling-products"
 import { SalesByChannel } from "../components/sales-by-channel"
-import { DateRangePickerFilter } from '@/components/shared/date-range-picker-filter'
+// import { DateRangePickerFilter } from '@/components/shared/date-range-picker-filter'
 
 const companyOptions = [
   { id: '1', label: 'All', value: 'all' },

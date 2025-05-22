@@ -27,11 +27,11 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
     setOrderItems(newItems)
   }
 
-  const handleQuantityAllocatedChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].quantityAllocated = Number.parseFloat(value) || 0
-    setOrderItems(newItems)
-  }
+  // const handleQuantityAllocatedChange = (index: number, value: string) => {
+  //   const newItems = [...orderItems]
+  //   newItems[index].quantityAllocated = Number.parseFloat(value) || 0
+  //   setOrderItems(newItems)
+  // }
 
   const handleUnitSubtotalChange = (index: number, value: string) => {
     const newItems = [...orderItems]
@@ -45,11 +45,11 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
     setOrderItems(newItems)
   }
 
-  const handleTaxTotalChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].taxTotal = Number.parseFloat(value.replace("£", "")) || 0
-    setOrderItems(newItems)
-  }
+  // const handleTaxTotalChange = (index: number, value: string) => {
+  //   const newItems = [...orderItems]
+  //   newItems[index].taxTotal = Number.parseFloat(value.replace("£", "")) || 0
+  //   setOrderItems(newItems)
+  // }
 
   const handleDiscountChange = (index: number, value: string) => {
     const newItems = [...orderItems]

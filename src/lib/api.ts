@@ -20,6 +20,8 @@ export interface IErrorType {
 
 
 export async function fetchDashboardData(dateRange: DateRange) {
+  console.log(dateRange, "dateRange");
+  
   // In a real application, this would be an API call to your backend
   // For this example, we'll just return mock data
 
@@ -156,6 +158,8 @@ export async function fetchDashboardData(dateRange: DateRange) {
 }
 
 export async function fetchRecentOrders(orderStatus: string) {
+  console.log(orderStatus, "orderStatus");
+  
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 500))
 

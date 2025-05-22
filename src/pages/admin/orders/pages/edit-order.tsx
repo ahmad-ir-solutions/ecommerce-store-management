@@ -57,6 +57,8 @@ export default function EditOrderPage() {
       airNumber: "",
     },
   })
+  console.log(errors, "errors");
+  
 
   const onSubmit = async (data: EditOrderFormValues) => {
     const success = await submitForm(data)

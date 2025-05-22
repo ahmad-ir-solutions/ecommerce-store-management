@@ -74,11 +74,14 @@ export async function fetchCustomers(): Promise<Customer[]> {
 }
 
 export async function fetchCustomerById(id: string): Promise<Customer> {
+  console.log(id, "fetchCustomerById");
   await new Promise((resolve) => setTimeout(resolve, 500))
   return mockCustomerDetail
 }
 
 export async function updateCustomer({ id, data }: { id: string; data: Partial<Customer> }): Promise<Customer> {
+  console.log(id, data, "updateCustomer");
+  
   await new Promise((resolve) => setTimeout(resolve, 800))
   return { ...mockCustomerDetail, ...data }
 }
