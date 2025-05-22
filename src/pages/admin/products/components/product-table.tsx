@@ -24,7 +24,7 @@ import { AddProductModal } from "./modals/add-product-modal"
 import { ProductQueryParams } from '../core/_modals'
 import { useDeleteProduct, useGetProducts } from '../core/hooks/useProduct'
 import { DeleteConfirmationModal } from './modals/delete-confirmation-modal'
-import { ArchiveConfirmationModal } from './modals/archive-confirmation-modal'
+// import { ArchiveConfirmationModal } from './modals/archive-confirmation-modal'
 
 interface ProductTableProps {
   isAddProductModalOpen: boolean
@@ -108,8 +108,8 @@ export default function ProductTable({
     )
   }
 
-  const handleSelectChange = (value: string) => {
-    applySavedFilter(value)
+  const handleSelectChange = (value: string | number) => {
+    applySavedFilter(String(value))
   }
 
   const handleSaveFilters = () => {
@@ -121,13 +121,13 @@ export default function ProductTable({
     setGlobalFilter("") // Clear global filter
   }
 
-  const handleSort = (field: string) => {
-    setQueryParams((prev) => ({
-      ...prev,
-      sortBy: field,
-      sortOrder: prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
-    }))
-  }
+  // const handleSort = (field: string) => {
+  //   setQueryParams((prev) => ({
+  //     ...prev,
+  //     sortBy: field,
+  //     sortOrder: prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
+  //   }))
+  // }
 
   const handlePageChange = (page: number) => {
     setQueryParams((prev) => ({
@@ -136,9 +136,9 @@ export default function ProductTable({
     }))
   }
 
-  const confirmDelete = (id: string) => {
-    setDeleteId(id)
-  }
+  // const confirmDelete = (id: string) => {
+  //   setDeleteId(id)
+  // }
 
   const handleDelete = () => {
     if (deleteId) {
@@ -150,12 +150,12 @@ export default function ProductTable({
     }
   }
 
-    const handleArchiveProduct = (product: any) => {
-    // Here you would call your API to archive the product
-    console.log("Archiving product:", product)
-    // After successful archiving, refetch the data
-    // queryClient.invalidateQueries(["inventory"])
-  }
+  //   const handleArchiveProduct = (product: any) => {
+  //   // Here you would call your API to archive the product
+  //   console.log("Archiving product:", product)
+  //   // After successful archiving, refetch the data
+  //   // queryClient.invalidateQueries(["inventory"])
+  // }
 
   const totalPages = data?.total ? Math.ceil(data.total / (queryParams.limit || 10)) : 0
   const currentPage = queryParams.page || 1

@@ -63,7 +63,7 @@ export const useCreateProduct = () => {
 // Update an existing product
 export const useUpdateProduct = () => {
   const queryClient = useQueryClient()
-
+  const navigate = useNavigate()
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateProductData }) => updateProduct(id, data),
     onSuccess: (response, variables) => {
@@ -71,6 +71,7 @@ export const useUpdateProduct = () => {
       queryClient.invalidateQueries({ queryKey: productKeys.detail(variables.id) })
       queryClient.invalidateQueries({ queryKey: productKeys.lists() })
       showSuccessMessage(response.data.message || "Product updated successfully!")
+      navigate(`/admin/products/all-products`)
     },
     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
       if (error.response?.data.errors) {

@@ -1,129 +1,46 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
-import { FileCheck, Printer, Trash2 } from "lucide-react"
+import { FileCheck, Loader2, Printer, Trash2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useProductsStore } from "@/store/admin/products-store"
-import { useProductDetailStore } from "@/store/admin/product-detail-store"
-import { productSchema } from "../core/_schema"
 import ProductListOverview from "../components/product-list-overview"
-import ProductInformation from "../components/product-imformation"
 import SupplierInformation from "../components/supplier-information"
-
-// Mock product data - in a real app, you would fetch this from an API
-const fetchProductData = async (productId: string) => {
-  // Simulate API call
-  return {
-    id: productId,
-    name: "Xerjoff Accento EDP 5 100ml",
-    sku: productId,
-    inventory: "6",
-    price: "112.95",
-    rrp: "112.95",
-    taxClass: "20",
-    priceIncludesVAT: true,
-    weight: "0.74",
-    length: "100",
-    width: "50",
-    heightDepth: "50",
-    warehouse: "Default Warehouse",
-    brand: "Xerjoff",
-    ean: "",
-    upc: "",
-    listings: [
-      { platform: "woocommerce", status: "-" },
-      { platform: "ebay", status: "-" },
-      { platform: "onbuy", status: "-" },
-      { platform: "tiktok", status: "-" },
-    ],
-    suppliers: [
-      {
-        name: "Designer Collection",
-        sku: "£ 0.00",
-        unitCost: "£ 0.00",
-        cartonCost: "6.43",
-        stockLevel: "6.43",
-        cartonQuantity: "6.43",
-        priority: "0.00",
-      },
-    ],
-  }
-}
+import type { IProductModel } from "../core/_modals"
+import { useGetProduct, useUpdateProduct } from '../core/hooks/useProduct'
+import ProductInformation from '../components/product-imformation'
+import { ProductFormValues, productSchema } from '../core/_schema'
 
 export const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>()
+  const [isEditing, setIsEditing] = useState(false)
+  const [currentProduct, setCurrentProduct] = useState<ProductFormValues | null>(null)
+  const [originalProduct, setOriginalProduct] = useState<ProductFormValues | null>(null)
 
-  // Use the product detail store for managing the current product being edited
-  const {
-    currentProduct,
-    isEditing,
-    isLoading: detailLoading,
-    error: detailError,
-    setProduct,
-    setIsEditing,
-    updateProduct,
-    resetProduct,
-    setLoading,
-    setError,
-  } = useProductDetailStore()
-
-  // Use the main products store for any global product data
-  const { product: allProducts, isLoading: productsLoading } = useProductsStore()
+  // Fetch product data
+  const { data: productData, isLoading, error } = useGetProduct(productId || "")
+  const updateProductMutation = useUpdateProduct()
+console.log(productData, "productData");
 
   const {
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: currentProduct || undefined,
   })
+console.log(errors, "errors");
 
   useEffect(() => {
-    const loadProduct = async () => {
-      if (!productId) return
-
-      setLoading(true)
-      try {
-        // First check if the product exists in the global store
-        const existingProduct = allProducts.find((p) => p.id.toString() === productId || p.sku === productId)
-
-        if (existingProduct) {
-          setProduct(existingProduct)
-          reset(existingProduct)
-        } else {
-          // If not found in store, fetch it directly
-          const data = await fetchProductData(productId)
-          setProduct(data)
-          reset(data)
-        }
-        setLoading(false)
-      } catch (error) {
-        console.error("Failed to load product:", error)
-        setError(error instanceof Error ? error : new Error("Failed to load product"))
-        setLoading(false)
-      }
+    if (productData) {
+      setCurrentProduct(productData)
+      setOriginalProduct(productData)
+      reset(productData)
     }
-
-    loadProduct()
-  }, [productId, setProduct, reset, setLoading, setError, allProducts])
-
-  // Update form when currentProduct changes
-  useEffect(() => {
-    if (currentProduct) {
-      reset(currentProduct)
-    }
-  }, [currentProduct, reset])
-
-  const onSubmit = (data: any) => {
-    updateProduct(data)
-    setIsEditing(false)
-    // Here you would typically save to your backend
-    console.log("Saving product:", data)
-  }
+  }, [productData, reset])
 
   const handleEditClick = () => {
     setIsEditing(true)
@@ -132,74 +49,112 @@ export const ProductDetailsPage = () => {
   const handleSkuClick = () => {
     if (isEditing) {
       setIsEditing(false)
-      resetProduct()
-      reset(currentProduct || undefined)
+      setCurrentProduct(originalProduct)
+      reset(originalProduct || undefined)
     }
   }
 
-  const isLoadingData = detailLoading || productsLoading
-
-  if (isLoadingData) {
-    return <div className="p-8">Loading product details...</div>
+  const onSubmit = (data: IProductModel) => {
+    console.log(data, "data.priceIncludesVat");
+    if (productId) {
+      updateProductMutation.mutate({
+        id: productId,
+        data: {
+          productName: data.productName,
+          productType: data.productType,
+          sku: data.sku,
+          inventory: Number(data.inventory),
+          price: data.price,
+          rrp: data.rrp,
+          taxClass: data.taxClass,
+          priceIncludesVat: data.priceIncludesVat,
+          weight: data.weight,
+          length: data.length,
+          width: data.width,
+          height: data.height,
+          warehouse: data.warehouse,
+          brand: data.brand,
+          ean: data.ean,
+          upc: data.upc,
+        },
+      })
+      setIsEditing(false)
+    }
   }
 
-  if (detailError) {
-    return <div className="p-8">Error loading product: {detailError.message}</div>
+if (isLoading) {
+    return <Loader2 className="animate-spin h-8 w-8 mx-auto mt-15" />
+  }
+
+  if (error) {
+    return <div className="p-8 flex justify-center items-center">
+      <p>Error loading product: {error.message}</p>
+    </div>
   }
 
   if (!currentProduct) {
-    return <div className="p-8">Product not found</div>
+    return  <div className="p-8 flex justify-center items-center w-full">
+      <p>Product is not available</p>
+    </div>
   }
 
+
   return (
-    
     <div>
-      <Header title="Products
-      ">
+      <Header title="Products">
         <div className="flex items-center justify-end h-16 px-6 gap-3">
-        <Button variant="filter" size="lg" className="rounded-lg">
-          <Printer className="h-4 w-4 mr-2" />
-          Discontinue Product
-        </Button>
-        <Button variant="filter" size="lg" className="rounded-lg">
-          <Printer className="h-4 w-4 mr-2" />
-          Archive Products
-        </Button>
-        <Button  variant="primary" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
-        <Trash2 className="h-4 w-4"/>
-        </Button>
-        <Button  variant="primary" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg" onClick={handleEditClick}>
-        <FileCheck  className="h-4 w-4"/>
-        </Button>
+          <Button variant="filter" size="lg" className="rounded-lg">
+            <Printer className="h-4 w-4 mr-2" />
+            Discontinue Product
+          </Button>
+          <Button variant="filter" size="lg" className="rounded-lg">
+            <Printer className="h-4 w-4 mr-2" />
+            Archive Products
+          </Button>
+          <Button variant="primary" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+            <Trash2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="primary"
+            size="lg"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            onClick={handleEditClick}
+          >
+            <FileCheck className="h-4 w-4" />
+          </Button>
         </div>
       </Header>
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit as (data: any) => void)}>
           <div className="py-4 space-y-4">
             <ProductListOverview />
-            <ProductInformation currentProduct={{ ...currentProduct, inventory: currentProduct.inventory || "" }} isEditing={isEditing} control={control} handleSkuClick={handleSkuClick}/>
-            <SupplierInformation isEditing={isEditing}/>
+            <ProductInformation
+              currentProduct={currentProduct}
+              isEditing={isEditing}
+              control={control}
+              handleSkuClick={handleSkuClick}
+            />
+            <SupplierInformation isEditing={isEditing} />
 
             <div className="flex justify-end gap-4">
-            {!isEditing && (
-              <>
-              <Button
-                type="button"
-                variant="outline"
-                className="px-8 rounded-lg"
-                onClick={() => {
-                  setIsEditing(false)
-                  resetProduct()
-                  reset(currentProduct || undefined)
-                }}
-              >
-                Cancel
-              </Button>
-                <Button type="submit" variant="primary" className="px-8 rounded-lg">
-                  Save
-                </Button>
-              </>
-              
+              {isEditing && (
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="px-8 rounded-lg"
+                    onClick={() => {
+                      setIsEditing(false)
+                      setCurrentProduct(originalProduct)
+                      reset(originalProduct || undefined)
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="primary" className="px-8 rounded-lg">
+                    Save
+                  </Button>
+                </>
               )}
             </div>
           </div>

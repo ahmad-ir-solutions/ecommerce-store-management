@@ -162,7 +162,7 @@ export const AddSupplierPage = () => {
                       { id: "USD", label: "US Dollar", value: "US Dollar" },
                       { id: "EUR", label: "Euro", value: "Euro" },
                     ]}
-                    onChange={(value) => form.setValue("supplierCurrency", value)}
+                    onChange={(value) => form.setValue("supplierCurrency", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -276,7 +276,7 @@ export const AddSupplierPage = () => {
                       { id: "Canada", label: "Canada", value: "Canada" },
                       { id: "Australia", label: "Australia", value: "Australia" },
                     ]}
-                    onChange={(value) => form.setValue("country", value)}
+                    onChange={(value) => form.setValue("country", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -325,7 +325,7 @@ export const AddSupplierPage = () => {
                       { id: "Express", label: "Express", value: "Express" },
                       { id: "Urgent", label: "Urgent", value: "Urgent" },
                     ]}
-                    onChange={(value) => form.setValue("purchaseOrderMode", value)}
+                    onChange={(value) => form.setValue("purchaseOrderMode", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -381,7 +381,7 @@ export const AddSupplierPage = () => {
                       { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
                       { id: "Euro", label: "Euro", value: "Euro" },
                     ]}
-                    onChange={(value) => form.setValue("purchaseOrderShippingCostType", value)}
+                    onChange={(value) => form.setValue("purchaseOrderShippingCostType", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -400,7 +400,7 @@ export const AddSupplierPage = () => {
                       { id: "Processing", label: "Processing", value: "Processing" },
                       { id: "Completed", label: "Completed", value: "Completed" },
                     ]}
-                    onChange={(value) => form.setValue("purchaseOrderChangeToStatus", value)}
+                    onChange={(value) => form.setValue("purchaseOrderChangeToStatus", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -453,7 +453,7 @@ export const AddSupplierPage = () => {
                       { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
                       { id: "Euro", label: "Euro", value: "Euro" },
                     ]}
-                    onChange={(value) => form.setValue("dropShipmentShippingCostType", value)}
+                    onChange={(value) => form.setValue("dropShipmentShippingCostType", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -472,7 +472,7 @@ export const AddSupplierPage = () => {
                       { id: "Processing", label: "Processing", value: "Processing" },
                       { id: "Completed", label: "Completed", value: "Completed" },
                     ]}
-                    onChange={(value) => form.setValue("dropShipmentChangeToStatus", value)}
+                    onChange={(value) => form.setValue("dropShipmentChangeToStatus", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -528,7 +528,7 @@ export const AddSupplierPage = () => {
                     { id: "Manual", label: "Manual", value: "Manual" },
                     { id: "Automatic", label: "Automatic", value: "Automatic" },
                   ]}
-                  onChange={(value) => form.setValue("transferMethod", value)}
+                  onChange={(value) => form.setValue("transferMethod", String(value))}
                   className="border-[#BBC2CB] bg-white max-w-52"
                 />
                 </div>
@@ -547,7 +547,7 @@ export const AddSupplierPage = () => {
                       { id: "XML", label: "XML", value: "XML" },
                       { id: "JSON", label: "JSON", value: "JSON" },
                     ]}
-                    onChange={(value) => form.setValue("exportMethod", value)}
+                    onChange={(value) => form.setValue("exportMethod", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>
@@ -566,7 +566,7 @@ export const AddSupplierPage = () => {
                       { id: "XML", label: "XML", value: "XML" },
                       { id: "JSON", label: "JSON", value: "JSON" },
                     ]}
-                    onChange={(value) => form.setValue("templateType", value)}
+                    onChange={(value) => form.setValue("templateType", String(value))}
                     className="border-[#BBC2CB] bg-white max-w-52"
                   />
                 </div>

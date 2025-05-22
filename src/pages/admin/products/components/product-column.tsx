@@ -17,7 +17,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
             to={`/admin/products/${row.original._id}`}
             className="text-blue-500 hover:text-blue-700 hover:underline"
           >
-            {row.original.sku}
+            {row.original.sku  || "---"}
           </Link>
         </div>
 
@@ -32,12 +32,12 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
             >
               Delete
             </button>
-            <button
+            {/* <button
               onClick={() => window.dispatchEvent(new CustomEvent("open-archive-modal", { detail: row.original }))}
               className="text-amber-500 hover:text-amber-700 text-xs"
             >
               Archive
-            </button>
+            </button> */}
           </div>
         )}
       </div>
@@ -93,7 +93,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
       header: "Product Name",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original?.productName}</div>
+          <div className="font-medium">{row.original?.productName || "---"}</div>
         </div>
       ),
     },
@@ -107,73 +107,73 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
       header: "Inventory",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.inventory}</div>
+          <div className="font-medium">{row.original.inventory  || "---"}</div>
         </div>
       ),
     },
     {
       accessorKey: "price",
       header: "Price",
-      cell: ({ row }) => <div>${row?.original?.price?.toFixed(2)}</div>,
+      cell: ({ row }) => <div>${row?.original?.price?.toFixed(2)  || "---"}</div>,
     },
     {
       accessorKey: "rrp",
       header: "RRP",
-      cell: ({ row }) => <div>${row?.original?.rrp?.toFixed(2)}</div>,
+      cell: ({ row }) => <div>${row?.original?.rrp?.toFixed(2)  || "---"}</div>,
     },
     {
       accessorKey: "taxClass",
       header: "Tax Class",
-      cell: ({ row }) => <div>{row.original.taxClass}%</div>,
+      cell: ({ row }) => <div>{row.original.taxClass  || "---"}%</div>,
     },
     {
-      accessorKey: "priceIncludesVAT",
+      accessorKey: "priceIncludesVat",
       header: "Price Includes VAT",
-      cell: ({ row }) => <div>{row.original.priceIncludesVAT ? "Yes" : "No"}</div>,
+      cell: ({ row }) => <div>{row.original.priceIncludesVat ? "Yes" : "No"}</div>,
     },
     {
       accessorKey: "weight",
       header: "Weight",
-      cell: ({ row }) => <div>{row.original.weight} kg</div>,
+      cell: ({ row }) => <div>{row.original.weight  || "---"} kg</div>,
     },
     {
       accessorKey: "length",
       header: "Length",
-      cell: ({ row }) => <div>{row.original.length} mm</div>,
+      cell: ({ row }) => <div>{row.original.length  || "---"} mm</div>,
     },
     {
       accessorKey: "width",
       header: "Width",
-      cell: ({ row }) => <div>{row.original.width} mm</div>,
+      cell: ({ row }) => <div>{row.original.width  || "---"} mm</div>,
     },
     {
       accessorKey: "height",
       header: "Height/Depth",
-      cell: ({ row }) => <div>{row.original.height} mm</div>,
+      cell: ({ row }) => <div>{row.original.height  || "---"} mm</div>,
     },
     {
       accessorKey: "warehouse",
       header: "Warehouse",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.warehouse}</div>
+          <div className="font-medium">{row.original.warehouse  || "---"}</div>
         </div>
       ),
     },
     {
       accessorKey: "brand",
       header: "Brand",
-      cell: ({ row }) => <div>{row.original.brand}</div>,
+      cell: ({ row }) => <div>{row.original.brand  || "---"}</div>,
     },
     {
       accessorKey: "ean",
       header: "EAN",
-      cell: ({ row }) => <div>{row.original.ean || "-"}</div>,
+      cell: ({ row }) => <div>{row.original.ean  || "---"}</div>,
     },
     {
       accessorKey: "upc",
       header: "UPC",
-      cell: ({ row }) => <div>{row.original.upc || "-"}</div>,
+      cell: ({ row }) => <div>{row.original.upc  || "---"}</div>,
     },
   ]
 }

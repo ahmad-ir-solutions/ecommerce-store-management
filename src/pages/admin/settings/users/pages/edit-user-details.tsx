@@ -171,7 +171,7 @@ export function EditUserDetails() {
                           { id: "3", label: "Jane Smith", value: "Jane Smith" },
                         ]}
                         defaultValue={formData.copyPermissionFrom}
-                        onChange={(value) => handleSelectChange(value)}
+                        onChange={(value) => handleSelectChange(String(value))}
                         className="w-full bg-white"
                       />
                       </div>

@@ -8,15 +8,16 @@ import {
 import { cn } from '@/lib/utils';
 
 interface Option {
-  id: string;
+  id: string | number;
   label: string;
-  value: string;
+  value: string | number;
 }
+
 interface CustomSelectProps {
   placeholder: string;
-  defaultValue?: string;
+  defaultValue?: string | number;
   options: Option[];
-  onChange?: (value: string) => void;
+  onChange?: (value: string | number) => void;
   className?: string;
   title?: string;
 }
@@ -29,19 +30,32 @@ export const CustomSelect = ({
   className,
   title,
 }: CustomSelectProps) => {
+  const handleChange = (val: string) => {
+    const selected = options.find((opt) => String(opt.value) === val);
+    if (onChange && selected) {
+      onChange(selected.value); // Maintain original type
+    }
+  };
+
   return (
-    <Select defaultValue={defaultValue} onValueChange={onChange}>
-      <div className="text-sm font-normal text-gray-500 whitespace-nowrap">{title}</div>
-      <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
-        <SelectValue placeholder={placeholder}/>
-      </SelectTrigger>
-      <SelectContent className="w-full border-gray-100 bg-white">
-        {options.map((opt) => (
-          <SelectItem key={opt.value} value={opt.value}>
-            {opt.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="space-y-1">
+      {title && (
+        <div className="text-sm font-normal text-gray-500 whitespace-nowrap">
+          {title}
+        </div>
+      )}
+      <Select defaultValue={String(defaultValue)} onValueChange={handleChange}>
+        <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent className="w-full border-gray-100 bg-white">
+          {options.map((opt) => (
+            <SelectItem key={opt.value} value={String(opt.value)}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 };

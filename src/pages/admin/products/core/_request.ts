@@ -1,14 +1,14 @@
 import authApi from '@/lib/axios';
-import { IProductResponse, IProductsResponse, CreateProductData, UpdateProductData } from './_modals';
+import { IProductResponse, IProductsResponse, CreateProductData, UpdateProductData, ProductQueryParams, IProductModel } from './_modals';
 
 const PRODUCTS_URL = '/products';
 
-export function getAllProducts(params?: Record<string, any>) {
+export function getAllProducts(params?: ProductQueryParams) {
   return authApi.get<IProductsResponse>(PRODUCTS_URL, { params });
 }
 
 export function getSpecificProduct(id: string) {
-  return authApi.get<IProductResponse>(`${PRODUCTS_URL}/${id}`);
+  return authApi.get<IProductModel>(`${PRODUCTS_URL}/${id}`);
 }
 
 export function createProduct(body: CreateProductData) {

@@ -79,7 +79,7 @@ export function OrderNoteModal({ isOpen, onClose, onSave, isSubmitting = false }
                     { id: "Shipping", label: "Shipping", value: "Shipping" },
                     { id: "Payment", label: "Payment", value: "Payment" },
                   ]}
-                  onChange={(value) => setNoteType(value)}
+                  onChange={(value) => setNoteType(String(value))}
                   className="border-gray-200 bg-white"
                 />
               </div>

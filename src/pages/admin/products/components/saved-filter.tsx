@@ -6,8 +6,8 @@ import { CustomSelect } from "@/components/shared/custom-select"
 export function SavedFilters() {
   const { savedFilters, applySavedFilter } = useProductsStore()
 
-  const handleSelectChange = (value: string) => {
-    applySavedFilter(value)
+  const handleSelectChange = (value: string | number) => {
+    applySavedFilter(String(value))
   }
 
   return (

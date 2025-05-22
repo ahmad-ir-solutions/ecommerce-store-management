@@ -17,7 +17,7 @@ export interface ProductItem {
   price: number
   rrp: number
   taxClass: number
-  priceIncludesVAT: boolean
+  priceIncludesVat: boolean
   weight: number
   length: number
   width: number
@@ -153,7 +153,7 @@ export interface IProductModel {
   price: number
   rrp: number
   taxClass: number
-  priceIncludesVAT: boolean
+  priceIncludesVat: boolean
   weight: number
   length: number
   width: number
@@ -189,7 +189,7 @@ export type CreateProductData = {
   price?: number
   rrp?: number
   taxClass?: number
-  priceIncludesVAT?: boolean
+  priceIncludesVat: boolean
   weight?: number
   length?: number
   width?: number

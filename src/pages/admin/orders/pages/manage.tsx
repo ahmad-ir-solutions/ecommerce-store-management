@@ -85,8 +85,8 @@ export function ManageOrderPage() {
     return <div>Error loading orders: {(error as Error).message}</div>
   }
 
-  const handleActionChange = (value: string) => {
-    setSelectedAction(value)
+  const handleActionChange = (value: string | number) => {
+    setSelectedAction(String(value))
   }
 
   const handleActionExecute = async () => {

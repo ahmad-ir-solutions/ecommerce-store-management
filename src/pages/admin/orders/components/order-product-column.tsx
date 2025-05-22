@@ -29,11 +29,11 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
       enableHiding: false,
     },
     {
-      accessorKey: "id",
+      accessorKey: "_id",
       header: () => (
         <div></div>
       ),
-      cell: ({ row }) => <div>{row.original.id}</div>,
+      cell: ({ row }) => <div>{row.original._id}</div>,
     },
     {
         accessorKey: "qty",
@@ -63,7 +63,7 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
             // onMouseLeave={() => setIsHovered(false)}
           >
             <div>
-              <Link to={`/admin/products/${row.original.id}`}  className="hover:underline">{row.original.sku}</Link>
+              <Link to={`/admin/products/${row.original._id}`}  className="hover:underline">{row.original.sku}</Link>
             </div>
 
             {/* {isHovered && (
@@ -99,9 +99,9 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
       },
     },
     {
-        accessorKey: "name",
+        accessorKey: "productName",
         header: "Product Name",
-        cell: ({ row }) => <div>{row.original.name}</div>,
+        cell: ({ row }) => <div>{row.original.productName}</div>,
     },
     {
         accessorKey: "mpn",
@@ -139,7 +139,7 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
     {
         accessorKey: "view",
         header: "",
-        cell: ({ row }) => <Link to={`/admin/products/${row.original.id}`} className="underline">View</Link>,
+        cell: ({ row }) => <Link to={`/admin/products/${row.original._id}`} className="underline">View</Link>,
     },
   ]
 }
