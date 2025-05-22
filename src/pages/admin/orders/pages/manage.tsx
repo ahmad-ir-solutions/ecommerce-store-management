@@ -136,7 +136,7 @@ export function ManageOrderPage() {
         <div className="flex items-center gap-4">
           <Button  variant="default" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
           <Plus />
-            Add Order
+            New Orders
           </Button>
         </div>
       </div>

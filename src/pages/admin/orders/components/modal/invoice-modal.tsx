@@ -29,7 +29,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
   if (isLoading) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[800px]">
+        <DialogContent className="sm:max-w-[800px] bg-white">
           <DialogHeader>
             <DialogTitle>Loading invoice...</DialogTitle>
           </DialogHeader>
@@ -41,7 +41,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
   if (!order) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="sm:max-w-[800px]">
+        <DialogContent className="sm:max-w-[800px] bg-white">
           <DialogHeader>
             <DialogTitle>Error loading invoice</DialogTitle>
           </DialogHeader>
@@ -52,7 +52,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] bg-white">
         <DialogHeader>
           <DialogTitle>Invoice #{order.orderId}</DialogTitle>
           <div className="flex justify-end space-x-2 mt-2">
