@@ -1,3 +1,5 @@
+import { z } from 'zod'
+import { csvFormSchema } from './_schema'
 
 export interface topSellingProduct {
   id: number
@@ -136,6 +138,7 @@ export interface SupplierFormValues {
   exportHeaders: boolean
 }
 
+export type CsvFormValues = z.infer<typeof csvFormSchema>;
 
 // ---------------------------------------------------------
 
@@ -206,3 +209,87 @@ export interface ProductQueryParams {
   page?: number
   search?: string
 }
+
+
+
+// ---------------------------------------------------------
+
+
+// API response interfaces for suppliers
+export interface ISupplier {
+  _id: string
+  supplierName: string
+  contactName: string
+  email: string
+  phone: string
+  address: {
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+    countryCode: string
+  }
+  handlingTimeInDays: number
+  collectionPoint?: string
+  warehouseType: "In-House" | "Third-Party"
+  isFreeProductSupplier: boolean
+  linkedProductIds: string[]
+  createdAt: string
+  updatedAt: string
+}
+
+export interface ISupplierResponse {
+  success: boolean
+  message: string
+  _id?: string
+  data?: ISupplier
+}
+
+export interface ISuppliersResponse {
+  success: boolean
+  message: string
+  data: {
+    suppliers: ISupplier[]
+    totalCount: number
+    page: number
+    limit: number
+  }
+}
+
+// Request interfaces
+export interface SupplierQueryParams {
+  page?: number
+  limit?: number
+  search?: string
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
+  warehouseType?: string
+  isFreeProductSupplier?: boolean
+}
+
+export interface SupplierAddressData {
+  addressLine1: string
+  addressLine2?: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+  countryCode: string
+}
+
+export interface CreateSupplierData {
+  supplierName: string
+  contactName: string
+  email: string
+  phone: string
+  address: SupplierAddressData
+  handlingTimeInDays: number
+  collectionPoint?: string
+  warehouseType: "In-House" | "Third-Party"
+  isFreeProductSupplier: boolean
+  linkedProductIds?: string[]
+}
+
+export type UpdateSupplierData = Partial<CreateSupplierData>
