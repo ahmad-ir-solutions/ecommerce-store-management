@@ -10,7 +10,7 @@ export function CompanyPage() {
     const companyId = "164123126545641231";
 
     const handleAddCompany = () => {
-        // navigate("/admin/settings/company/company-details")
+        navigate("")
       }
 
   return (

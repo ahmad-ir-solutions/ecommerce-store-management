@@ -75,7 +75,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "image",
       header: "Image",
-      cell: ({ row }) => (
+      cell: () => (
         <Avatar className="h-12 w-12 bg-gray-300 rounded-sm">
           <AvatarImage src='https://picsum.photos/400/300'
           // src={

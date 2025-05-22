@@ -1,16 +1,16 @@
-import { ProductFormValues } from "@/pages/admin/products/core/_modals"
+import { CreateProductData } from "@/pages/admin/products/core/_modals"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 interface ProductDetailStore {
-  currentProduct: ProductFormValues | null
-  originalProduct: ProductFormValues | null
+  currentProduct: CreateProductData | null
+  originalProduct: CreateProductData | null
   isEditing: boolean
   isLoading: boolean
   error: Error | null
-  setProduct: (product: ProductFormValues) => void
+  setProduct: (product: CreateProductData) => void
   setIsEditing: (isEditing: boolean) => void
-  updateProduct: (product: ProductFormValues) => void
+  updateProduct: (product: CreateProductData) => void
   resetProduct: () => void
   setLoading: (isLoading: boolean) => void
   setError: (error: Error | null) => void

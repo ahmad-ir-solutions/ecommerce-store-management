@@ -8,6 +8,8 @@ import { Company } from "./_modal"
 export const fetchCompanyDetails = async (companyId: string): Promise<Company> => {
   // In a real application, you would make an API call here
   // For now, we'll return mock data
+  console.log("Fetching company details for", companyId);
+  
   return {
     companyName: "Designer Collection",
     address: "123 Main St",

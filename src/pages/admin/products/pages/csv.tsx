@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn } from "@/lib/utils"
-import { CsvProductFormValues } from "../core/_modals"
+import { CsvFormValues } from "../core/_modals"
 import { csvFormSchema } from "../core/_schema"
 import { CustomSelect } from "@/components/shared/custom-select"
 
@@ -35,7 +35,7 @@ const warehouses = [
 export function ProductsCsvPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const form = useForm<CsvProductFormValues>({
+  const form = useForm<CsvFormValues>({
     resolver: zodResolver(csvFormSchema),
     defaultValues: {
       poReference: "",
@@ -46,14 +46,14 @@ export function ProductsCsvPage() {
   })
 
   const uploadMutation = useMutation({
-    mutationFn: async (data: CsvProductFormValues) => {
+    mutationFn: async (data: CsvFormValues) => {
       // Mock API call
       console.log("Uploading data:", data)
       return new Promise((resolve) => setTimeout(resolve, 1000))
     },
   })
 
-  const onSubmit = (data: CsvProductFormValues) => {
+  const onSubmit = (data: CsvFormValues) => {
     uploadMutation.mutate(data)
   }
 

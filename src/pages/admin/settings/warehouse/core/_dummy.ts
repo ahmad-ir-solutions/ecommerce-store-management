@@ -1,7 +1,9 @@
-import { WarehouseFormValues } from './_schema'
+import { WarehouseFormValues } from './_modal'
 
 // Mock API functions
 export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> => {
+  console.log(id, "id");
+  
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -26,6 +28,7 @@ export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormVa
 }
 
 export const updateWarehouseDetails = async (id: string, data: WarehouseFormValues): Promise<WarehouseFormValues> => {
+    console.log(id, "id");
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {

@@ -18,7 +18,7 @@ const dashboardData = {
 
 export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
-  const [data, setData] = useState(dashboardData)
+  const data = dashboardData
 
   useEffect(() => {
     // Simulate data loading

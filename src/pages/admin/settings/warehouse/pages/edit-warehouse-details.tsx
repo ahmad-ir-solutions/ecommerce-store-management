@@ -23,6 +23,7 @@ import { AddWarehouseZoneModal } from '../components/modal/add-warehouse-zone-mo
 
 // Mock API functions
 const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> => {
+    console.log(id, "id");
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -47,6 +48,7 @@ const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> =
 }
 
 const updateWarehouseDetails = async (id: string, data: WarehouseFormValues): Promise<WarehouseFormValues> => {
+    console.log(id, "id");
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {

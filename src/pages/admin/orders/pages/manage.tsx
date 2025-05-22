@@ -25,7 +25,7 @@ import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
 
 export function ManageOrderPage() {
-  const { savedFilters, applySavedFilter, activeFilters, resetFilters, setActiveFilters } = useOrderFilterStore()
+  const { activeFilters, resetFilters, setActiveFilters } = useOrderFilterStore()
   const [columnFilters, setColumnFilters] = useState<any[]>(activeFilters.columnFilters || [])
   const [globalFilter, setGlobalFilter] = useState(activeFilters.globalFilter || "")
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)

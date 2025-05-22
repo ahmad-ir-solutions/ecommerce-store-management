@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useOrderStore } from "@/store/admin/order-store"
 import { cancelOrder, cloneOrder, fetchOrderDetails, updateOrder } from "../_dummy"
-import { Address, EditOrderFormValues, OrderDetails, OrderItem, OrderTotals } from "../_modals"
+import { Address, CreateOrderData, EditOrderFormValues, OrderDetails, OrderItem, OrderQueryParams, OrderTotals, UpdateOrderData } from "../_modals"
 import { useEffect } from "react"
 
 export function useOrder(orderId: string) {
@@ -72,6 +72,8 @@ export function useOrder(orderId: string) {
       return { previousOrder }
     },
     onError: (err, newData, context) => {
+      console.log(newData, "newData");
+      
       // If the mutation fails, use the context returned from onMutate to roll back
       if (context?.previousOrder) {
         queryClient.setQueryData<OrderDetails>(["order", orderId], context.previousOrder)
@@ -221,3 +223,105 @@ export function useOrder(orderId: string) {
     isCloning: cloneOrderMutation.isPending,
   }
 }
+
+
+
+
+// import { showSuccessMessage, showErrorMessage } from "@/lib/utils/messageUtils"
+// import type { AxiosError } from "axios"
+// import { useNavigate } from "react-router-dom"
+// import { createOrder, deleteOrder, getAllOrders, getSpecificOrder } from '../_request'
+
+// // Query keys
+// export const orderKeys = {
+//   all: ["orders"] as const,
+//   lists: () => [...orderKeys.all, "list"] as const,
+//   list: (filters: OrderQueryParams) => [...orderKeys.lists(), filters] as const,
+//   details: () => [...orderKeys.all, "detail"] as const,
+//   detail: (id: string) => [...orderKeys.details(), id] as const,
+// }
+
+// // Get all orders with optional filtering
+// export const useGetOrders = (params?: OrderQueryParams) => {
+//   return useQuery({
+//     queryKey: orderKeys.list(params || {}),
+//     queryFn: () => getAllOrders(params),
+//     select: (data) => data.data,
+//   })
+// }
+
+// // Get a specific order by ID
+// export const useGetOrder = (id: string) => {
+//   return useQuery({
+//     queryKey: orderKeys.detail(id),
+//     queryFn: () => getSpecificOrder(id),
+//     select: (data) => data.data,
+//     enabled: !!id, // Only run if ID is provided
+//   })
+// }
+
+// // Create a new order
+// export const useCreateOrder = () => {
+//   const queryClient = useQueryClient()
+//   const navigate = useNavigate()
+
+//   return useMutation({
+//     mutationFn: (data: CreateOrderData) => createOrder(data),
+//     onSuccess: (response) => {
+//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
+//       showSuccessMessage(response.data.message || "Order created successfully!")
+//       const newOrderId = response.data?._id
+//       navigate(`/admin/orders/${newOrderId}`)
+//     },
+//     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
+//       if (error.response?.data.errors) {
+//         Object.values(error.response.data.errors).forEach((errorMessage) => {
+//           showErrorMessage(errorMessage)
+//         })
+//       } else {
+//         showErrorMessage(error.response?.data?.message || "Failed to create order. Please try again.")
+//       }
+//     },
+//   })
+// }
+
+// // Update an existing order
+// export const useUpdateOrder = () => {
+//   const queryClient = useQueryClient()
+
+//   return useMutation({
+//     mutationFn: ({ id, data }: { id: string; data: UpdateOrderData }) => updateOrder(id, data),
+//     onSuccess: (response, variables) => {
+//       // Invalidate specific order query and list queries
+//       queryClient.invalidateQueries({ queryKey: orderKeys.detail(variables.id) })
+//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
+//       showSuccessMessage(response.data.message || "Order updated successfully!")
+//     },
+//     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
+//       if (error.response?.data.errors) {
+//         Object.values(error.response.data.errors).forEach((errorMessage) => {
+//           showErrorMessage(errorMessage)
+//         })
+//       } else {
+//         showErrorMessage(error.response?.data?.message || "Failed to update order. Please try again.")
+//       }
+//     },
+//   })
+// }
+
+// // Delete an order
+// export const useDeleteOrder = () => {
+//   const queryClient = useQueryClient()
+
+//   return useMutation({
+//     mutationFn: (id: string) => deleteOrder(id),
+//     onSuccess: (response) => {
+//       // Invalidate list queries after deletion
+//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
+//       showSuccessMessage(response.data.message || "Order deleted successfully!")
+//     },
+//     onError: (error: AxiosError<{ message: string }>) => {
+//       showErrorMessage(error.response?.data?.message || "Failed to delete order. Please try again.")
+//     },
+//   })
+// }

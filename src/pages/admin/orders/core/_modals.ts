@@ -97,3 +97,102 @@ export type CsvOrderFormValues = z.infer<typeof csvOrderFormSchema>
 export type EditOrderFormValues = z.infer<typeof editOrderSchema>
 
 export type AddressFormValues = z.infer<typeof addressSchema>
+
+
+
+// Api response Order interfaces
+export interface IOrder {
+  _id: string
+  productDetails: string
+  quantity: number
+  totalPrice: number
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+  shippingAddress: {
+    firstName: string
+    lastName: string
+    company?: string
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  billingAddress: {
+    firstName: string
+    lastName: string
+    company?: string
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  paymentMethod: string
+  transactionId?: string
+  notes?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface IOrderResponse {
+  success: boolean
+  message: string
+  _id?: string
+  data: IOrder
+}
+
+export interface IOrdersResponse {
+  success: boolean
+  message: string
+  data: IOrder[]
+  pagination?: {
+    total: number
+    page: number
+    limit: number
+    pages: number
+  }
+}
+
+export type CreateOrderData = {
+  productDetails: string
+  quantity: number
+  totalPrice: number
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+  shippingAddress: {
+    firstName: string
+    lastName: string
+    company?: string
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  billingAddress: {
+    firstName: string
+    lastName: string
+    company?: string
+    addressLine1: string
+    addressLine2?: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  paymentMethod: string
+  transactionId?: string
+  notes?: string
+}
+
+export type UpdateOrderData = Partial<CreateOrderData>
+
+export type OrderQueryParams = {
+  page?: number
+  limit?: number
+  status?: string
+  sort?: string
+  search?: string
+}

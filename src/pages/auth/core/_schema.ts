@@ -25,7 +25,7 @@ export const registerSchema = z.object({
 // });
 
 export const otpSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().optional(),
   otp: z
     .string()
     .length(6, "OTP must be 6 characters.")

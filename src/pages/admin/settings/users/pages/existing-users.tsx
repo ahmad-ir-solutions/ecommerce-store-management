@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
@@ -6,22 +5,22 @@ import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
 
-interface User {
-  id: string
-  name: string
-  email: string
-  lastLoggedIn: string
-  role: string
-  designatedPicker: boolean
-  accountOwner: boolean
-  passwordAge: string
-  mfaStatus: string
-  ipRestriction: string
-}
+// interface User {
+//   id: string
+//   name: string
+//   email: string
+//   lastLoggedIn: string
+//   role: string
+//   designatedPicker: boolean
+//   accountOwner: boolean
+//   passwordAge: string
+//   mfaStatus: string
+//   ipRestriction: string
+// }
 
 export function ExistingUsers() {
   const navigate = useNavigate()
-  const [users, setUsers] = useState<User[]>([
+  const users = [
     {
       id: "1",
       name: "Benson",
@@ -35,7 +34,7 @@ export function ExistingUsers() {
       ipRestriction: "Unrestricted",
     },
     // Add more mock users as needed
-  ])
+  ]
 
   const handleAddUser = () => {
     // navigate("/admin/settings/users/add")

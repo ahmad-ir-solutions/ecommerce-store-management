@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { CreditCard } from "lucide-react"
+// import { CreditCard } from "lucide-react"
 import { useIntegrationStore } from '@/store/admin/integration-store'
 import { Platform } from '../core/_schema'
 import CourireTruck from "@/assets/images/courire-truck.svg"

@@ -14,7 +14,7 @@ export const ProfileSetup = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control,
+    // control,
   } = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {

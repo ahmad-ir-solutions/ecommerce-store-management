@@ -1,4 +1,4 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
@@ -7,19 +7,19 @@ import { Button } from "@/components/ui/button"
 import { CustomSearch } from '@/components/shared/custom-search'
 import { Plus } from "lucide-react"
 
-interface Warehouse {
-  id: string
-  warehouse: string
-  adress1: string
-  adress2: string
-  city: string
-  postCode: string
-  default: string
-}
+// interface Warehouse {
+//   id: string
+//   warehouse: string
+//   adress1: string
+//   adress2: string
+//   city: string
+//   postCode: string
+//   default: string
+// }
 
 export function ExistingWarehouse() {
   const navigate = useNavigate()
-  const [warehouse, setWarehouse] = useState<Warehouse[]>([
+  const warehouse = [
        {
       id: "1",
       warehouse: "Benson",
@@ -29,7 +29,7 @@ export function ExistingWarehouse() {
       postCode: "3434",
       default: "is Default",
     },
-  ])
+  ]
 
   const handleAddWarehouse = () => {
     // navigate("/admin/settings/users/add")
