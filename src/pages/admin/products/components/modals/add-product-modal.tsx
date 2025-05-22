@@ -4,21 +4,13 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CustomSelect } from "@/components/shared/custom-select"
-import { z } from "zod"
 import { useCreateProduct } from '../../core/hooks/useProduct'
+import { ProductFormValues, productSchema } from '../../core/_schema'
 
 interface AddProductModalModalProps {
     isOpen: boolean
     onClose: () => void
 }
-
-const productSchema = z.object({
-    sku: z.string().optional(),
-    productName: z.string().min(1, "Product Name is required"),
-    productType: z.string().min(1, "Product Type is required"),
-})
-
-type ProductFormValues = z.infer<typeof productSchema>
 
 export function AddProductModal({ isOpen, onClose }: AddProductModalModalProps) {
     const createProductMutation = useCreateProduct()

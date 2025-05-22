@@ -13,6 +13,9 @@ interface ProductInformationProps {
   isEditing: boolean
   control: any
   handleSkuClick: () => void
+  handleImageChange : (e: React.ChangeEvent<HTMLInputElement>) => void
+  uploading: boolean
+  uploadedImageUrl: string | null
 }
 
 export const ProductInformation: React.FC<ProductInformationProps> = ({
@@ -20,6 +23,9 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
   isEditing,
   control,
   handleSkuClick,
+  handleImageChange,
+  uploading,
+  uploadedImageUrl
 }) => {
   return (
     <div className="bg-white rounded-xl p-6">
@@ -400,18 +406,53 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
             </div>
           </div>
         </div>
-        <div className="overflow-hidden flex justify-center items-center">
-          <div className="flex justify-center items-center bg-white rounded-lg h-[200px] w-[200px]">
-            {/* <div className="text-center text-gray-500">No Image</div> */}
-            <img
-              src={
-                "https://plus.unsplash.com/premium_photo-1679913792906-13ccc5c84d44?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              }
-              alt="Product image"
-              className="h-full w-full object-cover"
-            />
-          </div>
+        <div className="overflow-hidden flex justify-center items-center flex-col p-6">
+          {isEditing ? (
+            <>
+              {/* Preview Box: Shows image after upload or a placeholder */}
+              <div className="flex justify-center items-center bg-white border border-dashed border-gray-300 rounded-lg h-[200px] w-[200px] mb-4">
+                {uploadedImageUrl ? (
+                  <img
+                    src={uploadedImageUrl}
+                    alt="Uploaded preview"
+                    className="h-full w-full object-cover rounded-lg"
+                  />
+                ) : uploading ? (
+                  <span className="text-sm text-blue-600">Uploading image...</span>
+                ) : (
+                  <span className="text-gray-400 text-sm">No image uploaded</span>
+                )}
+              </div>
+
+              {/* File Upload Input */}
+              <Controller
+                name="imageUrl"
+                control={control}
+                render={() => (
+                  <Input
+                    id="imageUrl"
+                    type="file"
+                    onChange={handleImageChange}
+                    className="border-gray-200 bg-white h-9 w-[200px]"
+                  />
+                )}
+              />
+            </>
+          ) : (
+            // View Mode: Show saved image or fallback
+            <div className="flex justify-center items-center bg-white rounded-lg h-[200px] w-[200px]">
+              <img
+                src={
+                  currentProduct.imageUrl ||
+                  "https://plus.unsplash.com/premium_photo-1679913792906-13ccc5c84d44?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }
+                alt="Product image"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          )}
         </div>
+
       </div>
     </div>
   )

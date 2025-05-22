@@ -77,7 +77,7 @@ export const SupplierInformation: React.FC<SupplierInformationProps> = ({ isEdit
                           <Link to="/admin/products/add-supplier" className="flex items-center rounded-lg bg-gray-300 text-[#11263C] px-3 py-[6.5px] font-medium whitespace-nowrap text-sm">
                             + Add Supplier
                           </Link>
-                          <Button variant="primary" size="sm" className="rounded-lg"><Trash2/></Button>
+                          <Button type='button' variant="primary" size="sm" className="rounded-lg"><Trash2/></Button>
                           </div>
                         {/* )} */}
                       </td>

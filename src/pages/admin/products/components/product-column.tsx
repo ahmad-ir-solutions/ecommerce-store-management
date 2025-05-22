@@ -75,13 +75,12 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "image",
       header: "Image",
-      cell: () => (
+      cell: ({row}) => (
         <Avatar className="h-12 w-12 bg-gray-300 rounded-sm">
-          <AvatarImage src='https://picsum.photos/400/300'
-          // src={
-          //   row.original.image || 
-          //   UserProfile}
-             alt="User" />
+          <AvatarImage
+          src={
+            row.original.imageUrl || 'https://picsum.photos/400/300'}
+             alt="Product img" />
           <AvatarFallback>img</AvatarFallback>
         </Avatar>
       ),

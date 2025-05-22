@@ -11,28 +11,43 @@ import type { IProductModel } from "../core/_modals"
 import { useGetProduct, useUpdateProduct } from '../core/hooks/useProduct'
 import ProductInformation from '../components/product-imformation'
 import { ProductFormValues, productSchema } from '../core/_schema'
+import { useUploadProductImage } from '@/hooks/useUploadProductImage'
 
 export const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>()
   const [isEditing, setIsEditing] = useState(false)
   const [currentProduct, setCurrentProduct] = useState<ProductFormValues | null>(null)
   const [originalProduct, setOriginalProduct] = useState<ProductFormValues | null>(null)
-
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
+  // image Upload hook
+  const { mutateAsync: uploadImage, isPending: uploading } = useUploadProductImage();  
   // Fetch product data
   const { data: productData, isLoading, error } = useGetProduct(productId || "")
   const updateProductMutation = useUpdateProduct()
-console.log(productData, "productData");
 
   const {
     control,
     handleSubmit,
     reset,
+    setValue ,
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: currentProduct || undefined,
   })
 console.log(errors, "errors");
+
+ const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadImage(file, {
+        onSuccess: (url) => {
+          setValue("imageUrl", url);
+          setUploadedImageUrl(url);
+        },
+      });
+    }
+  };
 
   useEffect(() => {
     if (productData) {
@@ -62,8 +77,9 @@ console.log(errors, "errors");
         data: {
           productName: data.productName,
           productType: data.productType,
+          imageUrl: data.imageUrl,
           sku: data.sku,
-          inventory: Number(data.inventory),
+          inventory: data.inventory,
           price: data.price,
           rrp: data.rrp,
           taxClass: data.taxClass,
@@ -133,6 +149,9 @@ if (isLoading) {
               isEditing={isEditing}
               control={control}
               handleSkuClick={handleSkuClick}
+              handleImageChange={handleImageChange}
+              uploading={uploading}
+              uploadedImageUrl={uploadedImageUrl}
             />
             <SupplierInformation isEditing={isEditing} />
 

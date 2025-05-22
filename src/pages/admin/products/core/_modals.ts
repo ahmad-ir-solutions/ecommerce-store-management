@@ -142,12 +142,12 @@ export type CsvFormValues = z.infer<typeof csvFormSchema>;
 
 // ---------------------------------------------------------
 
-
 // API response interfaces
 export interface IProductModel {
   _id: string
   productName: string
   productType: string
+  imageUrl: string
   sku: string
   inventory: number
   price: number
@@ -186,10 +186,11 @@ export type CreateProductData = {
   productType: string
   sku?: string
   inventory?: number
+  imageUrl?: string
   price?: number
   rrp?: number
   taxClass?: number
-  priceIncludesVat: boolean
+  priceIncludesVat?: boolean
   weight?: number
   length?: number
   width?: number
