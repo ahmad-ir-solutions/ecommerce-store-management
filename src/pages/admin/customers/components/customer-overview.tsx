@@ -42,8 +42,6 @@ export function CustomerOverview({
       setIsEditingNotes(false)
     }
   }
-  console.log(customer, "customercustomer");
-
 
   const name = `${customer.firstName} ${customer.lastName}`
   const initials = name
@@ -51,7 +49,6 @@ export function CustomerOverview({
     .map((n) => n[0])
     .join("")
     .toUpperCase()
-  console.log(customer, "customer");
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-7 gap-4">
