@@ -1,27 +1,21 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { z } from "zod"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Customer } from "../core/_modals"
-import { updateCustomer } from "../core/dummy"
+import type { ICustomer } from "../core/_modals"
+import { useState } from "react"
+import { BasicDetailsFormValues, basicDetailsSchema } from '../core/_schema'
 
-const basicDetailsSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  phoneNumber: z.string().optional(),
-  email: z.string().email("Invalid email address"),
-  ccEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
-  customerReference: z.string().optional(),
-})
-
-type BasicDetailsFormValues = z.infer<typeof basicDetailsSchema>
-
-export function CustomerBasicDetails({ customer }: { customer: Customer }) {
-  const queryClient = useQueryClient()
+export function CustomerBasicDetails({
+  customer,
+  onUpdate,
+}: {
+  customer: ICustomer
+  onUpdate: (data: BasicDetailsFormValues) => Promise<boolean>
+}) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<BasicDetailsFormValues>({
     resolver: zodResolver(basicDetailsSchema),
@@ -30,33 +24,23 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
       lastName: customer.lastName || "",
       phoneNumber: customer.phoneNumber || "",
       email: customer.email || "",
-      ccEmail: customer.ccEmail || "",
-      customerReference: customer.reference || "",
+      emailCC: customer.emailCC || "",
+      customerReference: customer.customerReference || "",
+      vatNumber: customer.vatNumber || "",
+      abn: customer.abn || "",
     },
   })
 
-  const updateMutation = useMutation({
-    mutationFn: updateCustomer,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer", customer.id] })
-    },
-  })
-
-  function onSubmit(data: BasicDetailsFormValues) {
-    updateMutation.mutate({
-      id: customer.id,
-      data: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phoneNumber: data.phoneNumber,
-        email: data.email,
-        ccEmail: data.ccEmail,
-        reference: data.customerReference,
-      },
-    })
-    console.log(data, "Form submitted")
-    form.reset();
-    
+  async function onSubmit(data: BasicDetailsFormValues) {
+    setIsSubmitting(true)
+    try {
+      const success = await onUpdate(data)
+      if (success) {
+        form.reset(data)
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -76,7 +60,7 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>First name</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -89,7 +73,7 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Last name *</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -102,7 +86,7 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Phone number</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -115,7 +99,7 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Email address</FormLabel>
                       <FormControl>
-                        <Input {...field}  className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -123,12 +107,12 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                 />
                 <FormField
                   control={form.control}
-                  name="ccEmail"
+                  name="emailCC"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Email CC address</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -141,7 +125,7 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Customer reference</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300"/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -157,30 +141,44 @@ export function CustomerBasicDetails({ customer }: { customer: Customer }) {
                 <CardTitle>Tax & customs</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormItem>
-                    <FormLabel>VAT Number</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Add a new tag" className="border-gray-300"/>
-                    </FormControl>
-                  </FormItem>
-                  <FormItem>
-                    <FormLabel>EORI</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Add a new tag" className="border-gray-300"/>
-                    </FormControl>
-                  </FormItem>
+                <div className="grid grid-cols-1 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="vatNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>VAT Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="border-gray-300" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="abn"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>EORI</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="border-gray-300" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </CardContent>
             </Card>
           </div>
         </div>
         <div className="flex justify-end gap-4 w-full mt-9">
-          <Button type="submit" disabled={updateMutation.isPending} variant="outline" className="rounded-lg" size="lg">
+          <Button type="button" variant="outline" className="rounded-lg" size="lg">
             Cancel
           </Button>
-          <Button type="submit" disabled={updateMutation.isPending} variant="primary" className="rounded-lg" size="lg">
-            {updateMutation.isPending ? "Saving..." : "Save"}
+          <Button type="submit" disabled={isSubmitting} className="rounded-lg bg-blue-500 hover:bg-blue-600" size="lg">
+            {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>

@@ -1,73 +1,73 @@
 import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Edit, Plus, Save } from "lucide-react"
-import { Customer } from "../core/_modals"
-import { updateCustomer } from "../core/dummy"
-import { useCustomerStore } from "@/store/admin/customer-store"
-import Ebay from "../../../../assets/images/ebay.svg";
+import type { ICustomer } from "../core/_modals"
 
 export function CustomerOverview({
   customer,
   setActiveTab,
-}: { customer: Customer; setActiveTab: (tab: string) => void }) {
-  const queryClient = useQueryClient()
+  onAddTag,
+  // onRemoveTag,
+  onUpdateNotes,
+  setAddressFormFocus,
+}: {
+  customer: ICustomer
+  setActiveTab: (tab: string) => void
+  onAddTag: (tag: string) => Promise<boolean>
+  onRemoveTag: (tag: string) => Promise<boolean>
+  onUpdateNotes: (notes: string) => Promise<boolean>
+  setAddressFormFocus: (focus: string | null) => void
+}) {
   const [isEditingTags, setIsEditingTags] = useState(false)
   const [isEditingNotes, setIsEditingNotes] = useState(false)
   const [newTag, setNewTag] = useState("")
   const [notes, setNotes] = useState(customer.notes || "")
 
-  const updateMutation = useMutation({
-    mutationFn: updateCustomer,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer", customer.id] })
-    },
-  })
-
-  const handleAddTag = () => {
+  const handleAddTag = async () => {
     if (!newTag.trim()) return
 
-    const updatedTags = [...(customer.tags || []), newTag.trim()]
-    updateMutation.mutate({
-      id: customer.id,
-      data: { tags: updatedTags },
-    })
-    setNewTag("")
+    const success = await onAddTag(newTag.trim())
+    if (success) {
+      setNewTag("")
+    }
   }
 
-  const handleSaveNotes = () => {
-    updateMutation.mutate({
-      id: customer.id,
-      data: { notes },
-    })
-    setIsEditingNotes(false)
+  const handleSaveNotes = async () => {
+    const success = await onUpdateNotes(notes)
+    if (success) {
+      setIsEditingNotes(false)
+    }
   }
+  console.log(customer, "customercustomer");
 
-  const initials = customer.name
+
+  const name = `${customer.firstName} ${customer.lastName}`
+  const initials = name
     .split(" ")
     .map((n) => n[0])
     .join("")
     .toUpperCase()
+  console.log(customer, "customer");
 
-    return (
+  return (
     <div className="grid grid-cols-2 lg:grid-cols-7 gap-4">
       <div className="space-y-4 col-span-7 lg:col-span-2">
         <Card className="bg-white border-0 shadow-none rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xl font-semibold">Customer</CardTitle>
             <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  // Navigate to addresses tab and focus on shipping form
-                  setActiveTab("addresses")
-                  useCustomerStore.getState().setAddressFormFocus("shipping")
-                }}
-              >
+              size="sm"
+              variant="ghost"
+              onClick={() => {
+                // Navigate to addresses tab and focus on shipping form
+                setActiveTab("addresses")
+                setAddressFormFocus("shipping")
+              }}
+            >
               <Edit className="h-7 w-7 text-blue-500" />
             </Button>
           </CardHeader>
@@ -77,13 +77,13 @@ export function CustomerOverview({
                 <AvatarFallback>{initials}</AvatarFallback>
               </Avatar>
               <div>
-                <h3 className="text-lg font-semibold">{customer.name}</h3>
+                <h3 className="text-lg font-semibold">{name}</h3>
                 <p className="text-sm text-gray-500">{customer.email}</p>
-                <p className="text-sm text-gray-500">{customer.reference}</p>
+                <p className="text-sm text-gray-500">{customer.customerReference}</p>
                 <div className="mt-3">
                   <h1 className="text-lg font-bold">Customer reference</h1>
-                  <p className="text-gray-500">akinolorunt0</p>
-              </div>
+                  <p className="text-gray-500">{customer.customerReference}</p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -98,7 +98,7 @@ export function CustomerOverview({
               onClick={() => {
                 // Navigate to addresses tab and focus on shipping form
                 setActiveTab("addresses")
-                useCustomerStore.getState().setAddressFormFocus("shipping")
+                setAddressFormFocus("shipping")
               }}
             >
               <Edit className="h-7 w-7 text-blue-500" />
@@ -108,8 +108,8 @@ export function CustomerOverview({
             {customer.shippingAddress ? (
               <div className="text-gray-500">
                 <p>{customer.shippingAddress.company || ""}</p>
-                <p>{customer.shippingAddress.line1}</p>
-                {customer.shippingAddress.line2 && <p>{customer.shippingAddress.line2}</p>}
+                <p>{customer.shippingAddress.addressLine1}</p>
+                {customer.shippingAddress.addressLine2 && <p>{customer.shippingAddress.addressLine2}</p>}
                 <p>{customer.shippingAddress.city}</p>
                 <p>{customer.shippingAddress.state}</p>
                 <p>{customer.shippingAddress.postalCode}</p>
@@ -130,7 +130,7 @@ export function CustomerOverview({
               onClick={() => {
                 // Navigate to addresses tab and focus on billing form
                 setActiveTab("addresses")
-                useCustomerStore.getState().setAddressFormFocus("billing")
+                setAddressFormFocus("billing")
               }}
             >
               <Edit className="h-7 w-7 text-blue-500" />
@@ -140,8 +140,8 @@ export function CustomerOverview({
             {customer.billingAddress ? (
               <div className="text-gray-500">
                 <p>{customer.billingAddress.company || ""}</p>
-                <p>{customer.billingAddress.line1}</p>
-                {customer.billingAddress.line2 && <p>{customer.billingAddress.line2}</p>}
+                <p>{customer.billingAddress.addressLine1}</p>
+                {customer.billingAddress.addressLine2 && <p>{customer.billingAddress.addressLine2}</p>}
                 <p>{customer.billingAddress.city}</p>
                 <p>{customer.billingAddress.state}</p>
                 <p>{customer.billingAddress.postalCode}</p>
@@ -157,7 +157,7 @@ export function CustomerOverview({
       <Card className="col-span-7 lg:col-span-5 xl:col-span-3 bg-white border-0 shadow-none rounded-2xl">
         <CardContent className="px-6">
           <h3 className="text-xl font-semibold mb-4">Activity</h3>
-          <div className="flex justify-between  gap-6 border-gray-200 flex-wrap">
+          <div className="flex justify-between gap-6 border-gray-200 flex-wrap">
             <Card className="rounded-2xl border-none shadow-none pt-0">
               <CardContent className="p-0">
                 <div className="space-y-2">
@@ -177,42 +177,35 @@ export function CustomerOverview({
               </CardContent>
             </Card>
             <div className="w-0.5 h-16 bg-gray-200 bg-opacity-50 border-dashed"></div>
-            
+
             <Card className="rounded-2xl border-none shadow-none pt-0">
               <CardContent className="p-0">
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">Total returns</p>
-                  <h2 className="text-3xl font-bold">
-                    0
-                  </h2>
+                  <h2 className="text-3xl font-bold">0</h2>
                 </div>
               </CardContent>
             </Card>
             <div className="w-0.5 h-16 bg-gray-200 bg-opacity-50 border-dashed"></div>
-            
+
             <Card className="rounded-2xl border-none shadow-none pt-0">
               <CardContent className="p-0">
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">Total spend</p>
-                  <h2 className="text-3xl font-bold">
-                    0
-                  </h2>
+                  <h2 className="text-3xl font-bold">0</h2>
                 </div>
               </CardContent>
             </Card>
             <div className="w-0.5 h-20 bg-gray-200 bg-opacity-50 border-dashed"></div>
-            
+
             <Card className="rounded-2xl border-none shadow-none pt-0">
               <CardContent className="p-0">
                 <div className="space-y-2">
                   <p className="text-sm text-gray-500">Average order value</p>
-                  <h2 className="text-3xl font-bold">
-                  £ 25.99
-                  </h2>
+                  <h2 className="text-3xl font-bold">£ 25.99</h2>
                 </div>
               </CardContent>
             </Card>
-
           </div>
 
           <div className="mt-6">
@@ -231,7 +224,7 @@ export function CustomerOverview({
                     <div>
                       <div className="flex items-center gap-2">
                         <div className="bg-white p-1 rounded">
-                          <img src={Ebay} alt="ebay" className="h-5" />
+                          <img src="/images/ebay.svg" alt="ebay" className="h-5" />
                         </div>
                         <div>
                           <p className="font-medium">Ebay DCUK</p>
@@ -239,30 +232,30 @@ export function CustomerOverview({
                         </div>
                       </div>
                     </div>
-                   <div className="flex justify-between w-full">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Order number</p>
-                      <p>19923422</p>
-                    </div>
-                    <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
-                    
-                    <div>
-                      <p className="text-xs text-muted-foreground">Order date</p>
-                      <p>Today</p>
-                    </div>
-                    <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Order number</p>
+                        <p>19923422</p>
+                      </div>
+                      <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
 
-                    <div>
-                      <p className="text-xs text-muted-foreground">Shipping cost</p>
-                      <p>£0.00</p>
-                    </div>
-                    <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Order date</p>
+                        <p>Today</p>
+                      </div>
+                      <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
 
-                    <div>
-                      <p className="text-xs text-muted-foreground">Order total</p>
-                      <p>£25.99</p>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Shipping cost</p>
+                        <p>£0.00</p>
+                      </div>
+                      <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>
+
+                      <div>
+                        <p className="text-xs text-muted-foreground">Order total</p>
+                        <p>£25.99</p>
+                      </div>
                     </div>
-                   </div>
                   </div>
 
                   <div className="flex justify-between items-start mb-4 px-12 mt-8">
@@ -421,7 +414,7 @@ export function CustomerOverview({
               </div>
               <div className="flex items-center gap-2 justify-between">
                 <p className="text-sm text-gray-500">EORI</p>
-                <p className="font-medium">{customer.eori || "—"}</p>
+                <p className="font-medium">{customer.abn || "—"}</p>
               </div>
             </div>
           </CardContent>
@@ -473,7 +466,12 @@ export function CustomerOverview({
           <CardContent>
             {isEditingNotes ? (
               <div className="flex items-center gap-2">
-                <Input value={notes} className="border-gray-400" onChange={(e) => setNotes(e.target.value)} placeholder="Add notes" />
+                <Input
+                  value={notes}
+                  className="border-gray-400"
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Add notes"
+                />
                 <Button size="sm" onClick={handleSaveNotes} className="shadow-none text-blue-500">
                   + Add
                 </Button>

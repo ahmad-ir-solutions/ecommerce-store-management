@@ -177,7 +177,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Company Name *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -193,7 +193,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Address *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -209,7 +209,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Address 2</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -225,7 +225,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">City *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -239,20 +239,20 @@ export const EditCompanyDetails = () => {
                       render={({ field }) => (
                         <FormItem className="grid grid-cols-3 items-center gap-4">
                           <FormLabel className="text-xs text-[#4E5967]">Country</FormLabel>
-                            <div className="col-span-2">
+                          <div className="col-span-2">
                             <CustomSelect
                               placeholder="Select a country"
                               options={[
-                              { id: "1", label: "United Kingdom", value: "United Kingdom" },
-                              { id: "2", label: "United States", value: "United States" },
-                              { id: "3", label: "Canada", value: "Canada" },
-                              { id: "4", label: "Australia", value: "Australia" },
+                                { id: "1", label: "United Kingdom", value: "United Kingdom" },
+                                { id: "2", label: "United States", value: "United States" },
+                                { id: "3", label: "Canada", value: "Canada" },
+                                { id: "4", label: "Australia", value: "Australia" },
                               ]}
                               onChange={(value) => field.onChange(value)}
                               className="w-full bg-white max-w-52"
                             />
                             <FormMessage className="text-red-400" />
-                            </div>
+                          </div>
                         </FormItem>
                       )}
                     />
@@ -265,7 +265,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Postcode/ Zip Code *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -281,7 +281,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Contact Email Address *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -297,7 +297,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Contact Phone Number *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -313,7 +313,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Website URL (eg: www.yourdomain.com)</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -329,7 +329,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Registered Company Name</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -345,7 +345,7 @@ export const EditCompanyDetails = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Override CN Sender Name</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                              <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                             </FormControl>
                             <FormMessage className="text-red-400" />
                           </div>
@@ -366,7 +366,7 @@ export const EditCompanyDetails = () => {
                               <FormLabel className="text-xs text-[#4E5967]">VAT Number</FormLabel>
                               <div className="col-span-2">
                                 <FormControl>
-                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                                 </FormControl>
                                 <FormMessage className="text-red-400" />
                               </div>
@@ -382,7 +382,7 @@ export const EditCompanyDetails = () => {
                               <FormLabel className="text-xs text-[#4E5967]">EORI Number</FormLabel>
                               <div className="col-span-2">
                                 <FormControl>
-                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                                 </FormControl>
                                 <FormMessage className="text-red-400" />
                               </div>
@@ -398,7 +398,7 @@ export const EditCompanyDetails = () => {
                               <FormLabel className="text-xs text-[#4E5967]">IOSS Number</FormLabel>
                               <div className="col-span-2">
                                 <FormControl>
-                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                                 </FormControl>
                                 <FormMessage className="text-red-400" />
                               </div>
@@ -427,19 +427,19 @@ export const EditCompanyDetails = () => {
                           render={({ field }) => (
                             <FormItem className="grid grid-cols-3 items-center gap-4">
                               <FormLabel className="text-xs text-[#4E5967]">UKIMS Number</FormLabel>
-                                <div className="col-span-2">
+                              <div className="col-span-2">
                                 <CustomSelect
                                   placeholder="Select an option"
                                   options={[
-                                  { id: "1", label: "Xerjoff", value: "Xerjoff" },
-                                  { id: "2", label: "Option 1", value: "Option 1" },
-                                  { id: "3", label: "Option 2", value: "Option 2" },
+                                    { id: "1", label: "Xerjoff", value: "Xerjoff" },
+                                    { id: "2", label: "Option 1", value: "Option 1" },
+                                    { id: "3", label: "Option 2", value: "Option 2" },
                                   ]}
                                   onChange={(value) => field.onChange(value)}
                                   className="w-full bg-white max-w-52"
                                 />
                                 <FormMessage className="text-red-400" />
-                                </div>
+                              </div>
                             </FormItem>
                           )}
                         />
@@ -452,7 +452,7 @@ export const EditCompanyDetails = () => {
                               <FormLabel className="text-xs text-[#4E5967]">EORI Number (Northern Ireland)</FormLabel>
                               <div className="col-span-2">
                                 <FormControl>
-                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52"/>
+                                  <Input placeholder="" {...field} className="bg-white border-gray-300 rounded-lg max-w-52" />
                                 </FormControl>
                                 <FormMessage className="text-red-400" />
                               </div>
@@ -633,50 +633,50 @@ export const EditCompanyDetails = () => {
                     </div>
                   </div>
 
-                   {/* Company Logo Upload */}
-                   <div className="w-32 h-32 bg-white rounded-md flex flex-col items-center justify-center border border-gray-200">
-                        {selectedImage || form.watch("companyLogo") ? (
-                          <div className="text-center">
-                            <div className="w-16 h-16 bg-gray-100 mx-auto mb-2 flex items-center justify-center">
-                              <img
-                                src={selectedImage || form.watch("companyLogo") || "/placeholder.svg"}
-                                alt="Company Logo"
-                                className="max-w-full max-h-full object-contain"
-                              />
-                            </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              type="button"
-                              onClick={() => {
-                                setSelectedImage(null)
-                                form.setValue("companyLogo", "")
-                              }}
-                              className="text-xs"
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            type="button"
-                            onClick={handleImageUpload}
-                            className="flex flex-col items-center h-full justify-center"
-                          >
-                            <ImagePlus className="h-6 w-6 mb-1 text-[#4E5967]" />
-                            <span className="text-xs text-[#4E5967]">+ Add Image</span>
-                          </Button>
-                        )}
-                        <input
-                          type="file"
-                          ref={imageInputRef}
-                          onChange={handleImageChange}
-                          accept="image/*"
-                          className="hidden"
-                        />
-                    </div>
+                  {/* Company Logo Upload */}
+                  <div className="w-32 h-32 bg-white rounded-md flex flex-col items-center justify-center border border-gray-200">
+                    {selectedImage || form.watch("companyLogo") ? (
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-gray-100 mx-auto mb-2 flex items-center justify-center">
+                          <img
+                            src={selectedImage || form.watch("companyLogo") || "/placeholder.svg"}
+                            alt="Company Logo"
+                            className="max-w-full max-h-full object-contain"
+                          />
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          type="button"
+                          onClick={() => {
+                            setSelectedImage(null)
+                            form.setValue("companyLogo", "")
+                          }}
+                          className="text-xs"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        type="button"
+                        onClick={handleImageUpload}
+                        className="flex flex-col items-center h-full justify-center"
+                      >
+                        <ImagePlus className="h-6 w-6 mb-1 text-[#4E5967]" />
+                        <span className="text-xs text-[#4E5967]">+ Add Image</span>
+                      </Button>
+                    )}
+                    <input
+                      type="file"
+                      ref={imageInputRef}
+                      onChange={handleImageChange}
+                      accept="image/*"
+                      className="hidden"
+                    />
+                  </div>
                 </div>
 
                 {/* Form Actions */}

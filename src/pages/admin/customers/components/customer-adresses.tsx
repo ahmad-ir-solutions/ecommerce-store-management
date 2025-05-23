@@ -1,17 +1,25 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Search } from "lucide-react"
-import { AddressFormValues, Customer } from "../core/_modals"
-import { updateCustomer } from "../core/dummy"
-import { addressSchema } from "../core/_schema"
+import type { ICustomer } from "../core/_modals"
+import { useState } from "react"
+import { AddressFormValues, addressSchema } from '../core/_schema'
 
-export function CustomerAddresses({ customer }: { customer: Customer }) {
-  const queryClient = useQueryClient()
+export function CustomerAddresses({
+  customer,
+  onUpdateShippingAddress,
+  onUpdateBillingAddress,
+}: {
+  customer: ICustomer
+  onUpdateShippingAddress: (data: AddressFormValues) => Promise<boolean>
+  onUpdateBillingAddress: (data: AddressFormValues) => Promise<boolean>
+}) {
+  const [isSubmittingShipping, setIsSubmittingShipping] = useState(false)
+  const [isSubmittingBilling, setIsSubmittingBilling] = useState(false)
 
   const shippingForm = useForm<AddressFormValues>({
     resolver: zodResolver(addressSchema),
@@ -19,8 +27,8 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
       firstName: customer.shippingAddress?.firstName || "",
       lastName: customer.shippingAddress?.lastName || "",
       company: customer.shippingAddress?.company || "",
-      addressLine1: customer.shippingAddress?.line1 || "",
-      addressLine2: customer.shippingAddress?.line2 || "",
+      addressLine1: customer.shippingAddress?.addressLine1 || "",
+      addressLine2: customer.shippingAddress?.addressLine2 || "",
       city: customer.shippingAddress?.city || "",
       state: customer.shippingAddress?.state || "",
       postalCode: customer.shippingAddress?.postalCode || "",
@@ -34,8 +42,8 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
       firstName: customer.billingAddress?.firstName || "",
       lastName: customer.billingAddress?.lastName || "",
       company: customer.billingAddress?.company || "",
-      addressLine1: customer.billingAddress?.line1 || "",
-      addressLine2: customer.billingAddress?.line2 || "",
+      addressLine1: customer.billingAddress?.addressLine1 || "",
+      addressLine2: customer.billingAddress?.addressLine2 || "",
       city: customer.billingAddress?.city || "",
       state: customer.billingAddress?.state || "",
       postalCode: customer.billingAddress?.postalCode || "",
@@ -43,49 +51,28 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
     },
   })
 
-  const updateMutation = useMutation({
-    mutationFn: updateCustomer,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customer", customer.id] })
-    },
-  })
-
-  function onSubmitShipping(data: AddressFormValues) {
-    updateMutation.mutate({
-      id: customer.id,
-      data: {
-        shippingAddress: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          company: data.company,
-          line1: data.addressLine1,
-          line2: data.addressLine2,
-          city: data.city,
-          state: data.state,
-          postalCode: data.postalCode,
-          country: data.country,
-        },
-      },
-    })
+  async function onSubmitShipping(data: AddressFormValues) {
+    setIsSubmittingShipping(true)
+    try {
+      const success = await onUpdateShippingAddress(data)
+      if (success) {
+        shippingForm.reset(data)
+      }
+    } finally {
+      setIsSubmittingShipping(false)
+    }
   }
 
-  function onSubmitBilling(data: AddressFormValues) {
-    updateMutation.mutate({
-      id: customer.id,
-      data: {
-        billingAddress: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          company: data.company,
-          line1: data.addressLine1,
-          line2: data.addressLine2,
-          city: data.city,
-          state: data.state,
-          postalCode: data.postalCode,
-          country: data.country,
-        },
-      },
-    })
+  async function onSubmitBilling(data: AddressFormValues) {
+    setIsSubmittingBilling(true)
+    try {
+      const success = await onUpdateBillingAddress(data)
+      if (success) {
+        billingForm.reset(data)
+      }
+    } finally {
+      setIsSubmittingBilling(false)
+    }
   }
 
   return (
@@ -117,7 +104,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>First name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -130,7 +117,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Last name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -145,7 +132,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Company</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -159,7 +146,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 1 *</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -171,9 +158,9 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                   name="addressLine2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address line 2 *</FormLabel>
+                      <FormLabel>Address line 2</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -188,7 +175,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>City *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -201,7 +188,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>State/County *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -217,7 +204,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Postal code *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -230,7 +217,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Country *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -239,8 +226,8 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={updateMutation.isPending}>
-                    {updateMutation.isPending ? "Saving..." : "Save"}
+                  <Button type="submit" disabled={isSubmittingShipping} className="bg-blue-500 hover:bg-blue-600">
+                    {isSubmittingShipping ? "Saving..." : "Save"}
                   </Button>
                 </div>
               </form>
@@ -267,7 +254,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>First name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 " />
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -280,7 +267,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Last name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -295,7 +282,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Company</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -309,7 +296,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                     <FormItem>
                       <FormLabel>Address line 1 *</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -321,9 +308,9 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                   name="addressLine2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address line 2 *</FormLabel>
+                      <FormLabel>Address line 2</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300 "/>
+                        <Input {...field} className="border-gray-300" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -338,7 +325,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>City *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -351,7 +338,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>State/County *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -367,7 +354,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Postal code *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -380,7 +367,7 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                       <FormItem>
                         <FormLabel>Country *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="border-gray-300 "/>
+                          <Input {...field} className="border-gray-300" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -389,8 +376,8 @@ export function CustomerAddresses({ customer }: { customer: Customer }) {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={updateMutation.isPending}>
-                    {updateMutation.isPending ? "Saving..." : "Save"}
+                  <Button type="submit" disabled={isSubmittingBilling} className="bg-blue-500 hover:bg-blue-600">
+                    {isSubmittingBilling ? "Saving..." : "Save"}
                   </Button>
                 </div>
               </form>

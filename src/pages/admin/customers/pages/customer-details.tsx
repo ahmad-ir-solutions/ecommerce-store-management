@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react"
-import { useQuery } from "@tanstack/react-query"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useParams } from "react-router-dom"
-import { fetchCustomerById } from "../core/dummy"
-import { useCustomerStore } from "@/store/admin/customer-store"
-import { Header } from "@/components/shared/header"
-import { CustomerOverview } from "../components/customer-overview"
-import { CustomerBasicDetails } from "../components/customer-basic-details"
-import { CustomerAddresses } from "../components/customer-adresses"
+import { useParams } from 'react-router-dom'
+import { useCustomer } from '../core/hooks/useCustomer'
+import { CustomerOverview } from '../components/customer-overview'
+import { CustomerBasicDetails } from '../components/customer-basic-details'
+import { CustomerAddresses } from '../components/customer-adresses'
+import { Header } from '@/components/shared/header'
 
 export function CustomerDetails() {
   const [activeTab, setActiveTab] = useState("overview")
-  const { customerId } = useParams<{ customerId: string }>()
+  const params = useParams()
+  const customerId = params.customerId as string
+  const [addressFormFocus, setAddressFormFocus] = useState<string | null>(null)
 
-  const { data: customer, isLoading } = useQuery({
-    queryKey: ["customer", customerId],
-    queryFn: () => fetchCustomerById(customerId as string),
-    enabled: !!customerId,
-  })
-
-  // Get the address form focus from the store
-  const addressFormFocus = useCustomerStore((state) => state.addressFormFocus)
+  const {
+    customer,
+    isLoading,
+    error,
+    updateBasicDetails,
+    updateShippingAddress,
+    updateBillingAddress,
+    addTag,
+    removeTag,
+    updateNotes,
+    // deleteCustomer,
+  } = useCustomer(customerId || "")
 
   // Effect to scroll to the focused form when tab changes to addresses
   useEffect(() => {
@@ -36,6 +40,10 @@ export function CustomerDetails() {
 
   if (isLoading) {
     return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error loading customer: {(error as Error).message}</div>
   }
 
   if (!customer) {
@@ -72,15 +80,26 @@ export function CustomerDetails() {
             </div>
 
             <TabsContent value="overview" className="mt-4">
-              <CustomerOverview customer={customer} setActiveTab={setActiveTab} />
+              <CustomerOverview
+                customer={customer}
+                setActiveTab={setActiveTab}
+                onAddTag={addTag}
+                onRemoveTag={removeTag}
+                onUpdateNotes={updateNotes}
+                setAddressFormFocus={setAddressFormFocus}
+              />
             </TabsContent>
 
             <TabsContent value="basic-details" className="mt-4">
-              <CustomerBasicDetails customer={customer} />
+              <CustomerBasicDetails customer={customer} onUpdate={updateBasicDetails} />
             </TabsContent>
 
             <TabsContent value="addresses" className="mt-4">
-              <CustomerAddresses customer={customer} />
+              <CustomerAddresses
+                customer={customer}
+                onUpdateShippingAddress={updateShippingAddress}
+                onUpdateBillingAddress={updateBillingAddress}
+              />
             </TabsContent>
           </Tabs>
         </div>
