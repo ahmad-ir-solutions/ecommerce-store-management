@@ -108,7 +108,7 @@ export default function AdminDashboardPage() {
                   />
                 </div>
                 <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
-                <DateRangePickerFilter date={date} setDate={setDate} className="w-62" title="Time Frame:" />
+                <DateRangePickerFilter date={date} setDate={setDate} className="w-62 flex flex-col justify-end" title="Time Frame:" />
                 <div className="w-0.5 h-14 bg-gray-200 bg-opacity-50 border-dashed" />
                 <div>
                   <CustomSelect
