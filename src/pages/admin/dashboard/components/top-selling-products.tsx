@@ -1,33 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useProductsStore } from "@/store/admin/products-store"
 import { CustomSelect } from "@/components/shared/custom-select"
-// import { useState } from "react"
+import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { topSellingProductsData } from '../core/data'
 
 export function TopSellingProducts() {
-  const { topSellingProducts } = useProductsStore()
-  // const [timePeriod, setTimePeriod] = useState("7days")
-  // const columns: ColumnDef<Product>[] = [
-  //   {
-  //     accessorKey: "sku",
-  //     header: "Product SKU",
-  //     cell: ({ row }) => <div className="font-medium">{row.getValue("sku")}</div>,
-  //   },
-  //   {
-  //     accessorKey: "name",
-  //     header: "Name",
-  //   },
-  //   {
-  //     accessorKey: "quantity",
-  //     header: "Quantity",
-  //     cell: ({ row }) => <div>{row.getValue("quantity")}</div>,
-  //   },
-  //   {
-  //     accessorKey: "revenue",
-  //     header: "Revenue (ex VAT)",
-  //     cell: ({ row }) => <div>£{(row.getValue("revenue") as number).toFixed(2)}</div>,
-  //   },
-  // ]
+  const [timePeriod, setTimePeriod] = useState("7days")
+  const [products, setProducts] = useState(topSellingProductsData)
+
+  // This would normally filter products based on time period
+  const handleTimePeriodChange = (value: string | number) => {
+    setTimePeriod(String(value))
+    // In a real app, you would filter products based on the time period
+    // For now, we'll just use the same data
+    setProducts(topSellingProductsData)
+  }
 
   return (
     <Card className="bg-white rounded-2xl border-none shadow-none">
@@ -37,20 +24,23 @@ export function TopSellingProducts() {
           placeholder="Select time period"
           options={[
             {
-              label: "Last 7 Days", value: "7days",
-              id: "1"
+              label: "Last 7 Days",
+              value: "7days",
+              id: "1",
             },
             {
-              label: "Last 30 Days", value: "30days",
-              id: "2"
+              label: "Last 30 Days",
+              value: "30days",
+              id: "2",
             },
             {
-              label: "Last 90 Days", value: "90days",
-              id: "3"
+              label: "Last 90 Days",
+              value: "90days",
+              id: "3",
             },
           ]}
-          // onChange={(value) => setTimePeriod(value)}
-          onChange={(value) => console.log(value)}
+          onChange={handleTimePeriodChange}
+          defaultValue={timePeriod}
           className="w-[180px]"
         />
       </CardHeader>
@@ -65,7 +55,7 @@ export function TopSellingProducts() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {topSellingProducts.map((product) => (
+            {products.map((product) => (
               <TableRow key={product.id} className="border-none text-[#727272]">
                 <TableCell className="font-normal text-[#11263C] p-3">{product.sku}</TableCell>
                 <TableCell className="text-sm p-3">{product.name}</TableCell>

@@ -1,11 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { useStatsStore } from "@/store/admin/stats-store"
 
-export function StatsCards() {
-  const { stats } = useStatsStore()
+interface StatsCardsProps {
+  stats: {
+    sales: number
+    revenue: number
+    taxAndShipping: number
+  }
+}
 
+export function StatsCards({ stats }: StatsCardsProps) {
   return (
-    <div className="flex justify-between  gap-6 border-b border-gray-200">
+    <div className="flex justify-between gap-6 border-b border-gray-200">
       <Card className="rounded-2xl border-none shadow-none pt-0">
         <CardContent className="p-0">
           <div className="space-y-2">
@@ -16,7 +21,7 @@ export function StatsCards() {
       </Card>
       <div className="w-0.5 h-20 bg-gray-200 bg-opacity-50 border-dashed"></div>
 
-        <Card className="rounded-2xl border-none shadow-none pt-0">
+      <Card className="rounded-2xl border-none shadow-none pt-0">
         <CardContent className="p-0">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Revenue</p>
@@ -31,7 +36,7 @@ export function StatsCards() {
         </CardContent>
       </Card>
       <div className="w-0.5 h-20 bg-gray-200 bg-opacity-50 border-dashed"></div>
-       
+
       <Card className="rounded-2xl border-none shadow-none pt-0">
         <CardContent className="p-0">
           <div className="space-y-2">

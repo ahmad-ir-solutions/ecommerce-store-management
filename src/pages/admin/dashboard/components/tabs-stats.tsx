@@ -2,61 +2,50 @@ import { useState } from "react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Card, CardContent } from "@/components/ui/card"
 import { Package, ShoppingCart, Warehouse, ListFilter, MoreHorizontal } from "lucide-react"
+import { productStatsData } from '../core/data'
 
 export function TabsStats() {
   const [activeTab, setActiveTab] = useState("products")
 
-  // Mock product stats data
-  const productStats = {
-    total: 934,
-    outOfStock: 116,
-    onPurchaseOrder: 0,
-    onBackOrder: 0,
-    noWeights: 1,
-    noDimensions: 934,
-    noCountryOfManufacture: 934,
-    unitsInUnknownLocations: 0,
-  }
-
   const stats = [
     {
       title: "Total Products",
-      value: productStats.total,
+      value: productStatsData.total,
       highlight: false,
     },
     {
       title: "Out Of Stock Products",
-      value: productStats.outOfStock,
+      value: productStatsData.outOfStock,
       highlight: false,
     },
     {
       title: "Products On Purchase Order",
-      value: productStats.onPurchaseOrder,
+      value: productStatsData.onPurchaseOrder,
       highlight: false,
     },
     {
       title: "Products On Back Order",
-      value: productStats.onBackOrder,
+      value: productStatsData.onBackOrder,
       highlight: false,
     },
     {
       title: "No Weight",
-      value: productStats.noWeights,
+      value: productStatsData.noWeights,
       highlight: true,
     },
     {
       title: "No Dimensions",
-      value: productStats.noDimensions,
+      value: productStatsData.noDimensions,
       highlight: true,
     },
     {
       title: "No Country Of Manufacture",
-      value: productStats.noCountryOfManufacture,
+      value: productStatsData.noCountryOfManufacture,
       highlight: false,
     },
     {
       title: "Units In Unknown Locations",
-      value: productStats.unitsInUnknownLocations,
+      value: productStatsData.unitsInUnknownLocations,
       highlight: false,
     },
   ]
@@ -69,60 +58,60 @@ export function TabsStats() {
           <TabsList className="grid w-full grid-cols-5 h-16 bg-white">
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
-              value="products"
-              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF] data-[state=active]:rounded-md"
+                value="products"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF] data-[state=active]:rounded-md"
               >
-              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
-                <Package className="h-5 w-5" />
-              </div>
+                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                  <Package className="h-5 w-5" />
+                </div>
               </TabsTrigger>
               <p className="text-xs">Products</p>
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
-              value="orders"
-              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                value="orders"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
               >
-              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
-                <ShoppingCart className="h-5 w-5" />
-              </div>
+                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                  <ShoppingCart className="h-5 w-5" />
+                </div>
               </TabsTrigger>
               <p className="text-xs">orders</p>
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
-              value="warehouse"
-              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                value="warehouse"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
               >
-              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
-                <Warehouse className="h-5 w-5" />
-              </div>
+                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                  <Warehouse className="h-5 w-5" />
+                </div>
               </TabsTrigger>
               <p className="text-xs">warehouse</p>
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
-              value="listings"
-              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                value="listings"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
               >
-              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
-                <ListFilter className="h-5 w-5" />
-              </div>
+                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                  <ListFilter className="h-5 w-5" />
+                </div>
               </TabsTrigger>
               <p className="text-xs">listings</p>
             </div>
 
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
-              value="others"
-              className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                value="others"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
               >
-              <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
-                <MoreHorizontal className="h-5 w-5" />
-              </div>
+                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                  <MoreHorizontal className="h-5 w-5" />
+                </div>
               </TabsTrigger>
               <p className="text-xs">others</p>
             </div>
