@@ -71,29 +71,29 @@ export type Supplier = {
   supplierCode?: string
   supplierCurrency: string
   supplierReference?: string
-  supplierEmail?: string
+  supplierEmailAddress?: string
   commaDelimitedEmails?: string
-  leadTime?: string
-  minimumOrderValue?: string
+  leadTime?: number
+  minimumOrderValue?: number
   purchaseOrderMode?: string
   isManufacturer: boolean
   contactEmail?: string
-  sendEmailWhenProductBelowReorderLevel: boolean
-  sendEmailWhenProductBelowOutOfStockThreshold: boolean
-  includeProductsEqualToReorderLevel: boolean
-  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean
+  sendEmailBelowReorderLevel: boolean
+  sendEmailBelowOutOfStockThreshold: boolean
+  includeProductsAtReorderLevel: boolean
+  excludeOutOfStockManualReorderLevel: boolean
   purchaseOrderShippingCostType?: string
   purchaseOrderChangeToStatus?: string
-  totalPurchaseOrderShippingCost?: string
+  totalDropShipCost?: number
   dropShipmentShippingCostType?: string
   dropShipmentChangeToStatus?: string
   totalDropShipmentShippingCost?: string
-  includeSupplierInRequisitions: boolean
-  consolidateDropshipSupplierEmails: boolean
+  includeInRequisitions: boolean
+  consolidateDropShipEmails: boolean
   transferMethod?: string
   exportMethod?: string
   templateType?: string
-  defaultExportMethod: boolean
+  isDefaultExportMethod: boolean
   exportDelimiter?: string
   exportHeaders: boolean
   id?: string
@@ -107,33 +107,33 @@ export interface SupplierFormValues {
   postcode: string
   supplierCurrency: string
   isManufacturer: boolean
-  sendEmailWhenProductBelowReorderLevel: boolean
-  sendEmailWhenProductBelowOutOfStockThreshold: boolean
-  includeProductsEqualToReorderLevel: boolean
-  excludeOutOfStockProductsWithZeroManualReorderLevel: boolean
-  includeSupplierInRequisitions: boolean
-  consolidateDropshipSupplierEmails: boolean
+  sendEmailBelowReorderLevel: boolean
+  sendEmailBelowOutOfStockThreshold: boolean
+  includeProductsAtReorderLevel: boolean
+  excludeOutOfStockManualReorderLevel: boolean
+  includeInRequisitions: boolean
+  consolidateDropShipEmails: boolean
   address2?: string
   countryState?: string
   phone?: string
   supplierCode?: string
   supplierReference?: string
   commaDelimitedEmails?: string
-  minimumOrderValue?: string
-  supplierEmail?: string
+  minimumOrderValue?: number
+  supplierEmailAddress?: string
   contactEmail?: string
-  leadTime?: string
+  leadTime?: number
   purchaseOrderMode?: string
   purchaseOrderShippingCostType?: string
   purchaseOrderChangeToStatus?: string
-  totalPurchaseOrderShippingCost?: string
+  totalDropShipCost?: number
   dropShipmentShippingCostType?: string
   dropShipmentChangeToStatus?: string
   totalDropShipmentShippingCost?: string
   transferMethod?: string
   exportMethod?: string
   templateType?: string
-  defaultExportMethod: boolean
+  isDefaultExportMethod: boolean
   exportDelimiter?: string
   exportHeaders: boolean
 }
@@ -217,80 +217,158 @@ export interface ProductQueryParams {
 
 
 // API response interfaces for suppliers
+// export interface ISupplier {
+//   _id: string
+//   supplierName: string
+//   contactName: string
+//   email: string
+//   phone: string
+//   address: {
+//     addressLine1: string
+//     addressLine2?: string
+//     city: string
+//     state: string
+//     postalCode: string
+//     country: string
+//     countryCode: string
+//   }
+//   handlingTimeInDays: number
+//   collectionPoint?: string
+//   warehouseType: "In-House" | "Third-Party"
+//   isFreeProductSupplier: boolean
+//   linkedProductIds: string[]
+//   createdAt: string
+//   updatedAt: string
+// }
+
+// export interface ISupplierResponse {
+//   success: boolean
+//   message: string
+//   _id?: string
+//   data?: ISupplier
+// }
+
+// export interface ISuppliersResponse {
+//   success: boolean
+//   message: string
+//   data: {
+//     suppliers: ISupplier[]
+//     totalCount: number
+//     page: number
+//     limit: number
+//   }
+// }
+
+// // Request interfaces
+// export interface SupplierQueryParams {
+//   page?: number
+//   limit?: number
+//   search?: string
+//   sortBy?: string
+//   sortOrder?: "asc" | "desc"
+//   warehouseType?: string
+//   isFreeProductSupplier?: boolean
+// }
+
+// export interface SupplierAddressData {
+//   addressLine1: string
+//   addressLine2?: string
+//   city: string
+//   state: string
+//   postalCode: string
+//   country: string
+//   countryCode: string
+// }
+
+// export interface CreateSupplierData {
+//   supplierName: string
+//   contactName: string
+//   email: string
+//   phone: string
+//   address: SupplierAddressData
+//   handlingTimeInDays: number
+//   collectionPoint?: string
+//   warehouseType: "In-House" | "Third-Party"
+//   isFreeProductSupplier: boolean
+//   linkedProductIds?: string[]
+// }
+
+// export type UpdateSupplierData = Partial<CreateSupplierData>
+
+
+
+// Base supplier interface
 export interface ISupplier {
   _id: string
   supplierName: string
-  contactName: string
-  email: string
-  phone: string
-  address: {
-    addressLine1: string
-    addressLine2?: string
-    city: string
-    state: string
-    postalCode: string
-    country: string
-    countryCode: string
-  }
-  handlingTimeInDays: number
-  collectionPoint?: string
-  warehouseType: "In-House" | "Third-Party"
-  isFreeProductSupplier: boolean
-  linkedProductIds: string[]
-  createdAt: string
-  updatedAt: string
+  address: string
+  city: string
+  country: string
+  postcode: string
+  supplierCurrency: string
+  isManufacturer: boolean
+  sendEmailBelowReorderLevel: boolean
+  sendEmailBelowOutOfStockThreshold: boolean
+  includeProductsAtReorderLevel: boolean
+  excludeOutOfStockManualReorderLevel: boolean
+  includeInRequisitions: boolean
+  consolidateDropShipEmails: boolean
+  address2?: string
+  countryState?: string
+  phone?: string
+  supplierCode?: string
+  supplierReference?: string
+  commaDelimitedEmails?: string
+  minimumOrderValue?: number
+  supplierEmailAddress?: string
+  contactEmail?: string
+  leadTime?: number
+  purchaseOrderMode?: string
+  purchaseOrderShippingCostType?: string
+  purchaseOrderChangeToStatus?: string
+  totalDropShipCost?: number
+  dropShipmentShippingCostType?: string
+  dropShipmentChangeToStatus?: string
+  totalDropShipmentShippingCost?: string
+  transferMethod?: string
+  exportMethod?: string
+  templateType?: string
+  isDefaultExportMethod?: boolean
+  exportDelimiter?: string
+  exportHeaders?: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
+// API Response interfaces
 export interface ISupplierResponse {
   success: boolean
   message: string
-  _id?: string
-  data?: ISupplier
+  data: ISupplier
 }
 
 export interface ISuppliersResponse {
   success: boolean
   message: string
-  data: {
-    suppliers: ISupplier[]
-    totalCount: number
+  data: ISupplier[]
+  pagination?: {
     page: number
     limit: number
+    total: number
+    totalPages: number
   }
 }
 
-// Request interfaces
+// Query parameters for filtering suppliers
 export interface SupplierQueryParams {
   page?: number
   limit?: number
   search?: string
-  sortBy?: string
-  sortOrder?: "asc" | "desc"
-  warehouseType?: string
-  isFreeProductSupplier?: boolean
+  country?: string
+  isManufacturer?: boolean
 }
 
-export interface SupplierAddressData {
-  addressLine1: string
-  addressLine2?: string
-  city: string
-  state: string
-  postalCode: string
-  country: string
-  countryCode: string
-}
-
-export interface CreateSupplierData {
-  supplierName: string
-  contactName: string
-  email: string
-  phone: string
-  address: SupplierAddressData
-  handlingTimeInDays: number
-  collectionPoint?: string
-  warehouseType: "In-House" | "Third-Party"
-  isFreeProductSupplier: boolean
-  linkedProductIds?: string[]
-}
-
+// Form data types
+export type CreateSupplierData = Omit<ISupplier, "_id" | "createdAt" | "updatedAt">
 export type UpdateSupplierData = Partial<CreateSupplierData>
+// export type SupplierFormValues = CreateSupplierData

@@ -1,7 +1,14 @@
 import authApi from '@/lib/axios';
-import { IProductResponse, IProductsResponse, CreateProductData, UpdateProductData, ProductQueryParams, IProductModel } from './_modals';
+import { IProductResponse, IProductsResponse, CreateProductData, UpdateProductData, ProductQueryParams, IProductModel,
+  ISupplierResponse,
+  ISuppliersResponse,
+  CreateSupplierData,
+  UpdateSupplierData,
+  SupplierQueryParams,
+  ISupplier, } from './_modals';
 
 const PRODUCTS_URL = '/products';
+const SUPPLIERS_URL = "/suppliers"
 
 export function getAllProducts(params?: ProductQueryParams) {
   return authApi.get<IProductsResponse>(PRODUCTS_URL, { params });
@@ -24,27 +31,49 @@ export function deleteProduct(id: string) {
 }
 
 
-// supplier 
-import { ISupplierResponse, ISuppliersResponse, CreateSupplierData, UpdateSupplierData } from './_modals';
+// supplier ===============================
+// import { ISupplierResponse, ISuppliersResponse, CreateSupplierData, UpdateSupplierData } from './_modals';
 
-const SUPPLIERS_URL = '/suppliers';
+// const SUPPLIERS_URL = '/suppliers';
 
-export function getAllSuppliers(params?: Record<string, any>) {
-  return authApi.get<ISuppliersResponse>(SUPPLIERS_URL, { params });
+// export function getAllSuppliers(params?: Record<string, any>) {
+//   return authApi.get<ISuppliersResponse>(SUPPLIERS_URL, { params });
+// }
+
+// export function getSpecificSupplier(id: string) {
+//   return authApi.get<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`);
+// }
+
+// export function createSupplier(body: CreateSupplierData) {
+//   return authApi.post<ISupplierResponse>(SUPPLIERS_URL, body);
+// }
+
+// export function updateSupplier(id: string, body: UpdateSupplierData) {
+//   return authApi.patch<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`, body);
+// }
+
+// export function deleteSupplier(id: string) {
+//   return authApi.delete<{ message: string }>(`${SUPPLIERS_URL}/${id}`);
+// }
+
+
+
+export function getAllSuppliers(params?: SupplierQueryParams) {
+  return authApi.get<ISuppliersResponse>(SUPPLIERS_URL, { params })
 }
 
 export function getSpecificSupplier(id: string) {
-  return authApi.get<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`);
+  return authApi.get<ISupplier>(`${SUPPLIERS_URL}/${id}`)
 }
 
 export function createSupplier(body: CreateSupplierData) {
-  return authApi.post<ISupplierResponse>(SUPPLIERS_URL, body);
+  return authApi.post<ISupplierResponse>(SUPPLIERS_URL, body)
 }
 
 export function updateSupplier(id: string, body: UpdateSupplierData) {
-  return authApi.patch<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`, body);
+  return authApi.patch<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`, body)
 }
 
 export function deleteSupplier(id: string) {
-  return authApi.delete<{ message: string }>(`${SUPPLIERS_URL}/${id}`);
+  return authApi.delete<{ message: string }>(`${SUPPLIERS_URL}/${id}`)
 }

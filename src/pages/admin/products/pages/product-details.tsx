@@ -20,7 +20,7 @@ export const ProductDetailsPage = () => {
   const [originalProduct, setOriginalProduct] = useState<ProductFormValues | null>(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
   // image Upload hook
-  const { mutateAsync: uploadImage, isPending: uploading } = useUploadProductImage();  
+  const { mutateAsync: uploadImage, isPending: uploading } = useUploadProductImage();
   // Fetch product data
   const { data: productData, isLoading, error } = useGetProduct(productId || "")
   const updateProductMutation = useUpdateProduct()
@@ -29,15 +29,15 @@ export const ProductDetailsPage = () => {
     control,
     handleSubmit,
     reset,
-    setValue ,
+    setValue,
     formState: { errors },
   } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema),
     defaultValues: currentProduct || undefined,
   })
-console.log(errors, "errors");
+  console.log(errors, "errors");
 
- const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       uploadImage(file, {
@@ -98,7 +98,7 @@ console.log(errors, "errors");
     }
   }
 
-if (isLoading) {
+  if (isLoading) {
     return <Loader2 className="animate-spin h-8 w-8 mx-auto mt-15" />
   }
 
@@ -109,7 +109,7 @@ if (isLoading) {
   }
 
   if (!currentProduct) {
-    return  <div className="p-8 flex justify-center items-center w-full">
+    return <div className="p-8 flex justify-center items-center w-full">
       <p>Product is not available</p>
     </div>
   }
