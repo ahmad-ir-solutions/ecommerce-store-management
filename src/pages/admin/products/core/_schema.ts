@@ -27,7 +27,6 @@ export const productSchema = z.object({
 
 export type ProductFormValues = z.infer<typeof productSchema>
 
-
 // supplier schema --------
 export const supplierSchema = z.object({
   supplierName: z.string().min(1, "Supplier Name is required"),
@@ -67,7 +66,6 @@ export const supplierSchema = z.object({
   exportDelimiter: z.string().optional(),
   exportHeaders: z.boolean(),
 });
-
 
 // csv product Form schema----------------
 export const csvFormSchema = z.object({

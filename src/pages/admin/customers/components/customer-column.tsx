@@ -118,6 +118,8 @@ export const columns: ColumnDef<ICustomer>[] = [
         accessorKey: "channel",
         header: "Channel",
         cell: ({ row }) => {
+            console.log(row.original, "row.original in channel");
+
             const channel = row.original.channel
             return (
                 <div className="flex items-center gap-2">
@@ -132,21 +134,30 @@ export const columns: ColumnDef<ICustomer>[] = [
     {
         accessorKey: "tags",
         header: "Tags",
-        cell: () => {
-            return (
+        cell: ({ row }) => (
+            row.original.tags && row.original.tags.length > 0 ? (
                 <div className="flex items-center gap-2">
-                    <span>-</span>
+                    {row.original.tags.map((tag, index) => (
+                        <span
+                            key={index}
+                            className="px-2 py-1 bg-gray-200 rounded-full text-xs text-gray-700 truncate"
+                        >
+                            {tag}
+                        </span>
+                    ))}
                 </div>
+            ) : (
+                <span>-</span>
             )
-        },
+        ),
     },
     {
         accessorKey: "notes",
         header: "Notes",
-        cell: () => {
+        cell: ({ row }) => {
             return (
                 <div className="flex items-center gap-2">
-                    <span>-</span>
+                    <span>{row.original.notes || "-"}</span>
                 </div>
             )
         },

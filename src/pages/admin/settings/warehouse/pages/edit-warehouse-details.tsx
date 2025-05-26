@@ -23,7 +23,7 @@ import { AddWarehouseZoneModal } from '../components/modal/add-warehouse-zone-mo
 
 // Mock API functions
 const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> => {
-    console.log(id, "id");
+  console.log(id, "id");
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -48,7 +48,7 @@ const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> =
 }
 
 const updateWarehouseDetails = async (id: string, data: WarehouseFormValues): Promise<WarehouseFormValues> => {
-    console.log(id, "id");
+  console.log(id, "id");
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -112,7 +112,7 @@ export function EditWarehouseDetails() {
     console.log(data, "form data")
   }
 
-    const handleAddZone = (zoneName: string) => {
+  const handleAddZone = (zoneName: string) => {
     setWarehouseZones([...warehouseZones, zoneName])
     // In a real app, you would make an API call to save the zone
   }
@@ -125,7 +125,7 @@ export function EditWarehouseDetails() {
     <div>
       <Header title="Warehouse">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
-          <CustomSearch className="w-[25rem]" onClick={() => {}} placeholder="Search by name/Master SKU/Channel SKU" />
+          <CustomSearch className="w-[25rem]" onClick={() => { }} placeholder="Search by name/Master SKU/Channel SKU" />
           <div className="flex items-center gap-4">
             <Button variant="primary" size="lg" className="rounded-xl" onClick={handleAddWarehouse}>
               <Plus />
@@ -135,7 +135,7 @@ export function EditWarehouseDetails() {
         </div>
       </Header>
       <div className="mt-6">
-        <div className="container mx-auto">
+        <div>
           <h2 className="text-lg font-medium mb-6">Details</h2>
           <Tabs defaultValue="warehouse-information">
             <TabsList className="mb-4 space-x-4">
@@ -516,18 +516,18 @@ export function EditWarehouseDetails() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                         {/* Display warehouse zones when available */}
+                      {/* Display warehouse zones when available */}
                       {warehouseZones.length > 0
                         ? warehouseZones.map((zone, index) => (
-                            <TableRow key={index}>
-                              <TableHead className="p-3">
-                                <Checkbox className="border-gray-400" />
-                              </TableHead>
-                              <TableHead className="p-3">{zone}</TableHead>
-                              <TableHead className="p-3">-</TableHead>
-                              <TableHead className="p-3">-</TableHead>
-                            </TableRow>
-                          ))
+                          <TableRow key={index}>
+                            <TableHead className="p-3">
+                              <Checkbox className="border-gray-400" />
+                            </TableHead>
+                            <TableHead className="p-3">{zone}</TableHead>
+                            <TableHead className="p-3">-</TableHead>
+                            <TableHead className="p-3">-</TableHead>
+                          </TableRow>
+                        ))
                         : null}
                     </TableBody>
                   </Table>
