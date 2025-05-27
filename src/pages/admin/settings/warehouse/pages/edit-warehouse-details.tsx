@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { warehouseSchema } from "../core/_schema"
 import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
-import { Plus } from "lucide-react"
+import { Loader2, Plus } from "lucide-react"
 import type { WarehouseFormValues } from "../core/_modal"
 import { useWarehouseStore } from "@/store/admin/warehouse-store"
 import { CustomSelect } from "@/components/shared/custom-select"
@@ -118,7 +118,11 @@ export function EditWarehouseDetails() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
 
   return (

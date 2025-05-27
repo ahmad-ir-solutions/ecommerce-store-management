@@ -11,6 +11,7 @@ import { ICustomer } from "../core/_modals"
 import { PaginationControls } from "../../../../components/shared/PaginationControls"
 import { useNavigate } from "react-router-dom"
 import { columns } from './customer-column'
+import { Loader2 } from 'lucide-react'
 
 export function CustomersTable({
   customers,
@@ -41,8 +42,13 @@ export function CustomersTable({
   })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   // Calculate total pages
   // const totalPages = table.getPageCount()

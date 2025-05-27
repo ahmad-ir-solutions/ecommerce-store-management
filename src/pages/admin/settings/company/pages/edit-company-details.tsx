@@ -3,7 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { ImagePlus } from "lucide-react"
+import { ImagePlus, Loader2 } from "lucide-react"
 
 import { Header } from "@/components/shared/header"
 import { Card, CardContent } from "@/components/ui/card"
@@ -153,8 +153,13 @@ export const EditCompanyDetails = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   return (
     <div>

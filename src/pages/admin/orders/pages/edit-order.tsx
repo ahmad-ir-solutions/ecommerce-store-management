@@ -15,6 +15,7 @@ import { OrderNotes } from "../components/order-notes"
 import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
 import { OrderProductTable } from "../components/order-product-table"
+import { Loader2 } from 'lucide-react'
 
 export default function EditOrderPage() {
   const { orderId } = useParams<{ orderId: string }>()
@@ -58,14 +59,14 @@ export default function EditOrderPage() {
     },
   })
   console.log(errors, "errors");
-  
+
 
   const onSubmit = async (data: EditOrderFormValues) => {
     const success = await submitForm(data)
     if (success) {
-    showSuccessMessage("The order has been updated successfully")
+      showSuccessMessage("The order has been updated successfully")
     } else {
-     showErrorMessage("There was an error updating the order. Please try again.")
+      showErrorMessage("There was an error updating the order. Please try again.")
     }
   }
 
@@ -73,22 +74,29 @@ export default function EditOrderPage() {
     navigate("/admin/orders")
   }
 
-  if (isLoading) return <div className="p-8">Loading order details...</div>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
   if (error) return <div className="p-8">Error loading order: {(error as Error).message}</div>
   if (!order) return <div className="p-8">Order not found</div>
 
   return (
     <div className="mt-6">
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Header title="Edit Orders">
-        <ActionButtons
-          orderId={order.orderId}
-          onClone={cloneOrder}
-          onCancel={cancelOrder}
-          isCloning={isCloning}
-          isCancelling={isCancelling}
-        />
-      </Header>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Header title="Edit Orders">
+          <ActionButtons
+            orderId={order.orderId}
+            onClone={cloneOrder}
+            onCancel={cancelOrder}
+            isCloning={isCloning}
+            isCancelling={isCancelling}
+          />
+        </Header>
 
         <OrderInformation order={order} control={control} register={register} onUpdateBillingAddress={updateBillingAddress}
           onUpdateShippingAddress={updateShippingAddress} />

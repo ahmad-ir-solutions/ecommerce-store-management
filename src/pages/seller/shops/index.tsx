@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 
@@ -19,7 +20,7 @@ const dashboardData = {
 export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState(dashboardData)
-console.log(setData(data));
+  console.log(setData(data));
 
   useEffect(() => {
     // Simulate data loading
@@ -32,8 +33,8 @@ console.log(setData(data));
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-t-2 border-blue-500"></div>
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
@@ -84,15 +85,14 @@ console.log(setData(data));
                   <td className="py-3 pr-4">${order.amount.toFixed(2)}</td>
                   <td className="py-3 pr-4">
                     <span
-                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                        order.status === "delivered"
-                          ? "bg-green-100 text-green-800"
-                          : order.status === "processing"
-                            ? "bg-blue-100 text-blue-800"
-                            : order.status === "shipped"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-yellow-100 text-yellow-800"
-                      }`}
+                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${order.status === "delivered"
+                        ? "bg-green-100 text-green-800"
+                        : order.status === "processing"
+                          ? "bg-blue-100 text-blue-800"
+                          : order.status === "shipped"
+                            ? "bg-purple-100 text-purple-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
                     >
                       {order.status}
                     </span>

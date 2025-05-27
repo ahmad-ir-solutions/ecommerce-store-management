@@ -73,7 +73,7 @@ import { Header } from "@/components/shared/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Plus, Trash2, Edit } from "lucide-react"
+import { Plus, Trash2, Edit, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import {
@@ -121,7 +121,9 @@ export function SuppliersPage() {
           </Link>
         </Header>
         <div className="mt-6 flex justify-center">
-          <p>Loading suppliers...</p>
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
         </div>
       </div>
     )

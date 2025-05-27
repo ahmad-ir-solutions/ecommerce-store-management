@@ -367,6 +367,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Loader2 } from 'lucide-react'
 
 // Define the form schema with Zod
 const courierFormSchema = z.object({
@@ -389,7 +390,7 @@ type CourierFormValues = z.infer<typeof courierFormSchema>
 const fetchCourierDetails = async (id?: string) => {
   // In a real app, fetch from API using the ID
   console.log(id);
-  
+
   return {
     profileName: "DPD Standard",
     trackingUrl: "https://track.dpd.co.uk/search?reference={tracking_number}",
@@ -462,8 +463,13 @@ export function EditCourierDetails() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   return (
     <div>

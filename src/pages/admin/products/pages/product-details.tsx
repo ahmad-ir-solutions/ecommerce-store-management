@@ -99,8 +99,13 @@ export const ProductDetailsPage = () => {
   }
 
   if (isLoading) {
-    return <Loader2 className="animate-spin h-8 w-8 mx-auto mt-15" />
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   if (error) {
     return <div className="p-8 flex justify-center items-center">

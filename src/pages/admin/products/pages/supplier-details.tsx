@@ -647,7 +647,7 @@ import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import { showInfoMessage } from "@/lib/utils/messageUtils"
 import { CustomSelect } from "@/components/shared/custom-select"
-import { Trash2 } from "lucide-react"
+import { Loader2, Trash2 } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -809,14 +809,12 @@ export const SupplierDetailsPage = () => {
 
   if (isLoading) {
     return (
-      <div>
-        <Header title="Products" />
-        <div className="mt-6 flex justify-center">
-          <p>Loading supplier details...</p>
-        </div>
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
+
 
   if (error) {
     return (

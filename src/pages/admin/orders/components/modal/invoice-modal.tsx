@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Printer, Download } from "lucide-react"
+import { Printer, Download, Loader2 } from "lucide-react"
 import { fetchOrderDetails } from "../../core/_dummy"
 
 interface InvoiceModalProps {
@@ -26,13 +26,22 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
     alert("Invoice downloaded")
   }
 
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64">
+  //       <Loader2 className="h-8 w-8 animate-spin" />
+  //     </div>
+  //   )
+  // }
+
+
   if (isLoading) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-[800px] bg-white">
-          <DialogHeader>
-            <DialogTitle>Loading invoice...</DialogTitle>
-          </DialogHeader>
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
         </DialogContent>
       </Dialog>
     )

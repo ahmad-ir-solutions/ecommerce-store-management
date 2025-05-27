@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Plus } from "lucide-react"
+import { Loader2, Plus } from "lucide-react"
 import { PaginationControls } from "@/components/shared/PaginationControls"
 import { useQuery } from "@tanstack/react-query"
 import { useOrderProductColumns } from "./order-product-column"
@@ -61,8 +61,8 @@ export function OrderProductTable() {
     queryFn: fetchInventory,
   })
 
-  console.log(data,"data");
-  
+  console.log(data, "data");
+
 
   const table = useReactTable({
     data: data || [],
@@ -89,12 +89,17 @@ export function OrderProductTable() {
   }
 
   if (isLoading) {
-    return <div>Loading inventory data...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   // const handleSelectChange = (value: string) => {
   //   console.log(value, "value");
-    
+
   //   applySavedFilter(value)
   // }
 
@@ -102,43 +107,43 @@ export function OrderProductTable() {
     setColumnFilters([]); // Clear column filters
     setGlobalFilter(""); // Clear global filter
   };
-  
 
-   // Calculate total pages
-   const totalPages = table.getPageCount()
-   const currentPage = table.getState().pagination.pageIndex + 1
- 
-   // Handle page change
-   const handlePageChange = (page: number) => {
-     table.setPageIndex(page - 1)
-   }
+
+  // Calculate total pages
+  const totalPages = table.getPageCount()
+  const currentPage = table.getState().pagination.pageIndex + 1
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    table.setPageIndex(page - 1)
+  }
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden mb-4 px-6 py-4 shadow-none">
-    <div className="py-4 flex justify-between items-center">
-      <Button
-        type="button"
-        variant="filter"
-        size="sm"
-        className="h-10 shadow-none"
-        // onClick={handleAddSelectedProducts}
-        // disabled={isSubmitting}
-      >
-        <Plus className="h-4 w-4 mx-1" />
-        {"Add Selected Products"}
-      </Button>
-      <div className="flex items-center gap-2">
+      <div className="py-4 flex justify-between items-center">
         <Button
           type="button"
           variant="filter"
           size="sm"
           className="h-10 shadow-none"
-          onClick={handleClearFilters}
+        // onClick={handleAddSelectedProducts}
+        // disabled={isSubmitting}
         >
-          Clear Filters
+          <Plus className="h-4 w-4 mx-1" />
+          {"Add Selected Products"}
         </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="filter"
+            size="sm"
+            className="h-10 shadow-none"
+            onClick={handleClearFilters}
+          >
+            Clear Filters
+          </Button>
+        </div>
       </div>
-    </div>
       <Table>
         <TableHeader className="">
           <TableRow className="border-none bg-[#ECF6FF] rounded-tl-xl">
@@ -153,25 +158,25 @@ export function OrderProductTable() {
               console.log(header, "header")
               return (
                 <>
-              <TableHead key={`filter-${header.id}`}>
-              {header.column.getCanFilter() ? (
-                <div>
-                  {/* Render different filter types based on column */}
-                  {columnFilterTypes[header.id] === "input" ? (
-                      <Input
-                      value={(header.column.getFilterValue() as string) ?? ""}
-                      onChange={(e) => header.column.setFilterValue(e.target.value)}
-                      className="h-8 w-full bg-white border-gray-300"
-                    />
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
-              ) : null}
-            </TableHead>
+                  <TableHead key={`filter-${header.id}`}>
+                    {header.column.getCanFilter() ? (
+                      <div>
+                        {/* Render different filter types based on column */}
+                        {columnFilterTypes[header.id] === "input" ? (
+                          <Input
+                            value={(header.column.getFilterValue() as string) ?? ""}
+                            onChange={(e) => header.column.setFilterValue(e.target.value)}
+                            className="h-8 w-full bg-white border-gray-300"
+                          />
+                        ) : (
+                          <div></div>
+                        )}
+                      </div>
+                    ) : null}
+                  </TableHead>
                 </>
               )
-              })}
+            })}
           </TableRow>
         </TableHeader>
         <TableBody>

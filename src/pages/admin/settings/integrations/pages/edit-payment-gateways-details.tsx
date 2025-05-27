@@ -280,6 +280,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Loader2 } from 'lucide-react'
 
 // Define the form schema with Zod
 const paymentGatewayFormSchema = z.object({
@@ -296,7 +297,7 @@ type PaymentGatewayFormValues = z.infer<typeof paymentGatewayFormSchema>
 const fetchPaymentGatewayDetails = async (id?: string) => {
   // In a real app, fetch from API using the ID
   console.log(id);
-  
+
   return {
     profileName: "Opayo Standard",
     vendorName: "MyStore",
@@ -353,8 +354,13 @@ export function EditPaymentGatewaysDetail() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
   }
+
 
   return (
     <div>
@@ -522,7 +528,7 @@ export function EditPaymentGatewaysDetail() {
                                     },
                                   ]}
                                   defaultValue=""
-                                  onChange={() => {}}
+                                  onChange={() => { }}
                                   className="w-full bg-white"
                                 />
                               </div>
