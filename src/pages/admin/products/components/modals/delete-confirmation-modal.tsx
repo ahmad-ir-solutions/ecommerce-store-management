@@ -9,16 +9,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { AlertTriangle } from "lucide-react"
-import { ProductItem } from "../../core/_modals"
+import { IProductModel } from "../../core/_modals"
 
 interface DeleteConfirmationModalProps {
-  onConfirm: (product: ProductItem) => void
+  onConfirm: (product: IProductModel) => void
   onCancel: () => void
 }
 
 export function DeleteConfirmationModal({ onConfirm, onCancel }: DeleteConfirmationModalProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [product, setProduct] = useState<ProductItem | null>(null)
+  const [product, setProduct] = useState<IProductModel | null>(null)
 
   useEffect(() => {
     const handleOpenModal = (e: CustomEvent) => {

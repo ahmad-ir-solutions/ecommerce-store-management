@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
-import { Filter, Settings, RotateCw, Plus, Search } from "lucide-react"
+import { Filter, Settings, RotateCw, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { CustomersTable } from "../components/customers-table"
 import type { CustomerQueryParams } from "../core/_modals"
@@ -9,7 +8,6 @@ import { Header } from "@/components/shared/header"
 import { useGetCustomers } from '../core/hooks/useCustomer'
 
 export function Customers() {
-  const navigate = useNavigate()
   const [searchText, setSearchText] = useState("")
   const [queryParams, setQueryParams] = useState<CustomerQueryParams>({
     limit: 10,
@@ -27,9 +25,9 @@ export function Customers() {
     }))
   }
 
-  const handleCreateCustomer = () => {
-    navigate("/admin/customers/new")
-  }
+  // const handleCreateCustomer = () => {
+  //   navigate("/admin/customers/new")
+  // }
 
   const handleRefresh = () => {
     // Refetch the current data
@@ -58,7 +56,7 @@ export function Customers() {
               </div>
             </form>
           </div>
-          <Button
+          {/* <Button
             variant="default"
             size="lg"
             className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
@@ -66,7 +64,7 @@ export function Customers() {
           >
             <Plus className="mr-2 h-4 w-4" />
             New Customer
-          </Button>
+          </Button> */}
         </div>
       </Header>
 

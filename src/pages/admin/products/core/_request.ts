@@ -32,31 +32,6 @@ export function deleteProduct(id: string) {
 
 
 // supplier ===============================
-// import { ISupplierResponse, ISuppliersResponse, CreateSupplierData, UpdateSupplierData } from './_modals';
-
-// const SUPPLIERS_URL = '/suppliers';
-
-// export function getAllSuppliers(params?: Record<string, any>) {
-//   return authApi.get<ISuppliersResponse>(SUPPLIERS_URL, { params });
-// }
-
-// export function getSpecificSupplier(id: string) {
-//   return authApi.get<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`);
-// }
-
-// export function createSupplier(body: CreateSupplierData) {
-//   return authApi.post<ISupplierResponse>(SUPPLIERS_URL, body);
-// }
-
-// export function updateSupplier(id: string, body: UpdateSupplierData) {
-//   return authApi.patch<ISupplierResponse>(`${SUPPLIERS_URL}/${id}`, body);
-// }
-
-// export function deleteSupplier(id: string) {
-//   return authApi.delete<{ message: string }>(`${SUPPLIERS_URL}/${id}`);
-// }
-
-
 
 export function getAllSuppliers(params?: SupplierQueryParams) {
   return authApi.get<ISuppliersResponse>(SUPPLIERS_URL, { params })

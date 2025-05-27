@@ -13,7 +13,7 @@ interface ProductInformationProps {
   isEditing: boolean
   control: any
   handleSkuClick: () => void
-  handleImageChange : (e: React.ChangeEvent<HTMLInputElement>) => void
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   uploading: boolean
   uploadedImageUrl: string | null
 }
@@ -234,7 +234,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     name="length"
                     control={control}
                     render={({ field }) => (
-                      <Input {...field} id="length" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
+                      <Input {...field} id="length" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                     )}
                   />
                 ) : (
@@ -256,7 +256,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     name="width"
                     control={control}
                     render={({ field }) => (
-                      <Input {...field} id="width" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
+                      <Input {...field} id="width" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                     )}
                   />
                 ) : (
@@ -278,7 +278,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     name="height"
                     control={control}
                     render={({ field }) => (
-                      <Input {...field} id="height" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)}/>
+                      <Input {...field} id="height" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)} />
                     )}
                   />
                 ) : (

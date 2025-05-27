@@ -19,6 +19,13 @@ export const productSchema = z.object({
   brand: z.string().optional(),
   ean: z.string().optional(),
   upc: z.string().optional(),
+  supplierDetails: z.string().optional(),
+  priorityOrder: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "priority Order must be a non-negative number",}),
+  supplierSku: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "supplier Sku must be a non-negative number",}),
+  unitCostPrice: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "Unit cost must be a non-negative number",}),
+  cartonCostPrice: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "carton Cost Price must be a non-negative number",}),
+  supplierStockLevel: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "supplier Stock Level must be a non-negative number",}),
+  supplierCartonQuantity: z.string().optional().refine((val) => !val || (!isNaN(Number(val)) && Number(val) >= 0),{message: "supplier Carton Quantity must be a non-negative number",}),
   _id: z.string().optional(),
   createdAt: z.string().optional(),
   updatedAt: z.string().optional(),
@@ -26,46 +33,6 @@ export const productSchema = z.object({
 })
 
 export type ProductFormValues = z.infer<typeof productSchema>
-
-// supplier schema --------
-// export const supplierSchema = z.object({
-//   supplierName: z.string().min(1, "Supplier Name is required"),
-//   address: z.string().min(1, "Address is required"),
-//   city: z.string().min(1, "City is required"),
-//   country: z.string().min(1, "Country is required"),
-//   postcode: z.string().min(1, "Postcode is required"),
-//   supplierCurrency: z.string().min(1, "Supplier Currency is required"),
-//   isManufacturer: z.boolean(),
-//   sendEmailBelowReorderLevel: z.boolean(),
-//   sendEmailBelowOutOfStockThreshold: z.boolean(),
-//   includeProductsAtReorderLevel: z.boolean(),
-//   excludeOutOfStockManualReorderLevel: z.boolean(),
-//   includeInRequisitions: z.boolean(),
-//   consolidateDropShipEmails: z.boolean(),
-//   address2: z.string().optional(),
-//   countryState: z.string().optional(),
-//   phone: z.string().optional(),
-//   supplierCode: z.string().optional(),
-//   supplierReference: z.string().optional(),
-//   commaDelimitedEmails: z.string().optional(),
-//   minimumOrderValue: z.number().optional().nullable(),
-//   supplierEmailAddress: z.string().email("Invalid email address").optional(),
-//   contactEmail: z.string().email("Invalid email address").optional(),
-//   leadTime: z.number().optional().nullable(),
-//   purchaseOrderMode: z.string().optional(),
-//   purchaseOrderShippingCostType: z.string().optional(),
-//   purchaseOrderChangeToStatus: z.string().optional(),
-//   totalDropShipCost:  z.number().optional().nullable(),
-//   dropShipmentShippingCostType: z.string().optional(),
-//   dropShipmentChangeToStatus: z.string().optional(),
-//   totalDropShipmentShippingCost: z.string().optional(),
-//   transferMethod: z.string().optional(),
-//   exportMethod: z.string().optional(),
-//   templateType: z.string().optional(),
-//   isDefaultExportMethod: z.boolean(),
-//   exportDelimiter: z.string().optional(),
-//   exportHeaders: z.boolean(),
-// });
 
 export const supplierSchema = z.object({
   supplierName: z.string().min(1, "Supplier Name is required"),
@@ -92,12 +59,12 @@ export const supplierSchema = z.object({
   contactEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
   leadTime: z.number().optional().nullable(),
   purchaseOrderMode: z.string().optional(),
-  purchaseOrderShippingCostType: z.string().optional(),
-  purchaseOrderChangeToStatus: z.string().optional(),
+  poShippingCostType: z.string().optional(),
+  poChangeToStatus: z.string().optional(),
   totalDropShipCost:  z.number().optional().nullable(),
-  dropShipmentShippingCostType: z.string().optional(),
-  dropShipmentChangeToStatus: z.string().optional(),
-  totalDropShipmentShippingCost: z.string().optional(),
+  dropShipShippingCostType: z.string().optional(),
+  dropShipChangeToStatus: z.string().optional(),
+  totalPoShippingCost: z.number().optional().nullable(),
   transferMethod: z.string().optional(),
   exportMethod: z.string().optional(),
   templateType: z.string().optional(),
@@ -107,7 +74,6 @@ export const supplierSchema = z.object({
 })
 
 export type SupplierFormValues = z.infer<typeof supplierSchema>
-
 
 // csv product Form schema----------------
 export const csvFormSchema = z.object({

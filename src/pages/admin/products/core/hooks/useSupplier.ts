@@ -148,8 +148,8 @@ export const useCreateSupplier = () => {
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: supplierKeys.lists() })
       showSuccessMessage(response.data.message || "Supplier created successfully!")
-      const newSupplierId = response.data.data._id
-      navigate(`/admin/products/supplier-details/${newSupplierId}`)
+      // const newSupplierId = response.data.data._id
+      navigate(`/admin/products/suppliers`)
     },
     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
       if (error.response?.data.errors) {
@@ -176,6 +176,8 @@ export const useUpdateSupplier = () => {
       showSuccessMessage(response.data.message || "Supplier updated successfully!")
     },
     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
+      console.log(error, "error");
+      
       if (error.response?.data.errors) {
         Object.values(error.response.data.errors).forEach((errorMessage) => {
           showErrorMessage(errorMessage)

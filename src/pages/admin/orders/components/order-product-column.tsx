@@ -1,28 +1,28 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Link } from "react-router-dom"
-import { ProductItem } from "../../products/core/_modals"
 import { Input } from "@/components/ui/input"
+import { IProductModel } from '../../products/core/_modals'
 
-export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
+export function useOrderProductColumns(): ColumnDef<IProductModel>[] {
   return [
     {
       accessorKey: "checked",
       header: ({ table }) => (
         <Checkbox
-        className="w-4 h-4 rounded-sm border-[#BBC2CB] bg-white"
-         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-         aria-label="Select all"
-       />
+          className="w-4 h-4 rounded-sm border-[#BBC2CB] bg-white"
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
       ),
       cell: ({ row }) => (
-          <Checkbox
+        <Checkbox
           className="w-4 h-4 rounded-sm border-[#BBC2CB]"
-           checked={row.getIsSelected()}
-           onCheckedChange={(value) => row.toggleSelected(!!value)}
-           aria-label="Select row"
-         />
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
       ),
       enableColumnFilter: false,
       enableSorting: false,
@@ -36,19 +36,19 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
       cell: ({ row }) => <div>{row.original._id}</div>,
     },
     {
-        accessorKey: "qty",
-        header: "Qty",
-        cell: ({ row }) => (
-          <Input
-            defaultValue={row.original.qty || ""}
-            value={row.original.qty || ""}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              row.original.qty = newValue; // Update the value in the row's original data
-            }}
-            className="h-8 w-24 border-gray-300"
-          />
-        ),
+      accessorKey: "qty",
+      header: "Qty",
+      cell: ({ row }) => (
+        <Input
+          defaultValue={row.original.qty || ""}
+          value={row.original.qty || ""}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            row.original.qty = newValue; // Update the value in the row's original data
+          }}
+          className="h-8 w-24 border-gray-300"
+        />
+      ),
     },
     {
       accessorKey: "sku",
@@ -59,11 +59,11 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
         return (
           <div
             className="relative group"
-            // onMouseEnter={() => setIsHovered(true)}
-            // onMouseLeave={() => setIsHovered(false)}
+          // onMouseEnter={() => setIsHovered(true)}
+          // onMouseLeave={() => setIsHovered(false)}
           >
             <div>
-              <Link to={`/admin/products/${row.original._id}`}  className="hover:underline">{row.original.sku}</Link>
+              <Link to={`/admin/products/${row.original._id}`} className="hover:underline">{row.original.sku}</Link>
             </div>
 
             {/* {isHovered && (
@@ -99,47 +99,47 @@ export function useOrderProductColumns(): ColumnDef<ProductItem>[] {
       },
     },
     {
-        accessorKey: "productName",
-        header: "Product Name",
-        cell: ({ row }) => <div>{row.original.productName}</div>,
+      accessorKey: "productName",
+      header: "Product Name",
+      cell: ({ row }) => <div>{row.original.productName}</div>,
     },
     {
-        accessorKey: "mpn",
-        header: "MPN",
-        cell: ({ row }) => (
-          <Input
-            defaultValue={row.original.qty || ""}
-            value={row.original.qty || ""}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              row.original.qty = newValue; // Update the value in the row's original data
-            }}
-            className="h-8 w-24 border-gray-300"
-          />
-        ),
+      accessorKey: "mpn",
+      header: "MPN",
+      cell: ({ row }) => (
+        <Input
+          defaultValue={row.original.qty || ""}
+          value={row.original.qty || ""}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            row.original.qty = newValue; // Update the value in the row's original data
+          }}
+          className="h-8 w-24 border-gray-300"
+        />
+      ),
     },
     {
       accessorKey: "ean",
       header: "EAN",
     },
     {
-        accessorKey: "inventory",
-        header: "Inventory",
-        cell: ({ row }) => (
-          <div>
-            <div className="font-medium">{row.original.inventory}</div>
-          </div>
-        ),
+      accessorKey: "inventory",
+      header: "Inventory",
+      cell: ({ row }) => (
+        <div>
+          <div className="font-medium">{row.original.inventory}</div>
+        </div>
+      ),
     },
     {
-        accessorKey: "price",
-        header: "Price",
-        cell: ({ row }) => <div>£{row.original.price}</div>,
+      accessorKey: "price",
+      header: "Price",
+      cell: ({ row }) => <div>£{row.original.price}</div>,
     },
     {
-        accessorKey: "view",
-        header: "",
-        cell: ({ row }) => <Link to={`/admin/products/${row.original._id}`} className="underline">View</Link>,
+      accessorKey: "view",
+      header: "",
+      cell: ({ row }) => <Link to={`/admin/products/${row.original._id}`} className="underline">View</Link>,
     },
   ]
 }

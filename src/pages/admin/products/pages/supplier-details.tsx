@@ -1,641 +1,6 @@
-// import { zodResolver } from "@hookform/resolvers/zod"
-// import { useForm } from "react-hook-form"
-// import { useMutation } from "@tanstack/react-query"
-
-// import { Header } from "@/components/shared/header"
-// import { Button } from "@/components/ui/button"
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-// import { Switch } from "@/components/ui/switch"
-// import { Checkbox } from "@/components/ui/checkbox"
-// import { useSupplierStore } from "@/store/admin/supplier-store"
-// import { supplierSchema } from "../core/_schema"
-// import { showErrorMessage, showInfoMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
-// import { SupplierFormValues } from "../core/_modals"
-// import { CustomSelect } from "@/components/shared/custom-select"
-
-// export const SupplierDetailsPage = () => {
-//   const addSupplier = useSupplierStore((state) => state.addSupplier)
-
-//   const form = useForm<SupplierFormValues>({
-//     resolver: zodResolver(supplierSchema),
-//     defaultValues: {
-//       supplierName: "",
-//       address: "",
-//       city: "",
-//       country: "UK",
-//       postcode: "",
-//       supplierCurrency: "British Pound",
-//       isManufacturer: true,
-//       sendEmailBelowReorderLevel: false,
-//       sendEmailBelowOutOfStockThreshold: true,
-//       includeProductsAtReorderLevel: true,
-//       excludeOutOfStockManualReorderLevel: true,
-//       includeInRequisitions: false,
-//       consolidateDropShipEmails: true,
-//       address2: "",
-//       countryState: "",
-//       phone: "",
-//       supplierCode: "",
-//       supplierReference: "",
-//       commaDelimitedEmails: "",
-//       minimumOrderValue: "",
-//       supplierEmailAddress: "",
-//       contactEmail: "",
-//       leadTime: "",
-//       purchaseOrderMode: "",
-//       purchaseOrderShippingCostType: "British Pound",
-//       purchaseOrderChangeToStatus: "",
-//       totalDropShipCost: undefined,
-//       dropShipmentShippingCostType: "British Pound",
-//       dropShipmentChangeToStatus: "",
-//       totalDropShipmentShippingCost: "",
-//       transferMethod: "Manual",
-//       exportMethod: "CSV",
-//       templateType: "CSV",
-//       isDefaultExportMethod: false,
-//       exportDelimiter: ",",
-//       exportHeaders: true,
-//     },
-//   })
-
-//   const { mutate, isPending } = useMutation({
-//     mutationFn: async (data: SupplierFormValues) => {
-//       // Simulate API call
-//       await new Promise((resolve) => setTimeout(resolve, 1000))
-//       return data
-//     },
-//     onSuccess: (data) => {
-//       addSupplier(data)
-//       showSuccessMessage("Supplier has been added successfully")
-//       //   navigate("/suppliers")
-//     },
-//     onError: (error) => {
-//       showErrorMessage(error.message || "Failed to add supplier. Please try again.")
-//     },
-//   })
-
-//   const onSubmit = (data: SupplierFormValues) => {
-//     console.log(data, "data");
-
-//     mutate(data)
-//   }
-
-//   const findEmail = () => {
-//     showInfoMessage("Searching for email based on postcode...")
-//   }
-
-//   return (
-//     <div>
-//       <Header title="Products" />
-//       <div className="mt-6">
-//         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-[#4E5967]">
-//           {/* Order Information */}
-//           <Card className="bg-white border-0 shadow-xs rounded-2xl">
-//             <CardHeader>
-//               <CardTitle className="text-[#11263C]">Order Information</CardTitle>
-//             </CardHeader>
-//             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
-//               <div className="space-y-4">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="supplierName">Supplier Name *</Label>
-//                   <div>
-//                     <Input
-//                       id="supplierName"
-//                       {...form.register("supplierName")}
-//                       className={form.formState.errors.supplierName ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                     />
-//                     {form.formState.errors.supplierName && (
-//                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierName.message}</p>
-//                     )}
-//                   </div>
-
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4" >
-//                   <Label htmlFor="address2">Address 2</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="countryState">Country/State</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="countryState" {...form.register("countryState")} />
-//                 </div>
-
-//                 <div className="flex items-end gap-2">
-//                   <div className="flex-1 grid grid-cols-[1fr_1fr] items-center gap-4">
-//                     <Label htmlFor="postcode">Postcode/Zip Code *</Label>
-//                     <div>
-//                       <div className="flex items-center gap-3">
-//                         <Input
-//                           id="postcode"
-//                           {...form.register("postcode")}
-//                           className={form.formState.errors.postcode ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                         />
-//                         <Button type="button" variant="link" className="underline text-[#4E5967] p-0 text-md" onClick={findEmail}>
-//                           Find Email
-//                         </Button>
-//                       </div>
-//                       {form.formState.errors.postcode && (
-//                         <p className="text-red-500 text-sm mt-1">{form.formState.errors.postcode.message}</p>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="supplierCode">Supplier Code</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="supplierCurrency">Supplier Currency</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("supplierCurrency")}
-//                       placeholder="Select currency"
-//                       options={[
-//                         { id: "GBP", label: "British Pound", value: "British Pound" },
-//                         { id: "USD", label: "US Dollar", value: "US Dollar" },
-//                         { id: "EUR", label: "Euro", value: "Euro" },
-//                       ]}
-//                       onChange={(value) => form.setValue("supplierCurrency", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="commaDelimitedEmails">Comma Delimited Email Addresses To Send To</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="commaDelimitedEmails" {...form.register("commaDelimitedEmails")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="minimumOrderValue">Minimum Order Value</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="minimumOrderValue" {...form.register("minimumOrderValue")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="sendEmailBelowReorderLevel">
-//                     Send Email When Product Below Reorder Level
-//                   </Label>
-//                   <div>
-//                     <Switch
-//                       id="sendEmailBelowReorderLevel"
-//                       checked={form.watch("sendEmailBelowReorderLevel")}
-//                       onCheckedChange={(checked) =>
-//                         form.setValue("sendEmailBelowReorderLevel", checked)
-//                       }
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="sendEmailBelowOutOfStockThreshold">
-//                     Send Email When Product Below Out of Stock Threshold
-//                   </Label>
-//                   <div>
-//                     <Switch
-//                       id="sendEmailBelowOutOfStockThreshold"
-//                       checked={form.watch("sendEmailBelowOutOfStockThreshold")}
-//                       onCheckedChange={(checked) => form.setValue("sendEmailBelowOutOfStockThreshold", checked)}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="includeProductsAtReorderLevel">Include Products Equal To Reorder Level</Label>
-//                   <div>
-//                     <Switch
-//                       id="includeProductsAtReorderLevel"
-//                       checked={form.watch("includeProductsAtReorderLevel")}
-//                       onCheckedChange={(checked) => form.setValue("includeProductsAtReorderLevel", checked)}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="excludeOutOfStockManualReorderLevel" className="text-sm">
-//                     Exclude Out of Stock Products With Zero Manual Reorder Level
-//                   </Label>
-//                   <div>
-//                     <Switch
-//                       id="excludeOutOfStockManualReorderLevel"
-//                       checked={form.watch("excludeOutOfStockManualReorderLevel")}
-//                       onCheckedChange={(checked) =>
-//                         form.setValue("excludeOutOfStockManualReorderLevel", checked)
-//                       }
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div className="space-y-4">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="address">Address *</Label>
-//                   <div>
-//                     <Input
-//                       id="address"
-//                       {...form.register("address")}
-//                       className={form.formState.errors.address ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                     />
-//                     {form.formState.errors.address && (
-//                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.address.message}</p>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="city">City *</Label>
-//                   <div>
-//                     <Input
-//                       id="city"
-//                       {...form.register("city")}
-//                       className={form.formState.errors.city ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                     />
-//                     {form.formState.errors.city && (
-//                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.city.message}</p>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="country">Country</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("country")}
-//                       placeholder="Select country"
-//                       options={[
-//                         { id: "UK", label: "UK", value: "UK" },
-//                         { id: "US", label: "US", value: "US" },
-//                         { id: "Canada", label: "Canada", value: "Canada" },
-//                         { id: "Australia", label: "Australia", value: "Australia" },
-//                       ]}
-//                       onChange={(value) => form.setValue("country", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="phone">Phone</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="supplierReference">Suppliers Reference</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="supplierReference" {...form.register("supplierReference")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="supplierEmailAddress">Supplier E-mail Address</Label>
-//                   <div>
-//                     <Input
-//                       id="supplierEmailAddress"
-//                       type="email"
-//                       {...form.register("supplierEmailAddress")}
-//                       className={form.formState.errors.supplierEmailAddress ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                     />
-//                     {form.formState.errors.supplierEmailAddress && (
-//                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierEmailAddress.message}</p>
-//                     )}
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="leadTime">Lead Time</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="leadTime" {...form.register("leadTime")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="purchaseOrderMode">Purchase Order Mode</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("purchaseOrderMode")}
-//                       placeholder="Select mode"
-//                       options={[
-//                         { id: "Standard", label: "Standard", value: "Standard" },
-//                         { id: "Express", label: "Express", value: "Express" },
-//                         { id: "Urgent", label: "Urgent", value: "Urgent" },
-//                       ]}
-//                       onChange={(value) => form.setValue("purchaseOrderMode", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="isManufacturer">Is Manufacturer</Label>
-//                   <div>
-//                     <Switch
-//                       id="isManufacturer"
-//                       checked={form.watch("isManufacturer")}
-//                       onCheckedChange={(checked) => form.setValue("isManufacturer", checked)}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="contactEmail">Contact Email</Label>
-//                   <div>
-//                     <Input
-//                       id="contactEmail"
-//                       type="email"
-//                       {...form.register("contactEmail")}
-//                       className={form.formState.errors.contactEmail ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
-//                     />
-//                     {form.formState.errors.contactEmail && (
-//                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.contactEmail.message}</p>
-//                     )}
-//                   </div>
-//                 </div>
-//               </div>
-//             </CardContent>
-//           </Card>
-
-//           {/* Purchase Order / Drop Shipment Information */}
-//           <Card className="bg-white border-0 shadow-xs rounded-2xl">
-//             <CardHeader>
-//               <CardTitle className="text-[#11263C]">Purchase Order / Drop Shipment Information</CardTitle>
-//             </CardHeader>
-//             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
-//               <div className="space-y-4">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="purchaseOrderShippingCostType">Purchase Order Shipping Cost Type</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("purchaseOrderShippingCostType")}
-//                       placeholder="Select type"
-//                       options={[
-//                         { id: "British Pound", label: "British Pound", value: "British Pound" },
-//                         { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
-//                         { id: "Euro", label: "Euro", value: "Euro" },
-//                       ]}
-//                       onChange={(value) => form.setValue("purchaseOrderShippingCostType", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="purchaseOrderChangeToStatus">Purchase Order Change to Status</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("purchaseOrderChangeToStatus")}
-//                       placeholder="Please Select"
-//                       options={[
-//                         { id: "Pending", label: "Pending", value: "Pending" },
-//                         { id: "Processing", label: "Processing", value: "Processing" },
-//                         { id: "Completed", label: "Completed", value: "Completed" },
-//                       ]}
-//                       onChange={(value) => form.setValue("purchaseOrderChangeToStatus", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="totalDropShipCost">Total Purchase Order Shipping Cost</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="totalDropShipCost" {...form.register("totalDropShipCost")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="sendEmailBelowReorderLevel2">
-//                     Send Email When Product Below Reorder Level
-//                   </Label>
-//                   <div>
-//                     <Switch
-//                       id="sendEmailBelowReorderLevel2"
-//                       checked={form.watch("sendEmailBelowReorderLevel")}
-//                       onCheckedChange={(checked) => form.setValue("sendEmailBelowReorderLevel", checked)}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="sendEmailBelowReorderLevel3">
-//                     Send Email When Product Below Reorder Level
-//                   </Label>
-//                   <div>
-//                     <Switch
-//                       id="sendEmailBelowReorderLevel3"
-//                       checked={form.watch("sendEmailBelowReorderLevel")}
-//                       onCheckedChange={(checked) => form.setValue("sendEmailBelowReorderLevel", checked)}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div className="space-y-4">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="dropShipmentShippingCostType">Drop Shipment Shipping Cost Type</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("dropShipmentShippingCostType")}
-//                       placeholder="Select type"
-//                       options={[
-//                         { id: "British Pound", label: "British Pound", value: "British Pound" },
-//                         { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
-//                         { id: "Euro", label: "Euro", value: "Euro" },
-//                       ]}
-//                       onChange={(value) => form.setValue("dropShipmentShippingCostType", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="dropShipmentChangeToStatus">Drop Shipment Change to Status</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("dropShipmentChangeToStatus")}
-//                       placeholder="Select status"
-//                       options={[
-//                         { id: "Pending", label: "Pending", value: "Pending" },
-//                         { id: "Processing", label: "Processing", value: "Processing" },
-//                         { id: "Completed", label: "Completed", value: "Completed" },
-//                       ]}
-//                       onChange={(value) => form.setValue("dropShipmentChangeToStatus", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="totalDropShipmentShippingCost">Total Drop Shipment Shipping Cost</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="totalDropShipmentShippingCost" {...form.register("totalDropShipmentShippingCost")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="includeInRequisitions">Include Supplier in Requisitions</Label>
-//                   <div>
-//                     <Switch
-//                       id="includeInRequisitions"
-//                       checked={form.watch("includeInRequisitions")}
-//                       onCheckedChange={(checked) => form.setValue("includeInRequisitions", checked)}
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="consolidateDropShipEmails">Consolidate Dropship Supplier Emails</Label>
-//                   <div>
-//                     <Switch
-//                       id="consolidateDropShipEmails"
-//                       checked={form.watch("consolidateDropShipEmails")}
-//                       onCheckedChange={(checked) => form.setValue("consolidateDropShipEmails", checked)}
-//                     />
-//                   </div>
-//                 </div>
-//               </div>
-//             </CardContent>
-//           </Card>
-
-//           {/* Export Templates and CSV Export Configuration */}
-//           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//             <Card className="bg-white border-0 shadow-xs rounded-2xl">
-//               <CardHeader>
-//                 <CardTitle className="text-[#11263C] text-xl">Export Templates</CardTitle>
-//               </CardHeader>
-//               <CardContent className="space-y-4 mx-5">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="transferMethod">Transfer Method</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("transferMethod")}
-//                       placeholder="Select method"
-//                       options={[
-//                         { id: "Manual", label: "Manual", value: "Manual" },
-//                         { id: "Automatic", label: "Automatic", value: "Automatic" },
-//                       ]}
-//                       onChange={(value) => form.setValue("transferMethod", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="exportMethod">Export Method</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("exportMethod")}
-//                       placeholder="Select method"
-//                       options={[
-//                         { id: "CSV", label: "CSV", value: "CSV" },
-//                         { id: "XML", label: "XML", value: "XML" },
-//                         { id: "JSON", label: "JSON", value: "JSON" },
-//                       ]}
-//                       onChange={(value) => form.setValue("exportMethod", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <div>
-//                     <Label htmlFor="templateType">Template Type</Label>
-//                   </div>
-//                   <div>
-//                     <CustomSelect
-//                       defaultValue={form.getValues("templateType")}
-//                       placeholder="Select type"
-//                       options={[
-//                         { id: "CSV", label: "CSV", value: "CSV" },
-//                         { id: "XML", label: "XML", value: "XML" },
-//                         { id: "JSON", label: "JSON", value: "JSON" },
-//                       ]}
-//                       onChange={(value) => form.setValue("templateType", String(value))}
-//                       className="border-[#BBC2CB] bg-white max-w-52"
-//                     />
-//                   </div>
-//                 </div>
-//               </CardContent>
-//             </Card>
-
-//             <Card className="bg-white border-0 shadow-xs rounded-2xl">
-//               <CardHeader>
-//                 <CardTitle className="text-[#11263C] text-xl">CSV Export Configuration</CardTitle>
-//               </CardHeader>
-//               <CardContent className="space-y-4 mx-5">
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <label htmlFor="isDefaultExportMethod">Default Export Method</label>
-//                   <div className="flex items-center space-x-2">
-//                     <Checkbox
-//                       id="isDefaultExportMethod"
-//                       checked={form.watch("isDefaultExportMethod")}
-//                       onCheckedChange={(checked) => form.setValue("isDefaultExportMethod", checked as boolean)}
-//                     />
-//                     <p className="text-[#11263C] m-0 leading-normal text-sm">Default Export Method</p>
-//                   </div>
-//                 </div>
-
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="exportDelimiter">Export Delimiter</Label>
-//                   <Input className="border-[#BBC2CB] max-w-52" id="exportDelimiter" {...form.register("exportDelimiter")} />
-//                 </div>
-
-//                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-//                   <Label htmlFor="exportHeaders">Export Headers</Label>
-//                   <div className="flex items-center space-x-2">
-//                     <Checkbox
-//                       id="exportHeaders"
-//                       checked={form.watch("exportHeaders")}
-//                       onCheckedChange={(checked) => form.setValue("exportHeaders", checked as boolean)}
-//                     />
-//                     <p className="text-[#11263C] m-0 leading-normal text-sm">Export Headers</p>
-//                   </div>
-
-//                 </div>
-//               </CardContent>
-//             </Card>
-//           </div>
-
-//           {/* Action Buttons */}
-//           <div className="flex justify-end gap-4">
-//             <Button type="button" variant="outline">
-//               Cancel
-//             </Button>
-//             <Button type="submit" disabled={isPending} variant="primary" className="rounded-lg">
-//               {isPending ? "Saving..." : "Save"}
-//             </Button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default SupplierDetailsPage
-
-
-
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 import { Header } from "@/components/shared/header"
@@ -645,123 +10,28 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
-import { showInfoMessage } from "@/lib/utils/messageUtils"
-import { CustomSelect } from "@/components/shared/custom-select"
-import { Loader2, Trash2 } from "lucide-react"
+// import { showInfoMessage } from "@/lib/utils/messageUtils"
+import { SelectDropdown } from "@/components/shared/select-dropdown"
+import { Loader2, Plus } from "lucide-react"
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { useDeleteSupplier, useGetSupplier, useUpdateSupplier } from '../core/hooks/useSupplier'
+  useGetSupplier, useUpdateSupplier
+} from '../core/hooks/useSupplier'
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
 
 export const SupplierDetailsPage = () => {
   // Support both /:id and /:supplierId route params for flexibility
   const params = useParams<{ supplierId?: string }>()
   const id = params.supplierId
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [currentSupplier, setCurrentSupplier] = useState<SupplierFormValues | null>(null)
   const { data: supplierResponse, isLoading, error } = useGetSupplier(id!)
   const updateSupplierMutation = useUpdateSupplier()
-  const deleteSupplierMutation = useDeleteSupplier()
 
   const form = useForm<SupplierFormValues>({
     resolver: zodResolver(supplierSchema),
     defaultValues: currentSupplier || undefined,
-    // {
-    //   supplierName: "",
-    //   address: "",
-    //   city: "",
-    //   country: "",
-    //   postcode: "",
-    //   supplierCurrency: "",
-    //   isManufacturer: false,
-    //   sendEmailBelowReorderLevel: false,
-    //   sendEmailBelowOutOfStockThreshold: false,
-    //   includeProductsAtReorderLevel: false,
-    //   excludeOutOfStockManualReorderLevel: false,
-    //   includeInRequisitions: false,
-    //   consolidateDropShipEmails: false,
-    //   address2: "",
-    //   countryState: "",
-    //   phone: "",
-    //   supplierCode: "",
-    //   supplierReference: "",
-    //   commaDelimitedEmails: "",
-    //   minimumOrderValue: undefined,
-    //   supplierEmailAddress: "",
-    //   contactEmail: "",
-    //   leadTime: undefined,
-    //   purchaseOrderMode: "",
-    //   purchaseOrderShippingCostType: "",
-    //   purchaseOrderChangeToStatus: "",
-    //   totalDropShipCost: "",
-    //   dropShipmentShippingCostType: "",
-    //   dropShipmentChangeToStatus: "",
-    //   totalDropShipmentShippingCost: "",
-    //   transferMethod: "",
-    //   exportMethod: "",
-    //   templateType: "",
-    //   isDefaultExportMethod: false,
-    //   exportDelimiter: "",
-    //   exportHeaders: false,
-    // },
   })
-  console.log(form.formState.errors, "error in supplier details page");
-
-  // Populate form when supplier data is loaded
-  // useEffect(() => {
-  //   if (supplierResponse) {
-  //     const supplier = supplierResponse
-  //     console.log(supplier.country, "supplierResponse.data");
-
-  //     form.reset({
-  //       supplierName: supplier.supplierName || "",
-  //       address: supplier.address || "",
-  //       city: supplier.city || "",
-  //       country: supplier.country || "",
-  //       postcode: supplier.postcode || "",
-  //       supplierCurrency: supplier.supplierCurrency || "",
-  //       isManufacturer: supplier.isManufacturer ?? true,
-  //       sendEmailBelowReorderLevel: supplier.sendEmailBelowReorderLevel ?? false,
-  //       sendEmailBelowOutOfStockThreshold: supplier.sendEmailBelowOutOfStockThreshold ?? true,
-  //       includeProductsAtReorderLevel: supplier.includeProductsAtReorderLevel ?? true,
-  //       excludeOutOfStockManualReorderLevel:
-  //         supplier.excludeOutOfStockManualReorderLevel ?? true,
-  //       includeInRequisitions: supplier.includeInRequisitions ?? false,
-  //       consolidateDropShipEmails: supplier.consolidateDropShipEmails ?? true,
-  //       address2: supplier.address2 || "",
-  //       countryState: supplier.countryState || "",
-  //       phone: supplier.phone || "",
-  //       supplierCode: supplier.supplierCode || "",
-  //       supplierReference: supplier.supplierReference || "",
-  //       commaDelimitedEmails: supplier.commaDelimitedEmails || "",
-  //       minimumOrderValue: supplierResponse?.minimumOrderValue ?? undefined,
-  //       supplierEmailAddress: supplier.supplierEmailAddress || "",
-  //       contactEmail: supplier.contactEmail || "",
-  //       leadTime: supplier.leadTime ?? undefined,
-  //       purchaseOrderMode: supplier.purchaseOrderMode || "",
-  //       purchaseOrderShippingCostType: supplier.purchaseOrderShippingCostType || "",
-  //       purchaseOrderChangeToStatus: supplier.purchaseOrderChangeToStatus || "",
-  //       totalDropShipCost: supplier.totalDropShipCost || "",
-  //       dropShipmentShippingCostType: supplier.dropShipmentShippingCostType || "",
-  //       dropShipmentChangeToStatus: supplier.dropShipmentChangeToStatus || "",
-  //       totalDropShipmentShippingCost: supplier.totalDropShipmentShippingCost || "",
-  //       transferMethod: supplier.transferMethod || "Manual",
-  //       exportMethod: supplier.exportMethod || "CSV",
-  //       templateType: supplier.templateType || "CSV",
-  //       isDefaultExportMethod: supplier.isDefaultExportMethod ?? false,
-  //       exportDelimiter: supplier.exportDelimiter || ",",
-  //       exportHeaders: supplier.exportHeaders ?? true,
-  //     })
-  //   }
-  // }, [supplierResponse, form])
+  console.log(form.getValues("templateType"));
 
   useEffect(() => {
     if (supplierResponse) {
@@ -771,41 +41,27 @@ export const SupplierDetailsPage = () => {
     }
   }, [supplierResponse, form.reset])
 
+  console.log(form.formState.errors, "form errors");
+
+
   const onSubmit = (data: SupplierFormValues) => {
     if (id) {
-
-      const emailArray = data.commaDelimitedEmails
-        ?.split(",")
-        .map((email) => email.trim())
-        .filter((email) => email) || [];
-
+      console.log(data, "data in supplier details page");
 
       const safeData = {
         ...data,
         minimumOrderValue: data.minimumOrderValue == null ? undefined : data.minimumOrderValue,
         leadTime: data.leadTime == null ? undefined : data.leadTime,
         totalDropShipCost: data.totalDropShipCost == null ? undefined : data.totalDropShipCost,
-        emailList: emailArray,
+        totalPoShippingCost: data.totalPoShippingCost == null ? undefined : data.totalPoShippingCost,
       }
-      delete safeData.commaDelimitedEmails;
       updateSupplierMutation.mutate({ id, data: safeData })
     }
   }
 
-  const handleDeleteClick = () => {
-    setDeleteDialogOpen(true)
-  }
-
-  const handleDeleteConfirm = () => {
-    if (id) {
-      deleteSupplierMutation.mutate(id)
-      setDeleteDialogOpen(false)
-    }
-  }
-
-  const findEmail = () => {
-    showInfoMessage("Searching for email based on postcode...")
-  }
+  // const findEmail = () => {
+  //   showInfoMessage("Searching for email based on postcode...")
+  // }
 
   if (isLoading) {
     return (
@@ -830,10 +86,13 @@ export const SupplierDetailsPage = () => {
   return (
     <div>
       <Header title="Products">
-        <Button variant="destructive" onClick={handleDeleteClick} className="flex items-center gap-2">
-          <Trash2 className="w-4 h-4" />
-          Delete Supplier
-        </Button>
+        <Link
+          to="/admin/products/add-supplier"
+          className="rounded-xl flex items-center bg-blue-500 px-3 py-2.5 text-white font-normal hover:bg-blue-600"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Supplier
+        </Link>
       </Header>
       <div className="mt-6">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-[#4E5967]">
@@ -882,14 +141,14 @@ export const SupplierDetailsPage = () => {
                             form.formState.errors.postcode ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"
                           }
                         />
-                        <Button
+                        {/* <Button
                           type="button"
                           variant="link"
                           className="underline text-[#4E5967] p-0 text-md"
                           onClick={findEmail}
                         >
                           Find Email
-                        </Button>
+                        </Button> */}
                       </div>
                       {form.formState.errors.postcode && (
                         <p className="text-red-500 text-sm mt-1">{form.formState.errors.postcode.message}</p>
@@ -908,15 +167,15 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="supplierCurrency">Supplier Currency</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.watch("supplierCurrency")}
                       placeholder="Select currency"
                       options={[
-                        { id: "GBP", label: "British Pound", value: "British Pound" },
-                        { id: "USD", label: "US Dollar", value: "US Dollar" },
-                        { id: "EUR", label: "Euro", value: "Euro" },
+                        { id: "GBP", label: "British Pound", value: "GBP" },
+                        { id: "USD", label: "US Dollar", value: "USD" },
+                        { id: "EUR", label: "Euro", value: "EUR" },
                       ]}
-                      onChange={(value) => form.setValue("supplierCurrency", String(value))}
+                      onChange={(value) => form.setValue("supplierCurrency", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1033,7 +292,7 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="country">Country</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.getValues("country")}
                       placeholder="Select country"
                       options={[
@@ -1094,7 +353,7 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="purchaseOrderMode">Purchase Order Mode</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.getValues("purchaseOrderMode")}
                       placeholder="Select mode"
                       options={[
@@ -1102,7 +361,7 @@ export const SupplierDetailsPage = () => {
                         { id: "Express", label: "Express", value: "Express" },
                         { id: "Urgent", label: "Urgent", value: "Urgent" },
                       ]}
-                      onChange={(value) => form.setValue("purchaseOrderMode", String(value))}
+                      onChange={(value) => form.setValue("purchaseOrderMode", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1148,18 +407,18 @@ export const SupplierDetailsPage = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <div>
-                    <Label htmlFor="purchaseOrderShippingCostType">Purchase Order Shipping Cost Type</Label>
+                    <Label htmlFor="poShippingCostType">Purchase Order Shipping Cost Type</Label>
                   </div>
                   <div>
-                    <CustomSelect
-                      defaultValue={form.getValues("purchaseOrderShippingCostType")}
+                    <SelectDropdown
+                      defaultValue={form.getValues("poShippingCostType")}
                       placeholder="Select type"
                       options={[
                         { id: "British Pound", label: "British Pound", value: "British Pound" },
                         { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
                         { id: "Euro", label: "Euro", value: "Euro" },
                       ]}
-                      onChange={(value) => form.setValue("purchaseOrderShippingCostType", String(value))}
+                      onChange={(value) => form.setValue("poShippingCostType", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1167,29 +426,30 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <div>
-                    <Label htmlFor="purchaseOrderChangeToStatus">Purchase Order Change to Status</Label>
+                    <Label htmlFor="poChangeToStatus">Purchase Order Change to Status</Label>
                   </div>
                   <div>
-                    <CustomSelect
-                      defaultValue={form.getValues("purchaseOrderChangeToStatus")}
+                    <SelectDropdown
+                      defaultValue={form.getValues("poChangeToStatus")}
                       placeholder="Please Select"
                       options={[
                         { id: "Pending", label: "Pending", value: "Pending" },
                         { id: "Processing", label: "Processing", value: "Processing" },
                         { id: "Completed", label: "Completed", value: "Completed" },
                       ]}
-                      onChange={(value) => form.setValue("purchaseOrderChangeToStatus", String(value))}
+                      onChange={(value) => form.setValue("poChangeToStatus", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="totalDropShipCost">Total Purchase Order Shipping Cost</Label>
+                  <Label htmlFor="totalPoShippingCost">Total Purchase Order Shipping Cost</Label>
                   <Input
                     className="border-[#BBC2CB] max-w-52"
-                    id="totalDropShipCost"
-                    {...form.register("totalDropShipCost", { valueAsNumber: true })} // Ensure this is a number
+                    id="totalPoShippingCost"
+                    type='number'
+                    {...form.register("totalPoShippingCost", { valueAsNumber: true })} // Ensure this is a number
                   />
                 </div>
 
@@ -1208,18 +468,18 @@ export const SupplierDetailsPage = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <div>
-                    <Label htmlFor="dropShipmentShippingCostType">Drop Shipment Shipping Cost Type</Label>
+                    <Label htmlFor="dropShipShippingCostType">Drop Shipment Shipping Cost Type</Label>
                   </div>
                   <div>
-                    <CustomSelect
-                      defaultValue={form.getValues("dropShipmentShippingCostType")}
+                    <SelectDropdown
+                      defaultValue={form.getValues("dropShipShippingCostType")}
                       placeholder="Select type"
                       options={[
                         { id: "British Pound", label: "British Pound", value: "British Pound" },
                         { id: "US Dollar", label: "US Dollar", value: "US Dollar" },
                         { id: "Euro", label: "Euro", value: "Euro" },
                       ]}
-                      onChange={(value) => form.setValue("dropShipmentShippingCostType", String(value))}
+                      onChange={(value) => form.setValue("dropShipShippingCostType", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1227,29 +487,30 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <div>
-                    <Label htmlFor="dropShipmentChangeToStatus">Drop Shipment Change to Status</Label>
+                    <Label htmlFor="dropShipChangeToStatus">Drop Shipment Change to Status</Label>
                   </div>
                   <div>
-                    <CustomSelect
-                      defaultValue={form.getValues("dropShipmentChangeToStatus")}
+                    <SelectDropdown
+                      defaultValue={form.getValues("dropShipChangeToStatus")}
                       placeholder="Select status"
                       options={[
                         { id: "Pending", label: "Pending", value: "Pending" },
                         { id: "Processing", label: "Processing", value: "Processing" },
                         { id: "Completed", label: "Completed", value: "Completed" },
                       ]}
-                      onChange={(value) => form.setValue("dropShipmentChangeToStatus", String(value))}
+                      onChange={(value) => form.setValue("dropShipChangeToStatus", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="totalDropShipmentShippingCost">Total Drop Shipment Shipping Cost</Label>
+                  <Label htmlFor="totalDropShipCost">Total Drop Shipment Shipping Cost</Label>
                   <Input
                     className="border-[#BBC2CB] max-w-52"
-                    id="totalDropShipmentShippingCost"
-                    {...form.register("totalDropShipmentShippingCost")}
+                    id="totalDropShipCost"
+                    type='number'
+                    {...form.register("totalDropShipCost", { valueAsNumber: true })} // Ensure this is a number
                   />
                 </div>
 
@@ -1279,14 +540,14 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="transferMethod">Transfer Method</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.getValues("transferMethod")}
                       placeholder="Select method"
                       options={[
                         { id: "Manual", label: "Manual", value: "Manual" },
                         { id: "Automatic", label: "Automatic", value: "Automatic" },
                       ]}
-                      onChange={(value) => form.setValue("transferMethod", String(value))}
+                      onChange={(value) => form.setValue("transferMethod", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1297,7 +558,7 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="exportMethod">Export Method</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.getValues("exportMethod")}
                       placeholder="Select method"
                       options={[
@@ -1305,7 +566,7 @@ export const SupplierDetailsPage = () => {
                         { id: "XML", label: "XML", value: "XML" },
                         { id: "JSON", label: "JSON", value: "JSON" },
                       ]}
-                      onChange={(value) => form.setValue("exportMethod", String(value))}
+                      onChange={(value) => form.setValue("exportMethod", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1316,7 +577,7 @@ export const SupplierDetailsPage = () => {
                     <Label htmlFor="templateType">Template Type</Label>
                   </div>
                   <div>
-                    <CustomSelect
+                    <SelectDropdown
                       defaultValue={form.getValues("templateType")}
                       placeholder="Select type"
                       options={[
@@ -1324,7 +585,7 @@ export const SupplierDetailsPage = () => {
                         { id: "XML", label: "XML", value: "XML" },
                         { id: "JSON", label: "JSON", value: "JSON" },
                       ]}
-                      onChange={(value) => form.setValue("templateType", String(value))}
+                      onChange={(value) => form.setValue("templateType", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
                   </div>
@@ -1384,27 +645,6 @@ export const SupplierDetailsPage = () => {
           </div>
         </form>
       </div>
-
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the supplier and remove all associated data.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteConfirm}
-              className="bg-red-500 hover:bg-red-600"
-              disabled={deleteSupplierMutation.isPending}
-            >
-              {deleteSupplierMutation.isPending ? "Deleting..." : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   )
 }
