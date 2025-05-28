@@ -1,102 +1,60 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { useOrderStore } from "@/store/admin/order-store"
-import { cancelOrder, cloneOrder, fetchOrderDetails, updateOrder } from "../_dummy"
-import { Address, 
-  // CreateOrderData, 
-  EditOrderFormValues, OrderDetails, OrderItem, 
-  // OrderQueryParams, 
-  OrderTotals, 
-  // UpdateOrderData
- } from "../_modals"
-import { useEffect } from "react"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { showSuccessMessage, showErrorMessage } from "@/lib/utils/messageUtils"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { getSpecificOrder, updateOrder, deleteOrder, cloneOrder, cancelOrder } from "../_request"
+import type { UpdateOrderData, OrderDetails, OrderQueryParams } from "../_modals"
+import type { AddressFormValues, BasicOrderDetailsFormValues, EditOrderFormValues } from "../_schema"
+import { transformOrderToOrderDetails } from '../order-mapper'
 
-export function useOrder(orderId: string) {
+
+
+// Query keys
+export const orderKeys = {
+  all: ["orders"] as const,
+  lists: () => [...orderKeys.all, "list"] as const,
+  list: (filters: OrderQueryParams) => [...orderKeys.lists(), filters] as const,
+  details: () => [...orderKeys.all, "detail"] as const,
+  detail: (id: string) => [...orderKeys.details(), id] as const,
+  stats: () => [...orderKeys.all, "stats"] as const,
+}
+
+// Custom hook for managing a specific order with all its operations
+export const useOrder = (orderId: string) => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  // Fetch order data
   const {
-    setOrder,
-    updateOrderStatus,
-    updateShippingMethod,
-    updateShippingCost,
-    updateAttentionRequired,
-    updateBillingAddress,
-    updateShippingAddress,
-    updateOrderItems,
-    addOrderNote,
-    addProductsToOrder,
-    setLoading,
-    setError,
-  } = useOrderStore()
-
-  // Fetch order details
-  // const { data, isLoading, error, refetch } = useQuery<OrderDetails, Error>({
-  //   queryKey: ["orderDetails", orderId],
-  //   queryFn: () => fetchOrderDetails(orderId),
-  //   enabled: !!orderId,
-  //   onSuccess: (data: any) => {
-  //     setOrder(data)
-  //   },
-  //   onError: (error: any) => {
-  //     console.log(error,"asfsdfsd");
-      
-  //     setError(error)
-  //   },
-  // })
-
-  const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ["orderDetails", orderId],
-    queryFn: () => fetchOrderDetails(orderId),
+    data: apiOrder,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: orderKeys.detail(orderId),
+    queryFn: () => getSpecificOrder(orderId),
+    select: (data) => data.data,
     enabled: !!orderId,
-  });
+  })
 
-  useEffect(() => {
-    if (data) {
-      setOrder(data);
-    }
-    if (error) {
-      setError(error as Error);
-    }
-  }, [data, error]);
+  // Transform API order to component format
+  const order: OrderDetails | undefined = apiOrder ? transformOrderToOrderDetails(apiOrder) : undefined
 
   // Update order mutation
   const updateOrderMutation = useMutation({
-    mutationFn: (data: Partial<OrderDetails>) => updateOrder(orderId, data),
-    onMutate: async (newData) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ["order", orderId] })
-
-      // Snapshot the previous value
-      const previousOrder = queryClient.getQueryData<OrderDetails>(["order", orderId])
-
-      // Optimistically update to the new value
-      if (previousOrder) {
-        queryClient.setQueryData<OrderDetails>(["order", orderId], {
-          ...previousOrder,
-          ...newData,
-        })
-      }
-
-      return { previousOrder }
-    },
-    onError: (err, newData, context) => {
-      console.log(newData, "newData");
-      
-      // If the mutation fails, use the context returned from onMutate to roll back
-      if (context?.previousOrder) {
-        queryClient.setQueryData<OrderDetails>(["order", orderId], context.previousOrder)
-      }
-      setError(err as Error)
-    },
-    onSettled: () => {
-      // Always refetch after error or success to ensure we have the latest data
-      queryClient.invalidateQueries({ queryKey: ["order", orderId] })
+    mutationFn: (data: UpdateOrderData) => updateOrder(orderId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: orderKeys.detail(orderId) })
+      queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
     },
   })
 
-  // Cancel order mutation
-  const cancelOrderMutation = useMutation({
-    mutationFn: () => cancelOrder(orderId),
+  // Delete order mutation
+  const deleteOrderMutation = useMutation({
+    mutationFn: () => deleteOrder(orderId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["order", orderId] })
+      queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
+      navigate("/admin/orders")
     },
   })
 
@@ -104,230 +62,210 @@ export function useOrder(orderId: string) {
   const cloneOrderMutation = useMutation({
     mutationFn: () => cloneOrder(orderId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] })
+      queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
     },
   })
 
-  // Submit form data
-  const submitForm = async (formData: EditOrderFormValues) => {
-    setLoading(true)
+  // Cancel order mutation
+  const cancelOrderMutation = useMutation({
+    mutationFn: () => cancelOrder(orderId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: orderKeys.detail(orderId) })
+      queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
+    },
+  })
 
+  // Update basic order details
+  const updateBasicDetails = async (data: BasicOrderDetailsFormValues) => {
+    setIsUpdating(true)
     try {
-      // Update order status
-      updateOrderStatus(formData.orderStatus)
-
-      // Update shipping method
-      updateShippingMethod(formData.shippingMethod)
-
-      // Update shipping cost
-      updateShippingCost(Number.parseFloat(formData.shippingCost))
-
-      // Update attention required
-      updateAttentionRequired(!!formData.attentionRequired)
-
-      // Submit to server
       await updateOrderMutation.mutateAsync({
-        status: formData.orderStatus,
-        shippingMethod: formData.shippingMethod,
-        attentionRequired: !!formData.attentionRequired,
-        totals: {
-          ...(data?.totals || {}),
-          shippingCosts: Number.parseFloat(formData.shippingCost),
-        } as OrderTotals,
-        // Add other form fields as needed
-        trackingNumber: formData.trackingNumber,
-        specialInstructions: formData.specialInstructions,
-        pickerInstructions: formData.pickerInstructions,
-        orderWeight: formData.orderWeight,
-        packageSize: formData.packageSize,
-        numberOfParcels: formData.numberOfParcels,
-        airNumber: formData.airNumber,
+        channelOrderNumber: data.channelOrderNumber,
+        orderStatus: data.orderStatus,
+        attentionRequired: data.attentionRequired,
+        quantity: data.quantity,
+        totalPrice: data.totalPrice,
+        notes: data.notes,
       })
-
+      setIsUpdating(false)
+      showSuccessMessage("Order details updated successfully")
       return true
     } catch (error) {
-      setError(error as Error)
+      setIsUpdating(false)
+      showErrorMessage("Failed to update order details")
       return false
-    } finally {
-      setLoading(false)
+    }
+  }
+
+  // Update shipping address
+  const updateShippingAddress = async (data: AddressFormValues) => {
+    setIsUpdating(true)
+    try {
+      await updateOrderMutation.mutateAsync({
+        customerDetails: {
+          ...apiOrder?.customerDetails,
+          shippingAddress: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            company: data.company,
+            addressLine1: data.addressLine1,
+            addressLine2: data.addressLine2,
+            city: data.city,
+            state: data.state,
+            postalCode: data.postalCode,
+            country: data.country,
+            phone: data.phone
+          },
+        },
+      })
+      setIsUpdating(false)
+      showSuccessMessage("Shipping address updated successfully")
+      return order! // Return transformed order
+    } catch (error) {
+      setIsUpdating(false)
+      showErrorMessage("Failed to update shipping address")
+      throw error
     }
   }
 
   // Update billing address
-  const updateBillingAddressFn = async (address: Address) => {
-    updateBillingAddress(address)
-    return updateOrderMutation.mutateAsync({ billingAddress: address })
-  }
-
-  // Update shipping address
-  const updateShippingAddressFn = async (address: Address) => {
-    updateShippingAddress(address)
-    return updateOrderMutation.mutateAsync({ shippingAddress: address })
-  }
-
-  // Update order items
-  const updateOrderItemsFn = async (items: OrderItem[]) => {
-    updateOrderItems(items)
-    return updateOrderMutation.mutateAsync({ items })
-  }
-
-  // Add order note
-  const addOrderNoteFn = async (note: { subject: string; note: string; createdBy: string }) => {
-    addOrderNote(note)
-    return updateOrderMutation.mutateAsync({
-      notes: [
-        ...(data?.notes || []),
-        {
-          id: `note-${Date.now()}`,
-          subject: note.subject,
-          note: note.note,
-          createdOn: new Date(),
-          createdBy: note.createdBy,
+  const updateBillingAddress = async (data: AddressFormValues) => {
+    setIsUpdating(true)
+    try {
+      await updateOrderMutation.mutateAsync({
+        billingAddress: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          company: data.company,
+          addressLine1: data.addressLine1,
+          addressLine2: data.addressLine2,
+          city: data.city,
+          state: data.state,
+          postalCode: data.postalCode,
+          country: data.country,
+          phone: data.phone
         },
-      ],
-    })
+      })
+      setIsUpdating(false)
+      showSuccessMessage("Billing address updated successfully")
+      return order! // Return transformed order
+    } catch (error) {
+      setIsUpdating(false)
+      showErrorMessage("Failed to update billing address")
+      throw error
+    }
   }
 
-  // Add products to order
-  const addProductsToOrderFn = async (products: any[]) => {
-    addProductsToOrder(products)
+  // Submit form (for edit order form)
+  const submitForm = async (formData: EditOrderFormValues) => {
+    setIsUpdating(true)
+    try {
+      await updateOrderMutation.mutateAsync({
+        orderStatus: formData.orderStatus,
+        attentionRequired: formData.attentionRequired,
+        shippingAndHandling: {
+          ...apiOrder?.shippingAndHandling,
+          shippingMethod: formData.shippingMethod,
+          shippingCost: Number.parseFloat(formData.shippingCost),
+          channelShippingMethod: formData.channelShippingMethod,
+          trackingNumber: formData.trackingNumber,
+          specialInstructions: formData.specialInstructions,
+          pickerInstructions: formData.pickerInstructions,
+          orderWeight: formData.orderWeight ? Number.parseFloat(formData.orderWeight) : undefined,
+          packageSize: formData.packageSize,
+          numberOfParcels: formData.numberOfParcels ? Number.parseInt(formData.numberOfParcels) : undefined,
+          airNumber: formData.airNumber,
+        },
+      })
+      setIsUpdating(false)
+      showSuccessMessage("Order updated successfully")
+      return true
+    } catch (error) {
+      setIsUpdating(false)
+      showErrorMessage("Failed to update order")
+      return false
+    }
+  }
 
-    // Convert products to order items
-    const newItems: OrderItem[] = products.map((product) => ({
-      id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      sku: product.sku,
-      name: product.name,
-      quantity: product.quantity || 1,
-      unitSubtotal: product.price,
-      taxRate: 20, // Default tax rate
-      taxTotal: product.price * 0.2, // 20% tax
-      discount: 0,
-      status: "Pending",
-      quantityAllocated: 0,
-      options: "",
-    }))
+  // Legacy methods for backward compatibility
+  const updateOrderItems = async (items: any[]) => {
+    console.log(items, "items");
+    
+    // Implementation for updating order items
+    return order!
+  }
 
-    return updateOrderMutation.mutateAsync({
-      items: [...(data?.items || []), ...newItems],
-    })
+  const addOrderNote = async (note: { subject: string; note: string; createdBy: string }) => {
+    setIsUpdating(true)
+    try {
+      const currentNotes = apiOrder?.notes || ""
+      const newNote = `${note.subject}: ${note.note} (by ${note.createdBy})`
+      const updatedNotes = currentNotes ? `${currentNotes}\n${newNote}` : newNote
+
+      await updateOrderMutation.mutateAsync({
+        notes: updatedNotes,
+      })
+      setIsUpdating(false)
+      showSuccessMessage("Note added successfully")
+      return order!
+    } catch (error) {
+      setIsUpdating(false)
+      showErrorMessage("Failed to add note")
+      throw error
+    }
+  }
+
+  // Delete order
+  const deleteOrderHandler = async () => {
+    try {
+      await deleteOrderMutation.mutateAsync()
+      showSuccessMessage("Order deleted successfully")
+      return true
+    } catch (error) {
+      showErrorMessage("Failed to delete order")
+      return false
+    }
+  }
+
+  // Clone order
+  const cloneOrderHandler = async () => {
+    try {
+      await cloneOrderMutation.mutateAsync()
+      showSuccessMessage("Order cloned successfully")
+      return true
+    } catch (error) {
+      showErrorMessage("Failed to clone order")
+      return false
+    }
+  }
+
+  // Cancel order
+  const cancelOrderHandler = async () => {
+    try {
+      await cancelOrderMutation.mutateAsync()
+      showSuccessMessage("Order cancelled successfully")
+      return true
+    } catch (error) {
+      showErrorMessage("Failed to cancel order")
+      return false
+    }
   }
 
   return {
-    order: data,
-    isLoading: isLoading || updateOrderMutation.isPending,
+    order,
+    isLoading,
     error,
-    refetch,
+    isUpdating,
+    updateBasicDetails,
+    updateShippingAddress,
+    updateBillingAddress,
+    updateOrderItems,
+    addOrderNote,
     submitForm,
-    updateBillingAddress: updateBillingAddressFn,
-    updateShippingAddress: updateShippingAddressFn,
-    updateOrderItems: updateOrderItemsFn,
-    addOrderNote: addOrderNoteFn,
-    addProductsToOrder: addProductsToOrderFn,
-    cancelOrder: cancelOrderMutation.mutate,
-    cloneOrder: cloneOrderMutation.mutate,
+    deleteOrder: deleteOrderHandler,
+    cloneOrder: cloneOrderHandler,
+    cancelOrder: cancelOrderHandler,
     isCancelling: cancelOrderMutation.isPending,
     isCloning: cloneOrderMutation.isPending,
   }
 }
-
-
-
-
-// import { showSuccessMessage, showErrorMessage } from "@/lib/utils/messageUtils"
-// import type { AxiosError } from "axios"
-// import { useNavigate } from "react-router-dom"
-// import { createOrder, deleteOrder, getAllOrders, getSpecificOrder } from '../_request'
-
-// // Query keys
-// export const orderKeys = {
-//   all: ["orders"] as const,
-//   lists: () => [...orderKeys.all, "list"] as const,
-//   list: (filters: OrderQueryParams) => [...orderKeys.lists(), filters] as const,
-//   details: () => [...orderKeys.all, "detail"] as const,
-//   detail: (id: string) => [...orderKeys.details(), id] as const,
-// }
-
-// // Get all orders with optional filtering
-// export const useGetOrders = (params?: OrderQueryParams) => {
-//   return useQuery({
-//     queryKey: orderKeys.list(params || {}),
-//     queryFn: () => getAllOrders(params),
-//     select: (data) => data.data,
-//   })
-// }
-
-// // Get a specific order by ID
-// export const useGetOrder = (id: string) => {
-//   return useQuery({
-//     queryKey: orderKeys.detail(id),
-//     queryFn: () => getSpecificOrder(id),
-//     select: (data) => data.data,
-//     enabled: !!id, // Only run if ID is provided
-//   })
-// }
-
-// // Create a new order
-// export const useCreateOrder = () => {
-//   const queryClient = useQueryClient()
-//   const navigate = useNavigate()
-
-//   return useMutation({
-//     mutationFn: (data: CreateOrderData) => createOrder(data),
-//     onSuccess: (response) => {
-//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
-//       showSuccessMessage(response.data.message || "Order created successfully!")
-//       const newOrderId = response.data?._id
-//       navigate(`/admin/orders/${newOrderId}`)
-//     },
-//     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
-//       if (error.response?.data.errors) {
-//         Object.values(error.response.data.errors).forEach((errorMessage) => {
-//           showErrorMessage(errorMessage)
-//         })
-//       } else {
-//         showErrorMessage(error.response?.data?.message || "Failed to create order. Please try again.")
-//       }
-//     },
-//   })
-// }
-
-// // Update an existing order
-// export const useUpdateOrder = () => {
-//   const queryClient = useQueryClient()
-
-//   return useMutation({
-//     mutationFn: ({ id, data }: { id: string; data: UpdateOrderData }) => updateOrder(id, data),
-//     onSuccess: (response, variables) => {
-//       // Invalidate specific order query and list queries
-//       queryClient.invalidateQueries({ queryKey: orderKeys.detail(variables.id) })
-//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
-//       showSuccessMessage(response.data.message || "Order updated successfully!")
-//     },
-//     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
-//       if (error.response?.data.errors) {
-//         Object.values(error.response.data.errors).forEach((errorMessage) => {
-//           showErrorMessage(errorMessage)
-//         })
-//       } else {
-//         showErrorMessage(error.response?.data?.message || "Failed to update order. Please try again.")
-//       }
-//     },
-//   })
-// }
-
-// // Delete an order
-// export const useDeleteOrder = () => {
-//   const queryClient = useQueryClient()
-
-//   return useMutation({
-//     mutationFn: (id: string) => deleteOrder(id),
-//     onSuccess: (response) => {
-//       // Invalidate list queries after deletion
-//       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
-//       showSuccessMessage(response.data.message || "Order deleted successfully!")
-//     },
-//     onError: (error: AxiosError<{ message: string }>) => {
-//       showErrorMessage(error.response?.data?.message || "Failed to delete order. Please try again.")
-//     },
-//   })
-// }

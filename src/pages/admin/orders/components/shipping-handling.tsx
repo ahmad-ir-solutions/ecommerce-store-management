@@ -17,7 +17,7 @@ export function ShippingHandling({ control, register }: ShippingHandlingProps) {
   const handleUpdateTotal = (checked: boolean) => {
     setUpdateOrderTotal(checked)
     if (checked) {
-     showSuccessMessage("The order total will be updated based on the shipping cost")
+      showSuccessMessage("The order total will be updated based on the shipping cost")
     }
   }
 
@@ -47,8 +47,8 @@ export function ShippingHandling({ control, register }: ShippingHandlingProps) {
                     ]}
                     onChange={field.onChange}
                     className="border-gray-200 bg-white max-w-52"
-                    />
-                  )}
+                  />
+                )}
               />
               <Checkbox
                 id="update-total"

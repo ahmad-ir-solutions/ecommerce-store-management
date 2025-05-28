@@ -153,7 +153,7 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                     />
                   </TableCell>
                   <TableCell className="p-2">
-                  {`£ ${item.taxTotal.toFixed(2)}`}
+                    {`£ ${item.taxTotal.toFixed(2)}`}
                   </TableCell>
                   <TableCell className="p-2">
                     <Input

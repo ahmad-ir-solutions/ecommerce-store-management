@@ -1,16 +1,19 @@
 import { Controller, UseFormRegister, type Control } from "react-hook-form"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Address, EditOrderFormValues, OrderDetails } from "../core/_modals"
+import { EditOrderFormValues, OrderDetails } from "../core/_modals"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { CustomerInformation } from "./customer-information"
 import { ShippingHandling } from "./shipping-handling"
+import { AddressFormValues } from '../core/_schema'
 
 interface OrderInformationProps {
   order: OrderDetails
   control: Control<EditOrderFormValues>
   register: UseFormRegister<EditOrderFormValues>
-  onUpdateBillingAddress: (data: Address) => Promise<OrderDetails>
-  onUpdateShippingAddress: (data: Address) => Promise<OrderDetails>
+  // onUpdateBillingAddress: (address: Address) => void
+  // onUpdateShippingAddress: (address: Address) => void
+  onUpdateBillingAddress: (data: AddressFormValues) => Promise<OrderDetails>
+  onUpdateShippingAddress: (data: AddressFormValues) => Promise<OrderDetails>
 }
 
 export function OrderInformation({ order, control, register, onUpdateBillingAddress, onUpdateShippingAddress }: OrderInformationProps) {
@@ -36,22 +39,22 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
             <div className="text-sm text-gray-500 p-2 pl-4">Order Status</div>
             <div className="text-sm p-2">
               <Controller
-              name="orderStatus"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                defaultValue={field.value}
-                placeholder="Please Select"
-                options={[
-                  { id: "Complete (Ready to pick)", label: "Complete (Ready to pick)", value: "Complete (Ready to pick)" },
-                  { id: "Pending", label: "Pending", value: "Pending" },
-                  { id: "Shipped", label: "Shipped", value: "Shipped" },
-                  { id: "Cancelled", label: "Cancelled", value: "Cancelled" },
-                ]}
-                onChange={field.onChange}
-                className="border-gray-200 bg-white max-w-48"
-                />
-              )}
+                name="orderStatus"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    defaultValue={field.value}
+                    placeholder="Please Select"
+                    options={[
+                      { id: "Complete (Ready to pick)", label: "Complete (Ready to pick)", value: "Complete (Ready to pick)" },
+                      { id: "Pending", label: "Pending", value: "Pending" },
+                      { id: "Shipped", label: "Shipped", value: "Shipped" },
+                      { id: "Cancelled", label: "Cancelled", value: "Cancelled" },
+                    ]}
+                    onChange={field.onChange}
+                    className="border-gray-200 bg-white max-w-48"
+                  />
+                )}
               />
             </div>
 
@@ -67,10 +70,10 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
         </div>
         {/* customer Information */}
         <CustomerInformation
-            order={order}
-            onUpdateBillingAddress={onUpdateBillingAddress}
-            onUpdateShippingAddress={onUpdateShippingAddress}
-          />
+          order={order}
+          onUpdateBillingAddress={onUpdateBillingAddress}
+          onUpdateShippingAddress={onUpdateShippingAddress}
+        />
 
         {/* eBay logo */}
         <div className="absolute top-6 right-6">
@@ -175,7 +178,7 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
             </div>
           </div>
         </div>
-        
+
         {/* shipping and handling */}
         <ShippingHandling control={control} register={register} />
       </div>

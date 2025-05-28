@@ -28,7 +28,7 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
         createdBy: "Current User",
       })
       setIsAddingNote(false)
-     showSuccessMessage("Your note has been added to the order")
+      showSuccessMessage("Your note has been added to the order")
     } catch (error) {
       showErrorMessage("There was an error adding the note. Please try again.")
     } finally {

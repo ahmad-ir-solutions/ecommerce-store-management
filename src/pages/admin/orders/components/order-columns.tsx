@@ -12,7 +12,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-       className="w-5 h-5 rounded-sm border-[#BBC2CB]"
+        className="w-5 h-5 rounded-sm border-[#BBC2CB]"
         checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -20,7 +20,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
-       className="w-5 h-5 rounded-sm border-[#BBC2CB]"
+        className="w-5 h-5 rounded-sm border-[#BBC2CB]"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
@@ -43,25 +43,26 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const [isHovered, setIsHovered] = useState(false)
       const navigate = useNavigate()
+      console.log(row.original);
 
       const handleClick = () => {
-        navigate(`/admin/orders/edit-order/${row.original.orderId}`)
+        navigate(`/admin/orders/edit-order/${row.original.id}`)
       }
 
       return (
-        <div 
-        className="relative"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        <div 
-          className="font-medium text-blue-600 hover:underline cursor-pointer"
-          onClick={handleClick}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          {row.getValue("orderId")}
+          <div
+            className="font-medium text-blue-600 hover:underline cursor-pointer"
+            onClick={handleClick}
+          >
+            {row.getValue("orderId")}
+          </div>
+          <RowActions orderId={row.original.id} isVisible={isHovered} />
         </div>
-        <RowActions orderId={row.original.orderId} isVisible={isHovered} />
-      </div>  
       )
     }
   },
@@ -193,7 +194,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     cell: ({ row }) => {
       const status = row.getValue("status") as string
       let statusClass = ""
-      
+
       switch (status?.toLowerCase()) {
         case "complete":
           statusClass = "bg-green-100 text-green-800"
@@ -207,7 +208,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
         default:
           statusClass = "bg-gray-100 text-gray-800"
       }
-      
+
       return (
         <div className={`px-2 py-1 rounded-full text-xs font-medium ${statusClass}`}>
           {status || "N/A"}

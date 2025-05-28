@@ -39,6 +39,7 @@ export function EditAddressModal({
     resolver: zodResolver(addressSchema),
     defaultValues: initialData,
   })
+  console.log(initialData, "initialDatainitialData");
 
   const onSubmit = (data: AddressFormValues) => {
     onSave(data)
@@ -54,11 +55,18 @@ export function EditAddressModal({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4 text-gray-500">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
+              <Label htmlFor="firstName" className="text-right">
+                First Name
               </Label>
-              <Input id="name" {...register("name")} className="col-span-3" disabled={isSubmitting} />
-              {errors.name && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.name.message}</p>}
+              <Input id="firstName" {...register("firstName")} className="col-span-3" disabled={isSubmitting} />
+              {errors.firstName && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.firstName.message}</p>}
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="lastName" className="text-right">
+                Last Name
+              </Label>
+              <Input id="lastName" {...register("lastName")} className="col-span-3" disabled={isSubmitting} />
+              {errors.lastName && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.lastName.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="company" className="text-right">
@@ -67,19 +75,19 @@ export function EditAddressModal({
               <Input id="company" {...register("company")} className="col-span-3" disabled={isSubmitting} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="address1" className="text-right">
+              <Label htmlFor="addressLine1" className="text-right">
                 Address 1
               </Label>
-              <Input id="address1" {...register("address1")} className="col-span-3" disabled={isSubmitting} />
-              {errors.address1 && (
-                <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.address1.message}</p>
+              <Input id="addressLine1" {...register("addressLine1")} className="col-span-3" disabled={isSubmitting} />
+              {errors.addressLine1 && (
+                <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.addressLine1.message}</p>
               )}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="address2" className="text-right">
+              <Label htmlFor="addressLine2" className="text-right">
                 Address 2
               </Label>
-              <Input id="address2" {...register("address2")} className="col-span-3" disabled={isSubmitting} />
+              <Input id="addressLine2" {...register("addressLine2")} className="col-span-3" disabled={isSubmitting} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="city" className="text-right">
@@ -89,19 +97,12 @@ export function EditAddressModal({
               {errors.city && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.city.message}</p>}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="county" className="text-right">
-                County
-              </Label>
-              <Input id="county" {...register("county")} className="col-span-3" disabled={isSubmitting} />
-              {errors.county && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.county.message}</p>}
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="postcode" className="text-right">
+              <Label htmlFor="postalCode" className="text-right">
                 Postcode
               </Label>
-              <Input id="postcode" {...register("postcode")} className="col-span-3" disabled={isSubmitting} />
-              {errors.postcode && (
-                <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.postcode.message}</p>
+              <Input id="postalCode" {...register("postalCode")} className="col-span-3" disabled={isSubmitting} />
+              {errors.postalCode && (
+                <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.postalCode.message}</p>
               )}
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
