@@ -36,23 +36,23 @@ export interface topSellingProduct {
 //   heightDepth?: string // UI alias for height
 // }
 
-// export interface SavedFilter {
-//   id: string
-//   label: string
-//   value: string
-//   conditions?: FilterCondition[]
-//   isPublic?: boolean
-//   isFavorite?: boolean
-//   filters?: any
-//   createdBy?: string
-//   createdAt?: string
-// }
+export interface SavedFilter {
+  id: string
+  label: string
+  value: string
+  conditions?: FilterCondition[]
+  isPublic?: boolean
+  isFavorite?: boolean
+  filters?: any
+  createdBy?: string
+  createdAt?: string
+}
 
-// export interface FilterCondition {
-//   field: keyof ProductItem
-//   operator: "equals" | "contains" | "greaterThan" | "lessThan"
-//   value: string
-// }
+export interface FilterCondition {
+  field: keyof IProductModel
+  operator: "equals" | "contains" | "greaterThan" | "lessThan"
+  value: string
+}
 
 // If you're using zod schemas
 // export type ProductFormValues = z.infer<typeof productSchema>

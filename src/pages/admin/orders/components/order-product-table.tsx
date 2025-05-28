@@ -14,9 +14,9 @@ import { Loader2, Plus } from "lucide-react"
 import { PaginationControls } from "@/components/shared/PaginationControls"
 import { useQuery } from "@tanstack/react-query"
 import { useOrderProductColumns } from "./order-product-column"
-import { ProductItem } from '../../products/core/_modals'
+import { IProductModel } from '../../products/core/_modals'
 
-export async function fetchInventory(): Promise<ProductItem[]> {
+export async function fetchInventory(): Promise<IProductModel[]> {
   // In a real app, this would be an API call
   return new Promise((resolve) => {
     setTimeout(() => {

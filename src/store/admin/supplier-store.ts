@@ -1,14 +1,14 @@
-import { Supplier } from "@/pages/admin/products/core/_modals"
+import { ISupplier } from '@/pages/admin/products/core/_modals'
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 
 type SupplierStore = {
-  suppliers: Supplier[]
-  addSupplier: (supplier: Omit<Supplier, "id">) => void
-  updateSupplier: (id: string, supplier: Partial<Supplier>) => void
+  suppliers: ISupplier[]
+  addSupplier: (supplier: Omit<ISupplier, "id">) => void
+  updateSupplier: (id: string, supplier: Partial<ISupplier>) => void
   deleteSupplier: (id: string) => void
-  getSupplier: (id: string) => Supplier | undefined
+  getSupplier: (id: string) => ISupplier | undefined
 }
 
 export const useSupplierStore = create<SupplierStore>()(
@@ -27,19 +27,19 @@ export const useSupplierStore = create<SupplierStore>()(
       updateSupplier: (id, updatedSupplier) => {
         set((state) => ({
           suppliers: state.suppliers.map((supplier) =>
-            supplier.id === id ? { ...supplier, ...updatedSupplier } : supplier,
+            supplier._id === id ? { ...supplier, ...updatedSupplier } : supplier,
           ),
         }))
       },
 
       deleteSupplier: (id) => {
         set((state) => ({
-          suppliers: state.suppliers.filter((supplier) => supplier.id !== id),
+          suppliers: state.suppliers.filter((supplier) => supplier._id !== id),
         }))
       },
 
       getSupplier: (id) => {
-        return get().suppliers.find((supplier) => supplier.id === id)
+        return get().suppliers.find((supplier) => supplier._id === id)
       },
     }),
     {

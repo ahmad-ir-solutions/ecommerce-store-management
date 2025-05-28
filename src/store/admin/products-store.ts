@@ -1,16 +1,16 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import { ProductItem, SavedFilter, topSellingProduct } from "@/pages/admin/products/core/_modals"
+import { IProductModel, SavedFilter, topSellingProduct } from "@/pages/admin/products/core/_modals"
 
 interface ProductState {
-  product: ProductItem[]
+  product: IProductModel[]
   isLoading: boolean
   error: Error | null
   savedFilters: SavedFilter[]
   activeFilters: any
   applySavedFilter: (id: string) => void
   resetFilters: () => void
-  setProduct: (inventory: ProductItem[]) => void
+  setProduct: (inventory: IProductModel[]) => void
   saveFilter: (filter: SavedFilter) => void
   topSellingProducts: topSellingProduct[]
   setActiveFilters: (filters: any) => void
@@ -48,7 +48,7 @@ export const useProductsStore = create<ProductState>()(
         
       },
 
-      setProduct: (product: ProductItem[]) => set({ product }),
+      setProduct: (product: IProductModel[]) => set({ product }),
       
       saveFilter: (filter: SavedFilter) => {
         const { savedFilters } = get();
