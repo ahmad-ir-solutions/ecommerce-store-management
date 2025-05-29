@@ -1,10 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useOrder } from "../core/hooks/use-order"
 import type { EditOrderFormValues } from "../core/_modals"
 import { editOrderSchema } from "../core/_schema"
-import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
+// import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 
 // Import components
 import { ActionButtons } from "../components/action-buttons"
@@ -14,9 +13,9 @@ import { OrderTotals } from "../components/order-total"
 import { OrderNotes } from "../components/order-notes"
 import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
-import { OrderProductTable } from "../components/order-product-table"
 import { Loader2 } from "lucide-react"
-import { useEffect } from "react"
+import { useGetOrder } from '../core/hooks/use-orders'
+import { useEffect } from 'react'
 
 export default function EditOrderPage() {
   const { orderId } = useParams<{ orderId: string }>()
@@ -26,16 +25,9 @@ export default function EditOrderPage() {
     order,
     isLoading,
     error,
-    submitForm,
-    updateBillingAddress,
-    updateShippingAddress,
-    updateOrderItems,
-    addOrderNote,
-    cancelOrder,
-    cloneOrder,
-    isCancelling,
-    isCloning,
-  } = useOrder(orderId || "")
+  } = useGetOrder(orderId || "")
+
+  console.log(order, "order");
 
   const {
     register,
@@ -56,8 +48,10 @@ export default function EditOrderPage() {
       pickerInstructions: "",
       orderWeight: "0.0",
       packageSize: "",
-      numberOfParcels: "",
+      numberOfParcels: 1,
       airNumber: "",
+      overrideWeight: false,
+      updateOrderTotal: false,
     },
   })
 
@@ -65,18 +59,20 @@ export default function EditOrderPage() {
   useEffect(() => {
     if (order) {
       reset({
-        orderStatus: order.status || "Complete (Ready to pick)",
-        attentionRequired: order.attentionRequired || false,
-        shippingMethod: order.shippingMethod || "Complete (Ready to pick)",
-        shippingCost: order.totals.shippingCosts.toString() || "0.00",
-        channelShippingMethod: "",
-        trackingNumber: order.trackingNumber || "",
-        specialInstructions: order.specialInstructions || "",
-        pickerInstructions: order.pickerInstructions || "",
-        orderWeight: order.orderWeight || "0.0",
-        packageSize: order.packageSize || "",
-        numberOfParcels: order.numberOfParcels || "",
-        airNumber: order.airNumber || "",
+        orderStatus: "Complete (Ready to pick)",
+        attentionRequired: false,
+        shippingMethod: order.shippingAndHandling?.shippingMethod ?? "Complete (Ready to pick)",
+        shippingCost: String(order.shippingAndHandling?.shippingCost ?? "0.00"),
+        channelShippingMethod: order.shippingAndHandling?.channelShippingMethod ?? "",
+        trackingNumber: order.shippingAndHandling?.trackingNumber ?? "",
+        specialInstructions: order.shippingAndHandling?.specialInstructions ?? "",
+        pickerInstructions: order.shippingAndHandling?.pickerInstructions ?? "",
+        orderWeight: String(order.shippingAndHandling?.orderWeight ?? "0.0"),
+        packageSize: order.shippingAndHandling?.packageSize ?? "",
+        numberOfParcels: order.shippingAndHandling?.numberOfParcels ?? 1,
+        airNumber: order.shippingAndHandling?.airNumber ?? "",
+        overrideWeight: order.shippingAndHandling?.overrideWeight ?? false,
+        updateOrderTotal: order.shippingAndHandling?.updateOrderTotal ?? false,
       })
     }
   }, [order, reset])
@@ -84,12 +80,14 @@ export default function EditOrderPage() {
   console.log(errors, "errors")
 
   const onSubmit = async (data: EditOrderFormValues) => {
-    const success = await submitForm(data)
-    if (success) {
-      showSuccessMessage("The order has been updated successfully")
-    } else {
-      showErrorMessage("There was an error updating the order. Please try again.")
-    }
+    // const success = await submitForm(data)
+    // if (success) {
+    //   showSuccessMessage("The order has been updated successfully")
+    // } else {
+    //   showErrorMessage("There was an error updating the order. Please try again.")
+    // }
+    console.log(data);
+
   }
 
   const handleCancel = () => {
@@ -112,11 +110,11 @@ export default function EditOrderPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header title="Edit Orders">
           <ActionButtons
-            orderId={order.orderId}
-            onClone={cloneOrder}
-            onCancel={cancelOrder}
-            isCloning={isCloning}
-            isCancelling={isCancelling}
+            orderId={order._id}
+          // onClone={cloneOrder}
+          // onCancel={cancelOrder}
+          // isCloning={isCloning}
+          // isCancelling={isCancelling}
           />
         </Header>
 
@@ -124,18 +122,22 @@ export default function EditOrderPage() {
           order={order}
           control={control}
           register={register}
-          onUpdateBillingAddress={updateBillingAddress}
-          onUpdateShippingAddress={updateShippingAddress}
+        // onUpdateBillingAddress={updateBillingAddress}
+        // onUpdateShippingAddress={updateShippingAddress}
         />
 
-        <OrderProductTable />
+        {/* <OrderProductTable /> */}
 
-        <ItemsOrdered items={order.items} onUpdateItems={updateOrderItems} />
+        <ItemsOrdered order={order}
+        //  onUpdateItems={updateOrderItems} 
+        />
 
         <div className="grid md:grid-cols-2 gap-4 mb-4">
           <OrderTotals order={order} />
 
-          <OrderNotes notes={order.notes} onAddNote={addOrderNote} />
+          <OrderNotes order={order}
+          // onAddNote={addOrderNote} 
+          />
         </div>
 
         <FormActions onCancel={handleCancel} isSubmitting={isSubmitting} />

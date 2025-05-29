@@ -6,8 +6,9 @@ import { ProtectedRoute } from "./ProtectedRoute";
 
 // Lazy load all admin pages
 const AdminDashboardPage = lazy(() => import("@/pages/admin/dashboard").then(module => ({ default: module.AdminDashboardPage })));
-const ManageOrderPage = lazy(() => import("@/pages/admin/orders/pages/manage").then(module => ({ default: module.ManageOrderPage })));
-const OrdersCsvPage = lazy(() => import("@/pages/admin/orders/pages/csv").then(module => ({ default: module.OrdersCsvPage })));
+const ManageOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.ManageOrderPage })));
+const AddOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.AddOrderPage })));
+const OrdersCsvPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.OrdersCsvPage })));
 const EditOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.EditOrderPage })));
 const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(module => ({ default: module.AdminCustomersPage })));
 const CustomerDetails = lazy(() => import("@/pages/admin/customers/pages/customer-details").then(module => ({ default: module.CustomerDetails })));
@@ -42,24 +43,26 @@ export const adminRoutes = {
     // Redirect root /admin to dashboard
     { index: true, element: <Navigate to="/admin/dashboard" replace /> },
     { path: "dashboard", element: <WithSuspense><AdminDashboardPage /></WithSuspense> },
-    
+
     // Orders routes
-    { 
+    {
       path: "orders",
       children: [
         // Redirect /admin/orders to /admin/orders/manage
         { index: true, element: <Navigate to="/admin/orders/manage" replace /> },
         { path: "manage", element: <WithSuspense><ManageOrderPage /></WithSuspense> },
+        { path: "add-order", element: <WithSuspense><AddOrderPage /></WithSuspense> },
         { path: "csv", element: <WithSuspense><OrdersCsvPage /></WithSuspense> },
         // Dynamic order route
         { path: "edit-order/:orderId", element: <WithSuspense><EditOrderPage /></WithSuspense> },
-      ]},
+      ]
+    },
 
     // Customers route
     { path: "customers", element: <WithSuspense><AdminCustomersPage /></WithSuspense> },
     // Dynamic customer route
     { path: "customer-details/:customerId", element: <WithSuspense><CustomerDetails /></WithSuspense> },
-    
+
     // Warehouse routes
     {
       path: "warehouse",
@@ -71,7 +74,7 @@ export const adminRoutes = {
         { path: "manifests", element: <WithSuspense><ManifestsPage /></WithSuspense> },
       ]
     },
-    
+
     // Products routes
     {
       path: "products",
@@ -104,7 +107,7 @@ export const adminRoutes = {
         { path: "warehouse/edit-warehouse-details/:warehouseId", element: <WithSuspense><EditWarehouseDetails /></WithSuspense> },
         { path: "integrations/edit-courier-details/:courierId", element: <WithSuspense><EditCourierDetails /></WithSuspense> },
         { path: "integrations/edit-payment-gateways-details/:paymentGatewaysId", element: <WithSuspense><EditPaymentGatewaysDetail /></WithSuspense> },
-       ]
+      ]
     },
   ],
 };

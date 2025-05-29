@@ -1,66 +1,79 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Check, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { OrderDetails, OrderItem } from "../core/_modals"
+import { IOrder } from "../core/_modals"
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 
 interface ItemsOrderedProps {
-  items: OrderItem[]
-  onUpdateItems: (items: OrderItem[]) => Promise<OrderDetails>
+  order: IOrder
+  // onUpdateItems: (items: OrderItem[]) => Promise<OrderDetails>
 }
 
-export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>(items)
+export function ItemsOrdered({ order }: ItemsOrderedProps) {
+  // const [orderItems, setOrderItems] = useState<IOrder>(order)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isUpdating, setIsUpdating] = useState(false)
 
   // Update local state when items prop changes
-  useEffect(() => {
-    setOrderItems(items)
-  }, [items])
+  // useEffect(() => {
+  //   setOrderItems(items)
+  // }, [items])
+  const handleQuantityChange = (value: string) => {
+    console.log(value, "handleQuantityChange");
 
-  const handleQuantityChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].quantity = Number.parseFloat(value) || 0
-    setOrderItems(newItems)
+    // const newItems = [...order.productDetails]
+    // newItems[index].quantity = Number.parseFloat(value) || 0
+    // setOrderItems(newItems)
   }
 
-  // const handleQuantityAllocatedChange = (index: number, value: string) => {
-  //   const newItems = [...orderItems]
-  //   newItems[index].quantityAllocated = Number.parseFloat(value) || 0
-  //   setOrderItems(newItems)
+  const handleQuantityAllocatedChange = (value: string) => {
+    console.log(value, "value");
+
+    // const newItems = [...orderItems]
+    // newItems[index].quantityAllocated = Number.parseFloat(value) || 0
+    // setOrderItems(newItems)
+  }
+
+  const handleUnitSubtotalChange = (value: string) => {
+    console.log(value, "value");
+
+    // const newItems = [...orderItems]
+    // newItems[index].unitSubtotal = Number.parseFloat(value) || 0
+    // setOrderItems(newItems)
+  }
+
+  const handleTaxRateChange = (value: string) => {
+    console.log(value, "value");
+
+    // const newItems = [...orderItems]
+    // newItems[index].taxRate = Number.parseFloat(value) || 0
+    // setOrderItems(newItems)
+  }
+
+  // const handleTaxTotalChange = (value: string) => {
+  // console.log(value, "value");
+
+  // const newItems = [...orderItems]
+  // newItems[index].taxTotal = Number.parseFloat(value.replace("£", "")) || 0
+  // setOrderItems(newItems)
   // }
 
-  const handleUnitSubtotalChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].unitSubtotal = Number.parseFloat(value) || 0
-    setOrderItems(newItems)
-  }
+  const handleDiscountChange = (value: string) => {
+    console.log(value, "value");
 
-  const handleTaxRateChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].taxRate = Number.parseFloat(value) || 0
-    setOrderItems(newItems)
-  }
-
-  // const handleTaxTotalChange = (index: number, value: string) => {
-  //   const newItems = [...orderItems]
-  //   newItems[index].taxTotal = Number.parseFloat(value.replace("£", "")) || 0
-  //   setOrderItems(newItems)
-  // }
-
-  const handleDiscountChange = (index: number, value: string) => {
-    const newItems = [...orderItems]
-    newItems[index].discount = Number.parseFloat(value) || 0
-    setOrderItems(newItems)
+    // const newItems = [...orderItems]
+    // newItems[index].discount = Number.parseFloat(value) || 0
+    // setOrderItems(newItems)
   }
 
   const handleSaveChanges = async () => {
     try {
+      // console.log(orderItems);
+
       setIsUpdating(true)
-      await onUpdateItems(orderItems)
+      // await onUpdateItems(orderItems)
       showSuccessMessage("Order items have been updated successfully")
     } catch (error) {
       showErrorMessage("There was an error updating the order items. Please try again.")
@@ -107,7 +120,7 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                 <TableHead className="font-medium rounded-l-lg py-3">Product SKU</TableHead>
                 <TableHead className="font-medium rounded-l-lg py-3">Name</TableHead>
                 <TableHead className="font-medium py-3">Quantity</TableHead>
-                <TableHead className="font-medium py-3">Item Options</TableHead>
+                {/* <TableHead className="font-medium py-3">Item Options</TableHead> */}
                 <TableHead className="font-medium py-3">Quantity Allocated</TableHead>
                 <TableHead className="font-medium py-3">Unit Subtotal</TableHead>
                 <TableHead className="font-medium py-3">Tax Rate</TableHead>
@@ -118,7 +131,7 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orderItems.map((item, index) => (
+              {/* {orderItems.map((item, index) => (
                 <TableRow key={index} className="border-b border-gray-200">
                   <TableCell className="p-2">{item.sku}</TableCell>
                   <TableCell className="p-2 text-gray-400">{item.name}</TableCell>
@@ -131,11 +144,11 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                   </TableCell>
                   <TableCell className="p-2">{item.options || "01"}</TableCell>
                   <TableCell className="p-2">
-                    {/* <Input
+                    <Input
                       className="h-8 w-16 border-gray-300"
                       value={item.quantityAllocated.toString()}
                       onChange={(e) => handleQuantityAllocatedChange(index, e.target.value)}
-                    /> */}
+                    />
                     {item.quantityAllocated}
                   </TableCell>
                   <TableCell className="p-2">
@@ -167,7 +180,56 @@ export function ItemsOrdered({ items, onUpdateItems }: ItemsOrderedProps) {
                   </TableCell>
                   <TableCell className="p-2">{item.status}</TableCell>
                 </TableRow>
-              ))}
+              ))} */}
+
+              <TableRow className="border-b border-gray-200">
+                <TableCell className="p-2">{order.productDetails.sku || "-"}</TableCell>
+                <TableCell className="p-2 text-gray-400">{order.productDetails.productName || "-"}</TableCell>
+                <TableCell className="p-2">
+                  <Input
+                    className="h-8 w-16 border-gray-300"
+                    value={order.quantity.toString()}
+                    onChange={(e) => handleQuantityChange(e.target.value)}
+                  />
+                </TableCell>
+                {/* <TableCell className="p-2">{item.options || "01"}</TableCell> */}
+                <TableCell className="p-2">
+                  <Input
+                    className="h-8 w-16 border-gray-300"
+                    value={order.quantityAllocated.toString()}
+                    onChange={(e) => handleQuantityAllocatedChange(e.target.value)}
+                  />
+                  {/* {order.quantityAllocated} */}
+                </TableCell>
+                <TableCell className="p-2">
+                  <Input
+                    className="h-8 w-16 border-gray-300"
+                    value={order.unitSubtotal.toString()}
+                    onChange={(e) => handleUnitSubtotalChange(e.target.value)}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  <Input
+                    className="h-8 w-16 border-gray-300"
+                    value={order.taxRate.toString()}
+                    onChange={(e) => handleTaxRateChange(e.target.value)}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  {`£ ${order.taxTotal.toFixed(2)}`}
+                </TableCell>
+                <TableCell className="p-2">
+                  <Input
+                    className="h-8 w-16 border-gray-300"
+                    value={order.discount.toString()}
+                    onChange={(e) => handleDiscountChange(e.target.value)}
+                  />
+                </TableCell>
+                <TableCell className="p-2">
+                  £ {(order.unitSubtotal * order.quantity + order.taxTotal - order.discount).toFixed(2)}
+                </TableCell>
+                <TableCell className="p-2">{order.status}</TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </div>

@@ -1,7 +1,7 @@
-import { OrderDetails } from "../core/_modals"
+import { IOrder } from "../core/_modals"
 
 interface OrderTotalsProps {
-  order: OrderDetails
+  order: IOrder
 }
 
 export function OrderTotals({ order }: OrderTotalsProps) {
@@ -14,39 +14,40 @@ export function OrderTotals({ order }: OrderTotalsProps) {
           <div>
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Subtotal</div>
-              <div className="text-sm">£ {order.totals.subtotal.toFixed(2)}</div>
+              <div className="text-sm">£ {order.unitSubtotal || "-"}</div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Shipping Costs</div>
-              <div className="text-sm">£ {order.totals.shippingCosts.toFixed(2)}</div>
+              <div className="text-sm">£ {order.shippingAndHandling?.shippingCost || "-"}</div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Shipping Tax</div>
-              <div className="text-sm">£ {order.totals.shippingTax.toFixed(2)}</div>
+              <div className="text-sm">£ {order.taxRate || "-"}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Discount</div>
-              <div className="text-sm">£ {order.totals.discount.toFixed(2)}</div>
+              <div className="text-sm">£ {order.discount || "-"}</div>
             </div>
           </div>
 
           <div>
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Lines Total Tax</div>
-              <div className="text-sm">£ {order.totals.lineItemsTax.toFixed(2)}</div>
+              <div className="text-sm">£ {order.taxTotal || "-"}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Total</div>
-              <div className="text-sm">£ {order.totals.total.toFixed(2)}</div>
+              <div className="text-sm">£ {order.totalPrice || "-"}</div>
             </div>
 
             <div className="grid grid-cols-2 gap-y-4">
               <div className="text-sm text-gray-500">Refunded Amount</div>
-              <div className="text-sm">£ {order.totals.refundedAmount.toFixed(2)}</div>
+              {/* <div className="text-sm">£ {order.refundAmmount || "-"}</div> */}
+              <div className="text-sm">-</div>
             </div>
           </div>
         </div>

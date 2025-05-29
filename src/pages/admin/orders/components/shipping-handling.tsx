@@ -2,16 +2,17 @@ import { useState } from "react"
 import { Controller, type Control, type UseFormRegister } from "react-hook-form"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
-import { EditOrderFormValues } from "../core/_modals"
+import { EditOrderFormValues, IOrder } from "../core/_modals"
 import { showSuccessMessage } from "@/lib/utils/messageUtils"
 import { CustomSelect } from "@/components/shared/custom-select"
 
 interface ShippingHandlingProps {
   control: Control<EditOrderFormValues>
   register: UseFormRegister<EditOrderFormValues>
+  order: IOrder
 }
 
-export function ShippingHandling({ control, register }: ShippingHandlingProps) {
+export function ShippingHandling({ control, register, order }: ShippingHandlingProps) {
   const [updateOrderTotal, setUpdateOrderTotal] = useState(false)
 
   const handleUpdateTotal = (checked: boolean) => {
@@ -104,12 +105,12 @@ export function ShippingHandling({ control, register }: ShippingHandlingProps) {
 
             <div className="text-sm text-gray-500">Number Of Parcels</div>
             <div>
-              <Input {...register("numberOfParcels")} className="h-8 border-gray-300 max-w-20" />
+              <Input defaultValue={order?.shippingAndHandling?.airNumber} {...register("numberOfParcels")} className="h-8 border-gray-300 max-w-20" />
             </div>
 
             <div className="text-sm text-gray-500">AIR Number</div>
             <div>
-              <Input {...register("airNumber")} className="h-8 border-gray-300 max-w-48" placeholder="ex_RoyalMailFirstClass" />
+              <Input defaultValue={order?.shippingAndHandling?.airNumber} {...register("airNumber")} className="h-8 border-gray-300 max-w-48" placeholder="ex_RoyalMailFirstClass" />
             </div>
           </div>
         </div>

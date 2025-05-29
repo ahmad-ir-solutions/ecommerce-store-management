@@ -92,10 +92,9 @@ export const csvOrderFormSchema = z.object({
   files: z.any().optional(),
 })
 
-// Edit order form schema
 export const editOrderSchema = z.object({
   orderStatus: z.string().min(1, "Order status is required"),
-  attentionRequired: z.boolean().optional(),
+  attentionRequired: z.boolean(), // not optional
   shippingMethod: z.string().min(1, "Shipping method is required"),
   shippingCost: z.string().min(1, "Shipping cost is required"),
   channelShippingMethod: z.string().optional(),
@@ -104,8 +103,10 @@ export const editOrderSchema = z.object({
   pickerInstructions: z.string().optional(),
   orderWeight: z.string().optional(),
   packageSize: z.string().optional(),
-  numberOfParcels: z.string().optional(),
+  numberOfParcels: z.number().nonnegative(),
   airNumber: z.string().optional(),
+  overrideWeight: z.boolean(), // required
+  updateOrderTotal: z.boolean(), // required
 })
 
 // Basic order details schema
