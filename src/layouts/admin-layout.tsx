@@ -67,7 +67,7 @@ export default function AdminLayout() {
   ]
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#E6EDF3]">
+    <div className="flex h-screen relative overflow-hidden bg-[#E6EDF3]">
       <Sidebar mainNavItems={adminNavItems} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <BaseLayout title="Admin Dashboard">

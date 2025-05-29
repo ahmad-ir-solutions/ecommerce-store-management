@@ -11,7 +11,7 @@ import { ProductFormValues } from '../core/_schema'
 interface ProductInformationProps {
   currentProduct: ProductFormValues
   isEditing: boolean
-  control: any
+  control: import("react-hook-form").Control<ProductFormValues>
   handleSkuClick: () => void
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   uploading: boolean
