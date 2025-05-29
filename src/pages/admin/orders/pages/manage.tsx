@@ -34,10 +34,18 @@ export function ManageOrderPage() {
     pageSize: 10,
   })
   const navigate = useNavigate();
-  const { data, isLoading, error } = useGetOrders({
+  // const { data, isLoading, error } = useGetOrders({
+  //   page: pagination.pageIndex + 1,
+  //   limit: pagination.pageSize,
+  // })
+
+  const { orders: data, isLoading, error } = useGetOrders({
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
-  })
+  });
+
+  console.log(data, "ordersordersorders");
+
 
   const handleAddOrder = () => {
     navigate("/admin/orders/add-order")
@@ -45,7 +53,7 @@ export function ManageOrderPage() {
 
   // Transform API data to table format
   const tableData = data?.orders ? data.orders.map(transformOrderToTableRow) : []
-  console.log(tableData, "sdkjhfkj");
+  // console.log(data?.orders, "sdkjhfkj");
 
   const table = useReactTable({
     data: tableData,

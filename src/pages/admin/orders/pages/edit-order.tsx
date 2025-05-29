@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-// import { useOrder } from "../core/hooks/use-order"
 import type { EditOrderFormValues } from "../core/_modals"
 import { editOrderSchema } from "../core/_schema"
 // import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
@@ -14,10 +13,9 @@ import { OrderTotals } from "../components/order-total"
 import { OrderNotes } from "../components/order-notes"
 import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
-// import { OrderProductTable } from "../components/order-product-table"
 import { Loader2 } from "lucide-react"
 import { useGetOrder } from '../core/hooks/use-orders'
-// import { useEffect } from "react"
+import { useEffect } from 'react'
 
 export default function EditOrderPage() {
   const { orderId } = useParams<{ orderId: string }>()
@@ -27,15 +25,6 @@ export default function EditOrderPage() {
     order,
     isLoading,
     error,
-    // submitForm,
-    // updateBillingAddress,
-    // updateShippingAddress,
-    // updateOrderItems,
-    // addOrderNote,
-    // cancelOrder,
-    // cloneOrder,
-    // isCancelling,
-    // isCloning,
   } = useGetOrder(orderId || "")
 
   console.log(order, "order");
@@ -44,7 +33,7 @@ export default function EditOrderPage() {
     register,
     handleSubmit,
     control,
-    // reset,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<EditOrderFormValues>({
     resolver: zodResolver(editOrderSchema),
@@ -59,30 +48,34 @@ export default function EditOrderPage() {
       pickerInstructions: "",
       orderWeight: "0.0",
       packageSize: "",
-      numberOfParcels: "",
+      numberOfParcels: 1,
       airNumber: "",
+      overrideWeight: false,
+      updateOrderTotal: false,
     },
   })
 
   // Update form when order data is loaded
-  // useEffect(() => {
-  //   if (order) {
-  //     reset({
-  //       orderStatus: order.status || "Complete (Ready to pick)",
-  //       attentionRequired: order.attentionRequired || false,
-  //       shippingMethod: order.shippingMethod || "Complete (Ready to pick)",
-  //       shippingCost: order.totals.shippingCosts.toString() || "0.00",
-  //       channelShippingMethod: "",
-  //       trackingNumber: order.trackingNumber || "",
-  //       specialInstructions: order.specialInstructions || "",
-  //       pickerInstructions: order.pickerInstructions || "",
-  //       orderWeight: order.orderWeight || "0.0",
-  //       packageSize: order.packageSize || "",
-  //       numberOfParcels: order.numberOfParcels || "",
-  //       airNumber: order.airNumber || "",
-  //     })
-  //   }
-  // }, [order, reset])
+  useEffect(() => {
+    if (order) {
+      reset({
+        orderStatus: "Complete (Ready to pick)",
+        attentionRequired: false,
+        shippingMethod: order.shippingAndHandling?.shippingMethod ?? "Complete (Ready to pick)",
+        shippingCost: String(order.shippingAndHandling?.shippingCost ?? "0.00"),
+        channelShippingMethod: order.shippingAndHandling?.channelShippingMethod ?? "",
+        trackingNumber: order.shippingAndHandling?.trackingNumber ?? "",
+        specialInstructions: order.shippingAndHandling?.specialInstructions ?? "",
+        pickerInstructions: order.shippingAndHandling?.pickerInstructions ?? "",
+        orderWeight: String(order.shippingAndHandling?.orderWeight ?? "0.0"),
+        packageSize: order.shippingAndHandling?.packageSize ?? "",
+        numberOfParcels: order.shippingAndHandling?.numberOfParcels ?? 1,
+        airNumber: order.shippingAndHandling?.airNumber ?? "",
+        overrideWeight: order.shippingAndHandling?.overrideWeight ?? false,
+        updateOrderTotal: order.shippingAndHandling?.updateOrderTotal ?? false,
+      })
+    }
+  }, [order, reset])
 
   console.log(errors, "errors")
 

@@ -177,7 +177,7 @@ export function OrderInformation({ order, control, register }: OrderInformationP
         </div>
 
         {/* shipping and handling */}
-        <ShippingHandling control={control} register={register} />
+        <ShippingHandling order={order} control={control} register={register} />
       </div>
     </div>
   )

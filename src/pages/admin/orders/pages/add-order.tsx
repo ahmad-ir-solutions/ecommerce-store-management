@@ -50,9 +50,12 @@ export default function AddOrderPage() {
             pickerInstructions: "",
             orderWeight: "0.0",
             packageSize: "",
-            numberOfParcels: "",
+            numberOfParcels: 1, // set a safe default, required by schema
             airNumber: "",
-        },
+            overrideWeight: false,
+            updateOrderTotal: false,
+        }
+
     })
 
     // Update form when order data is loaded
@@ -109,10 +112,6 @@ export default function AddOrderPage() {
                 <Header title="Edit Orders">
                     <ActionButtons
                         orderId={order._id}
-                    // onClone={cloneOrder}
-                    // onCancel={cancelOrder}
-                    // isCloning={isCloning}
-                    // isCancelling={isCancelling}
                     />
                 </Header>
 
@@ -120,22 +119,16 @@ export default function AddOrderPage() {
                     order={order}
                     control={control}
                     register={register}
-                // onUpdateBillingAddress={updateBillingAddress}
-                // onUpdateShippingAddress={updateShippingAddress}
                 />
 
                 {/* <OrderProductTable /> */}
 
-                <ItemsOrdered order={order}
-                //  onUpdateItems={updateOrderItems} 
-                />
+                <ItemsOrdered order={order} />
 
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
                     <OrderTotals order={order} />
 
-                    <OrderNotes order={order}
-                    // onAddNote={addOrderNote} 
-                    />
+                    <OrderNotes order={order} />
                 </div>
 
                 <FormActions onCancel={handleCancel} isSubmitting={isSubmitting} />

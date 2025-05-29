@@ -6,20 +6,6 @@ export type CsvOrderFormValues = z.infer<typeof csvOrderFormSchema>
 export type EditOrderFormValues = z.infer<typeof editOrderSchema>
 export type AddressFormValues = z.infer<typeof addressSchema>
 
-// Address interfaces
-export interface IAddress {
-  firstName: string
-  lastName: string
-  company?: string
-  addressLine1: string
-  addressLine2?: string
-  city: string
-  state: string
-  postalCode: string
-  country: string
-  phone?: string
-}
-
 // Legacy Address interface for backward compatibility
 export interface Address {
   firstName: string
@@ -52,7 +38,7 @@ export interface ICustomerDetails {
   vatNumbers?: string
   abn?: string
   shippingAddress?: Address
-  billingAddress: IAddress
+  billingAddress: Address
   channelDetails?: string
 }
 
@@ -71,6 +57,12 @@ export interface IShippingHandling {
   numberOfParcels?: number
   airNumber?: string
 }
+
+export interface Note {
+  note: string;
+  subject: string;
+};
+
 
 // Main Order interface from API
 export interface IOrder {
@@ -106,8 +98,8 @@ export interface IOrder {
   designatedPacker?: string
   signedForBy?: string
   shippingAndHandling?: IShippingHandling
-  billingAddress?: IAddress
-  notes?: [] | undefined
+  billingAddress?: Address
+  notes?: Note[] | undefined
   pickwave?: string
   scannedQuantity?: number
   royalMailLabelUrl?: string
@@ -117,19 +109,19 @@ export interface IOrder {
 }
 
 // Legacy interfaces for component compatibility
-export interface OrderItem {
-  id: string
-  sku: string
-  name: string
-  quantity: number
-  unitSubtotal: number
-  taxRate: number
-  taxTotal: number
-  discount: number
-  status: string
-  quantityAllocated: number
-  options?: string
-}
+// export interface OrderItem {
+//   id: string
+//   sku: string
+//   name: string
+//   quantity: number
+//   unitSubtotal: number
+//   taxRate: number
+//   taxTotal: number
+//   discount: number
+//   status: string
+//   quantityAllocated: number
+//   options?: string
+// }
 
 export interface OrderTotals {
   subtotal: number
@@ -147,29 +139,29 @@ export interface OrderNote {
 }
 
 // Transformed order details for components
-export interface OrderDetails {
-  orderId: string
-  status: string
-  customerName: string
-  emailAddress: string
-  channelOrderId: string
-  shippingMethod: string
-  attentionRequired?: boolean
-  billingAddress: Address
-  shippingAddress: Address
-  items: OrderItem[]
-  totals: OrderTotals
-  notes: OrderNote[]
-  orderDate: Date
-  importedDate: Date
-  trackingNumber?: string
-  specialInstructions?: string
-  pickerInstructions?: string
-  orderWeight?: string
-  packageSize?: string
-  numberOfParcels?: string
-  airNumber?: string
-}
+// export interface OrderDetails {
+//   orderId: string
+//   status: string
+//   customerName: string
+//   emailAddress: string
+//   channelOrderId: string
+//   shippingMethod: string
+//   attentionRequired?: boolean
+//   billingAddress: Address
+//   shippingAddress: Address
+//   items: OrderItem[]
+//   totals: OrderTotals
+//   notes: OrderNote[]
+//   orderDate: Date
+//   importedDate: Date
+//   trackingNumber?: string
+//   specialInstructions?: string
+//   pickerInstructions?: string
+//   orderWeight?: string
+//   packageSize?: string
+//   numberOfParcels?: number
+//   airNumber?: string
+// }
 
 // Table row interface for order listing
 export interface Order {
@@ -226,7 +218,7 @@ export interface IOrderResponse {
   designatedPacker?: string
   signedForBy?: string
   shippingAndHandling?: IShippingHandling
-  billingAddress?: IAddress
+  billingAddress?: Address
   notes?: string
   pickwave?: string
   scannedQuantity?: number
@@ -282,7 +274,7 @@ export interface CreateOrderData {
   status: string
   orderDate: string
   shippingAndHandling?: IShippingHandling
-  billingAddress?: IAddress
+  billingAddress?: Address
   notes?: string
 }
 

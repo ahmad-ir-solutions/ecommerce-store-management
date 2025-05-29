@@ -3,10 +3,9 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { format } from "date-fns"
 import { Order } from "../core/_modals"
 import { TikTokIcon } from "./TikTokIcon"
-import { RowActions } from "./row-actions"
+// import { RowActions } from "./row-actions"
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
-
+// import { useState } from "react"
 export const useOrderColumns: ColumnDef<Order>[] = [
   {
     id: "select",
@@ -41,7 +40,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     accessorKey: "id",
     header: "Order ID",
     cell: ({ row }) => {
-      const [isHovered, setIsHovered] = useState(false)
+      // const [isHovered, setIsHovered] = useState(false)
       const navigate = useNavigate()
       console.log(row.original);
 
@@ -52,8 +51,8 @@ export const useOrderColumns: ColumnDef<Order>[] = [
       return (
         <div
           className="relative"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+        // onChangeCapture={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
         >
           <div
             className="font-medium text-blue-600 hover:underline cursor-pointer"
@@ -61,7 +60,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
           >
             {row.getValue("id")}
           </div>
-          <RowActions orderId={row.original.id} isVisible={isHovered} />
+          {/* <RowActions orderId={row.original.id} isVisible={isHovered} /> */}
         </div>
       )
     }
@@ -149,7 +148,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
     accessorKey: "customerName",
     header: "Customer Name",
     cell: ({ row }) => (
-      <div className="font-medium text-blue-600 hover:underline cursor-pointer">{row.getValue("customerName")}</div>
+      <div className="font-medium hover:underline cursor-pointer">{row.getValue("customerName")}</div>
     ),
   },
   {
