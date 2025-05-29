@@ -21,6 +21,7 @@ const SupplierDetailsPage = lazy(() => import("@/pages/admin/products/pages/supp
 const ProductsCsvPage = lazy(() => import("@/pages/admin/products/pages/csv").then(module => ({ default: module.ProductsCsvPage })));
 const ProductDetailsPage = lazy(() => import("@/pages/admin/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
 const CompanyPage = lazy(() => import("@/pages/admin/settings/company/pages/company").then(module => ({ default: module.CompanyPage })));
+const AddCompany = lazy(() => import("@/pages/admin/settings/company/pages/add-company").then(module => ({ default: module.AddCompany })));
 const EditCompanyDetails = lazy(() => import("@/pages/admin/settings/company/pages/edit-company-details").then(module => ({ default: module.EditCompanyDetails })));
 const ExistingUsers = lazy(() => import("@/pages/admin/settings/users/pages/existing-users").then(module => ({ default: module.ExistingUsers })));
 const EditUserDetails = lazy(() => import("@/pages/admin/settings/users/pages/edit-user-details").then(module => ({ default: module.EditUserDetails })));
@@ -95,6 +96,7 @@ export const adminRoutes = {
         { index: true, element: <Navigate to="/admin/settings/company" replace /> },
         { path: "company", element: <WithSuspense><CompanyPage /></WithSuspense> },
         { path: "company/edit-company-details/:companyId", element: <WithSuspense><EditCompanyDetails /></WithSuspense> },
+        { path: "company/add-company", element: <WithSuspense><AddCompany /></WithSuspense> },
         { path: "users", element: <WithSuspense><ExistingUsers /></WithSuspense> },
         { path: "users/edit-user-details/:userId", element: <WithSuspense><EditUserDetails /></WithSuspense> },
         { path: "integrations", element: <WithSuspense><IntegrationPage /></WithSuspense> },

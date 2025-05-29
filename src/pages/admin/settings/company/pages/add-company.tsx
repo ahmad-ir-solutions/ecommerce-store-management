@@ -1,8 +1,7 @@
-
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ImagePlus, Loader2 } from "lucide-react"
 
 import { Header } from "@/components/shared/header"
@@ -16,20 +15,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { companySchema } from "../core/_schema"
 import type { Company } from "../core/_modal"
 import { CustomSelect } from "@/components/shared/custom-select"
-import { useGetCompany, useUpdateCompany } from "../core/hooks/useCompany"
+import { useCreateCompany } from "../core/hooks/useCompany"
 
-export const EditCompanyDetails = () => {
-  const { companyId } = useParams()
+export const AddCompany = () => {
+  const navigate = useNavigate()
   const [selectedFile, setSelectedFile] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const imageInputRef = useRef<HTMLInputElement>(null)
 
-  // Fetch company details using the custom hook
-  const { data: companyData, isLoading, error } = useGetCompany(companyId as string)
-
-  // Update company mutation
-  const updateCompanyMutation = useUpdateCompany()
+  // Create company mutation
+  const createCompanyMutation = useCreateCompany()
 
   // Initialize form with react-hook-form
   const form = useForm({
@@ -39,7 +35,7 @@ export const EditCompanyDetails = () => {
       address: "",
       address2: "",
       city: "",
-      country: "Default Warehouse",
+      country: "United Kingdom",
       postcode: "",
       contactEmail: "",
       contactPhone: "",
@@ -67,24 +63,14 @@ export const EditCompanyDetails = () => {
     },
   })
 
-  // Update form when company data is loaded
-  useEffect(() => {
-    if (companyData) {
-      form.reset(companyData)
-      if (companyData.companyLogo) {
-        setSelectedImage(companyData.companyLogo)
-      }
-      if (companyData.declarationFile) {
-        setSelectedFile(companyData.declarationFile)
-      }
-    }
-  }, [companyData, form])
-
   // Handle form submission
   const onSubmit = (data: Company) => {
-    if (companyId) {
-      updateCompanyMutation.mutate({ id: companyId, data })
-    }
+    createCompanyMutation.mutate(data)
+  }
+
+  // Handle cancel
+  const handleCancel = () => {
+    navigate("/admin/settings/company")
   }
 
   // Handle file selection
@@ -120,25 +106,9 @@ export const EditCompanyDetails = () => {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-red-500">Error loading company details. Please try again.</p>
-      </div>
-    )
-  }
-
   return (
     <div>
-      <Header title="Company" />
+      <Header title="Add Company" />
       <div className="mt-6">
         <Card className="bg-white border-none shadow-none">
           <CardContent>
@@ -161,7 +131,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter company name"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -181,7 +151,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter address"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -201,7 +171,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter address line 2"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -221,7 +191,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter city"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -237,7 +207,7 @@ export const EditCompanyDetails = () => {
                       name="country"
                       render={({ field }) => (
                         <FormItem className="grid grid-cols-3 items-center gap-4">
-                          <FormLabel className="text-xs text-[#4E5967]">Country</FormLabel>
+                          <FormLabel className="text-xs text-[#4E5967]">Country *</FormLabel>
                           <div className="col-span-2">
                             <CustomSelect
                               placeholder="Select a country"
@@ -246,7 +216,9 @@ export const EditCompanyDetails = () => {
                                 { id: "2", label: "United States", value: "United States" },
                                 { id: "3", label: "Canada", value: "Canada" },
                                 { id: "4", label: "Australia", value: "Australia" },
+                                { id: "5", label: "Pakistan", value: "Pakistan" },
                               ]}
+                              defaultValue={field.value}
                               onChange={(value) => field.onChange(value)}
                               className="w-full bg-white max-w-52"
                             />
@@ -265,7 +237,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter postcode"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -285,7 +257,8 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter email address"
+                                type="email"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -305,7 +278,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter phone number"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -321,11 +294,11 @@ export const EditCompanyDetails = () => {
                       name="websiteUrl"
                       render={({ field }) => (
                         <FormItem className="grid grid-cols-3 items-center gap-4">
-                          <FormLabel className="text-xs text-[#4E5967]">Website URL (eg: www.yourdomain.com)</FormLabel>
+                          <FormLabel className="text-xs text-[#4E5967]">Website URL</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="www.example.com"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -345,7 +318,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter registered name"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -365,7 +338,7 @@ export const EditCompanyDetails = () => {
                           <div className="col-span-2">
                             <FormControl>
                               <Input
-                                placeholder=""
+                                placeholder="Enter sender name"
                                 {...field}
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
                               />
@@ -390,7 +363,7 @@ export const EditCompanyDetails = () => {
                               <div className="col-span-2">
                                 <FormControl>
                                   <Input
-                                    placeholder=""
+                                    placeholder="Enter VAT number"
                                     {...field}
                                     className="bg-white border-gray-300 rounded-lg max-w-52"
                                   />
@@ -410,7 +383,7 @@ export const EditCompanyDetails = () => {
                               <div className="col-span-2">
                                 <FormControl>
                                   <Input
-                                    placeholder=""
+                                    placeholder="Enter EORI number"
                                     {...field}
                                     className="bg-white border-gray-300 rounded-lg max-w-52"
                                   />
@@ -430,7 +403,7 @@ export const EditCompanyDetails = () => {
                               <div className="col-span-2">
                                 <FormControl>
                                   <Input
-                                    placeholder=""
+                                    placeholder="Enter IOSS number"
                                     {...field}
                                     className="bg-white border-gray-300 rounded-lg max-w-52"
                                   />
@@ -445,13 +418,13 @@ export const EditCompanyDetails = () => {
                           control={form.control}
                           name="grantPermissions"
                           render={({ field }) => (
-                            <FormItem className="flex flex-row items-center justify-start space-y-0 rounded-md">
-                              <FormLabel className="text-xs text-[#4E5967]">
-                                Grant company channel permissions to all existing users
-                              </FormLabel>
+                            <FormItem className="flex flex-row items-center justify-start space-y-0 rounded-md gap-3">
                               <FormControl>
                                 <Switch checked={field.value} onCheckedChange={field.onChange} />
                               </FormControl>
+                              <FormLabel className="text-xs text-[#4E5967]">
+                                Grant company channel permissions to all existing users
+                              </FormLabel>
                             </FormItem>
                           )}
                         />
@@ -470,6 +443,7 @@ export const EditCompanyDetails = () => {
                                     { id: "2", label: "Option 1", value: "Option 1" },
                                     { id: "3", label: "Option 2", value: "Option 2" },
                                   ]}
+                                  defaultValue={field.value}
                                   onChange={(value) => field.onChange(value)}
                                   className="w-full bg-white max-w-52"
                                 />
@@ -488,7 +462,7 @@ export const EditCompanyDetails = () => {
                               <div className="col-span-2">
                                 <FormControl>
                                   <Input
-                                    placeholder=""
+                                    placeholder="Enter EORI NI number"
                                     {...field}
                                     className="bg-white border-gray-300 rounded-lg max-w-52"
                                   />
@@ -503,7 +477,7 @@ export const EditCompanyDetails = () => {
 
                     {/* Declaration Categories */}
                     <div className="mt-6">
-                      <Label className="text-xs text-[#4E5967]">Custom Declaration Categories</Label>
+                      <Label className="text-xs text-[#4E5967] mb-2 block">Custom Declaration Categories</Label>
                       <div className="grid grid-cols-2 gap-2 mt-2">
                         <FormField
                           control={form.control}
@@ -635,7 +609,7 @@ export const EditCompanyDetails = () => {
 
                     {/* Auto Sign Declarations */}
                     <div className="mt-6">
-                      <Label className="text-xs text-[#4E5967]">Custom Declaration Categories</Label>
+                      <Label className="text-xs text-[#4E5967] mb-2 block">Declaration Settings</Label>
                       <div className="flex items-center mt-2">
                         <FormField
                           control={form.control}
@@ -720,7 +694,7 @@ export const EditCompanyDetails = () => {
 
                 {/* Form Actions */}
                 <div className="flex justify-end gap-4 mt-8">
-                  <Button variant="outline" type="button" size="lg" className="bg-white">
+                  <Button variant="outline" type="button" size="lg" className="bg-white" onClick={handleCancel}>
                     Cancel
                   </Button>
                   <Button
@@ -728,15 +702,15 @@ export const EditCompanyDetails = () => {
                     variant="primary"
                     size="lg"
                     className="rounded-lg"
-                    disabled={updateCompanyMutation.isPending}
+                    disabled={createCompanyMutation.isPending}
                   >
-                    {updateCompanyMutation.isPending ? (
+                    {createCompanyMutation.isPending ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Saving...
+                        Creating...
                       </>
                     ) : (
-                      "Save"
+                      "Create Company"
                     )}
                   </Button>
                 </div>
@@ -749,4 +723,4 @@ export const EditCompanyDetails = () => {
   )
 }
 
-export default EditCompanyDetails
+export default AddCompany
