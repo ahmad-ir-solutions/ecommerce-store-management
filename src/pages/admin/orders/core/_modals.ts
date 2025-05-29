@@ -17,6 +17,7 @@ export interface IAddress {
   state: string
   postalCode: string
   country: string
+  phone?: string
 }
 
 // Legacy Address interface for backward compatibility
@@ -31,7 +32,7 @@ export interface Address {
   county?: string
   postalCode: string
   country: string
-  phone: string
+  phone?: string
 }
 
 export interface IproductDetails {
@@ -310,7 +311,7 @@ export interface UpdateOrderData {
   status?: string
   orderDate?: string
   shippingAndHandling?: Partial<IShippingHandling>
-  billingAddress?: Partial<IAddress>
+  billingAddress?: Partial<Address>
   notes?: string
 }
 

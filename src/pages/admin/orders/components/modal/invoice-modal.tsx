@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Printer, Download, Loader2 } from "lucide-react"
@@ -14,8 +13,8 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
   const {
     data: order,
     isLoading,
-    isError,
-    error,
+    // isError,
+    // error,
   } = useGetOrder(orderId || "")
 
   const handlePrint = () => {

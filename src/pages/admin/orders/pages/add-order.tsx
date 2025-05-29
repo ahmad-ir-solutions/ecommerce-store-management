@@ -14,7 +14,7 @@ import { OrderTotals } from "../components/order-total"
 import { OrderNotes } from "../components/order-notes"
 import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
-import { OrderProductTable } from "../components/order-product-table"
+// import { OrderProductTable } from "../components/order-product-table"
 import { Loader2 } from 'lucide-react'
 
 export default function AddOrder() {
@@ -102,7 +102,7 @@ export default function AddOrder() {
                     onUpdateShippingAddress={updateShippingAddress} />
 
                 {/* <ShippingHandling control={control} register={register} /> */}
-                <OrderProductTable />
+                {/* <OrderProductTable /> */}
 
                 <ItemsOrdered items={order.items} onUpdateItems={updateOrderItems} />
 
