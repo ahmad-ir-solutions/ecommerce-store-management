@@ -1,21 +1,16 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Address, OrderDetails } from "../core/_modals"
+import { Address, IOrder } from "../core/_modals"
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { EditAddressModal } from "./modal/edit-adress-modal"
 import { Edit } from "lucide-react"
-import { AddressFormValues } from '../core/_schema'
 
 interface CustomerInformationProps {
-  order: OrderDetails
-  onUpdateBillingAddress: (data: AddressFormValues) => Promise<OrderDetails>
-  onUpdateShippingAddress: (data: AddressFormValues) => Promise<OrderDetails>
+  order: IOrder
 }
 
 export function CustomerInformation({
   order,
-  onUpdateBillingAddress,
-  onUpdateShippingAddress,
 }: CustomerInformationProps) {
   const [isEditingBillingAddress, setIsEditingBillingAddress] = useState(false)
   const [isEditingShippingAddress, setIsEditingShippingAddress] = useState(false)
@@ -31,15 +26,17 @@ export function CustomerInformation({
   }
 
   const handleSaveAddress = async (type: "billing" | "shipping", data: Address) => {
+    console.log(data, "handleSaveAddress");
+
     try {
       if (type === "billing") {
         setIsUpdatingBilling(true)
-        await onUpdateBillingAddress(data)
+        // await onUpdateBillingAddress(data)
         setIsEditingBillingAddress(false)
         showSuccessMessage("The billing address has been updated successfully")
       } else {
         setIsUpdatingShipping(true)
-        await onUpdateShippingAddress(data)
+        // await onUpdateShippingAddress(data)
         setIsEditingShippingAddress(false)
         showSuccessMessage("The shipping address has been updated successfully")
       }
@@ -58,16 +55,16 @@ export function CustomerInformation({
         <div className="bg-[#ECF6FF] rounded-xl p-4">
           <div className="grid grid-cols-2 gap-y-1 mb-6">
             <div className="text-sm text-gray-500 p-2 pl-4">Customer</div>
-            <div className="text-sm p-2">{order.customerName}</div>
+            <div className="text-sm p-2"> {`${order.customerDetails.firstName} ${order.customerDetails.lastName}`}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Phone</div>
-            <div className="text-sm p-2">{order.billingAddress.phone}</div>
+            <div className="text-sm p-2">{order.customerDetails.billingAddress.phone}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Email</div>
-            <div className="text-sm p-2">{order.emailAddress}</div>
+            <div className="text-sm p-2">{order.customerDetails.email}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Email CC (comma-separated)</div>
-            <div className="text-sm p-2">{order.channelOrderId}</div>
+            <div className="text-sm p-2">{order.channelOrderNumber}</div>
           </div>
 
           <div className="grid xl:grid-cols-2 gap-24">
@@ -89,28 +86,28 @@ export function CustomerInformation({
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="text-sm text-gray-500 p-2 pl-4">Name</div>
-                <div className="text-sm p-2 whitespace-nowrap">{`${order?.billingAddress.firstName} ${order?.billingAddress.firstName}`}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{`${order.customerDetails.billingAddress.firstName} ${order.customerDetails.billingAddress.firstName}`}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Company</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.company || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.company || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Address 1</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.addressLine1}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.addressLine1}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Address 2</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.addressLine2 || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.addressLine2 || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">City</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.city}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.city}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Postcode</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.postalCode}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.postalCode}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Country</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.country}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.country}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Phone</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.billingAddress.phone}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.phone}</div>
               </div>
             </div>
 
@@ -146,9 +143,6 @@ export function CustomerInformation({
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">City</div>
                 <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.city}</div>
 
-                <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">County</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.county}</div>
-
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Postcode</div>
                 <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.postalCode}</div>
 
@@ -167,7 +161,7 @@ export function CustomerInformation({
               isOpen={isEditingBillingAddress}
               onClose={() => setIsEditingBillingAddress(false)}
               addressType="billing"
-              initialData={order.billingAddress}
+              initialData={order.customerDetails.billingAddress}
               onSave={(data) => handleSaveAddress("billing", data)}
               isSubmitting={isUpdatingBilling}
             />

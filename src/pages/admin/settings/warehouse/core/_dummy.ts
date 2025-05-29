@@ -14,7 +14,7 @@ export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormVa
         address1: "",
         address2: "",
         city: "",
-        countyState: "",
+        state: "",
         postcode: "",
         collectionPoint: "",
         country: "UNITED KINGDOME",

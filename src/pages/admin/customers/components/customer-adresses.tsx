@@ -186,7 +186,7 @@ export function CustomerAddresses({
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>State/County *</FormLabel>
+                        <FormLabel>State/Country *</FormLabel>
                         <FormControl>
                           <Input {...field} className="border-gray-300" />
                         </FormControl>
@@ -336,7 +336,7 @@ export function CustomerAddresses({
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>State/County *</FormLabel>
+                        <FormLabel>State/Country *</FormLabel>
                         <FormControl>
                           <Input {...field} className="border-gray-300" />
                         </FormControl>

@@ -10,7 +10,7 @@ export const warehouseSchema = z.object({
   handlingTime: z.string().min(1, { message: "Handling time is required" }),
   address1: z.string().optional(),
   address2: z.string().optional(),
-  countyState: z.string().optional(),
+  state: z.string().optional(),
   collectionPoint: z.string().optional(),
   country: z.string(),
   countryCode: z.string(),

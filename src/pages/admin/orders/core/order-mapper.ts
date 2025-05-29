@@ -1,5 +1,5 @@
 // import { useGetCustomers } from '../../customers/core/hooks/useCustomer'
-import type { IOrder, OrderDetails, Order, Address, OrderItem, OrderTotals, OrderNote } from "./_modals"
+import type { IOrder, OrderDetails, Order, Address, OrderItem, OrderTotals } from "./_modals"
 
 // Transform API order to OrderDetails for components
 export function transformOrderToOrderDetails(apiOrder: IOrder): OrderDetails {
@@ -12,7 +12,6 @@ export function transformOrderToOrderDetails(apiOrder: IOrder): OrderDetails {
     addressLine1: apiOrder.customerDetails.billingAddress.addressLine1,
     addressLine2: apiOrder.customerDetails.billingAddress.addressLine2,
     city: apiOrder.customerDetails.billingAddress.city,
-    county: apiOrder.customerDetails.billingAddress.state,
     postalCode: apiOrder.customerDetails.billingAddress.postalCode,
     country: apiOrder.customerDetails.billingAddress.country,
     phone: apiOrder.customerDetails.billingAddress.phone || "",
@@ -57,19 +56,19 @@ export function transformOrderToOrderDetails(apiOrder: IOrder): OrderDetails {
     total: apiOrder.totalPrice,
     refundedAmount: 0, // Add if available in API
   }
+console.log(apiOrder.notes,"apiOrder.notes");
 
   // Transform notes (create from notes string if available)
-  const notes: OrderNote[] = apiOrder.notes
-    ? [
-        {
-          id: "1",
-          subject: "Order Note",
-          note: apiOrder.notes,
-          createdOn: new Date(apiOrder.createdAt),
-          createdBy: "System",
-        },
-      ]
-    : []
+  // const notes: OrderNote[] = apiOrder.notes
+  //   ? [
+  //       {
+  //         subject: "Order Note",
+  //         note: apiOrder.notes,
+  //         // createdOn: new Date(apiOrder.createdAt),
+  //         // createdBy: "System",
+  //       },
+  //     ]
+  //   : []
 
   return {
     orderId: apiOrder._id,
@@ -83,7 +82,7 @@ export function transformOrderToOrderDetails(apiOrder: IOrder): OrderDetails {
     shippingAddress,
     items,
     totals,
-    notes,
+    notes: apiOrder.notes ?? [],
     orderDate: new Date(apiOrder.orderDate),
     importedDate: new Date(apiOrder.importedFromChannelOn || apiOrder.createdAt),
     trackingNumber: apiOrder.shippingAndHandling?.trackingNumber,

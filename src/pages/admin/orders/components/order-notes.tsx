@@ -1,17 +1,17 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { OrderDetails, OrderNote } from "../core/_modals"
+import { IOrder, OrderNote } from "../core/_modals"
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { OrderNoteModal } from "./modal/order-notes-modal"
 
 
 interface OrderNotesProps {
-  notes: OrderNote[]
-  onAddNote: (note: { subject: string; note: string; createdBy: string }) => Promise<OrderDetails>
+  order: IOrder
+  // onAddNote: (note: { subject: string; note: string; createdBy: string }) => Promise<OrderDetails>
 }
 
-export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
+export function OrderNotes({ order }: OrderNotesProps) {
   const [isAddingNote, setIsAddingNote] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -21,12 +21,14 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
 
   const handleSaveNote = async (note: { type: string; subject: string; note: string }) => {
     try {
+      console.log(note);
+
       setIsSubmitting(true)
-      await onAddNote({
-        subject: note.subject,
-        note: note.note,
-        createdBy: "Current User",
-      })
+      // await onAddNote({
+      //   subject: note.subject,
+      //   note: note.note,
+      //   createdBy: "Current User",
+      // })
       setIsAddingNote(false)
       showSuccessMessage("Your note has been added to the order")
     } catch (error) {
@@ -62,13 +64,13 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {notes.length > 0 ? (
-                notes.map((note, index) => (
+              {order.notes ? (
+                (order.notes as OrderNote[]).map((note, index) => (
                   <TableRow key={index} className="">
                     <TableCell className="p-2">{note.subject}</TableCell>
                     <TableCell className="p-2">{note.note}</TableCell>
-                    <TableCell className="p-2">{note.createdOn.toLocaleDateString()}</TableCell>
-                    <TableCell className="p-2">{note.createdBy}</TableCell>
+                    {/* <TableCell className="p-2">{note.createdOn.toLocaleDateString()}</TableCell> */}
+                    {/* <TableCell className="p-2">{note.createdBy}</TableCell> */}
                   </TableRow>
                 ))
               ) : (
@@ -78,6 +80,13 @@ export function OrderNotes({ notes, onAddNote }: OrderNotesProps) {
                   </TableCell>
                 </TableRow>
               )}
+
+              {/* <TableRow className="">
+                <TableCell className="p-2">{"subject"}</TableCell>
+                <TableCell className="p-2">{order.notes}</TableCell>
+                <TableCell className="p-2">{order.createdAt}</TableCell>
+                <TableCell className="p-2">{order.customerDetails.firstName} {order.customerDetails.lastName}</TableCell>
+              </TableRow> */}
             </TableBody>
           </Table>
         </div>

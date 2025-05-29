@@ -7,23 +7,15 @@ import { InvoiceModal } from "./modal/invoice-modal"
 
 interface ActionButtonsProps {
   orderId: string
-  onClone: () => void
-  onCancel: () => void
-  isCloning?: boolean
-  isCancelling?: boolean
 }
 
 export function ActionButtons({
   orderId,
-  onClone,
-  onCancel,
-  isCloning = false,
-  isCancelling = false,
 }: ActionButtonsProps) {
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false)
 
   const handleCloneOrder = () => {
-    onClone()
+    // onClone()
     showSuccessMessage("A new order has been created based on this one")
   }
 
@@ -32,12 +24,12 @@ export function ActionButtons({
   }
 
   const handleReprintLabel = () => {
-    window.open(`/api/orders/${orderId}/label/print`, "_blank")
+    // window.open(`/api/orders/${orderId}/label/print`, "_blank")
     showSuccessMessage("The shipping label is being sent to your printer")
   }
 
   const handleCancelOrder = () => {
-    onCancel()
+    // onCancel()
     showSuccessMessage("The order has been cancelled successfully")
   }
 
@@ -48,10 +40,11 @@ export function ActionButtons({
         variant="filter"
         className="rounded-lg xl:flex items-center gap-1 hidden"
         onClick={handleCloneOrder}
-        disabled={isCloning}
+      // disabled={isCloning}
       >
         <Copy className="h-4 w-4 mr-1" />
-        {isCloning ? "Cloning..." : "Clone Order"}
+        {/* {isCloning ? "Cloning..." : "Clone Order"} */}
+        Clone Order
       </Button>
       <Button
         type="button"
@@ -76,9 +69,10 @@ export function ActionButtons({
         variant="filter"
         className="rounded-lg xl:flex items-center gap-1 hidden"
         onClick={handleCancelOrder}
-        disabled={isCancelling}
+      // disabled={isCancelling}
       >
-        {isCancelling ? "Cancelling..." : "Cancel Order"}
+        {/* {isCancelling ? "Cancelling..." : "Cancel Order"} */}
+        Cancel Order
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -87,7 +81,9 @@ export function ActionButtons({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="bg-white">
-          <DropdownMenuItem onClick={handleCloneOrder} disabled={isCloning}>
+          <DropdownMenuItem onClick={handleCloneOrder}
+          // disabled={isCloning}
+          >
             <Copy className="h-4 w-4 mr-2" />
             Clone Order
           </DropdownMenuItem>
@@ -99,7 +95,9 @@ export function ActionButtons({
             <Printer className="h-4 w-4 mr-2" />
             Reprint Label
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleCancelOrder} className="text-red-600" disabled={isCancelling}>
+          <DropdownMenuItem onClick={handleCancelOrder} className="text-red-600"
+          // disabled={isCancelling}
+          >
             <Trash2 className="h-4 w-4 mr-2" />
             Cancel Order
           </DropdownMenuItem>

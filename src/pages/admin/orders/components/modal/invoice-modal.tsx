@@ -62,7 +62,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
     )
   }
 
-  console.log(order.shippingAddress, "orderderderderder");
+  console.log(order, "orderderderderder");
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -115,9 +115,6 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
               {order.shippingAddress?.company && <p>{order.shippingAddress?.company}</p>}
               <p>{order.shippingAddress?.addressLine1}</p>
               {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress?.addressLine2}</p>}
-              <p>
-                {order.shippingAddress?.city}, {order.shippingAddress?.county}
-              </p>
               <p>{order.shippingAddress?.postalCode}</p>
               <p>{order.shippingAddress?.country}</p>
             </div>

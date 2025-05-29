@@ -1,22 +1,21 @@
 import { Controller, UseFormRegister, type Control } from "react-hook-form"
 import { Checkbox } from "@/components/ui/checkbox"
-import { EditOrderFormValues, OrderDetails } from "../core/_modals"
+import { EditOrderFormValues, IOrder } from "../core/_modals"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { CustomerInformation } from "./customer-information"
 import { ShippingHandling } from "./shipping-handling"
-import { AddressFormValues } from '../core/_schema'
 
 interface OrderInformationProps {
-  order: OrderDetails
+  order: IOrder
   control: Control<EditOrderFormValues>
   register: UseFormRegister<EditOrderFormValues>
   // onUpdateBillingAddress: (address: Address) => void
   // onUpdateShippingAddress: (address: Address) => void
-  onUpdateBillingAddress: (data: AddressFormValues) => Promise<OrderDetails>
-  onUpdateShippingAddress: (data: AddressFormValues) => Promise<OrderDetails>
+  // onUpdateBillingAddress: (data: AddressFormValues) => Promise<IOrder>
+  // onUpdateShippingAddress: (data: AddressFormValues) => Promise<OrderDetails>
 }
 
-export function OrderInformation({ order, control, register, onUpdateBillingAddress, onUpdateShippingAddress }: OrderInformationProps) {
+export function OrderInformation({ order, control, register }: OrderInformationProps) {
 
   return (
     <div className="grid md:grid-cols-2 gap-4 mb-4 mt-6">
@@ -25,16 +24,16 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
           <h2 className="text-lg font-semibold mb-4">Order Information</h2>
           <div className="grid grid-cols-2 gap-y-4 bg-[#ECF6FF] rounded-xl">
             <div className="text-sm text-gray-500 p-2 pl-4">Order Numbers</div>
-            <div className="text-sm p-2">{order.orderId}</div>
+            <div className="text-sm p-2">{order._id}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Company Identity</div>
-            <div className="text-sm p-2">Designers Collection</div>
+            <div className="text-sm p-2">{order.companyIdentity || "-"}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Channel Purchased From</div>
-            <div className="text-sm p-2">Ebay DCUK</div>
+            <div className="text-sm p-2">{order.channelPurhasedFrom}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Channel Order Number</div>
-            <div className="text-sm text-blue-500 p-2">18-12798-77213</div>
+            <div className="text-sm text-blue-500 p-2">{order.channelOrderNumber}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Order Status</div>
             <div className="text-sm p-2">
@@ -46,7 +45,7 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
                     defaultValue={field.value}
                     placeholder="Please Select"
                     options={[
-                      { id: "Complete (Ready to pick)", label: "Complete (Ready to pick)", value: "Complete (Ready to pick)" },
+                      { id: "confirmed", label: "Confirmed (Ready to pick)", value: "confirmed" },
                       { id: "Pending", label: "Pending", value: "Pending" },
                       { id: "Shipped", label: "Shipped", value: "Shipped" },
                       { id: "Cancelled", label: "Cancelled", value: "Cancelled" },
@@ -71,8 +70,6 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
         {/* customer Information */}
         <CustomerInformation
           order={order}
-          onUpdateBillingAddress={onUpdateBillingAddress}
-          onUpdateShippingAddress={onUpdateShippingAddress}
         />
 
         {/* eBay logo */}
@@ -110,69 +107,69 @@ export function OrderInformation({ order, control, register, onUpdateBillingAddr
               <div>
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Order Date</div>
-                  <div className="text-sm p-2">10/03/2023 @ 09:40</div>
+                  <div className="text-sm p-2">{order.orderDate || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Imported from Channel on</div>
-                  <div className="text-sm p-2">10/03/2023 @ 09:45</div>
+                  <div className="text-sm p-2">{order.importedFromChannelOn || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Assigned to Picker on</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.assignedToPickerOn || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Pickwave ID</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.pickwave || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Despatched on</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.dispatchedOn || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Despatch sent to Channel</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.dispatchSentToChannel || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Payment ID</div>
-                  <div className="text-sm p-2">-</div>
+                  <div className="text-sm p-2">{order.paymentId || "-"}</div>
                 </div>
               </div>
 
               <div>
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Delivered on</div>
-                  <div className="text-sm p-2">10073693780218</div>
+                  <div className="text-sm p-2">{order.deliveredOn || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Manifested on</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.manifestedOn || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Pickwave ID</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.pickwave || "-"}</div>
                 </div>
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Designated Picker</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
+                  <div className="text-sm p-2">{order.designatedPacker || "-"}</div>
                 </div>
 
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Designated Picker</div>
-                  <div className="text-sm p-2">Not Yet Set</div>
-                </div>
+                  <div className="text-sm p-2">{order.designatedPacker || "-"}</div>
+                </div> */}
 
                 <div className="flex justify-between">
                   <div className="text-sm text-gray-500 p-2 pl-4">Signed for by</div>
-                  <div className="text-sm p-2">-</div>
+                  <div className="text-sm p-2">{order.signedForBy || "-"}</div>
                 </div>
               </div>
             </div>

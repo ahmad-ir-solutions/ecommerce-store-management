@@ -34,7 +34,7 @@ const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> =
         address1: "",
         address2: "",
         city: "",
-        countyState: "",
+        state: "",
         postcode: "",
         collectionPoint: "",
         country: "UNITED KINGDOME",
@@ -95,7 +95,7 @@ export function EditWarehouseDetails() {
       address1: "",
       address2: "",
       city: "",
-      countyState: "",
+      state: "",
       postcode: "",
       collectionPoint: "",
       country: "UNITED KINGDOME",
@@ -266,10 +266,10 @@ export function EditWarehouseDetails() {
 
                             <FormField
                               control={form.control}
-                              name="countyState"
+                              name="state"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
-                                  <FormLabel className="text-sm text-gray-600">County/ State</FormLabel>
+                                  <FormLabel className="text-sm text-gray-600">State</FormLabel>
                                   <div className="col-span-2">
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />

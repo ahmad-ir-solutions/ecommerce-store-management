@@ -29,7 +29,6 @@ export interface Address {
   addressLine2?: string
   city: string
   state?: string
-  county?: string
   postalCode: string
   country: string
   phone?: string
@@ -108,7 +107,7 @@ export interface IOrder {
   signedForBy?: string
   shippingAndHandling?: IShippingHandling
   billingAddress?: IAddress
-  notes?: string
+  notes?: [] | undefined
   pickwave?: string
   scannedQuantity?: number
   royalMailLabelUrl?: string
@@ -143,11 +142,8 @@ export interface OrderTotals {
 }
 
 export interface OrderNote {
-  id: string
   subject: string
   note: string
-  createdOn: Date
-  createdBy: string
 }
 
 // Transformed order details for components
