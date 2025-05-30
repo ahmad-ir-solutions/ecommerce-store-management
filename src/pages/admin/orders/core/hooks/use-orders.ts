@@ -54,107 +54,12 @@ export const useGetOrders = (params?: OrderQueryParams) => {
 }
 
 
-// Get a specific order by ID
-// export const useGetOrder = (id: string) => {
-//   return useQuery({
-//     queryKey: orderKeys.detail(id),
-//     queryFn: () => getSpecificOrder(id),
-//     select: (data) => {
-//       // Transform API response to match the Order interface used in components
-//       const order = data.data
-//       return {
-//         _id: order._id,
-//         productDetails: order.productDetails,
-//         customerDetails: order.customerDetails,
-//         channelDetails: order.channelDetails,
-//         companyIdentity: order.companyIdentity,
-//         channelPurhasedFrom: order.channelPurhasedFrom,
-//         channelOrderNumber: order.channelOrderNumber,
-//         orderStatus: order.orderStatus,
-//         attentionRequired: order.attentionRequired,
-//         sellerId: order.sellerId,
-//         quantity: order.quantity,
-//         itemOptions: order.itemOptions,
-//         quantityAllocated: order.quantityAllocated,
-//         unitSubtotal: order.unitSubtotal,
-//         taxRate: order.taxRate,
-//         taxTotal: order.taxTotal,
-//         discount: order.discount,
-//         totalPrice: order.totalPrice,
-//         status: order.status,
-//         orderDate: order.orderDate,
-//         importedFromChannelOn: order.importedFromChannelOn,
-//         assignedToPickerOn: order.assignedToPickerOn,
-//         dispatchedOn: order.dispatchedOn,
-//         dispatchSentToChannel: order.dispatchSentToChannel,
-//         paymentId: order.paymentId,
-//         deliveredOn: order.deliveredOn,
-//         manifestedOn: order.manifestedOn,
-//         designatedPicker: order.designatedPicker,
-//         designatedPacker: order.designatedPacker,
-//         signedForBy: order.signedForBy,
-//         shippingAndHandling: order.shippingAndHandling,
-//         billingAddress: order.billingAddress,
-//         notes: order.notes,
-//         pickwave: order.pickwave,
-//         scannedQuantity: order.scannedQuantity,
-//         royalMailLabelUrl: order.royalMailLabelUrl,
-//         createdAt: order.createdAt,
-//         updatedAt: order.updatedAt,
-//         __v: order.__v,
-//       } as IOrder
-//     },
-//     enabled: !!id, // Only run if ID is provided
-//   })
-// }
-
 export const useGetOrder = (id: string) => {
   const query = useQuery({
     queryKey: orderKeys.detail(id),
     queryFn: () => getSpecificOrder(id),
     select: (data) => {
       return data.data
-      // return {
-      //   _id: order._id,
-      //   productDetails: order.productDetails,
-      //   customerDetails: order.customerDetails,
-      //   channelDetails: order.channelDetails,
-      //   companyIdentity: order.companyIdentity,
-      //   channelPurhasedFrom: order.channelPurhasedFrom,
-      //   channelOrderNumber: order.channelOrderNumber,
-      //   orderStatus: order.orderStatus,
-      //   attentionRequired: order.attentionRequired,
-      //   sellerId: order.sellerId,
-      //   quantity: order.quantity,
-      //   itemOptions: order.itemOptions,
-      //   quantityAllocated: order.quantityAllocated,
-      //   unitSubtotal: order.unitSubtotal,
-      //   taxRate: order.taxRate,
-      //   taxTotal: order.taxTotal,
-      //   discount: order.discount,
-      //   totalPrice: order.totalPrice,
-      //   status: order.status,
-      //   orderDate: order.orderDate,
-      //   importedFromChannelOn: order.importedFromChannelOn,
-      //   assignedToPickerOn: order.assignedToPickerOn,
-      //   dispatchedOn: order.dispatchedOn,
-      //   dispatchSentToChannel: order.dispatchSentToChannel,
-      //   paymentId: order.paymentId,
-      //   deliveredOn: order.deliveredOn,
-      //   manifestedOn: order.manifestedOn,
-      //   designatedPicker: order.designatedPicker,
-      //   designatedPacker: order.designatedPacker,
-      //   signedForBy: order.signedForBy,
-      //   shippingAndHandling: order.shippingAndHandling,
-      //   billingAddress: order.billingAddress,
-      //   notes: order.notes,
-      //   pickwave: order.pickwave,
-      //   scannedQuantity: order.scannedQuantity,
-      //   royalMailLabelUrl: order.royalMailLabelUrl,
-      //   createdAt: order.createdAt,
-      //   updatedAt: order.updatedAt,
-      //   __v: order.__v,
-      // } as IOrder
     },
     enabled: !!id,
   })
