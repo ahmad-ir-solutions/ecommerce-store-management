@@ -29,6 +29,7 @@ const EditUserDetails = lazy(() => import("@/pages/admin/settings/users/pages/ed
 const IntegrationPage = lazy(() => import("@/pages/admin/settings/integrations/pages/integration").then(module => ({ default: module.IntegrationPage })));
 const ExistingWarehouse = lazy(() => import("@/pages/admin/settings/warehouse/pages/existing-warehouse").then(module => ({ default: module.ExistingWarehouse })));
 const EditWarehouseDetails = lazy(() => import('@/pages/admin/settings/warehouse/pages/edit-warehouse-details').then(module => ({ default: module.EditWarehouseDetails })));
+const AddWarehouse = lazy(() => import('@/pages/admin/settings/warehouse/pages/add-warehouse').then(module => ({ default: module.AddWarehouse })));
 const EditCourierDetails = lazy(() => import("@/pages/admin/settings/integrations/pages/edit-courier-details").then(module => ({ default: module.EditCourierDetails })));
 const EditPaymentGatewaysDetail = lazy(() => import("@/pages/admin/settings/integrations/pages/edit-payment-gateways-details").then(module => ({ default: module.EditPaymentGatewaysDetail })));
 
@@ -105,6 +106,7 @@ export const adminRoutes = {
         { path: "integrations", element: <WithSuspense><IntegrationPage /></WithSuspense> },
         { path: "warehouse", element: <WithSuspense><ExistingWarehouse /></WithSuspense> },
         { path: "warehouse/edit-warehouse-details/:warehouseId", element: <WithSuspense><EditWarehouseDetails /></WithSuspense> },
+        { path: "warehouse/add-warehouse", element: <WithSuspense><AddWarehouse /></WithSuspense> },
         { path: "integrations/edit-courier-details/:courierId", element: <WithSuspense><EditCourierDetails /></WithSuspense> },
         { path: "integrations/edit-payment-gateways-details/:paymentGatewaysId", element: <WithSuspense><EditPaymentGatewaysDetail /></WithSuspense> },
       ]

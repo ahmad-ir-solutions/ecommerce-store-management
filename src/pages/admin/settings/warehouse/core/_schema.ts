@@ -7,7 +7,7 @@ export const warehouseSchema = z.object({
   address: z.string().min(1, { message: "Address is required" }),
   city: z.string().min(1, { message: "City is required" }),
   postcode: z.string().min(1, { message: "Postcode/Zip code is required" }),
-  handlingTime: z.string().min(1, { message: "Handling time is required" }),
+  handlingTimeInDays: z.number().min(1, { message: "Handling time is required" }),
   address1: z.string().optional(),
   address2: z.string().optional(),
   state: z.string().optional(),

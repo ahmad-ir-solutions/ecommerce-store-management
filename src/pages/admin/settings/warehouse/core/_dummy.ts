@@ -19,7 +19,7 @@ export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormVa
         collectionPoint: "",
         country: "UNITED KINGDOME",
         countryCode: "GB",
-        handlingTime: "1",
+        handlingTimeInDays: 1,
         warehouseType: "Default Warehouse",
         freeProduct: "Search For Product",
       })

@@ -11,7 +11,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 // Create a Zustand store for warehouse data
 import { warehouseSchema } from "../core/_schema"
 import { Header } from "@/components/shared/header"
-import { CustomSearch } from "@/components/shared/custom-search"
 import { Loader2, Plus } from "lucide-react"
 import type { WarehouseFormValues } from "../core/_modal"
 import { useWarehouseStore } from "@/store/admin/warehouse-store"
@@ -39,7 +38,7 @@ const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormValues> =
         collectionPoint: "",
         country: "UNITED KINGDOME",
         countryCode: "GB",
-        handlingTime: "1",
+        handlingTimeInDays: 1,
         warehouseType: "Default Warehouse",
         freeProduct: "Search For Product",
       })
@@ -55,10 +54,6 @@ const updateWarehouseDetails = async (id: string, data: WarehouseFormValues): Pr
       resolve(data)
     }, 500)
   })
-}
-
-const handleAddWarehouse = () => {
-  // navigate("/admin/settings/users/add")
 }
 
 export function EditWarehouseDetails() {
@@ -100,7 +95,7 @@ export function EditWarehouseDetails() {
       collectionPoint: "",
       country: "UNITED KINGDOME",
       countryCode: "GB",
-      handlingTime: "1",
+      handlingTimeInDays: 1,
       warehouseType: "Default Warehouse",
       freeProduct: "Search For Product",
     },
@@ -127,20 +122,12 @@ export function EditWarehouseDetails() {
 
   return (
     <div>
-      <Header title="Warehouse">
+      <Header title="Edit Warehouse">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
-          <CustomSearch className="w-[25rem]" onClick={() => { }} placeholder="Search by name/Master SKU/Channel SKU" />
-          <div className="flex items-center gap-4">
-            <Button variant="primary" size="lg" className="rounded-xl" onClick={handleAddWarehouse}>
-              <Plus />
-              Add New
-            </Button>
-          </div>
         </div>
       </Header>
       <div className="mt-6">
         <div>
-          <h2 className="text-lg font-medium mb-6">Details</h2>
           <Tabs defaultValue="warehouse-information">
             <TabsList className="mb-4 space-x-4">
               <TabsTrigger
@@ -358,7 +345,7 @@ export function EditWarehouseDetails() {
 
                             <FormField
                               control={form.control}
-                              name="handlingTime"
+                              name="handlingTimeInDays"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
                                   <FormLabel className="text-sm text-gray-600">Handling Time (in days) *</FormLabel>
