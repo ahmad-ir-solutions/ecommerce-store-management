@@ -1,19 +1,17 @@
-import { z } from 'zod';
-import { warehouseSchema } from './_schema';
-import { Company } from '../../company/core/_modal';
+import type { z } from "zod"
+import type { warehouseSchema } from "./_schema"
 
-// Define the warehouse type
 export type WarehouseFormValues = z.infer<typeof warehouseSchema>
 
-export interface ICompanyResponse {
+export interface IWarehouseResponse {
   success: boolean
-  data: Company & { _id: string; createdAt: string; updatedAt: string }
+  data: WarehouseFormValues & { id: string; createdAt: string; updatedAt: string }
   message?: string
 }
 
-export interface ICompaniesResponse {
+export interface IWarehousesResponse {
   success: boolean
-  data: Array<Company & { _id: string; createdAt: string; updatedAt: string }>
+  data: Array<WarehouseFormValues & { _id: string; createdAt: string; updatedAt: string }>
   pagination: {
     page: number
     limit: number
@@ -22,17 +20,25 @@ export interface ICompaniesResponse {
   }
 }
 
-export interface CompanyQueryParams {
+export interface WarehouseQueryParams {
   page?: number
   limit?: number
   search?: string
 }
 
-export type CreateCompanyData = Company
-export type UpdateCompanyData = Partial<Company>
+export type CreateWarehouseData = WarehouseFormValues
+export type UpdateWarehouseData = Partial<WarehouseFormValues>
 
-export interface ICompanyModel extends Company {
-  _id: string
+export interface IWarehouseModel extends WarehouseFormValues {
+  id: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface WarehouseZone {
+  id: string
+  name: string
+  warehouseId: string
   createdAt: string
   updatedAt: string
 }
