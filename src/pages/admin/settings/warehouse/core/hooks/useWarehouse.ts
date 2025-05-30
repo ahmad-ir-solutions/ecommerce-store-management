@@ -51,16 +51,13 @@ export const useCreateWarehouse = () => {
 
       queryClient.invalidateQueries({ queryKey: warehouseKeys.lists() })
       showSuccessMessage(response.data.message || "Warehouse created successfully!")
-      const newWarehouseId = response.data?.data.id
-      navigate(`/admin/settings/warehouse/edit-warehouse-details/${newWarehouseId}`)
+      navigate(`/admin/settings/warehouse`)
     },
     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
       if (error.response?.data.errors) {
         Object.values(error.response.data.errors).forEach((errorMessage) => {
           showErrorMessage(errorMessage)
         })
-      } else {
-        showErrorMessage(error.response?.data?.message || "Failed to create warehouse. Please try again.")
       }
     },
   })
@@ -85,8 +82,6 @@ export const useUpdateWarehouse = () => {
         Object.values(error.response.data.errors).forEach((errorMessage) => {
           showErrorMessage(errorMessage)
         })
-      } else {
-        showErrorMessage(error.response?.data?.message || "Failed to update warehouse. Please try again.")
       }
     },
   })

@@ -59,8 +59,6 @@ export const useCreateCompany = () => {
         Object.values(error.response.data.errors).forEach((errorMessage) => {
           showErrorMessage(errorMessage)
         })
-      } else {
-        showErrorMessage(error.response?.data?.message || "Failed to create company. Please try again.")
       }
     },
   })
@@ -85,8 +83,6 @@ export const useUpdateCompany = () => {
         Object.values(error.response.data.errors).forEach((errorMessage) => {
           showErrorMessage(errorMessage)
         })
-      } else {
-        showErrorMessage(error.response?.data?.message || "Failed to update company. Please try again.")
       }
     },
   })
