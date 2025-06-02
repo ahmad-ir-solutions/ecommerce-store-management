@@ -11,39 +11,39 @@ export interface IAuthResponse {
   token?: string
 }
 
-export interface IRegisterResponse {
-  success: boolean
-  message: string
-}
-
 export enum UserRole {
   ADMIN = "ADMIN",
   USER = "USER",
 }
 
 export interface IUserModel {
-  id: string
+  _id: string
   name: string
   email: string
   role: UserRole
   designatedPicker?: boolean
   accountOwner?: boolean
   token?: string
-  lastLoggedIn?: string
+  lastLogin?: string
   passwordAge?: string
   mfaStatus?: string
   ipRestriction?: string
 }
 
 export interface IUserResponse {
-  id: string
-  name: string
-  email: string
-  role: UserRole
-  designatedPicker?: boolean
-  accountOwner?: boolean
-  lastLoggedIn?: string
-  passwordAge?: string
-  mfaStatus?: string
-  ipRestriction?: string
+  data: IUserModel[]
+  limit: number
+  page: number
+  total: number
+}
+
+export interface ISingleUserResponse {
+  user: IUserModel
+}
+
+export interface IGetAllUsersResponse {
+  data: IUserModel[]
+  total: number
+  page: number
+  limit: number
 }

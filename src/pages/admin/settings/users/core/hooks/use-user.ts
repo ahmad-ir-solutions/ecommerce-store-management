@@ -7,7 +7,7 @@ export const useGetAllUsers = () => {
   return useQuery({
     queryKey: ["users"],
     queryFn: () => getAllUsers(),
-    select: (data) => data.data.users,
+    select: (userData) => userData.data,
   })
 }
 

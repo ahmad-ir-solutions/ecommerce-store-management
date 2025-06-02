@@ -14,7 +14,7 @@ interface Option {
 }
 
 interface CustomSelectProps {
-  placeholder: string;
+  placeholder?: string;
   defaultValue?: string | number;
   options: Option[];
   onChange?: (value: string | number) => void;

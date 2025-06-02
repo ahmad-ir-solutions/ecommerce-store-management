@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { Search, Package, ShoppingCart, FileText, X, User, MapPin } from "lucide-react"
+import { Search, Package, ShoppingCart, FileText, User, MapPin } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -217,7 +217,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] p-0">
+      <DialogContent className="max-w-2xl max-h-[80vh] p-0 bg-white">
         <DialogHeader className="p-4 pb-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -228,14 +228,14 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
               className="pl-10 pr-10 border-0 focus-visible:ring-0 text-base"
               autoFocus
             />
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               className="absolute right-1 top-1/2 transform -translate-y-1/2 h-8 w-8"
               onClick={onClose}
             >
               <X className="w-4 h-4" />
-            </Button>
+            </Button> */}
           </div>
         </DialogHeader>
 

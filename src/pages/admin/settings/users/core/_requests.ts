@@ -1,29 +1,18 @@
 import authApi from "@/lib/axios"
 import {
-    IAuthResponse,
-    IRegisterResponse,
-  type IUserResponse,
-  RegisterFormData,
-  UserRole,
+  type  IAuthResponse,
+  type IGetAllUsersResponse,
+  type IUserModel,
 } from "./_models"
 
-const REGISTER_URL = "/user/signup"
-const ADD_USER_URL = "/user/add"
 const GET_ALL_USERS_URL = "/user/all"
+const ADD_USER_URL = "/auth/signup"
 const DELETE_USER_URL = "/user"
 const UPDATE_USER_URL = "/user"
 const GET_USER_URL = "/user"
 
-export function register(body: RegisterFormData) {
-  const registerData = {
-    ...body,
-    role: UserRole.USER,
-  }
-  return authApi.post<IRegisterResponse>(REGISTER_URL, registerData)
-}
-
 export function getAllUsers() {
-  return authApi.get<{ users: IUserResponse[] }>(GET_ALL_USERS_URL)
+  return authApi.get<{ data: IGetAllUsersResponse }>(GET_ALL_USERS_URL)
 }
 
 export function addUser(body: any) {
@@ -35,7 +24,7 @@ export function updateUser(userId: string, body: any) {
 }
 
 export function getUserById(userId: string) {
-  return authApi.get<{ user: IUserResponse }>(`${GET_USER_URL}/${userId}`)
+  return authApi.get<IUserModel>(`${GET_USER_URL}/${userId}`)
 }
 
 export function deleteUser(userId: string) {
