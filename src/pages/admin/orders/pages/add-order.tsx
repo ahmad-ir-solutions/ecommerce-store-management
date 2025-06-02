@@ -2,8 +2,6 @@ import { useParams, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 // import { useOrder } from "../core/hooks/use-order"
-import type { EditOrderFormValues } from "../core/_modals"
-import { editOrderSchema } from "../core/_schema"
 // import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 
 // Import components
@@ -16,84 +14,102 @@ import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
 // import { OrderProductTable } from "../components/order-product-table"
 import { Loader2 } from "lucide-react"
-import { useGetOrder } from '../core/hooks/use-orders'
+import { useCreateOrder, useGetOrder } from '../core/hooks/use-orders'
+import { OrderFormValues, orderSchema } from "../core/_schema"
 // import { useEffect } from "react"
 
 export default function AddOrderPage() {
-    const { orderId } = useParams<{ orderId: string }>()
+
     const navigate = useNavigate()
+  const createOrderMutation = useCreateOrder()
 
-    const {
-        order,
-        isLoading,
-        error,
-    } = useGetOrder(orderId || "")
+  const form = useForm<OrderFormValues>({
+    resolver: zodResolver(orderSchema),
+    defaultValues: {
+      productDetails: "",
+      customerDetails: {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        emailCC: "",
+        customerReference: "",
+        vatNumbers: "",
+        abn: "",
+        shippingAddress: {
+          firstName: "",
+          lastName: "",
+          company: "",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+          phone: "",
+        },
+        billingAddress: {
+          firstName: "",
+          lastName: "",
+          company: "",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+          phone: "",
+        },
+        channelDetails: "",
+      },
+      channelDetails: "",
+      companyIdentity: "",
+      channelPurhasedFrom: "",
+      channelOrderNumber: "",
+      orderStatus: "Processing",
+      attentionRequired: false,
+      sellerId: "",
+      quantity: 1,
+      itemOptions: 1,
+      quantityAllocated: 0,
+      unitSubtotal: 0,
+      taxRate: 0,
+      taxTotal: 0,
+      discount: 0,
+      totalPrice: 0,
+      status: "Pending",
+      orderDate: new Date().toISOString().split("T")[0],
+      shippingAndHandling: {
+        warehouse: "",
+        shippingMethod: "",
+        updateOrderTotal: false,
+        shippingCost: 0,
+        channelShippingMethod: "",
+        trackingNumber: "",
+        specialInstructions: "",
+        pickerInstructions: "",
+        orderWeight: 0,
+        overrideWeight: false,
+        packageSize: "",
+        numberOfParcels: 1,
+        airNumber: "",
+      },
+      notes: "",
+    },
+  })
 
-    console.log(order, "order");
-
-    const {
-        register,
-        handleSubmit,
-        control,
-        // reset,
-        formState: { errors, isSubmitting },
-    } = useForm<EditOrderFormValues>({
-        resolver: zodResolver(editOrderSchema),
-        defaultValues: {
-            orderStatus: "Complete (Ready to pick)",
-            attentionRequired: false,
-            shippingMethod: "Complete (Ready to pick)",
-            shippingCost: "0.00",
-            channelShippingMethod: "",
-            trackingNumber: "",
-            specialInstructions: "",
-            pickerInstructions: "",
-            orderWeight: "0.0",
-            packageSize: "",
-            numberOfParcels: 1, // set a safe default, required by schema
-            airNumber: "",
-            overrideWeight: false,
-            updateOrderTotal: false,
-        }
-
-    })
-
-    // Update form when order data is loaded
-    // useEffect(() => {
-    //   if (order) {
-    //     reset({
-    //       orderStatus: order.status || "Complete (Ready to pick)",
-    //       attentionRequired: order.attentionRequired || false,
-    //       shippingMethod: order.shippingMethod || "Complete (Ready to pick)",
-    //       shippingCost: order.totals.shippingCosts.toString() || "0.00",
-    //       channelShippingMethod: "",
-    //       trackingNumber: order.trackingNumber || "",
-    //       specialInstructions: order.specialInstructions || "",
-    //       pickerInstructions: order.pickerInstructions || "",
-    //       orderWeight: order.orderWeight || "0.0",
-    //       packageSize: order.packageSize || "",
-    //       numberOfParcels: order.numberOfParcels || "",
-    //       airNumber: order.airNumber || "",
-    //     })
-    //   }
-    // }, [order, reset])
-
-    console.log(errors, "errors")
-
-    const onSubmit = async (data: EditOrderFormValues) => {
-        // const success = await submitForm(data)
-        // if (success) {
-        //   showSuccessMessage("The order has been updated successfully")
-        // } else {
-        //   showErrorMessage("There was an error updating the order. Please try again.")
-        // }
-        console.log(data);
-
+  const onSubmit = async (data: OrderFormValues) => {
+    try {
+      await createOrderMutation.mutateAsync(data)
+      // Navigation is handled in the mutation's onSuccess callback
+    } catch (error) {
+      console.error("Error creating order:", error)
     }
+  }
 
-    const handleCancel = () => {
-        navigate("/admin/orders")
-    }
+  const handleCancel = () => {
+    navigate("/admin/orders")
+  }
 
     if (isLoading) {
         return (
