@@ -108,7 +108,7 @@ export default function EditOrderPage() {
   return (
     <div className="mt-6">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Header title="Edit Orders">
+        <Header title="Order">
           <ActionButtons
             orderId={order._id}
           // onClone={cloneOrder}
@@ -127,7 +127,6 @@ export default function EditOrderPage() {
         />
 
         {/* <OrderProductTable /> */}
-
         <ItemsOrdered order={order}
         //  onUpdateItems={updateOrderItems} 
         />

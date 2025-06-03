@@ -1,8 +1,6 @@
 import { useState } from "react"
-import { ChevronDown, FileText, Printer, Trash2, Copy, FileCheck } from "lucide-react"
+import {  FileText, Trash2, FileCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { showSuccessMessage } from "@/lib/utils/messageUtils"
 import { InvoiceModal } from "./modal/invoice-modal"
 
 interface ActionButtonsProps {
@@ -14,38 +12,38 @@ export function ActionButtons({
 }: ActionButtonsProps) {
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false)
 
-  const handleCloneOrder = () => {
-    // onClone()
-    showSuccessMessage("A new order has been created based on this one")
-  }
+  // const handleCloneOrder = () => {
+  //   // onClone()
+  //   showSuccessMessage("A new order has been created based on this one")
+  // }
 
   const handleReprintInvoice = () => {
     setIsInvoiceModalOpen(true)
   }
 
-  const handleReprintLabel = () => {
-    // window.open(`/api/orders/${orderId}/label/print`, "_blank")
-    showSuccessMessage("The shipping label is being sent to your printer")
-  }
+  // const handleReprintLabel = () => {
+  //   // window.open(`/api/orders/${orderId}/label/print`, "_blank")
+  //   showSuccessMessage("The shipping label is being sent to your printer")
+  // }
 
-  const handleCancelOrder = () => {
-    // onCancel()
-    showSuccessMessage("The order has been cancelled successfully")
-  }
+  // const handleCancelOrder = () => {
+  //   // onCancel()
+  //   showSuccessMessage("The order has been cancelled successfully")
+  // }
 
   return (
     <div className="flex justify-end space-x-2 items-center">
-      <Button
+      {/* <Button
         type="button"
         variant="filter"
         className="rounded-lg xl:flex items-center gap-1 hidden"
         onClick={handleCloneOrder}
-      // disabled={isCloning}
+      disabled={isCloning}
       >
         <Copy className="h-4 w-4 mr-1" />
-        {/* {isCloning ? "Cloning..." : "Clone Order"} */}
+        {isCloning ? "Cloning..." : "Clone Order"}
         Clone Order
-      </Button>
+      </Button> */}
       <Button
         type="button"
         variant="filter"
@@ -55,7 +53,7 @@ export function ActionButtons({
         <FileText className="h-4 w-4 mr-1" />
         Reprint Invoice
       </Button>
-      <Button
+      {/* <Button
         type="button"
         variant="filter"
         className="rounded-lg xl:flex items-center gap-1 hidden"
@@ -63,18 +61,18 @@ export function ActionButtons({
       >
         <Printer className="h-4 w-4 mr-1" />
         Reprint Label
-      </Button>
-      <Button
+      </Button> */}
+      {/* <Button
         type="button"
         variant="filter"
         className="rounded-lg xl:flex items-center gap-1 hidden"
         onClick={handleCancelOrder}
-      // disabled={isCancelling}
+      disabled={isCancelling}
       >
-        {/* {isCancelling ? "Cancelling..." : "Cancel Order"} */}
+        {isCancelling ? "Cancelling..." : "Cancel Order"}
         Cancel Order
-      </Button>
-      <DropdownMenu>
+      </Button> */}
+      {/* <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button type="button" variant="filter" className="rounded-lg flex items-center gap-1">
             <ChevronDown className="h-4 w-4" />
@@ -82,7 +80,6 @@ export function ActionButtons({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="bg-white">
           <DropdownMenuItem onClick={handleCloneOrder}
-          // disabled={isCloning}
           >
             <Copy className="h-4 w-4 mr-2" />
             Clone Order
@@ -96,13 +93,12 @@ export function ActionButtons({
             Reprint Label
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleCancelOrder} className="text-red-600"
-          // disabled={isCancelling}
           >
             <Trash2 className="h-4 w-4 mr-2" />
             Cancel Order
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu>
+      </DropdownMenu> */}
       <Button variant="primary" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
         <Trash2 className="h-4 w-4" />
       </Button>

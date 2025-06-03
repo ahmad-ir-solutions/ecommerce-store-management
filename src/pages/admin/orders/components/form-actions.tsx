@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { showSuccessMessage } from "@/lib/utils/messageUtils"
+// import { showSuccessMessage } from "@/lib/utils/messageUtils"
 
 interface FormActionsProps {
   onCancel: () => void
@@ -10,7 +10,7 @@ export function FormActions({ onCancel, isSubmitting }: FormActionsProps) {
 
   const handleCancel = () => {
     onCancel()
-    showSuccessMessage("Your changes have been discarded")
+    // showSuccessMessage("Your changes have been discarded")
   }
 
   return (
@@ -24,9 +24,9 @@ export function FormActions({ onCancel, isSubmitting }: FormActionsProps) {
       >
         Cancel
       </Button>
-      <Button type="submit" className="bg-blue-500 hover:bg-blue-600 px-8 text-white" disabled={isSubmitting}>
+      {/* <Button type="submit" className="bg-blue-500 hover:bg-blue-600 px-8 text-white" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : "Save"}
-      </Button>
+      </Button> */}
     </div>
   )
 }

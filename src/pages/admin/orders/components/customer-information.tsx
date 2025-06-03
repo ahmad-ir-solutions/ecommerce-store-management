@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { Address, IOrder } from "../core/_modals"
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { EditAddressModal } from "./modal/edit-adress-modal"
-import { Edit } from "lucide-react"
+// import { Edit } from "lucide-react"
 
 interface CustomerInformationProps {
   order: IOrder
@@ -17,13 +17,13 @@ export function CustomerInformation({
   const [isUpdatingBilling, setIsUpdatingBilling] = useState(false)
   const [isUpdatingShipping, setIsUpdatingShipping] = useState(false)
 
-  const handleEditBillingAddress = () => {
-    setIsEditingBillingAddress(true)
-  }
+  // const handleEditBillingAddress = () => {
+  //   setIsEditingBillingAddress(true)
+  // }
 
-  const handleEditShippingAddress = () => {
-    setIsEditingShippingAddress(true)
-  }
+  // const handleEditShippingAddress = () => {
+  //   setIsEditingShippingAddress(true)
+  // }
 
   const handleSaveAddress = async (type: "billing" | "shipping", data: Address) => {
     console.log(data, "handleSaveAddress");
@@ -71,7 +71,7 @@ export function CustomerInformation({
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium">Billing Address</h3>
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                   <h2>Edit</h2>
                   <Button
                     type="button"
@@ -80,7 +80,7 @@ export function CustomerInformation({
                     disabled={isUpdatingBilling}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                </div>
+                </div> */}
               </div>
               <div className="grid grid-cols-2 gap-y-1">
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
@@ -114,7 +114,7 @@ export function CustomerInformation({
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium">Shipping Address</h3>
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                   <h2>Edit</h2>
                   <Button
                     type="button"
@@ -123,7 +123,7 @@ export function CustomerInformation({
                     disabled={isUpdatingShipping}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                </div>
+                </div> */}
               </div>
               <div className="grid grid-cols-2 xl:grid-cols-1 gap-y-1">
                 <div className="border-b h-[2px] w-full border-gray-300"></div>

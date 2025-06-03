@@ -16,9 +16,6 @@ export interface IErrorType {
     Default: 'Error',
   };
   
-
-
-
 export async function fetchDashboardData(dateRange: DateRange) {
   console.log(dateRange, "dateRange");
   

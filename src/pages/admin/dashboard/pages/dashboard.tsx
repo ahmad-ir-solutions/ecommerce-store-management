@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Header } from "@/components/shared/header"
@@ -12,25 +12,13 @@ import { TabsStats } from '../components/tabs-stats'
 import { TopSellingProducts } from '../components/top-selling-products'
 import { SalesByChannel } from '../components/sales-by-channel'
 import { DateRangePickerFilter } from '@/components/ui/date-range-picker'
+import { useGetAllChannels } from "@/pages/admin/common-api/channels/core/_hooks"
+import { IChannel } from "@/pages/admin/common-api/channels/core/_modals"
 
 const companyOptions = [
   { id: "1", label: "All", value: "all" },
   { id: "2", label: "Company 1", value: "company1" },
   { id: "3", label: "Company 2", value: "company2" },
-]
-
-const channelOptions = [
-  { id: "1", label: "All", value: "all" },
-  { id: "2", label: "Amazon", value: "amazon" },
-  { id: "3", label: "Ebay", value: "ebay" },
-  { id: "4", label: "Onbuy", value: "onbuy" },
-]
-
-const unitSoldOptions = [
-  { id: "1", label: "Units", value: "units" },
-  { id: "2", label: "Revenue", value: "revenue" },
-  { id: "3", label: "Orders", value: "orders" },
-  { id: "4", label: "Average Order Value", value: "average_order_value" },
 ]
 
 const graphTypeOptions = [
@@ -48,13 +36,47 @@ export default function AdminDashboardPage() {
   const [unitSold, setUnitSold] = useState<"units" | "revenue" | "orders" | "average_order_value">("units")
   const [company, setCompany] = useState("all")
   const [channel, setChannel] = useState("all")
-  const [activeChannels, setActiveChannels] = useState({
+  const [channels, setChannels] = useState<IChannel[]>([])
+  const { data: channelsData, isLoading, isError } = useGetAllChannels();
+
+  const [activeChannels, setActiveChannels] = useState<{
+    amazon: boolean;
+    ebay: boolean;
+    onbuy: boolean;
+    woocommerce: boolean;
+    shopify: boolean;
+    [key: string]: boolean;
+  }>({
     amazon: true,
     ebay: true,
     onbuy: true,
     woocommerce: true,
     shopify: true,
-  })
+  });
+
+  const unitSoldOptions = [
+    { id: "1", label: "Units", value: "units" },
+    { id: "2", label: "Revenue", value: "revenue" },
+    { id: "3", label: "Orders", value: "orders" },
+    { id: "4", label: "Average Order Value", value: "average_order_value" },
+  ];
+
+  useEffect(() => {
+    const getChannels = async () => {
+      if (channelsData?.data) {
+        setChannels(channelsData.data);
+        const initialActiveChannels: { [key: string]: boolean } = {};
+        channelsData.data.forEach(channel => {
+          initialActiveChannels[channel.channelName.toLowerCase()] = true;
+        });
+        setActiveChannels(prevActiveChannels => ({
+          ...prevActiveChannels,
+          ...initialActiveChannels,
+        }));
+      }
+    };
+    getChannels();
+  }, [channelsData]);
 
   const toggleChannel = (channelName: string) => {
     setActiveChannels((prev) => ({
@@ -82,7 +104,11 @@ export default function AdminDashboardPage() {
               placeholder="Channel"
               defaultValue={channel}
               onChange={(value) => setChannel(String(value))}
-              options={channelOptions}
+              options={channels.map((channel: IChannel) => ({
+                id: channel.channelId,
+                label: channel.channelName,
+                value: channel.channelId,
+              }))}
               title="Channel"
             />
           </div>
@@ -130,39 +156,21 @@ export default function AdminDashboardPage() {
               activeChannels={activeChannels}
             />
             <div className="flex items-center justify-center gap-8 mt-6">
-              <div className="flex items-center gap-2">
-                <Checkbox id="amazon" checked={activeChannels.amazon} onCheckedChange={() => toggleChannel("amazon")} />
-                <label htmlFor="amazon" className="text-sm">
-                  Amazon
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox id="ebay" checked={activeChannels.ebay} onCheckedChange={() => toggleChannel("ebay")} />
-                <label htmlFor="ebay" className="text-sm">
-                  Ebay
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="woocommerce"
-                  checked={activeChannels.woocommerce}
-                  onCheckedChange={() => toggleChannel("woocommerce")}
-                />
-                <label htmlFor="woocommerce" className="text-sm">
-                  Woocommerce
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="shopify"
-                  checked={activeChannels.shopify}
-                  onCheckedChange={() => toggleChannel("shopify")}
-                />
-                <label htmlFor="shopify" className="text-sm">
-                  Shopify
-                </label>
-              </div>
+              {channels.map(channel => (
+                <div key={channel.channelId} className="flex items-center gap-2">
+                  <Checkbox
+                    id={channel.channelName.toLowerCase()}
+                    checked={!!activeChannels[channel.channelName.toLowerCase()]}
+                    onCheckedChange={() => toggleChannel(channel.channelName.toLowerCase())}
+                  />
+                  <label htmlFor={channel.channelName.toLowerCase()} className="text-sm">
+                    {channel.channelName}
+                  </label>
+                </div>
+              ))}
             </div>
+            {isLoading && <p>Loading channels...</p>}
+            {isError && <p>Error loading channels.</p>}
           </CardContent>
         </Card>
         <TabsStats />
