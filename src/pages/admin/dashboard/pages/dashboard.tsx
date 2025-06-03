@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Header } from "@/components/shared/header"
@@ -6,7 +6,7 @@ import { CustomSelect } from "@/components/shared/custom-select"
 import { subDays } from "date-fns"
 import type { DateRange } from "react-day-picker"
 import { StatsCards } from '../components/stats-cards'
-import { salesData, statsData } from '../core/data'
+// import { salesData, statsData } from '../core/data'
 import { SalesChart } from '../components/sales-chart'
 import { TabsStats } from '../components/tabs-stats'
 import { TopSellingProducts } from '../components/top-selling-products'
@@ -14,6 +14,7 @@ import { SalesByChannel } from '../components/sales-by-channel'
 import { DateRangePickerFilter } from '@/components/ui/date-range-picker'
 import { useGetAllChannels } from "@/pages/admin/common-api/channels/core/_hooks"
 import { IChannel } from "@/pages/admin/common-api/channels/core/_modals"
+import { useGetOrderStats } from "../core/hooks/use-dashboard";
 
 const companyOptions = [
   { id: "1", label: "All", value: "all" },
@@ -37,7 +38,7 @@ export default function AdminDashboardPage() {
   const [company, setCompany] = useState("all")
   const [channel, setChannel] = useState("all")
   const [channels, setChannels] = useState<IChannel[]>([])
-  const { data: channelsData, isLoading, isError } = useGetAllChannels();
+  const { data: channelsData } = useGetAllChannels();
 
   const [activeChannels, setActiveChannels] = useState<{
     amazon: boolean;
@@ -57,8 +58,8 @@ export default function AdminDashboardPage() {
   const unitSoldOptions = [
     { id: "1", label: "Units", value: "units" },
     { id: "2", label: "Revenue", value: "revenue" },
-    { id: "3", label: "Orders", value: "orders" },
-    { id: "4", label: "Average Order Value", value: "average_order_value" },
+    // { id: "3", label: "Orders", value: "orders" },
+    // { id: "4", label: "Average Order Value", value: "average_order_value" },
   ];
 
   useEffect(() => {
@@ -84,6 +85,21 @@ export default function AdminDashboardPage() {
       [channelName]: !prev[channelName as keyof typeof prev],
     }))
   }
+
+  const { data: orderStatsData, isLoading: isOrderStatsLoading, isError: isOrderStatsError } = useGetOrderStats();
+
+  // Calculate stats from orderStatsData
+  const calculatedStats = useMemo(() => {
+    if (!orderStatsData?.data) {
+      return { sales: 0, revenue: 0, taxAndShipping: 0 };
+    }
+
+    const totalSales = orderStatsData.data.length; // Assuming each entry is one order
+    const totalRevenue = orderStatsData.data.reduce((sum, order) => sum + order.totalPrice, 0);
+    const totalTax = orderStatsData.data.reduce((sum, order) => sum + order.taxTotal, 0);
+
+    return { sales: totalSales, revenue: totalRevenue, taxAndShipping: totalTax };
+  }, [orderStatsData]);
 
   return (
     <div className="space-y-6">
@@ -117,7 +133,9 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 bg-white rounded-2xl border-none shadow-none gap-0">
           <CardHeader className="pb-0">
-            <StatsCards stats={statsData} />
+            {isOrderStatsLoading && <p>Loading stats...</p>}
+            {isOrderStatsError && <p>Error loading stats.</p>}
+            {!isOrderStatsLoading && !isOrderStatsError && <StatsCards stats={calculatedStats} />}
             <CardTitle className="text-lg font-medium">Sales by channel</CardTitle>
           </CardHeader>
           <CardContent>
@@ -152,7 +170,6 @@ export default function AdminDashboardPage() {
               chartType={chartType}
               unitSold={unitSold}
               dateRange={date}
-              salesData={salesData}
               activeChannels={activeChannels}
             />
             <div className="flex items-center justify-center gap-8 mt-6">
@@ -169,8 +186,6 @@ export default function AdminDashboardPage() {
                 </div>
               ))}
             </div>
-            {isLoading && <p>Loading channels...</p>}
-            {isError && <p>Error loading channels.</p>}
           </CardContent>
         </Card>
         <TabsStats />

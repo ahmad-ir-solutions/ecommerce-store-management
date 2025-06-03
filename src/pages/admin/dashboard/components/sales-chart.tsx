@@ -3,70 +3,41 @@ import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, T
 import { Card } from "@/components/ui/card"
 import type { DateRange } from "react-day-picker"
 import { isWithinInterval } from "date-fns"
+import { useGetOrderStats } from "../core/hooks/use-dashboard";
+import { IOrderStat } from "../core/_modals";
+import { Loader2 } from "lucide-react"
 
 interface SalesChartProps {
   chartType: "line" | "area"
   unitSold: "units" | "revenue" | "orders" | "average_order_value"
   dateRange?: DateRange
-  salesData: Array<{
-    date: string
-    amazon: number
-    ebay: number
-    onbuy: number
-    woocommerce: number
-    shopify: number
-    [key: string]: string | number
-  }>
   activeChannels: {
-    amazon: boolean
-    ebay: boolean
-    onbuy: boolean
-    woocommerce: boolean
-    shopify: boolean
     [key: string]: boolean
   }
 }
 
-export function SalesChart({ chartType, unitSold, dateRange, salesData, activeChannels }: SalesChartProps) {
-  const [filteredData, setFilteredData] = useState(salesData)
+export function SalesChart({ chartType, unitSold, dateRange, activeChannels }: SalesChartProps) {
+  const { data: orderStatsData, isLoading, isError } = useGetOrderStats();
+  const [filteredData, setFilteredData] = useState<IOrderStat[]>([]);
 
   // Filter data based on active channels and date range
   useEffect(() => {
-    let filtered = salesData.map((item) => {
-      const newItem: any = { date: item.date }
+    if (orderStatsData?.data) {
+      let filtered = orderStatsData.data;
 
-      if (activeChannels.amazon) newItem.amazon = item.amazon
-      if (activeChannels.ebay) newItem.ebay = item.ebay
-      if (activeChannels.onbuy) newItem.onbuy = item.onbuy
-      if (activeChannels.woocommerce) newItem.woocommerce = item.woocommerce
-      if (activeChannels.shopify) newItem.shopify = item.shopify
+      // Filter by active channels
+      filtered = filtered.filter(order => activeChannels[order.channelDetails.channelName.toLowerCase()]);
 
-      return newItem
-    })
-
-    // Apply date range filter if provided
-    if (dateRange?.from && dateRange?.to) {
-      filtered = filtered.filter((item) => {
-        try {
-          // Convert date string to Date object (assuming format like "Mar 01")
-          const year = new Date().getFullYear()
-          const itemDate = new Date(`${item.date}, ${year}`)
-
-          if (dateRange.from && dateRange.to) {
-            return isWithinInterval(itemDate, {
-              start: dateRange.from as Date,
-              end: dateRange.to as Date,
-            })
-          }
-          return true
-        } catch (error) {
-          return true // Include if date parsing fails
-        }
-      })
+      // Apply date range filter if provided
+      if (dateRange?.from && dateRange?.to) {
+        filtered = filtered.filter(order => {
+          const orderDate = new Date(order.createdAt);
+          return isWithinInterval(orderDate, { start: dateRange.from as Date, end: dateRange.to as Date });
+        });
+      }
+      setFilteredData(filtered);
     }
-
-    setFilteredData(filtered)
-  }, [salesData, activeChannels, dateRange])
+  }, [orderStatsData, activeChannels, dateRange]);
 
   // Format values based on unit type
   const formatValue = (value: number) => {
@@ -161,34 +132,51 @@ export function SalesChart({ chartType, unitSold, dateRange, salesData, activeCh
   const renderChart = () => {
     const yAxisConfig = getYAxisConfig()
 
-    // Apply unit conversion if needed
-    const processedData = filteredData.map((item) => {
-      const newItem: any = { date: item.date }
+    // Aggregate data by date and channel for the chart
+    const aggregatedData: { [date: string]: { [channel: string]: number } } = {};
 
-      // Process each channel based on unit type
-      Object.keys(item).forEach((key) => {
-        if (key !== "date") {
-          const value = item[key as keyof typeof item]
-          if (typeof value === "number") {
-            switch (unitSold) {
-              case "revenue":
-                newItem[key] = value * 15.5 // Average price per unit
-                break
-              case "orders":
-                newItem[key] = value / 5 // Assume 5 units per order
-                break
-              case "average_order_value":
-                newItem[key] = (value * 15.5) / (value / 5) // Revenue / Orders
-                break
-              default:
-                newItem[key] = value
-            }
-          }
-        }
-      })
+    filteredData.forEach(order => {
+      const orderDate = new Date(order.createdAt).toLocaleDateString(); // Use a consistent date format
+      if (!aggregatedData[orderDate]) {
+        aggregatedData[orderDate] = {};
+      }
+      const channelName = order.channelDetails.channelName.toLowerCase();
+      if (!aggregatedData[orderDate][channelName]) {
+        aggregatedData[orderDate][channelName] = 0;
+      }
 
-      return newItem
-    })
+      // Aggregate based on unitSold
+      switch (unitSold) {
+        case "units":
+          // Assuming each order represents 1 unit for simplicity, adjust if needed
+          aggregatedData[orderDate][channelName] += 1;
+          break;
+        case "revenue":
+          aggregatedData[orderDate][channelName] += order.totalPrice; // Assuming totalPrice is revenue
+          break;
+        case "orders":
+          aggregatedData[orderDate][channelName] += 1; // Each order is one order
+          break;
+        case "average_order_value":
+          // This requires calculating total revenue and total orders per channel per day first
+          // For simplicity, we'll skip this aggregation here or calculate it differently
+          break;
+        default:
+          break;
+      }
+    });
+
+    // Convert aggregated data to array format for recharts
+    const processedData = Object.keys(aggregatedData).map(date => {
+      const item: any = { date };
+      Object.keys(aggregatedData[date]).forEach(channel => {
+        item[channel] = aggregatedData[date][channel];
+      });
+      return item;
+    });
+
+    // Sort data by date
+    processedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     switch (chartType) {
       case "line":
@@ -279,9 +267,17 @@ export function SalesChart({ chartType, unitSold, dateRange, salesData, activeCh
 
   return (
     <div className="w-full h-64">
-      <ResponsiveContainer width="100%" height="100%">
-        {renderChart() || <div>No chart data</div>}
-      </ResponsiveContainer>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : isError ? (
+        <p>Error loading chart data.</p>
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          {renderChart() || <div>No chart data</div>}
+        </ResponsiveContainer>
+      )}
     </div>
   )
 }

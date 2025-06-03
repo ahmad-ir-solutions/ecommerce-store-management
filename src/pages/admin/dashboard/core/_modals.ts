@@ -22,4 +22,27 @@ export interface ITopSellingProduct {
   width?: number;
   totalSales: number;
   totalRevenue: number;
+}
+
+export interface IProductDetails {
+  _id: string;
+  productName: string;
+  sku: string;
+  price: number;
+}
+
+export interface IChannelDetails {
+  _id: string;
+  channelId: string;
+  channelName: string;
+}
+
+export interface IOrderStat {
+  _id: string;
+  productDetails: IProductDetails;
+  channelDetails: IChannelDetails;
+  taxTotal: number;
+  totalPrice: number;
+  orderStatus: string;
+  createdAt: string;
 } 
