@@ -20,7 +20,7 @@ npm run dev
 
 
 ## Create a .env file in the root:
-VITE_API_URL=https://your-api-url.com
+VITE_API_BASE_URL=https://your-api-url.com
 
 
 
