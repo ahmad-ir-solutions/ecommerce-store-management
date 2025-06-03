@@ -11,12 +11,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Loader2, Plus } from "lucide-react"
-import { SavedFilters } from "../../products/components/saved-filter"
+import { SavedFilters } from "../components/saved-filter"
 import { CheckboxListFilter } from "../../../../components/shared/checkbox-list-filter"
 import { DateRangePickerFilter } from "../../../../components/shared/date-range-picker-filter"
 import { PaginationControls } from "@/components/shared/PaginationControls"
-import { SaveFilterModal } from "../../products/components/modals/save-filter-modal"
-import { useOrderFilterStore } from "@/store/admin/order-filter-store"
+import { SaveFilterModal } from "../components/modals/save-filter-modal"
 import { useOrderColumns as columns } from "../components/order-columns"
 import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
@@ -25,9 +24,8 @@ import { useGetOrders } from '../core/hooks/use-orders'
 import { useNavigate } from 'react-router-dom'
 
 export function ManageOrderPage() {
-  const { activeFilters, resetFilters, setActiveFilters } = useOrderFilterStore()
-  const [columnFilters, setColumnFilters] = useState<any[]>(activeFilters.columnFilters || [])
-  const [globalFilter, setGlobalFilter] = useState(activeFilters.globalFilter || "")
+  const [columnFilters, setColumnFilters] = useState<any[]>([] /* activeFilters.columnFilters || [] */)
+  const [globalFilter, setGlobalFilter] = useState("" /* activeFilters.globalFilter || "" */)
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -69,11 +67,9 @@ export function ManageOrderPage() {
     manualPagination: true,
     onColumnFiltersChange: (filters) => {
       setColumnFilters(filters as any[])
-      setActiveFilters({ columnFilters: filters as any[], globalFilter })
     },
     onGlobalFilterChange: (filter) => {
       setGlobalFilter(filter)
-      setActiveFilters({ columnFilters, globalFilter: filter })
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -121,7 +117,7 @@ export function ManageOrderPage() {
   }
 
   const handleResetFilters = () => {
-    resetFilters()
+    // resetFilters()
     setColumnFilters([])
     setGlobalFilter("")
   }
@@ -135,6 +131,41 @@ export function ManageOrderPage() {
     setPagination((prev) => ({ ...prev, pageIndex: page - 1 }))
   }
 
+  const handleApplySavedFilter = (filtersObj: any) => {
+    if (!filtersObj) return;
+    const checkboxListIds = ["ordersFlags", "channel", "shippingCountry", "shippingMethod"];
+    const dateRangeIds = ["orderDate", "dispatchDate", "channelDispatchDate"];
+    
+    if (Array.isArray(filtersObj.columnFilters)) {
+      const normalized = filtersObj.columnFilters.map((f: any) => {
+        if (checkboxListIds.includes(f.id) && !Array.isArray(f.value)) {
+          return { ...f, value: [f.value] };
+        }
+        if (dateRangeIds.includes(f.id) && typeof f.value === "string") {
+          return { ...f, value: { from: f.value, to: f.value } };
+        }
+        return f;
+      });
+      setColumnFilters(normalized);
+      setGlobalFilter(filtersObj.globalFilter || "");
+    } else {
+      // fallback for flat object shape
+      const colFilters = Object.entries(filtersObj)
+        .filter(([key]) => key !== "search" && key !== "globalFilter")
+        .map(([id, value]) => {
+          if (checkboxListIds.includes(id) && !Array.isArray(value)) {
+            return { id, value: [value] };
+          }
+          if (dateRangeIds.includes(id) && typeof value === "string") {
+            return { id, value: { from: value, to: value } };
+          }
+          return { id, value };
+        });
+      setColumnFilters(colFilters);
+      if (filtersObj.search) setGlobalFilter(filtersObj.search);
+    }
+  }
+
   return (
     <div>
       <Header title="Manage Orders">
@@ -144,7 +175,7 @@ export function ManageOrderPage() {
             onClick={() => { }}
             placeholder="Search for orders, Channels order reference, name, postcode (min.3 characters)"
             value={globalFilter}
-          // onChange={setGlobalFilter}
+            // onChange={setGlobalFilter}
           />
           <div className="flex items-center gap-4">
             <Button type='button' onClick={handleAddOrder} variant="default" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
@@ -168,7 +199,7 @@ export function ManageOrderPage() {
               <span className="text-sm text-gray-600">{data?.pagination?.total || 0} total orders</span>
             </div>
             <div className="flex items-center space-x-2">
-              <SavedFilters />
+              <SavedFilters onApplyFilter={handleApplySavedFilter} />
               <Button variant="filter" onClick={handleSaveFilters}>
                 Save Filters
               </Button>

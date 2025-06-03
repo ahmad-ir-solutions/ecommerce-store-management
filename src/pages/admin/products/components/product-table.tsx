@@ -24,7 +24,6 @@ import { AddProductModal } from "./modals/add-product-modal"
 import { ProductQueryParams } from '../core/_modals'
 import { useDeleteProduct, useGetProducts } from '../core/hooks/useProduct'
 import { DeleteConfirmationModal } from './modals/delete-confirmation-modal'
-// import { ArchiveConfirmationModal } from './modals/archive-confirmation-modal'
 
 interface ProductTableProps {
   isAddProductModalOpen: boolean
@@ -117,17 +116,9 @@ export default function ProductTable({
   }
 
   const handleResetFilters = () => {
-    setColumnFilters([]) // Clear column filters
-    setGlobalFilter("") // Clear global filter
+    setColumnFilters([])
+    setGlobalFilter("")
   }
-
-  // const handleSort = (field: string) => {
-  //   setQueryParams((prev) => ({
-  //     ...prev,
-  //     sortBy: field,
-  //     sortOrder: prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
-  //   }))
-  // }
 
   const handlePageChange = (page: number) => {
     setQueryParams((prev) => ({
@@ -135,10 +126,6 @@ export default function ProductTable({
       page,
     }))
   }
-
-  // const confirmDelete = (id: string) => {
-  //   setDeleteId(id)
-  // }
 
   const handleDelete = () => {
     if (deleteId) {
@@ -150,18 +137,55 @@ export default function ProductTable({
     }
   }
 
-  //   const handleArchiveProduct = (product: any) => {
-  //   // Here you would call your API to archive the product
-  //   console.log("Archiving product:", product)
-  //   // After successful archiving, refetch the data
-  //   // queryClient.invalidateQueries(["inventory"])
-  // }
-
   const totalPages = data?.total ? Math.ceil(data.total / (queryParams.limit || 10)) : 0
   const currentPage = queryParams.page || 1
 
   if (isError) {
     return <div className="text-center py-10">No Products Found</div>
+  }
+
+  // Handler to apply a saved filter's filters object
+  const handleApplySavedFilter = (filtersObj: any) => {
+    if (!filtersObj) return;
+    const checkboxListIds = ["warehouse", "brand", "type"];
+    const comparisonIds = [
+      "inventory", "price", "rrp", "taxClass", "weight", "length", "width", "height"
+    ];
+    if (Array.isArray(filtersObj.columnFilters)) {
+      const normalized = filtersObj.columnFilters.map((f: any) => {
+        if (checkboxListIds.includes(f.id) && !Array.isArray(f.value)) {
+          return { ...f, value: [f.value] };
+        }
+        if (
+          comparisonIds.includes(f.id) &&
+          (typeof f.value === "string" || Array.isArray(f.value))
+        ) {
+          // If value is not an object, default to { operator: '=', value: f.value }
+          return { ...f, value: { operator: "=", value: f.value } };
+        }
+        return f;
+      });
+      setColumnFilters(normalized);
+      setGlobalFilter(filtersObj.globalFilter || "");
+    } else {
+      // fallback for flat object shape
+      const colFilters = Object.entries(filtersObj)
+        .filter(([key]) => key !== "search" && key !== "globalFilter")
+        .map(([id, value]) => {
+          if (checkboxListIds.includes(id) && !Array.isArray(value)) {
+            return { id, value: [value] };
+          }
+          if (
+            comparisonIds.includes(id) &&
+            (typeof value === "string" || Array.isArray(value))
+          ) {
+            return { id, value: { operator: "=", value } };
+          }
+          return { id, value };
+        });
+      setColumnFilters(colFilters);
+      if (filtersObj.search) setGlobalFilter(filtersObj.search);
+    }
   }
 
   return (
@@ -179,7 +203,7 @@ export default function ProductTable({
           </Button>
         </div>
         <div className="flex items-center space-x-2">
-          <SavedFilters />
+          <SavedFilters onApplyFilter={handleApplySavedFilter} />
           <Button variant="outline" onClick={handleSaveFilters}>
             Save Filters
           </Button>
@@ -308,9 +332,7 @@ export default function ProductTable({
         isOpen={isAddProductModalOpen}
         onClose={() => setIsAddProductModalOpen(false)}
       />
-      <DeleteConfirmationModal onConfirm={handleDelete} onCancel={() => console.log("Delete cancelled")} />
-      {/* <ArchiveConfirmationModal onConfirm={handleArchiveProduct} onCancel={() => console.log("Archive cancelled")} /> */}
-    
+      <DeleteConfirmationModal open={deleteId !== null} setOpen={() => setDeleteId(null)} onConfirm={handleDelete} onCancel={() => console.log("Delete cancelled")} />
     </div>
   )
 }

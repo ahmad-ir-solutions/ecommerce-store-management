@@ -5,10 +5,13 @@ import { IProductResponse, IProductsResponse, CreateProductData, UpdateProductDa
   CreateSupplierData,
   UpdateSupplierData,
   SupplierQueryParams,
-  ISupplier, } from './_modals';
+  ISupplier,
+  SavedFilter } from './_modals';
 
 const PRODUCTS_URL = '/products';
 const SUPPLIERS_URL = "/suppliers"
+const FILTERS_URL = '/saved-filters';
+const PRODUCT_FILTERS_URL = '/saved-filters/product';
 
 export function getAllProducts(params?: ProductQueryParams) {
   return authApi.get<IProductsResponse>(PRODUCTS_URL, { params });
@@ -51,4 +54,20 @@ export function updateSupplier(id: string, body: UpdateSupplierData) {
 
 export function deleteSupplier(id: string) {
   return authApi.delete<{ message: string }>(`${SUPPLIERS_URL}/${id}`)
+}
+
+export function saveProductFilter(filter: SavedFilter) {
+  return authApi.post<{ message: string; data: SavedFilter }>(FILTERS_URL, filter);
+}
+
+export function getProductFilters() {
+  return authApi.get<{ data: SavedFilter[] }>(PRODUCT_FILTERS_URL);
+}
+
+export function deleteProductFilter(id: string) {
+  return authApi.delete<{ message: string }>(`${FILTERS_URL}/${id}`);
+}
+
+export function updateProductFilter(id: string, filter: Partial<SavedFilter>) {
+  return authApi.patch<{ message: string; data: SavedFilter }>(`${FILTERS_URL}/${id}`, filter);
 }

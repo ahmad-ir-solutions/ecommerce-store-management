@@ -11,9 +11,12 @@ import type {
   BulkOperationResponse,
   ExportResponse,
   CsvImportResponse,
+  SavedFilter,
 } from "./_modals"
 
 const ORDERS_URL = "/orders"
+const FILTERS_URL = "/saved-filters"
+const ORDER_FILTERS_URL = "/saved-filters/order"
 
 // Get all orders with optional query parameters
 export function getAllOrders(params?: OrderQueryParams) {
@@ -106,4 +109,20 @@ export function markOrderDispatched(id: string) {
 // Mark order as delivered
 export function markOrderDelivered(id: string, signedBy?: string) {
   return authApi.patch<IOrdersResponse>(`${ORDERS_URL}/${id}/deliver`, { signedBy })
+}
+
+export function saveOrderFilter(filter: SavedFilter) {
+  return authApi.post<{ message: string; data: SavedFilter }>(FILTERS_URL, filter)
+}
+
+export function getOrderFilters() {
+  return authApi.get<{ data: SavedFilter[] }>(ORDER_FILTERS_URL)
+}
+
+export function updateOrderFilter(id: string, filter: Partial<SavedFilter>) {
+  return authApi.patch<{ message: string; data: SavedFilter }>(`${FILTERS_URL}/${id}`, filter)
+}
+
+export function deleteOrderFilter(id: string) {
+  return authApi.delete<{ message: string }>(`${FILTERS_URL}/${id}`)
 }

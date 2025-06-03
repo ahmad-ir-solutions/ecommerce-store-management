@@ -11,10 +11,10 @@ interface SimpleDropdownFilterProps<TData, TValue> {
 
 export function SimpleDropdownFilter<TData, TValue>({ column, options }: SimpleDropdownFilterProps<TData, TValue>) {
   const [open, setOpen] = useState(false)
-  const [selectedValue, setSelectedValue] = useState<string>("All")
+  const rawValue = column.getFilterValue()
+  const selectedValue: string = typeof rawValue === 'string' ? rawValue : "All"
 
   const handleSelect = (value: string) => {
-    setSelectedValue(value)
     column.setFilterValue(value === "All" ? undefined : value)
     setOpen(false)
   }

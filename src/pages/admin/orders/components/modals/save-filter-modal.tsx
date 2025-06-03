@@ -3,10 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useSaveProductFilter, 
-  // useUpdateProductFilter, useDeleteProductFilter
- } from "@/pages/admin/products/core/hooks/useProductFilter"
-import { SavedFilter } from "@/pages/admin/products/core/_modals"
+import { useSaveOrderFilter } from "@/pages/admin/orders/core/hooks/useOrderFilter"
+import { SavedFilter } from "@/pages/admin/orders/core/_modals"
 
 interface SaveFilterModalProps {
   isOpen: boolean
@@ -16,17 +14,14 @@ interface SaveFilterModalProps {
 }
 
 export function SaveFilterModal({ isOpen, onClose, currentFilters, editingFilter }: SaveFilterModalProps) {
-  const saveFilter = useSaveProductFilter()
-  // const updateFilter = useUpdateProductFilter()
-  // const deleteFilter = useDeleteProductFilter()
-  
+  const saveFilter = useSaveOrderFilter()
   const [filterName, setFilterName] = useState(editingFilter?.name || "")
 
   const handleSave = () => {
     if (!filterName.trim()) return
     const filterData = {
       name: filterName,
-      module: "product",
+      module: "order",
       filters: currentFilters,
     }
     saveFilter.mutate(filterData, {
@@ -36,16 +31,6 @@ export function SaveFilterModal({ isOpen, onClose, currentFilters, editingFilter
       }
     })
   }
-
-  // const handleDelete = () => {
-  //   if (editingFilter) {
-  //     deleteFilter.mutate(editingFilter._id, {
-  //       onSuccess: () => {
-  //         onClose()
-  //       }
-  //     })
-  //   }
-  // }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -90,12 +75,11 @@ export function SaveFilterModal({ isOpen, onClose, currentFilters, editingFilter
             </div>
           </div>
         </div>
-        <DialogFooter className="sm:justify-between">
+        <DialogFooter>
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
           <div className="flex space-x-2">
-            {/* TODO: Implement update/delete */}
             <Button onClick={handleSave}>
               {editingFilter ? "Update" : "Save"}
             </Button>
@@ -104,4 +88,4 @@ export function SaveFilterModal({ isOpen, onClose, currentFilters, editingFilter
       </DialogContent>
     </Dialog>
   )
-}
+} 

@@ -239,18 +239,29 @@ export interface IOrdersResponse {
   }
 }
 
+export interface SavedFilter {
+  _id?: string
+  name: string
+  module: string
+  filters: any
+  user?: string
+}
+
+
+
+export interface FilterCondition {
+  field: string
+  operator: "equals" | "contains" | "greaterThan" | "lessThan"
+  value: string
+}
+
 export interface OrderQueryParams {
-  limit?: number
   page?: number
+  limit?: number
   search?: string
-  sortBy?: string
-  sortOrder?: "asc" | "desc"
-  status?: string
-  channel?: string
-  startDate?: string
-  endDate?: string
-  shippingCountry?: string
-  shippingMethod?: string
+  sort?: string
+  order?: "asc" | "desc"
+  filters?: any
 }
 
 export interface CreateOrderData {
