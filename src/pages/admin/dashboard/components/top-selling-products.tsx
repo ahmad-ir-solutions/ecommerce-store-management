@@ -2,18 +2,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { useState } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { topSellingProductsData } from '../core/data'
+import { useGetTopSellingProducts } from "../core/hooks/use-dashboard"
+import { ITopSellingProduct } from "../core/_modals"
+import { Loader2 } from "lucide-react"
 
 export function TopSellingProducts() {
   const [timePeriod, setTimePeriod] = useState("7days")
-  const [products, setProducts] = useState(topSellingProductsData)
+  const [limit, setLimit] = useState(7); // State to manage the limit for the API call
+  const { data: productsData, isLoading, isError } = useGetTopSellingProducts(limit);
 
   // This would normally filter products based on time period
   const handleTimePeriodChange = (value: string | number) => {
     setTimePeriod(String(value))
-    // In a real app, you would filter products based on the time period
-    // For now, we'll just use the same data
-    setProducts(topSellingProductsData)
+    // Map time period to a limit for the API call
+    switch (value) {
+      case "7days":
+        setLimit(7);
+        break;
+      case "30days":
+        setLimit(30);
+        break;
+      case "90days":
+        setLimit(90);
+        break;
+      default:
+        setLimit(7);
+    }
   }
 
   return (
@@ -50,17 +64,23 @@ export function TopSellingProducts() {
             <TableRow className="border-none bg-[#ECF6FF] rounded-lg">
               <TableHead className="w-[100px] p-3">Product SKU</TableHead>
               <TableHead className="p-3">Name</TableHead>
-              <TableHead className="text-right p-3">Quantity</TableHead>
+              <TableHead className="text-start p-3">Quantity</TableHead>
               <TableHead className="text-right p-3">Revenue (ex VAT)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id} className="border-none text-[#727272]">
+            {isLoading && <TableRow><TableCell colSpan={4}><div className="flex justify-center items-center h-64">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div></TableCell></TableRow>}
+            {isError && <TableRow><TableCell colSpan={4}><div className="flex justify-center items-center h-64">
+              Error loading products.
+            </div></TableCell></TableRow>}
+            {productsData?.data?.map((product: ITopSellingProduct) => (
+              <TableRow key={product._id} className="border-none text-[#727272]">
                 <TableCell className="font-normal text-[#11263C] p-3">{product.sku}</TableCell>
-                <TableCell className="text-sm p-3">{product.name}</TableCell>
-                <TableCell className="text-right p-3">{product.quantity}</TableCell>
-                <TableCell className="text-right text-[#11263C] p-3">£{product.revenue.toFixed(2)}</TableCell>
+                <TableCell className="text-sm p-3">{product.productName}</TableCell>
+                <TableCell className="text-start p-3">{product.totalSales}</TableCell>
+                <TableCell className="text-right text-[#11263C] p-3">£{product.totalRevenue.toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

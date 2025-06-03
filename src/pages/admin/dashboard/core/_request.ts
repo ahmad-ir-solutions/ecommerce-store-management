@@ -1,10 +1,11 @@
-import api from '@/services/api';
-import { CaseCounts } from './_modals';
+import authApi from "@/lib/axios"
+import type {
+    ITopSellingProduct
+} from "./_modals"
 
+const PRODUCTS_URL = "/products"
 
-const DASHBOARD_URL = '/dashboard';
-
-export function getDashboardData(params: any) {
-  return api.get<CaseCounts>(DASHBOARD_URL, { params }).then((response) => response);
-}
-
+// Get top selling products with optional limit
+export function getTopSellingProducts(limit?: number) {
+  return authApi.get<ITopSellingProduct[]>(`${PRODUCTS_URL}/top-selling`, { params: { limit } })
+} 
