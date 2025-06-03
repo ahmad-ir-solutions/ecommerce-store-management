@@ -65,7 +65,7 @@ export function CompanyPage() {
               </TableHeader>
                 <TableBody>
                 {companies && Array.isArray(companies) && companies.map((company: ICompanyModel) => (
-                  <TableRow key={company._id} className="text-[#11263C] text-sm">
+                  <TableRow key={company._id} className="text-[#11263C] text-sm border-gray-200">
                   <TableCell className="p-3 text-start">{company.companyName}</TableCell>
                   <TableCell className="p-3 text-start">{company.contactEmail}</TableCell>
                   <TableCell className="text-start text-[#3D8BFF] p-3">

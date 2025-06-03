@@ -127,7 +127,7 @@ export function SuppliersPage() {
                 </TableHeader>
                 <TableBody>
                   {suppliers.map((supplier) => (
-                    <TableRow key={supplier._id} className="text-[#11263C] text-sm border-none">
+                    <TableRow key={supplier._id} className="text-[#11263C] text-sm border-b border-gray-200">
                       <TableCell className="p-3 text-start font-medium">{supplier.supplierName}</TableCell>
                       <TableCell className="p-3 text-start">{supplier.city}</TableCell>
                       <TableCell className="p-3 text-start">{supplier.country}</TableCell>

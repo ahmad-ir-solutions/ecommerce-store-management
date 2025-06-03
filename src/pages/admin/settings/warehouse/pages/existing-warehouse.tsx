@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useNavigate } from "react-router-dom"
@@ -7,27 +7,34 @@ import { Button } from "@/components/ui/button"
 import { CustomSearch } from "@/components/shared/custom-search"
 import { Loader2, Plus, Trash2 } from "lucide-react"
 import { useGetWarehouses, useDeleteWarehouse } from "../core/hooks/useWarehouse"
-import { debounce } from 'lodash';
+import { debounce } from 'lodash'
 
 export function ExistingWarehouse() {
   const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState("")
-  const [debouncedQuery, setDebouncedQuery] = useState("")
-  const { data: warehousesData, isLoading, error } = useGetWarehouses({ search: debouncedQuery })
+  const [searchTerm, setSearchTerm] = useState("")
+  const [queryParams, setQueryParams] = useState({
+    search: "",
+    limit: 10,
+    page: 1,
+  })
+  const { data: warehousesData, isLoading, error } = useGetWarehouses(queryParams)
   const deleteWarehouseMutation = useDeleteWarehouse()
-  console.log(warehousesData, "warehousesData");
 
-  // Debounce search query input
   const debouncedSearch = useCallback(
     debounce((query: string) => {
-      setDebouncedQuery(query)
+      setQueryParams((prev) => ({
+        ...prev,
+        search: query,
+        page: 1,
+      }))
     }, 500),
     []
   )
 
-  useEffect(() => {
-    debouncedSearch(searchQuery)
-  }, [searchQuery, debouncedSearch])
+  const handleSearch = (value: string) => {
+    setSearchTerm(value)
+    debouncedSearch(value)
+  }
 
   const handleAddWarehouse = () => {
     navigate("/admin/settings/warehouse/add-warehouse")
@@ -41,10 +48,6 @@ export function ExistingWarehouse() {
     if (window.confirm("Are you sure you want to delete this warehouse?")) {
       deleteWarehouseMutation.mutate(warehouseId)
     }
-  }
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query)
   }
 
   if (isLoading) {
@@ -65,25 +68,23 @@ export function ExistingWarehouse() {
 
   return (
     <div>
-      <Header title="Warehouse">
+      <Header title="Warehouses">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
-          <CustomSearch
-            className="w-[25rem]"
-            value={searchQuery}
+          <CustomSearch 
+            placeholder="Search warehouses..."
+            value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
-            placeholder="Search by name/Master SKU/Channel SKU"
+            className="w-[25rem]"
           />
-          <div className="flex items-center gap-4">
-            <Button
-              variant="default"
-              size="lg"
-              className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-              onClick={handleAddWarehouse}
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Add New
-            </Button>
-          </div>
+          <Button
+            variant="default"
+            size="lg"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            onClick={handleAddWarehouse}
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Add Warehouse
+          </Button>
         </div>
       </Header>
       <div className="mt-6">
@@ -106,7 +107,7 @@ export function ExistingWarehouse() {
               </TableHeader>
               <TableBody>
                 {warehousesData?.data?.map((warehouse) => (
-                  <TableRow key={warehouse._id} className="border-none">
+                  <TableRow key={warehouse._id} className="border-b border-gray-200">
                     <TableCell className="py-3 font-medium">{warehouse.warehouseName}</TableCell>
                     <TableCell className="py-3">{warehouse.address}</TableCell>
                     <TableCell className="py-3">{warehouse.address2 || "-"}</TableCell>

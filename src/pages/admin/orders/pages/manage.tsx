@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback, useEffect } from "react"
 import {
   flexRender,
   getCoreRowModel,
@@ -22,36 +22,48 @@ import { CustomSearch } from "@/components/shared/custom-search"
 import { transformOrderToTableRow } from '../core/order-mapper'
 import { useGetOrders } from '../core/hooks/use-orders'
 import { useNavigate } from 'react-router-dom'
+import { debounce } from 'lodash'
 
 export function ManageOrderPage() {
-  const [columnFilters, setColumnFilters] = useState<any[]>([] /* activeFilters.columnFilters || [] */)
-  const [globalFilter, setGlobalFilter] = useState("" /* activeFilters.globalFilter || "" */)
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
+  const [columnFilters, setColumnFilters] = useState<any[]>([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
-  })
+  });
   const navigate = useNavigate();
-  // const { data, isLoading, error } = useGetOrders({
-  //   page: pagination.pageIndex + 1,
-  //   limit: pagination.pageSize,
-  // })
+
+  const debouncedSetSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+      setPagination(prev => ({ ...prev, pageIndex: 0 })); // optional: reset to page 1
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSetSearch(searchInput);
+  }, [searchInput, debouncedSetSearch]);
+
 
   const { orders: data, isLoading, error } = useGetOrders({
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
+    search: searchTerm,
   });
 
-  console.log(data, "ordersordersorders");
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
 
   const handleAddOrder = () => {
-    navigate("/admin/orders/add-order")
-  }
+    navigate("/admin/orders/add-order");
+  };
 
-  // Transform API data to table format
   const tableData = data?.orders ? data.orders.map(transformOrderToTableRow) : []
-  // console.log(data?.orders, "sdkjhfkj");
 
   const table = useReactTable({
     data: tableData,
@@ -59,7 +71,6 @@ export function ManageOrderPage() {
     pageCount: data?.pagination?.pages ?? -1,
     state: {
       columnFilters,
-      globalFilter,
       pagination,
     },
     enableRowSelection: true,
@@ -67,9 +78,6 @@ export function ManageOrderPage() {
     manualPagination: true,
     onColumnFiltersChange: (filters) => {
       setColumnFilters(filters as any[])
-    },
-    onGlobalFilterChange: (filter) => {
-      setGlobalFilter(filter)
     },
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
@@ -88,7 +96,6 @@ export function ManageOrderPage() {
     shippingMethod: "checkbox-list",
   }
 
-  // Define options for dropdown filters
   const filterOptions = {
     ordersFlags: ["All", "Pending", "Shipped", "Cancelled"],
     channel: ["All", "TikTok", "Amazon", "eBay", "Shopify"],
@@ -96,9 +103,8 @@ export function ManageOrderPage() {
     shippingMethod: ["All", "Tracked 24", "Tracked 48", "Standard", "Express"],
   }
 
-  const selectedRows = table.getSelectedRowModel().rows
-  const selectedOrderIds = selectedRows.map((row) => row.original.id)
-  console.log(selectedOrderIds);
+  // const selectedRows = table.getSelectedRowModel().rows
+  // const selectedOrderIds = selectedRows.map((row) => row.original.id)
 
   if (isLoading) {
     return (
@@ -117,9 +123,8 @@ export function ManageOrderPage() {
   }
 
   const handleResetFilters = () => {
-    // resetFilters()
     setColumnFilters([])
-    setGlobalFilter("")
+    setSearchInput("")
   }
 
   // Calculate total pages
@@ -131,51 +136,15 @@ export function ManageOrderPage() {
     setPagination((prev) => ({ ...prev, pageIndex: page - 1 }))
   }
 
-  const handleApplySavedFilter = (filtersObj: any) => {
-    if (!filtersObj) return;
-    const checkboxListIds = ["ordersFlags", "channel", "shippingCountry", "shippingMethod"];
-    const dateRangeIds = ["orderDate", "dispatchDate", "channelDispatchDate"];
-    
-    if (Array.isArray(filtersObj.columnFilters)) {
-      const normalized = filtersObj.columnFilters.map((f: any) => {
-        if (checkboxListIds.includes(f.id) && !Array.isArray(f.value)) {
-          return { ...f, value: [f.value] };
-        }
-        if (dateRangeIds.includes(f.id) && typeof f.value === "string") {
-          return { ...f, value: { from: f.value, to: f.value } };
-        }
-        return f;
-      });
-      setColumnFilters(normalized);
-      setGlobalFilter(filtersObj.globalFilter || "");
-    } else {
-      // fallback for flat object shape
-      const colFilters = Object.entries(filtersObj)
-        .filter(([key]) => key !== "search" && key !== "globalFilter")
-        .map(([id, value]) => {
-          if (checkboxListIds.includes(id) && !Array.isArray(value)) {
-            return { id, value: [value] };
-          }
-          if (dateRangeIds.includes(id) && typeof value === "string") {
-            return { id, value: { from: value, to: value } };
-          }
-          return { id, value };
-        });
-      setColumnFilters(colFilters);
-      if (filtersObj.search) setGlobalFilter(filtersObj.search);
-    }
-  }
-
   return (
     <div>
       <Header title="Manage Orders">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
           <CustomSearch
             className="w-[25rem]"
-            onClick={() => { }}
-            placeholder="Search for orders, Channels order reference, name, postcode (min.3 characters)"
-            value={globalFilter}
-            // onChange={setGlobalFilter}
+            value={searchInput}
+            onChange={handleSearchInputChange}
+            placeholder="Search for orders, Channels order reference, name, postcode (min. 3 characters)"
           />
           <div className="flex items-center gap-4">
             <Button type='button' onClick={handleAddOrder} variant="default" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
@@ -196,10 +165,13 @@ export function ManageOrderPage() {
           {/* Filter Actions */}
           <div className="flex items-center justify-between bg-white py-4 px-6 rounded-2xl">
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">{data?.pagination?.total || 0} total orders</span>
+              {/* <span className="text-sm text-gray-600">{data?.pagination?.total || 0} total orders</span> */}
             </div>
             <div className="flex items-center space-x-2">
-              <SavedFilters onApplyFilter={handleApplySavedFilter} />
+              <SavedFilters onApplyFilter={(filters) => {
+                setColumnFilters(filters.columnFilters || [])
+                setSearchInput(filters.globalFilter || "")
+              }} />
               <Button variant="filter" onClick={handleSaveFilters}>
                 Save Filters
               </Button>
@@ -323,7 +295,7 @@ export function ManageOrderPage() {
           <SaveFilterModal
             isOpen={isSaveModalOpen}
             onClose={() => setIsSaveModalOpen(false)}
-            currentFilters={{ columnFilters, globalFilter }}
+            currentFilters={{ columnFilters, globalFilter: searchInput }}
           />
         </div>
       </div>

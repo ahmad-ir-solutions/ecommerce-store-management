@@ -24,7 +24,7 @@ export function ExistingCourier() {
                 </TableHeader>
                 <TableBody>
                 {/* Static example row; you can map through your data here */}
-                <TableRow className="text-[#11263C] text-sm">
+                <TableRow className="text-[#11263C] text-sm border-b border-gray-200">
                     <TableCell className="p-3 text-start">
                     <div className="w-16 h-16 flex items-center justify-center">
                         <img 

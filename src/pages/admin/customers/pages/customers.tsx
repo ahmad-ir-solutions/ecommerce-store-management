@@ -1,11 +1,12 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Filter, Settings, RotateCw, Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { Filter, Settings, RotateCw } from "lucide-react"
 import { CustomersTable } from "../components/customers-table"
 import type { CustomerQueryParams } from "../core/_modals"
 import { Header } from "@/components/shared/header"
 import { useGetCustomers } from '../core/hooks/useCustomer'
+import { CustomSearch } from "@/components/shared/custom-search"
+import { debounce } from 'lodash'
 
 export function Customers() {
   const [searchText, setSearchText] = useState("")
@@ -16,14 +17,16 @@ export function Customers() {
 
   const { data, isLoading, error } = useGetCustomers(queryParams)
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setQueryParams((prev) => ({
-      ...prev,
-      search: searchText,
-      page: 1,
-    }))
-  }
+  const handleSearch = useCallback(
+    debounce((query: string) => {
+      setQueryParams((prev) => ({
+        ...prev,
+        search: query,
+        page: 1,
+      }))
+    }, 500),
+    []
+  )
 
   // const handleCreateCustomer = () => {
   //   navigate("/admin/customers/new")
@@ -42,20 +45,16 @@ export function Customers() {
     <div>
       <Header title="Customers">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
-          <div className="relative w-full sm:w-72">
-            <form onSubmit={handleSearch}>
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                <Input
-                  type="search"
-                  placeholder="Search customers..."
-                  className="pl-8 pr-4 py-2 border-gray-300 rounded-md w-full"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
-              </div>
-            </form>
-          </div>
+          <CustomSearch 
+            placeholder="Search customers..."
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value)
+              handleSearch(e.target.value)
+            }}
+            onEnter={handleSearch}
+            className="w-[25rem]"
+          />
           {/* <Button
             variant="default"
             size="lg"

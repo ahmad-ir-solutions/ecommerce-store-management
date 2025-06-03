@@ -81,7 +81,7 @@ export function ExistingUsers() {
                     </TableRow>
                   ) : (
                     users.map((user) => (
-                      <TableRow key={user._id} className="border-none">
+                      <TableRow key={user._id} className="border-b border-gray-200">
                         <TableCell className="py-3 font-medium">{user.name}</TableCell>
                         <TableCell className="py-3">{user.email}</TableCell>
                         <TableCell className="py-3 text-sm text-gray-500">{user.lastLogin?.split("T")[0] || "-"}</TableCell>

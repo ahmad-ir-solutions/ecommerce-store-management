@@ -455,7 +455,7 @@ export function EditWarehouseDetails() {
                       {/* Display warehouse zones when available */}
                       {warehouseZones.length > 0
                         ? warehouseZones.map((zone, index) => (
-                          <TableRow key={index}>
+                          <TableRow key={index} className="border-gray-200 border-b">
                             <TableHead className="p-3">
                               <Checkbox className="border-gray-400" />
                             </TableHead>
