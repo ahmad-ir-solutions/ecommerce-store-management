@@ -14,7 +14,7 @@ import { Check, Loader2 } from "lucide-react"
 import { useProductColumns } from "./product-column"
 import { SavedFilters } from "./saved-filter"
 import { CustomSelect } from "@/components/shared/custom-select"
-import { useProductsStore } from "@/store/admin/products-store"
+// import { useProductsStore } from "@/store/admin/products-store"
 import { ComparisonOperatorFilter } from "./comparison-operator-filter"
 import { DateRangePickerFilter } from "@/components/shared/date-range-picker-filter"
 import { CheckboxListFilter } from "@/components/shared/checkbox-list-filter"
@@ -38,8 +38,8 @@ export default function ProductTable({
   queryParams,
   setQueryParams,
 }: ProductTableProps) {
-  const { applySavedFilter } = useProductsStore()
-  const { data, isLoading, isError } = useGetProducts(queryParams)
+  // const { applySavedFilter } = useProductsStore()
+  const { data: productsData, isLoading, isError } = useGetProducts(queryParams)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const deleteProduct = useDeleteProduct()
 
@@ -62,7 +62,7 @@ export default function ProductTable({
   })
 
   const table = useReactTable({
-    data: data?.productsWithOrderCOunt || [],
+    data: productsData?.productsWithOrderCOunt || [],
     columns,
     state: {
       columnFilters,
@@ -107,10 +107,6 @@ export default function ProductTable({
     )
   }
 
-  const handleSelectChange = (value: string | number) => {
-    applySavedFilter(String(value))
-  }
-
   const handleSaveFilters = () => {
     setIsSaveModalOpen(true)
   }
@@ -137,7 +133,7 @@ export default function ProductTable({
     }
   }
 
-  const totalPages = data?.total ? Math.ceil(data.total / (queryParams.limit || 10)) : 0
+  const totalPages = productsData?.total ? Math.ceil(productsData.total / (queryParams.limit || 10)) : 0
   const currentPage = queryParams.page || 1
 
   if (isError) {
@@ -169,8 +165,7 @@ export default function ProductTable({
       setGlobalFilter(filtersObj.globalFilter || "");
     } else {
       // fallback for flat object shape
-      const colFilters = Object.entries(filtersObj)
-        .filter(([key]) => key !== "search" && key !== "globalFilter")
+      const colFilters = Object.entries(filtersObj?.columnFilters || {})
         .map(([id, value]) => {
           if (checkboxListIds.includes(id) && !Array.isArray(value)) {
             return { id, value: [value] };
@@ -184,7 +179,7 @@ export default function ProductTable({
           return { id, value };
         });
       setColumnFilters(colFilters);
-      if (filtersObj.search) setGlobalFilter(filtersObj.search);
+      if (filtersObj.globalFilter) setGlobalFilter(filtersObj.globalFilter);
     }
   }
 
@@ -194,9 +189,8 @@ export default function ProductTable({
         <div className="flex items-center space-x-2">
           <CustomSelect
             placeholder="Please select"
-            options={[{ id: "export", label: "Export", value: "export" }]}
+            options={[{ id: "export", label: "Export", value: "export" }] as any}
             className="w-[200px]"
-            onChange={handleSelectChange}
           />
           <Button variant="default" size="icon" className="bg-blue-500 hover:bg-blue-600">
             <Check className="h-4 w-4 text-white" />
@@ -319,7 +313,7 @@ export default function ProductTable({
         </div>
         <div className="text-sm text-muted-foreground">
           Page {currentPage} of {totalPages} - Items {(currentPage - 1) * (queryParams.limit || 10) + 1} to{" "}
-          {Math.min(currentPage * (queryParams.limit || 10), data?.total ?? 0)} of {data?.total ?? 0}
+          {Math.min(currentPage * (queryParams.limit || 10), productsData?.total ?? 0)} of {productsData?.total ?? 0}
         </div>
       </div>
 

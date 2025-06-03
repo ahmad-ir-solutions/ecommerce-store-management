@@ -34,7 +34,7 @@ export default function AdminDashboardPage() {
   })
 
   const [chartType, setChartType] = useState<"line" | "area">("area")
-  const [unitSold, setUnitSold] = useState<"units" | "revenue" | "orders" | "average_order_value">("units")
+  const [unitSold, setUnitSold] = useState<"revenue" | "orders">("orders")
   const [company, setCompany] = useState("all")
   const [channel, setChannel] = useState("all")
   const [channels, setChannels] = useState<IChannel[]>([])
@@ -56,9 +56,9 @@ export default function AdminDashboardPage() {
   });
 
   const unitSoldOptions = [
-    { id: "1", label: "Units", value: "units" },
+    // { id: "1", label: "Units", value: "units" },
     { id: "2", label: "Revenue", value: "revenue" },
-    // { id: "3", label: "Orders", value: "orders" },
+    { id: "3", label: "Orders", value: "orders" },
     // { id: "4", label: "Average Order Value", value: "average_order_value" },
   ];
 
@@ -145,7 +145,7 @@ export default function AdminDashboardPage() {
                   <CustomSelect
                     placeholder="Unit Sold"
                     defaultValue={unitSold}
-                    onChange={(value) => setUnitSold(value as "units" | "revenue" | "orders" | "average_order_value")}
+                    onChange={(value) => setUnitSold(value as "revenue" | "orders")}
                     options={unitSoldOptions}
                     title="Unit Sold"
                     className="w-32"
