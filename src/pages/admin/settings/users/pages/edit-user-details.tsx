@@ -118,8 +118,7 @@ export function EditUserDetails() {
 
   return (
     <div>
-      <Header title="Edit User">
-      </Header>
+      <Header title="Edit User"/>
       <div className="mt-6">
         <Card className="overflow-hidden border-0 shadow-none bg-white rounded-2xl">
           <CardContent className="p-6">

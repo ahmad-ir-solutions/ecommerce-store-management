@@ -74,6 +74,17 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
     }
 
     setSelectedDates({ from, to })
+    // Apply filter immediately after selecting quick range
+    if (from && to) {
+      column.setFilterValue({ from, to });
+      setOpen(false);
+    } else if (from) {
+       column.setFilterValue({ from, to: from });
+       setOpen(false);
+    } else {
+       column.setFilterValue(undefined);
+       setOpen(false);
+    }
   }
 
   const handlePrevMonth = () => {
@@ -142,11 +153,17 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
       !selectedDates.to ||
       (selectedDates.from && selectedDates.to && isSameDay(selectedDates.from, selectedDates.to))
     ) {
-      if (date < selectedDates.from) {
-        setSelectedDates({ from: date, to: selectedDates.from })
-      } else {
-        setSelectedDates({ ...selectedDates, to: date })
+      const newSelectedDates = date < selectedDates.from
+        ? { from: date, to: selectedDates.from }
+        : { ...selectedDates, to: date };
+      setSelectedDates(newSelectedDates);
+
+      // Apply filter immediately if both from and to dates are selected
+      if (newSelectedDates.from && newSelectedDates.to) {
+        column.setFilterValue({ from: newSelectedDates.from, to: newSelectedDates.to });
+        setOpen(false);
       }
+
     } else {
       setSelectedDates({ from: date, to: date })
     }
@@ -168,19 +185,8 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
     return day === 0 || day === 6
   }
 
-  const applyFilter = () => {
-    if (!selectedDates.from) {
-      column.setFilterValue(undefined)
-    } else if (!selectedDates.to) {
-      column.setFilterValue({ from: selectedDates.from, to: selectedDates.from })
-    } else {
-      column.setFilterValue({ from: selectedDates.from, to: selectedDates.to })
-    }
-    setOpen(false)
-  }
-
   const formatDisplayDate = () => {
-    if (!selectedDates.from) return "Filter..."
+    if (!selectedDates.from) return "Please select date range"
     if (selectedRange) return quickDateOptions.find((opt) => opt.value === selectedRange)?.label || "Custom Range"
     if (!selectedDates.to) return format(selectedDates.from, "dd MMM yyyy")
     return `${format(selectedDates.from, "dd MMM yyyy")} - ${format(selectedDates.to, "dd MMM yyyy")}`
@@ -193,7 +199,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-8 px-3 text-xs border-gray-300"
+          className="w-full justify-between h-9 px-3 text-sm font-normal border-gray-300 bg-white shadow-none"
         >
           {formatDisplayDate()}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -259,7 +265,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
               ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-center">
+            <div className="grid grid-cols-7 gap-1">
               {getDaysInMonth(currentMonth).map((item, i) => {
                 const { date, isCurrentMonth } = item
                 const isSelected = isSelectedDate(date)
@@ -287,18 +293,6 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
             </div>
           </div>
 
-          <div className="flex justify-between border-t border-gray-200 pt-4">
-            <Button
-              variant="outline"
-              className="border border-gray-300 text-gray-700 hover:bg-gray-100"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={applyFilter}>
-              Save
-            </Button>
-          </div>
         </div>
       </PopoverContent>
     </Popover>
