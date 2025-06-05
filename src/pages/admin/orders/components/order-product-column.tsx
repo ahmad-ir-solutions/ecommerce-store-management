@@ -10,7 +10,6 @@
 //       accessorKey: "checked",
 //       header: ({ table }) => (
 //         <Checkbox
-//           className="w-4 h-4 rounded-sm border-[#BBC2CB] bg-white"
 //           checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
 //           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
 //           aria-label="Select all"
@@ -18,7 +17,6 @@
 //       ),
 //       cell: ({ row }) => (
 //         <Checkbox
-//           className="w-4 h-4 rounded-sm border-[#BBC2CB]"
 //           checked={row.getIsSelected()}
 //           onCheckedChange={(value) => row.toggleSelected(!!value)}
 //           aria-label="Select row"

@@ -449,7 +449,7 @@ export function AddWarehouse() {
                                         </Button>
                                     </div>
 
-                                    <div className="bg-[#f0f8ff] p-6 rounded-lg">
+                                    <div className="p-6 rounded-lg">
                                         <Table>
                                             <TableHeader>
                                                 <TableRow className="bg-[#ECF6FF] border-none rounded-lg">

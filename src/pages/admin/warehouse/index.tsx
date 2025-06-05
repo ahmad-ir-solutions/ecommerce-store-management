@@ -1,6 +1,6 @@
-import PickingPage from "./pages/picking";
+import PickwavePage from "./pages/pickwave";
 import DeliveriesPage from "./pages/deliveries";
 import ManifestsPage from "./pages/manifests";
 
 
-export { PickingPage, DeliveriesPage, ManifestsPage };
+export { PickwavePage, DeliveriesPage, ManifestsPage };

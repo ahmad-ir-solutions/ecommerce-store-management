@@ -36,7 +36,7 @@ export default function AdminLayout() {
       icon: Warehouse,
       hasChildren: true,
       children: [
-        { title: "Picking", href: "/admin/warehouse/picking" },
+        { title: "pickwave", href: "/admin/warehouse/pickwave" },
         { title: "Deliveries", href: "/admin/warehouse/deliveries" },
         { title: "Manifests", href: "/admin/warehouse/manifests" },
       ],

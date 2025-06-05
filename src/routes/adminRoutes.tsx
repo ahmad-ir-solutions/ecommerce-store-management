@@ -12,7 +12,9 @@ const OrdersCsvPage = lazy(() => import("@/pages/admin/orders").then(module => (
 const EditOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.EditOrderPage })));
 const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(module => ({ default: module.AdminCustomersPage })));
 const CustomerDetails = lazy(() => import("@/pages/admin/customers/pages/customer-details").then(module => ({ default: module.CustomerDetails })));
-const PickingPage = lazy(() => import("@/pages/admin/warehouse/pages/picking").then(module => ({ default: module.PickingPage })));
+const PickwavePage = lazy(() => import("@/pages/admin/warehouse/pages/pickwave").then(module => ({ default: module.PickwavePage })));
+const EditPickwaveDetailsPage = lazy(() => import("@/pages/admin/warehouse/pages/edit-pickwave-details").then(module => ({ default: module.EditPickwaveDetailsPage })));
+const UpdateTrackingNumberPage = lazy(() => import("@/pages/admin/warehouse/pages/update-tracking-number").then(module => ({ default: module.UpdateTrackingNumberPage })));
 const DeliveriesPage = lazy(() => import("@/pages/admin/warehouse/pages/deliveries").then(module => ({ default: module.DeliveriesPage })));
 const ManifestsPage = lazy(() => import("@/pages/admin/warehouse/pages/manifests").then(module => ({ default: module.ManifestsPage })));
 const AllProductsPage = lazy(() => import("@/pages/admin/products/pages/all-products").then(module => ({ default: module.AllProductsPage })));
@@ -69,11 +71,13 @@ export const adminRoutes = {
     {
       path: "warehouse",
       children: [
-        // Redirect /admin/warehouse to /admin/warehouse/picking
-        { index: true, element: <Navigate to="/admin/warehouse/picking" replace /> },
-        { path: "picking", element: <WithSuspense><PickingPage /></WithSuspense> },
+        // Redirect /admin/warehouse to /admin/warehouse/pickwave
+        { index: true, element: <Navigate to="/admin/warehouse/pickwave" replace /> },
+        { path: "pickwave", element: <WithSuspense><PickwavePage /></WithSuspense> },
         { path: "deliveries", element: <WithSuspense><DeliveriesPage /></WithSuspense> },
         { path: "manifests", element: <WithSuspense><ManifestsPage /></WithSuspense> },
+        { path: "edit-pickwave-details/:pickwaveId", element: <WithSuspense><EditPickwaveDetailsPage /></WithSuspense> },
+        { path: "update-tracking-number/:trackingId", element: <WithSuspense><UpdateTrackingNumberPage /></WithSuspense> },
       ]
     },
 

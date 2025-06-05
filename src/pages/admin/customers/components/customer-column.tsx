@@ -13,7 +13,6 @@ export const columns: ColumnDef<ICustomer>[] = [
                 checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                 aria-label="Select all"
-                className="border-[#BBC2CB] w-4.5 h-4.5"
             />
         ),
         cell: ({ row }) => (
@@ -22,7 +21,6 @@ export const columns: ColumnDef<ICustomer>[] = [
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
                 aria-label="Select row"
                 onClick={(e) => e.stopPropagation()}
-                className="border-[#BBC2CB] w-4.5 h-4.5"
             />
         ),
         enableSorting: false,

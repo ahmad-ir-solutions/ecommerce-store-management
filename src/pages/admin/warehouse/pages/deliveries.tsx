@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Header } from "@/components/shared/header";
 import { Label } from "@/components/ui/label";
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead, TableCaption } from "@/components/ui/table";
+import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -85,7 +85,7 @@ const fetchOutstandingOrders = async (filters: any): Promise<OutstandingOrder[]>
   if (filters?.totalLines) {
     const totalLinesValue = filters.totalLines.toString().trim();
     if (totalLinesValue) {
-      filteredData = filteredData.filter(order => 
+      filteredData = filteredData.filter(order =>
         order.totalLines.toString().includes(totalLinesValue)
       );
     }
@@ -268,7 +268,7 @@ export function DeliveriesPage() {
           placeholder="Filter ID"
           value={(column.getFilterValue() ?? '') as string}
           onChange={e => column.setFilterValue(e.target.value)}
-          className="bg-white h-9 text-xs"
+          className="bg-white h-9 text-xs border-gray-200"
         />
       );
     } else if (column.id === 'supplier') {
@@ -278,7 +278,7 @@ export function DeliveriesPage() {
           options={supplierOptions}
           defaultValue={column.getFilterValue() as string ?? 'all'}
           onChange={value => column.setFilterValue(value)}
-          className="bg-white h-9 text-xs"
+          className="bg-white h-9 text-xs border-gray-200"
         />
       );
     } else if (column.id === 'warehouse') {
@@ -288,7 +288,7 @@ export function DeliveriesPage() {
           options={warehouseOptions}
           defaultValue={column.getFilterValue() as string ?? 'all'}
           onChange={value => column.setFilterValue(value)}
-          className="bg-white h-9 text-xs"
+          className="bg-white h-9 text-xs border-gray-200"
         />
       );
     } else if (column.id === 'status') {
@@ -298,12 +298,12 @@ export function DeliveriesPage() {
           options={statusOptions}
           defaultValue={column.getFilterValue() as string ?? 'all'}
           onChange={value => column.setFilterValue(value)}
-          className="bg-white h-9 text-xs"
+          className="bg-white h-9 text-xs border-gray-200"
         />
       );
     } else if (column.id === 'dateRaised') {
       return (
-        <DateRangePickerFilter column={column as Column<any, any>} />
+        <DateRangePickerFilter column={column as Column<any, any>}  className="border-gray-200"/>
       );
     } else if (column.id === 'totalLines') {
       return (
@@ -311,7 +311,7 @@ export function DeliveriesPage() {
           placeholder="Total lines"
           value={(column.getFilterValue() ?? '') as string}
           onChange={e => column.setFilterValue(e.target.value)}
-          className="bg-white h-9 text-xs"
+          className="bg-white h-9 text-xs border-gray-200"
         />
       );
     }
@@ -331,11 +331,11 @@ export function DeliveriesPage() {
           <div className="flex items-end justify-between gap-4">
             <div className="flex align-middle">
               <Label htmlFor="product-sku" className="whitespace-nowrap mr-3">Product SKU / EAN / UPC: *</Label>
-              <Input id="product-sku" className="bg-white" value={sku} onChange={(e) => setSku(e.target.value)} placeholder="0.00" />
+              <Input id="product-sku" className="bg-white border-gray-200" value={sku} onChange={(e) => setSku(e.target.value)} placeholder="0.00" />
             </div>
             <div className="flex align-middle gap-4">
               <Label htmlFor="quantity">Quantity</Label>
-              <Input id="quantity" className="bg-white   " type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0.00" />
+              <Input id="quantity" className="bg-white border-gray-200" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0.00" />
             </div>
             <Button onClick={handleAddAdHocItem} className="shadow-none bg-transparent text-blue-400">+ Add</Button>
           </div>
@@ -369,7 +369,7 @@ export function DeliveriesPage() {
                       options={stockLocationOptions}
                       defaultValue={adHocItem.stockLocation}
                       onChange={(value) => handleStockLocationChange(value)}
-                      className="w-32"
+                      className="w-32 border-gray-200"
                     />
                   </TableCell>
                   <TableCell className="p-3 text-start space-y-2">
@@ -388,6 +388,7 @@ export function DeliveriesPage() {
                           placeholder="Please Select Picker"
                           options={[{ id: "umar", label: "Umar", value: "Umar" }]}
                           onChange={() => { }}
+                          className="border-gray-200"
                         />
                       </div>
                     </div>
@@ -413,9 +414,9 @@ export function DeliveriesPage() {
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <Button variant="primary" size="lg" className="rounded-lg font-normal">Book An Outstanding Order</Button>
           <div className="flex items-center gap-2">
-            <Button 
-              variant="filter" 
-              size="lg" 
+            <Button
+              variant="filter"
+              size="lg"
               className="rounded-lg"
               onClick={handleClearFilters}
             >
@@ -425,8 +426,8 @@ export function DeliveriesPage() {
         </CardHeader>
         <CardContent>
           {isLoading && <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>}
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>}
           {error && <div>Error loading orders.</div>}
 
           {!isLoading && !error && (

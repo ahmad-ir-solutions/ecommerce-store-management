@@ -199,7 +199,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-9 px-3 text-sm font-normal border-gray-300 bg-white shadow-none"
+          className="w-full justify-between h-9 px-3 text-sm font-normal bg-white shadow-none border-gray-200"
         >
           {formatDisplayDate()}
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
