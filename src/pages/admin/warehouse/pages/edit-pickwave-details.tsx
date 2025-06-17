@@ -7,19 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { Switch } from "@/components/ui/switch"
-// Assuming you have an icon component, e.g., from react-icons
-// import { FiCheck } from "react-icons/fi";
-
-interface PickwaveDetails {
-  id: string
-  createdDate: string
-  outstandingOrders: number
-  totalOrders: number
-  picker: string
-  tag: string
-  status: string
-  message: string
-}
+import { useGetPickwave } from "../core/hooks/usePickwave"
 
 interface OrderItem {
   sku: string
@@ -27,75 +15,69 @@ interface OrderItem {
   productName: string
   stockLocation: string
   quantityOrdered: number
-  orderStatus: number
+  orderStatus: string
   shippingMethod: string
+}
+
+interface Order {
+  _id: string
+  productDetails: {
+    _id: string
+    productName: string
+    sku: string
+    warehouse: string
+  }
+  channelOrderNumber: string
+  quantity: number
+  orderStatus: string
+  shippingAndHandling: {
+    shippingMethod: string
+  }
+}
+
+interface PickwaveData {
+  _id: string
+  orders: Order[]
+  status: string
+  tag: string | null
+  createdBy: string
+  createdAt: string
+  splitByCourier: boolean
+  restrictedByWarehouseZone: boolean
+  priorityWarehouseZone: string[]
+  updatedAt: string
 }
 
 export function EditPickwaveDetailsPage() {
   const params = useParams()
   const pickwaveId = params.pickwaveId as string
-  const [dispatchDate, setDispatchDate] = useState("17/03/2025")
+  const [dispatchDate, setDispatchDate] = useState("")
   const [skuBarcode, setSkuBarcode] = useState("")
   const [quantity, setQuantity] = useState("")
+  const [groupByOrders, setGroupByOrders] = useState(false)
+  const [selectedRows, setSelectedRows] = useState<boolean[]>([])
 
-  const [pickwaveDetails, setPickwaveDetails] = useState<PickwaveDetails>({
-    id: pickwaveId,
-    createdDate: "17/03/2025",
-    outstandingOrders: 150,
-    totalOrders: 150,
-    picker: "Adnan",
-    tag: "",
-    status: "Open",
-    message: "",
-  })
+  // Fetch pickwave data
+  const { data: pickwaveData, isLoading } = useGetPickwave(pickwaveId)
 
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([
-    {
-      sku: "19-YXTR-YMFJ",
-      orderNumber: "19-YXTR-YMFJ",
-      productName: "AFNAN 9PM GIFT SET SHOWER GEL 150ML EDP 100ML DEO SPRAY 150ML",
-      stockLocation: "A1-PA1",
-      quantityOrdered: 1,
-      orderStatus: 0,
-      shippingMethod: "Standard",
-    },
-    {
-      sku: "19-YXTR-YMFJ",
-      orderNumber: "19-YXTR-YMFJ",
-      productName: "AFNAN 9PM GIFT SET SHOWER GEL 150ML EDP 100ML DEO SPRAY 150ML",
-      stockLocation: "A1-PA1",
-      quantityOrdered: 1,
-      orderStatus: 0,
-      shippingMethod: "Standard",
-    },
-    {
-      sku: "19-YXTR-YMFJ",
-      orderNumber: "19-YXTR-YMFJ",
-      productName: "AFNAN 9PM GIFT SET SHOWER GEL 150ML EDP 100ML DEO SPRAY 150ML",
-      stockLocation: "A1-PA1",
-      quantityOrdered: 1,
-      orderStatus: 0,
-      shippingMethod: "Standard",
-    },
-  ])
-console.log(setOrderItems);
-
-  const [groupByOrders, setGroupByOrders] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<boolean[]>([]);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
 
   useEffect(() => {
-    // Initialize selectedRows when orderItems change
-    setSelectedRows(new Array(orderItems.length).fill(false));
-  }, [orderItems]);
-
-  // Simulate fetching data based on ID
-  useEffect(() => {
-    // In a real application, you would fetch the data from an API
-    console.log(`Fetching pickwave details for ID: ${pickwaveId}`)
-    // For now, we're using the default state values
-    setSkuBarcode("")
-    setQuantity("")
-  }, [pickwaveId])
+    if (pickwaveData) {
+      // Transform orders data into OrderItem format
+      const transformedOrders = (pickwaveData as unknown as PickwaveData).orders.map(order => ({
+        sku: order.productDetails.sku,
+        orderNumber: order.channelOrderNumber,
+        productName: order.productDetails.productName,
+        stockLocation: order.productDetails.warehouse,
+        quantityOrdered: order.quantity,
+        orderStatus: order.orderStatus,
+        shippingMethod: order.shippingAndHandling.shippingMethod
+      }))
+      setOrderItems(transformedOrders)
+      setSelectedRows(new Array(transformedOrders.length).fill(false))
+    }
+  }, [pickwaveData])
 
   const handleUpdateOrder = () => {
     // Handle order update logic
@@ -109,20 +91,18 @@ console.log(setOrderItems);
     setQuantity("")
   }
 
-  // const handleExportSelected = () => {
-  //   const selectedData = orderItems.filter((_, index) => selectedRows[index]);
-  //   // TODO: Implement CSV export logic for selectedData
-  //   console.log("Exporting selected rows:", selectedData);
-  // }
-
   const handleSelectAll = (checked: boolean) => {
-    setSelectedRows(new Array(orderItems.length).fill(checked));
+    setSelectedRows(new Array(orderItems.length).fill(checked))
   }
 
   const handleRowSelect = (index: number, checked: boolean) => {
-    const newSelectedRows = [...selectedRows];
-    newSelectedRows[index] = checked;
-    setSelectedRows(newSelectedRows);
+    const newSelectedRows = [...selectedRows]
+    newSelectedRows[index] = checked
+    setSelectedRows(newSelectedRows)
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
 
   return (
@@ -144,47 +124,46 @@ console.log(setOrderItems);
               <div className="space-y-1 md:col-span-1">
                 <div className="flex justify-between">
                   <span className="">Pickwave ID</span>
-                  <span>{pickwaveDetails.id}</span>
+                  <span>{pickwaveData?._id}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="">Created Date</span>
-                  <span>{pickwaveDetails.createdDate}</span>
+                  <span>{new Date(pickwaveData?.createdAt || "").toLocaleDateString()}</span>
                 </div>
 
                 <div className="flex justify-between">
                   <span className="">Outstanding / Total Orders</span>
                   <span>
-                    {pickwaveDetails.outstandingOrders} / {pickwaveDetails.totalOrders}
+                    {pickwaveData?.orders.length} / {pickwaveData?.orders.length}
                   </span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="">Picker</span>
-                  <span>{pickwaveDetails.picker}</span>
+                  <span className="">Created By</span>
+                  <span>{pickwaveData?.createdBy}</span>
                 </div>
               </div>
               <div className="space-y-1 md:col-span-1">
                 <div className="flex justify-between">
                   <span className=" mr-4">Tag</span>
                   <Input
-                    value={pickwaveDetails.tag}
-                    onChange={(e) => setPickwaveDetails({ ...pickwaveDetails, tag: e.target.value })}
+                    value={pickwaveData?.tag || ""}
+                    onChange={(e) => console.log("Tag updated:", e.target.value)}
                     className="w-64 h-8 border-gray-200"
                   />
                 </div>
 
                 <div className="flex justify-between">
                   <span className="">Pickwave Status</span>
-                  <span>{pickwaveDetails.status}</span>
+                  <span>{pickwaveData?.status}</span>
                 </div>
-
 
                 <div className="flex justify-between">
                   <span className="mr-4">Pickwave Message</span>
                   <Textarea
-                    value={pickwaveDetails.message}
-                    onChange={(e) => setPickwaveDetails({ ...pickwaveDetails, message: e.target.value })}
+                    value=""
+                    onChange={(e) => console.log("Message updated:", e.target.value)}
                     className="w-64 h-24 border-gray-200"
                   />
                 </div>
@@ -240,10 +219,8 @@ console.log(setOrderItems);
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center justify-between gap-4 w-full">
-                {/* Replace with your customSelector component */}
                 <div className="relative inline-block text-left">
                   <div>
-                    {/* This button would trigger the dropdown */}
                     <Button variant="outline" className="h-8 text-sm">
                       Export Selected
                     </Button>
@@ -280,24 +257,24 @@ console.log(setOrderItems);
                   <TableHead className="p-3">Order Status</TableHead>
                   <TableHead className="p-3 rounded-tr-lg rounded-br-lg">Shipping Method</TableHead>
                 </TableRow>
-                 <TableRow className="text-[#11263C] text-sm border-b border-gray-200">
-                 <TableCell className="p-3 text-start"></TableCell>
-                 <TableCell className="p-3 text-start">
-                     <Input placeholder="Filter SKU" className="w-full bg-white border-gray-200 rounded-md h-8" />
-                 </TableCell>
-                 <TableCell className="p-3 text-start">
-                     <Input placeholder="Filter Order Number" className="w-full bg-white border-gray-200 rounded-md h-8" />
-                 </TableCell>
-                 <TableCell className="p-3 text-start">
-                     <Input placeholder="Filter Product Name" className="w-full bg-white border-gray-200 rounded-md h-8" />
-                 </TableCell>
-                 <TableCell className="p-3 text-start"></TableCell>
-                 <TableCell className="p-3 text-start"></TableCell>
-                 <TableCell className="p-3 text-start">
-                      <Input placeholder="Filter Order Status" className="w-full bg-white border-gray-200 rounded-md h-8" />
-                 </TableCell>
-                 <TableCell className="p-3 text-start"></TableCell>
-             </TableRow>
+                <TableRow className="text-[#11263C] text-sm border-b border-gray-200">
+                  <TableCell className="p-3 text-start"></TableCell>
+                  <TableCell className="p-3 text-start">
+                    <Input placeholder="Filter SKU" className="w-full bg-white border-gray-200 rounded-md h-8" />
+                  </TableCell>
+                  <TableCell className="p-3 text-start">
+                    <Input placeholder="Filter Order Number" className="w-full bg-white border-gray-200 rounded-md h-8" />
+                  </TableCell>
+                  <TableCell className="p-3 text-start">
+                    <Input placeholder="Filter Product Name" className="w-full bg-white border-gray-200 rounded-md h-8" />
+                  </TableCell>
+                  <TableCell className="p-3 text-start"></TableCell>
+                  <TableCell className="p-3 text-start"></TableCell>
+                  <TableCell className="p-3 text-start">
+                    <Input placeholder="Filter Order Status" className="w-full bg-white border-gray-200 rounded-md h-8" />
+                  </TableCell>
+                  <TableCell className="p-3 text-start"></TableCell>
+                </TableRow>
               </TableHeader>
               <TableBody>
                 {orderItems.map((item, index) => (

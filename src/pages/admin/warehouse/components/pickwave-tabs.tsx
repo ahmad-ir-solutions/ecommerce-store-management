@@ -1,20 +1,22 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Link } from "react-router-dom"
-
-const pickwaves = [
-    {
-        id: "609499",
-        despatched: 0,
-        total: 20,
-        assigned: "17/03/2025 10:34",
-        warehouse: "Default Warehouse",
-        picker: "Adnan",
-    },
-]
+import { useGetPickwaves } from "../core/hooks/usePickwave"
+import { PickwaveTable } from "./pickwave-table"
+import { Loader2 } from "lucide-react"
 
 export function PickwaveTabs() {
+    // const [queryParams, setQueryParams] = useState({
+    //     limit: 10,
+    //     page: 1,
+    // })
+
+    const { data: pickwaves, isLoading } = useGetPickwaves({
+        limit: 10,
+        page: 1,
+    });
+
+    const openPickwaves = pickwaves?.filter(pw => pw.status === "pending") || [];
+    const completedPickwaves = pickwaves?.filter(pw => pw.status === "completed") || [];
+
     return (
         <Tabs defaultValue="open" className="bg-white px-3 rounded-2xl mt-4">
             <div className="border-b border-gray-200 w-full px-6 pt-6 pb-0">
@@ -35,72 +37,21 @@ export function PickwaveTabs() {
             </div>
 
             <TabsContent value="open">
-                <div className="">
-                    <PickwaveTable data={pickwaves} />
+                <div className="py-4">
+                    {isLoading ? <div className="flex justify-center items-center h-64">
+                        <Loader2 className="h-8 w-8 animate-spin" />
+                    </div> : <PickwaveTable data={openPickwaves} />}
                 </div>
             </TabsContent>
 
             <TabsContent value="completed">
-                <div className="">
-                    <PickwaveTable data={pickwaves} />
+                <div className="py-4">
+                    {isLoading ? <div className="flex justify-center items-center h-64">
+                        <Loader2 className="h-8 w-8 animate-spin" />
+                    </div> : <PickwaveTable data={completedPickwaves} />}
                 </div>
             </TabsContent>
         </Tabs>
-    )
+    );
 }
 
-function PickwaveTable({ data }: { data: typeof pickwaves }) {
-    return (
-        <Card className="border-none shadow-none">
-            <CardContent>
-                <h3 className="text-lg font-medium mb-4">Items Ordered</h3>
-                <Table>
-                    <TableHeader>
-                        <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
-                            <TableHead className="p-3 rounded-l-xl">Pickwave ID</TableHead>
-                            <TableHead className="p-3">Despatched/Total Orders</TableHead>
-                            <TableHead className="p-3">Assigned</TableHead>
-                            <TableHead className="p-3">Warehouse</TableHead>
-                            <TableHead className="p-3">Picker</TableHead>
-                            <TableHead className="p-3">Tag</TableHead>
-                            <TableHead className="p-3">Tracking Number</TableHead>
-                            <TableHead className="p-3">Packing List</TableHead>
-                            <TableHead className="p-3">Scan Products</TableHead>
-                            <TableHead className="p-3">Pre-Generate Labels</TableHead>
-                            <TableHead className="p-3 rounded-r-xl">Quick Despatch</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {data.map((item) => (
-                            <TableRow key={item.id} className="text-sm text-[#11263C]">
-                                <TableCell className="p-3 underline">
-                                    <Link to={`/admin/warehouse/edit-pickwave-details/${item.id}`}>{item.id}</Link>
-                                </TableCell>
-                                <TableCell className="p-3">{item.despatched}/{item.total}</TableCell>
-                                <TableCell className="p-3">{item.assigned}</TableCell>
-                                <TableCell className="p-3">{item.warehouse}</TableCell>
-                                <TableCell className="p-3">{item.picker}</TableCell>
-                                <TableCell className="p-3">-</TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item.id}`}>Input</Link>
-                                </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item.id}`}>Print</Link>
-                                </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item.id}`}>Scan Products</Link>
-                                </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item.id}`}>Pre Generate</Link>
-                                </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item.id}`}>Despatch Pickwave</Link>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </CardContent>
-        </Card>
-    )
-}

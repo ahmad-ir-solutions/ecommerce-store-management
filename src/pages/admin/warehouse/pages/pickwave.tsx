@@ -85,8 +85,8 @@ export function PickwavePage() {
   });
 
   const { orders: data, isLoading, error } = useGetOrders(queryParams);
-
-  const tableData = data?.orders ? data.orders.map(transformToPickwaveOrder) : []
+  const pendingOrders = data?.orders ? data.orders.filter(order => order.status === "pending") : [];
+  const tableData = pendingOrders ? pendingOrders.map(transformToPickwaveOrder) : []
 
   const table = useReactTable({
     data: tableData,
@@ -195,4 +195,4 @@ export function PickwavePage() {
   );
 }
 
-export default PickwavePage; 
+export default PickwavePage;
