@@ -97,7 +97,7 @@ export function ExistingUsers() {
                               variant="ghost"
                               size="sm"
                               onClick={() => handleEditUser(user._id)}
-                              className="text-[#3D8BFF] hover:text-[#3D8BFF] hover:bg-blue-50"
+                              className="text-[#024AFE] hover:text-[#0228fe] hover:bg-blue-50"
                             >
                               Edit
                             </Button>

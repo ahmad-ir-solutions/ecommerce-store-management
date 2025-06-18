@@ -215,7 +215,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
                 size="sm"
                 className={`rounded-full text-sm ${
                   selectedRange === option.value
-                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    ? "bg-[#024AFE] text-white hover:bg-[#021bfe]"
                     : "bg-white text-gray-800 hover:bg-gray-100"
                 }`}
                 onClick={() => applyQuickDateRange(option.value)}
@@ -251,7 +251,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
               <button onClick={handlePrevMonth} className="p-1 rounded-full hover:bg-gray-100">
                 <ChevronLeft className="h-5 w-5 text-gray-600" />
               </button>
-              <div className="font-medium text-blue-500 text-lg">{format(currentMonth, "MMMM yyyy")}</div>
+              <div className="font-medium text-[#024AFE] text-lg">{format(currentMonth, "MMMM yyyy")}</div>
               <button onClick={handleNextMonth} className="p-1 rounded-full hover:bg-gray-100">
                 <ChevronRight className="h-5 w-5 text-gray-600" />
               </button>
@@ -278,7 +278,7 @@ export function DateRangePickerFilter<TData, TValue>({ column, className }: Date
                       !isCurrentMonth
                         ? "text-gray-300"
                         : isSelected
-                          ? "bg-blue-500 text-white hover:bg-blue-600"
+                          ? "bg-[#024AFE] text-white hover:bg-[#2802fe]"
                           : isWeekendDay
                             ? "text-red-500 hover:bg-gray-100"
                             : "hover:bg-gray-100"

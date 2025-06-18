@@ -33,25 +33,25 @@ export function RowActions({ orderId, isVisible }: RowActionsProps) {
     <div className="flex space-x-6 absolute left-0 right-0 bg-white shadow-md p-1 z-10 border border-gray-200 rounded">
       <button
         onClick={handleEdit}
-        className="text-blue-600 hover:underline text-xs"
+        className="text-[#024AFE] hover:underline text-xs"
       >
         Edit
       </button>
       <button
         onClick={handleView}
-        className="text-blue-600 hover:underline text-xs"
+        className="text-[#024AFE] hover:underline text-xs"
       >
         View
       </button>
       {/* <button
         onClick={handlePrint}
-        className="text-blue-600 hover:underline text-xs"
+        className="text-[#024AFE] hover:underline text-xs"
       >
         Print
       </button>
       <button
         onClick={handleRedownload}
-        className="text-blue-600 hover:underline text-xs"
+        className="text-[#024AFE] hover:underline text-xs"
       >
         Redownload
       </button> */}

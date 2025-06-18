@@ -75,7 +75,7 @@ export function CustomerInformation({
                   <h2>Edit</h2>
                   <Button
                     type="button"
-                    className="bg-blue-500 text-white w-7 h-7"
+                    className="bg-[#024AFE] text-white w-7 h-7"
                     onClick={handleEditBillingAddress}
                     disabled={isUpdatingBilling}>
                     <Edit className="h-4 w-4" />
@@ -118,7 +118,7 @@ export function CustomerInformation({
                   <h2>Edit</h2>
                   <Button
                     type="button"
-                    className="bg-blue-500 text-white w-7 h-7"
+                    className="bg-[#024AFE] text-white w-7 h-7"
                     onClick={handleEditShippingAddress}
                     disabled={isUpdatingShipping}>
                     <Edit className="h-4 w-4" />

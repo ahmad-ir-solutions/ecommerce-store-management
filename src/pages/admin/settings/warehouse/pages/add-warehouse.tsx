@@ -71,13 +71,13 @@ export function AddWarehouse() {
                         <TabsList className="mb-4 space-x-4">
                             <TabsTrigger
                                 value="warehouse-information"
-                                className="data-[state=active]:bg-[#3D8BFF] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
+                                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
                             >
                                 Warehouse Information
                             </TabsTrigger>
                             <TabsTrigger
                                 value="warehouse-zone"
-                                className="data-[state=active]:bg-[#3D8BFF] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
+                                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
                             >
                                 Warehouse Zone
                             </TabsTrigger>

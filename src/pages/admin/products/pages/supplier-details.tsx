@@ -88,7 +88,7 @@ export const SupplierDetailsPage = () => {
       <Header title="Products">
         <Link
           to="/admin/products/add-supplier"
-          className="rounded-xl flex items-center bg-blue-500 px-3 py-2.5 text-white font-normal hover:bg-blue-600"
+          className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Supplier

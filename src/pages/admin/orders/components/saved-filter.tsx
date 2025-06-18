@@ -48,7 +48,7 @@ export function SavedFilters({ onApplyFilter }: SavedFiltersProps) {
       />
       <Button
         variant="default"
-        className="bg-blue-500 hover:bg-blue-600"
+        className="bg-[#024AFE] hover:bg-[#0228fe]"
         onClick={handleEditClick}
         disabled={isLoading || !selectedFilterId}
       >

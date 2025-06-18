@@ -47,7 +47,7 @@ export function OrderNotes({ order }: OrderNotesProps) {
             type="button"
             variant="primary"
             size="sm"
-            className="h-8 bg-blue-500 text-white"
+            className="h-8 bg-[#024AFE] text-white"
             onClick={handleAddNote}
           >
             + Add Note

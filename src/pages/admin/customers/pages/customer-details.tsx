@@ -66,19 +66,19 @@ export function CustomerDetails() {
               <TabsList className="justify-start rounded-none">
                 <TabsTrigger
                   value="overview"
-                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] data-[state=active]:shadow-none"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="basic-details"
-                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] data-[state=active]:shadow-none"
                 >
                   Basic Details
                 </TabsTrigger>
                 <TabsTrigger
                   value="addresses"
-                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 data-[state=active]:shadow-none"
+                  className="py-6 px-4 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] data-[state=active]:shadow-none"
                 >
                   Addresses
                 </TabsTrigger>

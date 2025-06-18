@@ -75,7 +75,7 @@ export default function VerificationPage() {
               )}
             /> */}
            <InputOTP maxLength={6} onComplete={handleOTPComplete} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
-              <InputOTPGroup>
+              <InputOTPGroup className="flex-1">
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />
                 <InputOTPSlot index={2} />
@@ -95,7 +95,7 @@ export default function VerificationPage() {
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-600">
             Didn't receive a code?{" "}
-            <Link to="/auth/forgot-password" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/auth/forgot-password" className="font-medium text-[#024AFE] hover:text-[#0213fe]">
               Resend
             </Link>
           </p>

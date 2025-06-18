@@ -192,7 +192,7 @@ export default function ProductTable({
             options={[{ id: "export", label: "Export", value: "export" }] as any}
             className="w-[200px]"
           />
-          <Button variant="default" size="icon" className="bg-blue-500 hover:bg-blue-600">
+          <Button variant="default" size="icon" className="bg-[#024AFE] hover:bg-[#0228fe]">
             <Check className="h-4 w-4 text-white" />
           </Button>
         </div>

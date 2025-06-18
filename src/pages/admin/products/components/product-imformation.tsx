@@ -176,7 +176,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                       <Switch
                         checked={field.value}
                         onCheckedChange={field.onChange}
-                        className="data-[state=checked]:bg-blue-500"
+                        className="data-[state=checked]:bg-[#024AFE]"
                       />
                     </div>
                   )}
@@ -186,7 +186,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   <Switch
                     checked={currentProduct.priceIncludesVat}
                     disabled
-                    className="data-[state=checked]:bg-blue-500"
+                    className="data-[state=checked]:bg-[#024AFE]"
                   />
                 </div>
               )}
@@ -373,7 +373,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   </div>
                 )}
                 <>
-                  <Button variant="primary" size="sm" className="bg-blue-500 h-8 rounded-lg">
+                  <Button variant="primary" size="sm" className="bg-[#024AFE] h-8 rounded-lg">
                     Autofill
                   </Button>
                   <Button variant="default" size="sm" className="bg-[#FF9A3D] h-8 text-white rounded-lg">
@@ -418,7 +418,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     className="h-full w-full object-cover rounded-lg"
                   />
                 ) : uploading ? (
-                  <span className="text-sm text-blue-600">Uploading image...</span>
+                  <span className="text-sm text-[#0228fe]">Uploading image...</span>
                 ) : (
                   <span className="text-gray-400 text-sm">No image uploaded</span>
                 )}

@@ -99,10 +99,10 @@ export function ActionButtons({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu> */}
-      <Button variant="primary" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+      <Button variant="primary" className="bg-[#024AFE] hover:bg-[#0213fe] text-white rounded-lg">
         <Trash2 className="h-4 w-4" />
       </Button>
-      <Button variant="primary" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+      <Button variant="primary" className="bg-[#024AFE] hover:bg-[#021bfe] text-white rounded-lg">
         <FileCheck className="h-4 w-4" />
       </Button>
       <InvoiceModal isOpen={isInvoiceModalOpen} onClose={() => setIsInvoiceModalOpen(false)} orderId={orderId} />

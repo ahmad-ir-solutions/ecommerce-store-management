@@ -79,7 +79,7 @@ export function ExistingWarehouse() {
           <Button
             variant="default"
             size="lg"
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            className="bg-[#024AFE] hover:bg-[#0228fe] text-white rounded-lg"
             onClick={handleAddWarehouse}
           >
             <Plus className="mr-2 h-4 w-4" />
@@ -122,7 +122,7 @@ export function ExistingWarehouse() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleEditWarehouse(warehouse._id)}
-                          className="text-[#3D8BFF] hover:text-[#3D8BFF] hover:bg-blue-50 underline"
+                          className="text-[#024AFE] hover:text-[#0228fe] hover:bg-blue-50 underline"
                         >
                           Edit/View
                         </Button>

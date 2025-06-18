@@ -43,7 +43,7 @@ export function ExistingPaymentGatways() {
                 <TableCell className="p-3 text-start w-1/2">
                 <Switch/>
                 </TableCell>
-                <TableCell className="text-start text-[#3D8BFF] p-3 underline hover:text-[#3d4aff]">
+                <TableCell className="text-start text-[#024AFE] p-3 underline hover:text-[#0228fe]">
                 <Link to={`/admin/settings/integrations/edit-payment-gateways-details/${paymentGatewaysId}`}>View/Edit Payment-gateways</Link>
                 </TableCell>
             </TableRow>

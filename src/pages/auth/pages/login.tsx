@@ -61,7 +61,7 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              {/* <Link to="/auth/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+              {/* <Link to="/auth/forgot-password" className="text-sm font-medium text-[#024AFE] hover:text-[#0206fe]">
                 Forgot password?
               </Link> */}
             </div>
@@ -75,7 +75,7 @@ export default function LoginPage() {
           </div>
           <div className="flex items-center justify-center my-7 text-sm">
           <p className="text-gray-600">Can't log in?</p>
-          <Link to="/auth/forgot-password" className="text-blue-500 underline ml-1">Reset your password</Link>
+          <Link to="/auth/forgot-password" className="text-[#024AFE] underline ml-1">Reset your password</Link>
           </div>
           <Button variant="primary" type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Signing in..." : "Sign in"}
@@ -85,7 +85,7 @@ export default function LoginPage() {
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-600">
             Don't have an account?{" "}
-            <Link to="/auth/register" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/auth/register" className="font-medium text-[#024AFE] hover:text-[#0206fe]">
               Sign up
             </Link>
           </p>

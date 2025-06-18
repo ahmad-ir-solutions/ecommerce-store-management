@@ -96,16 +96,16 @@ export default function RegisterPage() {
         <div className="mt-6 text-center text-sm">
           {/* <p className="text-gray-500 text-xs mb-4">
             By creating an account, you agree to the{" "}
-            <Link to="/terms" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/terms" className="font-medium text-[#024AFE] hover:text-[#0206fe]">
               Terms of use
             </Link>{" "}and{" "}
-            <Link to="/privacy" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/privacy" className="font-medium text-[#024AFE] hover:text-[#0206fe]">
               Privacy Policy
             </Link>.
           </p> */}
           <p className="text-gray-600">
             Already have an account?{" "}
-            <Link to="/auth/login" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/auth/login" className="font-medium text-[#024AFE] hover:text-[#0206fe]">
               Sign in
             </Link>
           </p>

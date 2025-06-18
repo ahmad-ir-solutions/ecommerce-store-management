@@ -226,7 +226,7 @@ export function CustomerAddresses({
                 </div>
 
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={isSubmittingShipping} className="bg-blue-500 hover:bg-blue-600">
+                  <Button type="submit" disabled={isSubmittingShipping} className="bg-[#024AFE] hover:bg-[#0206fe]">
                     {isSubmittingShipping ? "Saving..." : "Save"}
                   </Button>
                 </div>
@@ -376,7 +376,7 @@ export function CustomerAddresses({
                 </div>
 
                 <div className="flex justify-end">
-                  <Button type="submit" disabled={isSubmittingBilling} className="bg-blue-500 hover:bg-blue-600">
+                  <Button type="submit" disabled={isSubmittingBilling} className="bg-[#024AFE] hover:bg-[#0602fe]">
                     {isSubmittingBilling ? "Saving..." : "Save"}
                   </Button>
                 </div>

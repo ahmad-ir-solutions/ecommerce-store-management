@@ -23,13 +23,13 @@ export function PickwaveTabs() {
                 <TabsList className="bg-white border-b border-gray-200 p-0 shadow-none data-[state=active]:shadow-none">
                     <TabsTrigger
                         value="open"
-                        className="data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 border-b-2 border-transparent text-gray-600 rounded-none px-4 py-2 shadow-none data-[state=active]:shadow-none"
+                        className="data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] border-b-2 border-transparent text-gray-600 rounded-none px-4 py-2 shadow-none data-[state=active]:shadow-none"
                     >
                         Open Pickwaves
                     </TabsTrigger>
                     <TabsTrigger
                         value="completed"
-                        className="data-[state=active]:border-b-blue-500 data-[state=active]:text-blue-500 border-b-2 border-transparent text-gray-600 rounded-none px-4 py-2 shadow-none data-[state=active]:shadow-none"
+                        className="data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] border-b-2 border-transparent text-gray-600 rounded-none px-4 py-2 shadow-none data-[state=active]:shadow-none"
                     >
                         Completed Pickwaves
                     </TabsTrigger>

@@ -44,7 +44,7 @@ export function SuppliersPage() {
         <Header title="Products">
           <Link
             to="/admin/products/add-supplier"
-            className="rounded-xl flex items-center bg-blue-500 px-3 py-2.5 text-white font-normal hover:bg-blue-600"
+            className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Supplier
@@ -65,7 +65,7 @@ export function SuppliersPage() {
         <Header title="Products">
           <Link
             to="/admin/products/add-supplier"
-            className="rounded-xl flex items-center bg-blue-500 px-3 py-2.5 text-white font-normal hover:bg-blue-600"
+            className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Supplier
@@ -95,7 +95,7 @@ export function SuppliersPage() {
       <Header title="Products">
         <Link
           to="/admin/products/add-supplier"
-          className="rounded-xl flex items-center bg-blue-500 px-3 py-2.5 text-white font-normal hover:bg-blue-600"
+          className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Supplier
@@ -136,7 +136,7 @@ export function SuppliersPage() {
                         <div className="flex items-center gap-2">
                           <Link
                             to={`/admin/products/supplier-details/${supplier._id}`}
-                            className="text-[#3D8BFF] hover:text-[#3d4aff] underline flex items-center gap-1"
+                            className="text-[#024AFE] hover:text-[#0228fe] underline flex items-center gap-1"
                           >
                             View/Edit Supplier
                           </Link>

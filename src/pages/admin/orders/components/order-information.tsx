@@ -33,7 +33,7 @@ export function OrderInformation({ order, control, register }: OrderInformationP
             <div className="text-sm p-2">{order.channelPurhasedFrom}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Channel Order Number</div>
-            <div className="text-sm text-blue-500 p-2">{order.channelOrderNumber}</div>
+            <div className="text-sm text-[#024AFE] p-2">{order.channelOrderNumber}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Order Status</div>
             <div className="text-sm p-2">

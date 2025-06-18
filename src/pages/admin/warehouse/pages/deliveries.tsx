@@ -337,7 +337,7 @@ export function DeliveriesPage() {
               <Label htmlFor="quantity">Quantity</Label>
               <Input id="quantity" className="bg-white border-gray-200" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0.00" />
             </div>
-            <Button onClick={handleAddAdHocItem} className="shadow-none bg-transparent text-blue-400">+ Add</Button>
+            <Button onClick={handleAddAdHocItem} className="shadow-none bg-transparent text-[#024AFE]">+ Add</Button>
           </div>
         </CardContent>
       </Card>

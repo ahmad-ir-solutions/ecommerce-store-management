@@ -150,7 +150,7 @@ export function ManageOrderPage() {
           <div className="flex items-center gap-4">
             <Button type='button' 
             // onClick={handleAddOrder} 
-            variant="default" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+            variant="default" size="lg" className="bg-[#024AFE] hover:bg-[#021bfe] text-white rounded-lg">
               <Plus />
               New Orders
             </Button>

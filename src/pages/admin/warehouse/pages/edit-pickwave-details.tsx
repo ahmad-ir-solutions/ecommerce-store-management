@@ -205,7 +205,7 @@ export function EditPickwaveDetailsPage() {
                   <div className=" col-span-1"></div>
                   <Button
                     onClick={handleUpdateOrder}
-                    className="text-blue-500 hover:text-blue-700 bg-transparent hover:bg-transparent p-0 shadow-none underline"
+                    className="text-[#024AFE] hover:text-[#0206fe] bg-transparent hover:bg-transparent p-0 shadow-none underline"
                   >
                     Update Order
                   </Button>
@@ -279,7 +279,7 @@ export function EditPickwaveDetailsPage() {
                     </div>)}
                 />
 
-                <Button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white">
+                <Button type="submit" className="bg-[#024AFE] hover:bg-[#0206fe] text-white">
                   Scan
                 </Button>
               </form>

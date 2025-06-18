@@ -15,7 +15,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
         <div>
           <Link
             to={`/admin/products/${row.original._id}`}
-            className="text-blue-500 hover:text-blue-700 hover:underline"
+            className="text-[#024AFE] hover:text-[#0228fe] hover:underline"
           >
             {row.original.sku  || "-"}
           </Link>
@@ -23,7 +23,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
 
         {isHovered && (
           <div className="absolute left-0 -bottom-8 flex space-x-2 bg-white shadow-sm p-2 rounded z-10">
-            <Link to={`/admin/products/${row.original._id}`} className="text-blue-500 hover:text-blue-700 text-xs">
+            <Link to={`/admin/products/${row.original._id}`} className="text-[#024AFE] hover:text-[#0228fe] text-xs">
               Edit
             </Link>
             <button

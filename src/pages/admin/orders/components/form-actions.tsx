@@ -24,7 +24,7 @@ export function FormActions({ onCancel, isSubmitting }: FormActionsProps) {
       >
         Cancel
       </Button>
-      {/* <Button type="submit" className="bg-blue-500 hover:bg-blue-600 px-8 text-white" disabled={isSubmitting}>
+      {/* <Button type="submit" className="bg-[#024AFE] hover:bg-[#021bfe] px-8 text-white" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : "Save"}
       </Button> */}
     </div>

@@ -36,7 +36,7 @@ export function ExistingCourier() {
                     {/* <img src="https://informationcentre.co.uk/img_pages/dpd-customer-service.png" alt="courier company logo"/> */}
                     </TableCell>
                     <TableCell className="p-3 text-start w-1/2">DPD Local</TableCell>
-                    <TableCell className="text-start text-[#3D8BFF] p-3 underline hover:text-[#3d4aff]">
+                    <TableCell className="text-start text-[#024AFE] p-3 underline hover:text-[#0228fe]">
                     <Link to={`/admin/settings/integrations/edit-courier-details/${courierId}`}>View/Edit Courier</Link>
                     </TableCell>
                 </TableRow>

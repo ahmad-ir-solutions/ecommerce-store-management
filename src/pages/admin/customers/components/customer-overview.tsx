@@ -65,7 +65,7 @@ export function CustomerOverview({
                 setAddressFormFocus("shipping")
               }}
             >
-              <Edit className="h-7 w-7 text-blue-500" />
+              <Edit className="h-7 w-7 text-[#024AFE]" />
             </Button>
           </CardHeader>
           <CardContent className="p-6">
@@ -98,7 +98,7 @@ export function CustomerOverview({
                 setAddressFormFocus("shipping")
               }}
             >
-              <Edit className="h-7 w-7 text-blue-500" />
+              <Edit className="h-7 w-7 text-[#024AFE]" />
             </Button>
           </CardHeader>
           <CardContent>
@@ -130,7 +130,7 @@ export function CustomerOverview({
                 setAddressFormFocus("billing")
               }}
             >
-              <Edit className="h-7 w-7 text-blue-500" />
+              <Edit className="h-7 w-7 text-[#024AFE]" />
             </Button>
           </CardHeader>
           <CardContent>
@@ -208,7 +208,7 @@ export function CustomerOverview({
           <div className="mt-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold mb-4">Order History</h3>
-              <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
+              <Button size="lg" className="bg-[#024AFE] hover:bg-[#1b02fe] text-white">
                 <Plus className="h-4 w-4 mr-2" />
                 Create Order
               </Button>
@@ -257,7 +257,7 @@ export function CustomerOverview({
 
                   <div className="flex justify-between items-start mb-4 px-12 mt-8">
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                      <div className="w-12 h-12 rounded-full bg-[#024AFE] flex items-center justify-center text-white">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -282,7 +282,7 @@ export function CustomerOverview({
                     <div className="flex-1 border-t border-dashed border-gray-300 mx-2 mt-6"></div>
 
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                      <div className="w-12 h-12 rounded-full bg-[#024AFE] flex items-center justify-center text-white">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -305,7 +305,7 @@ export function CustomerOverview({
                     <div className="flex-1 border-t border-dashed border-gray-300 mx-2 mt-6"></div>
 
                     <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-blue-500">
+                      <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-[#024AFE]">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -400,7 +400,7 @@ export function CustomerOverview({
                 setActiveTab("basic-details")
               }}
             >
-              <Edit className="h-7 w-7 text-blue-500" />
+              <Edit className="h-7 w-7 text-[#024AFE]" />
             </Button>
           </CardHeader>
           <CardContent>
@@ -421,7 +421,7 @@ export function CustomerOverview({
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xl font-semibold">Tags</CardTitle>
             <Button size="sm" variant="ghost" onClick={() => setIsEditingTags(!isEditingTags)}>
-              {isEditingTags ? <Save className="h-7 w-7 text-blue-500" /> : <Edit className="h-7 w-7 text-blue-500" />}
+              {isEditingTags ? <Save className="h-7 w-7 text-[#024AFE]" /> : <Edit className="h-7 w-7 text-[#024AFE]" />}
             </Button>
           </CardHeader>
           <CardContent>
@@ -433,7 +433,7 @@ export function CustomerOverview({
                   placeholder="Add a new tag"
                   className="flex-1 border-gray-400"
                 />
-                <Button size="sm" onClick={handleAddTag} className="shadow-none text-blue-500">
+                <Button size="sm" onClick={handleAddTag} className="shadow-none text-[#024AFE]">
                   + Add
                 </Button>
               </div>
@@ -457,7 +457,7 @@ export function CustomerOverview({
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-xl font-semibold">Notes</CardTitle>
             <Button size="sm" variant="ghost" onClick={() => setIsEditingNotes(!isEditingNotes)}>
-              {isEditingNotes ? <Save className="h-7 w-7 text-blue-500" /> : <Edit className="h-7 w-7 text-blue-500" />}
+              {isEditingNotes ? <Save className="h-7 w-7 text-[#024AFE]" /> : <Edit className="h-7 w-7 text-[#024AFE]" />}
             </Button>
           </CardHeader>
           <CardContent>
@@ -469,7 +469,7 @@ export function CustomerOverview({
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="Add notes"
                 />
-                <Button size="sm" onClick={handleSaveNotes} className="shadow-none text-blue-500">
+                <Button size="sm" onClick={handleSaveNotes} className="shadow-none text-[#024AFE]">
                   + Add
                 </Button>
               </div>

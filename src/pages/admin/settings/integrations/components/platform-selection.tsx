@@ -23,7 +23,7 @@ export const PlatformSelection = () => {
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div
-          className={`flex flex-col items-center justify-center p-6 border border-[#9999997A] rounded-2xl cursor-pointer hover:border-blue-500 transition-colors ${selected === "courier" ? "border-blue-500 bg-blue-50" : ""}`}
+          className={`flex flex-col items-center justify-center p-6 border border-[#9999997A] rounded-2xl cursor-pointer hover:border-[#024AFE] transition-colors ${selected === "courier" ? "border-[#024AFE] bg-blue-50" : ""}`}
           onClick={() => setSelected("courier")}
         >
           <div className="w-16 h-16 flex items-center justify-center mb-2">
@@ -45,7 +45,7 @@ export const PlatformSelection = () => {
         </div>
 
         <div
-          className={`flex flex-col items-center justify-center p-6 border border-[#9999997A] rounded-2xl cursor-pointer hover:border-blue-500 transition-colors ${selected === "payment-gateway" ? "border-blue-500 bg-blue-50" : ""}`}
+          className={`flex flex-col items-center justify-center p-6 border border-[#9999997A] rounded-2xl cursor-pointer hover:border-[#024AFE] transition-colors ${selected === "payment-gateway" ? "border-[#024AFE] bg-blue-50" : ""}`}
           onClick={() => setSelected("payment-gateway")}
         >
           <div className="w-16 h-18 flex items-center justify-center mb-2">

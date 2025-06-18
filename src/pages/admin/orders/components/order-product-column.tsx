@@ -68,7 +68,7 @@
 //               <div className="absolute left-0 -bottom-8 flex space-x-2 bg-white shadow-sm p-2 rounded z-10">
 //                 <Link
 //                   to={`/admin/products/${row.original.id}`}
-//                   className="text-blue-500 hover:text-blue-700 text-xs"
+//                   className="text-[#024AFE] hover:text-[#0228fe] text-xs"
 //                 >
 //                   Edit
 //                 </Link>

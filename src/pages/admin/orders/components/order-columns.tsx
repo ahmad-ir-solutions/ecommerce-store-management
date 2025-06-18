@@ -53,7 +53,7 @@ export const useOrderColumns: ColumnDef<Order>[] = [
         // onMouseLeave={() => setIsHovered(false)}
         >
           <div
-            className="font-medium text-blue-600 hover:underline cursor-pointer"
+            className="font-medium text-[#024AFE] hover:underline cursor-pointer"
             onClick={handleClick}
           >
             {row.getValue("id")}

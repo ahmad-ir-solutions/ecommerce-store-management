@@ -59,9 +59,9 @@ export function TabsStats() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
                 value="products"
-                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF] data-[state=active]:rounded-md"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#024AFE] data-[state=active]:rounded-md"
               >
-                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <div className="p-2 rounded-full data-[state=active]:bg-[#024AFE] flex items-center justify-center">
                   <Package className="h-5 w-5" />
                 </div>
               </TabsTrigger>
@@ -71,9 +71,9 @@ export function TabsStats() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
                 value="orders"
-                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#024AFE]"
               >
-                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <div className="p-2 rounded-full data-[state=active]:bg-[#024AFE] flex items-center justify-center">
                   <ShoppingCart className="h-5 w-5" />
                 </div>
               </TabsTrigger>
@@ -83,9 +83,9 @@ export function TabsStats() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
                 value="warehouse"
-                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#024AFE]"
               >
-                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <div className="p-2 rounded-full data-[state=active]:bg-[#024AFE] flex items-center justify-center">
                   <Warehouse className="h-5 w-5" />
                 </div>
               </TabsTrigger>
@@ -95,9 +95,9 @@ export function TabsStats() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
                 value="listings"
-                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#024AFE]"
               >
-                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <div className="p-2 rounded-full data-[state=active]:bg-[#024AFE] flex items-center justify-center">
                   <ListFilter className="h-5 w-5" />
                 </div>
               </TabsTrigger>
@@ -107,9 +107,9 @@ export function TabsStats() {
             <div className="flex flex-col items-center justify-center space-y-1">
               <TabsTrigger
                 value="others"
-                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#3D8BFF]"
+                className="flex flex-col items-center justify-center space-y-1 data-[state=active]:text-white data-[state=active]:bg-[#024AFE]"
               >
-                <div className="p-2 rounded-full data-[state=active]:bg-[#3D8BFF] flex items-center justify-center">
+                <div className="p-2 rounded-full data-[state=active]:bg-[#024AFE] flex items-center justify-center">
                   <MoreHorizontal className="h-5 w-5" />
                 </div>
               </TabsTrigger>

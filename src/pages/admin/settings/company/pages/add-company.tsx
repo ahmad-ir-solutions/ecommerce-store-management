@@ -635,7 +635,7 @@ export const AddCompany = () => {
                           variant="link"
                           type="button"
                           onClick={handleFileSelect}
-                          className="text-[#3D8BFF] p-0 h-auto ml-2"
+                          className="text-[#024AFE] p-0 h-auto ml-2"
                         >
                           Select File
                         </Button>

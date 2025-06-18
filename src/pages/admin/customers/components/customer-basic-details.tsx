@@ -177,7 +177,7 @@ export function CustomerBasicDetails({
           <Button type="button" variant="outline" className="rounded-lg" size="lg">
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting} className="rounded-lg bg-blue-500 hover:bg-blue-600" size="lg">
+          <Button type="submit" disabled={isSubmitting} className="rounded-lg bg-[#024AFE] hover:bg-[#1b02fe]" size="lg">
             {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>

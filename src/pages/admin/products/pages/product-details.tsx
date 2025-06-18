@@ -132,13 +132,13 @@ export const ProductDetailsPage = () => {
             <Printer className="h-4 w-4 mr-2" />
             Archive Products
           </Button>
-          <Button variant="primary" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+          <Button variant="primary" size="lg" className="bg-[#024AFE] hover:bg-[#0228fe] text-white rounded-lg">
             <Trash2 className="h-4 w-4" />
           </Button>
           <Button
             variant="primary"
             size="lg"
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            className="bg-[#024AFE] hover:bg-[#0228fe] text-white rounded-lg"
             onClick={handleEditClick}
           >
             <FileCheck className="h-4 w-4" />

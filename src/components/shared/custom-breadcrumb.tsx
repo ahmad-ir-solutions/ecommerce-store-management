@@ -33,7 +33,7 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
                     // to={crumb.href}
                     className={cn(
                       'text-gray-400 hover:text-gray-700',
-                      index === breadcrumbs.length - 1 && 'text-blue-500 text-xs font-semibold whitespace-nowrap'
+                      index === breadcrumbs.length - 1 && 'text-[#024AFE] text-xs font-semibold whitespace-nowrap'
                     )}
                   >
                     {crumb.label}

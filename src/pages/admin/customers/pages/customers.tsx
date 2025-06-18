@@ -58,7 +58,7 @@ export function Customers() {
           {/* <Button
             variant="default"
             size="lg"
-            className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
+            className="bg-[#024AFE] hover:bg-[#1b02fe] text-white rounded-lg"
             onClick={handleCreateCustomer}
           >
             <Plus className="mr-2 h-4 w-4" />

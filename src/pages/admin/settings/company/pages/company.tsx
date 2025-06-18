@@ -68,11 +68,11 @@ export function CompanyPage() {
                   <TableRow key={company._id} className="text-[#11263C] text-sm border-gray-200">
                   <TableCell className="p-3 text-start">{company.companyName}</TableCell>
                   <TableCell className="p-3 text-start">{company.contactEmail}</TableCell>
-                  <TableCell className="text-start text-[#3D8BFF] p-3">
+                  <TableCell className="text-start text-[#024AFE] p-3">
                     <div className="flex items-center gap-2">
                     <Link
                       to={`/admin/settings/company/edit-company-details/${company._id}`}
-                      className="underline hover:text-[#3d4aff]"
+                      className="underline hover:text-[#0228fe]"
                     >
                       View/Edit
                     </Link>

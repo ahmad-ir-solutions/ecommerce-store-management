@@ -136,7 +136,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
       onClick={() => handleResultClick(order)}
     >
       <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-        <ShoppingCart className="w-4 h-4 text-blue-600" />
+        <ShoppingCart className="w-4 h-4 text-[#024AFE]" />
       </div>
       <div className="flex-1">
         <div className="font-medium text-sm">{order.title}</div>
@@ -242,7 +242,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
         <div className="flex-1 overflow-auto">
           {isLoading && searchQuery && (
             <div className="p-4 text-center text-gray-500">
-              <div className="animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto mb-2"></div>
+              <div className="animate-spin w-6 h-6 border-2 border-[#024AFE] border-t-transparent rounded-full mx-auto mb-2"></div>
               Searching...
             </div>
           )}
@@ -270,7 +270,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
                         {searchResults.orders.length} RESULTS
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-xs text-blue-600">
+                    <Button variant="ghost" size="sm" className="text-xs text-[#024AFE]">
                       VIEW ALL RESULTS
                     </Button>
                   </div>
@@ -289,7 +289,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
                         {searchResults.products.length} RESULT
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-xs text-blue-600">
+                    <Button variant="ghost" size="sm" className="text-xs text-[#024AFE]">
                       VIEW ALL RESULTS
                     </Button>
                   </div>
@@ -324,7 +324,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
                         NO RESULTS
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-xs text-blue-600">
+                    <Button variant="ghost" size="sm" className="text-xs text-[#024AFE]">
                       OPEN
                     </Button>
                   </div>

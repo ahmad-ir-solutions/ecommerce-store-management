@@ -66,10 +66,10 @@ export function PickwaveTable({ data }: { data: IPickwave[] }) {
                                 <TableCell className="p-3">Default Warehouse</TableCell>
                                 <TableCell className="p-3">{item.picker || '-'}</TableCell>
                                 <TableCell className="p-3">{item.tag || '-'}</TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
+                                <TableCell className="p-3 text-[#024AFE] underline cursor-pointer">
                                     <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Input</Link>
                                 </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
+                                <TableCell className="p-3 text-[#024AFE] underline cursor-pointer">
                                     <span
                                         className="cursor-pointer"
                                         onClick={() => handlePrint(item._id)}
@@ -77,10 +77,10 @@ export function PickwaveTable({ data }: { data: IPickwave[] }) {
                                         Print
                                     </span>
                                 </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
+                                <TableCell className="p-3 text-[#024AFE] underline cursor-pointer">
                                     <Link to={`/admin/warehouse/edit-pickwave-details/${item._id}`}>Scan Products</Link>
                                 </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
+                                <TableCell className="p-3 text-[#024AFE] underline cursor-pointer">
                                     {/* <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Pre Generate</Link> */}
                                     <span
                                         className="cursor-pointer"
@@ -89,7 +89,7 @@ export function PickwaveTable({ data }: { data: IPickwave[] }) {
                                         Pre Generate
                                     </span>
                                 </TableCell>
-                                <TableCell className="p-3 text-blue-500 underline cursor-pointer">
+                                <TableCell className="p-3 text-[#024AFE] underline cursor-pointer">
                                     <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Despatch Pickwave</Link>
                                 </TableCell>
                             </TableRow>

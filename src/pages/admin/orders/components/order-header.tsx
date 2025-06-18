@@ -8,7 +8,7 @@ export function OrderHeader() {
         <div className="flex items-center text-sm text-gray-500 mt-1">
           <span className="text-gray-500">Manage Order</span>
           <ChevronRight className="h-4 w-4 mx-1" />
-          <span className="text-blue-500">Add Products</span>
+          <span className="text-[#024AFE]">Add Products</span>
         </div>
       </div>
     </div>

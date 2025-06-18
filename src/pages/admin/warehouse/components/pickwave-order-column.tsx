@@ -127,7 +127,7 @@ export const usePickwaveOrderColumns: ColumnDef<PickwaveOrder>[] = [
 
       return (
         <div className="relative">
-          <div className="font-medium text-blue-600 hover:underline cursor-pointer text-sm" onClick={handleClick}>
+          <div className="font-medium text-[#024AFE] hover:underline cursor-pointer text-sm" onClick={handleClick}>
             {row.original._id}
           </div>
         </div>

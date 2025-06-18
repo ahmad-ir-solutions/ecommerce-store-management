@@ -71,7 +71,7 @@ export function PaginationControls({ currentPage, totalPages, onPageChange }: Pa
             </PaginationItem>
           ) : (
             <PaginationItem key={page}>
-              <PaginationLink isActive={page === currentPage} onClick={() => onPageChange(page)} className={`${page === currentPage ? "bg-[#3D8BFF]" : "bg-[#E6EDF3]"}text-white border-[#E6EDF3]`}>
+              <PaginationLink isActive={page === currentPage} onClick={() => onPageChange(page)} className={`${page === currentPage ? "bg-[#024AFE]" : "bg-[#E6EDF3]"}text-white border-[#E6EDF3]`}>
                 {page}
               </PaginationLink>
             </PaginationItem>

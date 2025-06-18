@@ -105,7 +105,7 @@ export function SalesChart({ chartType, unitSold, dateRange, activeChannels }: S
     if (active && payload && payload.length) {
       return (
         <>
-          <Card className="bg-blue-500 text-white p-2 text-sm">
+          <Card className="bg-[#024AFE] text-white p-2 text-sm">
             <div className="font-medium">{label}, 2025</div>
             {payload.map((entry, index) => (
               <div key={`item-${index}`} className="flex justify-between gap-8 mt-1">
@@ -120,7 +120,7 @@ export function SalesChart({ chartType, unitSold, dateRange, activeChannels }: S
               </div>
             </div>
           </Card>
-          <div className="w-3 h-3 bg-blue-500 rounded-full mx-auto mt-1"></div>
+          <div className="w-3 h-3 bg-[#024AFE] rounded-full mx-auto mt-1"></div>
           <div className="w-0.5 h-20 bg-blue-300 bg-opacity-50 mx-auto mt-1 border-dashed border-blue-300"></div>
         </>
       )

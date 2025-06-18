@@ -94,7 +94,7 @@ export default function ResetPasswordPage() {
         <div className="mt-6 text-center text-sm">
           <p className="text-gray-600">
             Remember your password?{" "}
-            <Link to="/auth/login" className="font-medium text-blue-500 hover:text-blue-400">
+            <Link to="/auth/login" className="font-medium text-[#024AFE] hover:text-[#1302fe]">
               Sign in
             </Link>
           </p>
