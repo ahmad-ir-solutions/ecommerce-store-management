@@ -43,7 +43,7 @@ export function AllProductsPage() {
               setSearchTerm(e.target.value)
               handleSearch(e.target.value)
             }}
-            placeholder="Search for products, SKU, name, etc. (min. 3 characters)" 
+            placeholder="Search for products name" 
           />
           <div className="flex items-center gap-4">
             <Button variant="default" size="lg" className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg" onClick={handleAddProductModalOpen}>

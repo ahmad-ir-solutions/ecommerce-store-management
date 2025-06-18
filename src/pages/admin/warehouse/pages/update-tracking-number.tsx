@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Header } from "@/components/shared/header"
+import { useGetPickwave, useUpdatePickwave } from "../core/hooks/usePickwave"
 
 interface TrackingItem {
+  orderId: string
   orderNumber: string
   channelOrderId: string
   shippingName: string
@@ -18,39 +20,27 @@ interface TrackingItem {
 export function UpdateTrackingNumberPage() {
   const params = useParams()
   const pickwaveId = params.trackingId as string
-  const [trackingItems, setTrackingItems] = useState<TrackingItem[]>([
-    {
-      orderNumber: "19943068",
-      channelOrderId: "576733195736878439",
-      shippingName: "OLAGOLD ONAFUWA",
-      shippingPostCode: "SE28 8PA",
-      trackingNumber: "",
-      carrierName: "",
-    },
-    {
-      orderNumber: "19943068",
-      channelOrderId: "576733195736878439",
-      shippingName: "OLAGOLD ONAFUWA",
-      shippingPostCode: "SE28 8PA",
-      trackingNumber: "",
-      carrierName: "",
-    },
-    {
-      orderNumber: "19943068",
-      channelOrderId: "576733195736878439",
-      shippingName: "OLAGOLD ONAFUWA",
-      shippingPostCode: "SE28 8PA",
-      trackingNumber: "",
-      carrierName: "",
-    },
-  ])
+  const [trackingItems, setTrackingItems] = useState<TrackingItem[]>([])
 
-  // Simulate fetching data based on ID
+  const { data: pickwaveData } = useGetPickwave(pickwaveId)
+  const { mutate: updatePickwave } = useUpdatePickwave()
+
+  // Fetch and map API data
   useEffect(() => {
-    // In a real application, you would fetch the data from an API
-    console.log(`Fetching tracking details for pickwave ID: ${pickwaveId}`)
-    // For now, we're using the default state values
-  }, [pickwaveId])
+    if (pickwaveData?.orders) {
+      setTrackingItems(
+        pickwaveData.orders.map((order: any) => ({
+          orderId: order._id,
+          orderNumber: order.channelOrderNumber,
+          channelOrderId: order.channelOrderNumber,
+          shippingName: order.shippingAddress?.firstName + " " + order.shippingAddress?.lastName,
+          shippingPostCode: order.shippingAddress?.postalCode,
+          trackingNumber: order.shippingAndHandling?.trackingNumber || "",
+          carrierName: order.shippingAndHandling?.carrierName || "",
+        }))
+      )
+    }
+  }, [pickwaveData])
 
   const handleTrackingNumberChange = (index: number, value: string) => {
     const updatedItems = [...trackingItems]
@@ -64,14 +54,31 @@ export function UpdateTrackingNumberPage() {
     setTrackingItems(updatedItems)
   }
 
-  const handleSave = () => {
-    // Handle save logic
-    console.log("Saving tracking numbers:", trackingItems)
+  const handleUpdate = () => {
+    updatePickwave({
+      id: pickwaveId,
+      data: {
+        trackingNumber: "TRK123456789",
+        carrierName: "DHL",
+      },
+    })
   }
 
   const handleCancel = () => {
-    // Handle cancel logic
-    console.log("Operation cancelled")
+    // Optionally, refetch or reset
+    // if (pickwaveData?.orders) {
+    //   setTrackingItems(
+    //     pickwaveData.orders.map((order: any) => ({
+    //       orderId: order._id,
+    //       orderNumber: order.channelOrderNumber,
+    //       channelOrderId: order.channelOrderNumber,
+    //       shippingName: order.shippingAddress?.firstName + " " + order.shippingAddress?.lastName,
+    //       shippingPostCode: order.shippingAddress?.postalCode,
+    //       trackingNumber: order.shippingAndHandling?.trackingNumber || "",
+    //       carrierName: order.shippingAndHandling?.carrierName || "",
+    //     }))
+    //   )
+    // }
   }
 
   return (
@@ -98,7 +105,7 @@ export function UpdateTrackingNumberPage() {
               </TableHeader>
               <TableBody>
                 {trackingItems.map((item, index) => (
-                  <TableRow key={index} className="text-[#11263C] text-sm border-b border-gray-200">
+                  <TableRow key={item.orderId} className="text-[#11263C] text-sm border-b border-gray-200">
                     <TableCell className="p-3 text-start">{item.orderNumber}</TableCell>
                     <TableCell className="p-3 text-start">{item.channelOrderId}</TableCell>
                     <TableCell className="p-3 text-start">{item.shippingName}</TableCell>
@@ -128,7 +135,7 @@ export function UpdateTrackingNumberPage() {
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleSave} className="rounded-lg" >
+          <Button variant="primary" onClick={handleUpdate} className="rounded-lg">
             Save
           </Button>
         </div>

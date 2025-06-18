@@ -1,11 +1,40 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Link } from "react-router-dom"
 import { IPickwave } from "../core/_modals"
+import { useCreatePickList, useGetOrderLabel } from "../core/hooks/usePickwave";
+import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils";
 
 export function PickwaveTable({ data }: { data: IPickwave[] }) {
-    console.log(data,"data");
-    
+    const { mutate: createPickList } = useCreatePickList()
+    const [labelPickwaveId, setLabelPickwaveId] = useState<string | null>(null);
+
+    // Call the hook at the top level, using the current labelPickwaveId
+    const { data: labelData, error } = useGetOrderLabel(
+        labelPickwaveId ? { orderId: labelPickwaveId } : { orderId: "" }
+    );
+
+    const handlePrint = (pickwaveId: string) => {
+        createPickList(pickwaveId)
+    }
+
+    const handleGenerateLabels = (pickwaveId: string) => {
+        setLabelPickwaveId(pickwaveId);
+    }
+
+    // Optionally, open the label in a new tab when labelData changes
+    useEffect(() => {
+        if (labelData?.allPickwaveLabelsUrl) {
+            showSuccessMessage("Label generated successfully");
+            window.open(labelData.allPickwaveLabelsUrl, '_blank');
+            setLabelPickwaveId(null);
+        }
+        if (error) {
+            showErrorMessage((error as Error).message || "Failed to fetch label");
+        }
+    }, [labelData, error]);
+
     return (
         <Card className="border-none shadow-none">
             <CardContent>
@@ -41,13 +70,24 @@ export function PickwaveTable({ data }: { data: IPickwave[] }) {
                                     <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Input</Link>
                                 </TableCell>
                                 <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Print</Link>
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => handlePrint(item._id)}
+                                    >
+                                        Print
+                                    </span>
                                 </TableCell>
                                 <TableCell className="p-3 text-blue-500 underline cursor-pointer">
                                     <Link to={`/admin/warehouse/edit-pickwave-details/${item._id}`}>Scan Products</Link>
                                 </TableCell>
                                 <TableCell className="p-3 text-blue-500 underline cursor-pointer">
-                                    <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Pre Generate</Link>
+                                    {/* <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Pre Generate</Link> */}
+                                    <span
+                                        className="cursor-pointer"
+                                        onClick={() => handleGenerateLabels(item._id)}
+                                    >
+                                        Pre Generate
+                                    </span>
                                 </TableCell>
                                 <TableCell className="p-3 text-blue-500 underline cursor-pointer">
                                     <Link to={`/admin/warehouse/update-tracking-number/${item._id}`}>Despatch Pickwave</Link>

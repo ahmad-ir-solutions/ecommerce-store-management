@@ -46,7 +46,7 @@ export function Customers() {
       <Header title="Customers">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
           <CustomSearch 
-            placeholder="Search customers..."
+            placeholder="Search for customers name"
             value={searchText}
             onChange={(e) => {
               setSearchText(e.target.value)

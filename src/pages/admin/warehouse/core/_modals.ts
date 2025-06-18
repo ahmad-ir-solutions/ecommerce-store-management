@@ -145,50 +145,17 @@ export interface PickwaveOrder {
   updatedAt: string
   __v: number
 
-  // Computed/derived fields for table display
-  id: string // Maps to _id
-  channel: string // Derived from channelDetails
-  multipleLines: boolean // Derived from quantity > 1
-  productSKU: string // Maps to productDetails.sku
-  stockLocations: string // Derived from warehouse info
-  warehouseLocations: string // Derived from warehouse address
-  packageSize: string // Maps to shippingAndHandling.packageSize
-  orderWeight: number // Maps to shippingAndHandling.orderWeight
-  shippingMethod: string // Maps to shippingAndHandling.shippingMethod
-  postCode: string // Maps to shippingAddress.postalCode
+  id: string
+  channel: string 
+  multipleLines: boolean
+  productSKU: string 
+  stockLocations: string 
+  warehouseLocations: string 
+  packageSize: string 
+  orderWeight: number
+  shippingMethod: string
+  postCode: string
 }
-
-// Enum types for better type safety
-// export enum OrderStatus {
-//   PENDING = "Pending",
-//   PROCESSING = "Processing",
-//   CONFIRMED = "Confirmed",
-//   SHIPPED = "Shipped",
-//   DELIVERED = "Delivered",
-//   CANCELLED = "Cancelled",
-//   AWAITING_PAYMENT = "Awaiting Payment",
-// }
-
-// export enum PickwaveStatus {
-//   NOT_PICKED = "not_picked",
-//   PICKED = "picked",
-//   PARTIALLY_PICKED = "partially_picked",
-// }
-
-// export enum ShippingMethod {
-//   ROYAL_MAIL_TRACKED_24 = "Royal Mail Tracked 24",
-//   ROYAL_MAIL_TRACKED_48 = "Royal Mail Tracked 48",
-//   STANDARD = "Standard",
-//   EXPRESS = "Express",
-//   NEXT_DAY = "Next Day",
-// }
-
-// export enum PackageSize {
-//   SMALL = "Small",
-//   MEDIUM = "Medium",
-//   LARGE = "Large",
-//   EXTRA_LARGE = "Extra Large",
-// }
 
 export enum ChannelType {
   TIKTOK = "TikTok",
@@ -197,44 +164,6 @@ export enum ChannelType {
   SHOPIFY = "Shopify",
   WOOCOMMERCE = "Woocommerce",
 }
-
-// Filter types
-// export interface ColumnFilter {
-//   id: string
-//   value: any
-// }
-
-// export interface DateRangeFilter {
-//   from: Date | null
-//   to: Date | null
-// }
-
-// export interface CheckboxListFilter {
-//   values: string[]
-// }
-
-// Table props types
-// export interface TableColumn {
-//   accessorKey: string
-//   header: string
-//   type: "text" | "number" | "date" | "boolean" | "enum" | "currency" | "weight"
-//   filterable?: boolean
-//   sortable?: boolean
-//   filterType?: "input" | "checkbox-list" | "date-range"
-//   filterOptions?: string[]
-// }
-
-// API Response types
-// export interface OrdersResponse {
-//   orders: PickwaveOrder[]
-//   pagination: {
-//     total: number
-//     pages: number
-//     page: number
-//     limit: number
-//   }
-// }
-
 export interface ApiError {
   message: string
   code?: string
@@ -275,6 +204,7 @@ pickwaveId: string
 items: PickListItem[]
 createdAt: string
 updatedAt: string
+pdfUrl?: string
 }
 
 export interface PickListItem {
@@ -285,17 +215,16 @@ location: string
 }
 
 export interface IScanResponse {
-success: boolean
-message: string
-product?: {
-  id: string
-  sku: string
-  name: string
-  barcode: string
+  message: string; 
+data: {
+  message: string
+  singleLabelS3Url: string
+  allLabelFileS3Url: string
 }
 }
 
 export interface IOrderLabel {
+allPickwaveLabelsUrl: string | URL | undefined
 id: string
 orderId: string
 labelUrl: string
@@ -315,13 +244,18 @@ priorityWarehouseZone?: string
 picker?: string
 }
 
+// export interface UpdatePickwaveData {
+// splitByCourier?: boolean
+// tag?: string
+// restrictedByWarehouseZone?: boolean
+// priorityWarehouseZone?: string
+// picker?: string
+// status?: PickwaveStatus
+// }
+
 export interface UpdatePickwaveData {
-splitByCourier?: boolean
-tag?: string
-restrictedByWarehouseZone?: boolean
-priorityWarehouseZone?: string
-picker?: string
-status?: PickwaveStatus
+  trackingNumber: string
+  carrierName: string
 }
 
 export interface PickwaveQueryParams {
@@ -336,13 +270,14 @@ endDate?: string
 }
 
 export interface ScanProductData {
-barcode: string
-pickwaveId?: string
-picklistId?: string
+orderId: string
+pickwaveId: string
+dispatchDate: string
+quantity: number
 }
 
 export interface OrderLabelParams {
-orderId: string
+  orderId: string
 }
 
 // Enums

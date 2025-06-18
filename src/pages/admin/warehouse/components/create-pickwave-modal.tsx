@@ -21,6 +21,7 @@ interface CreatePickwaveModalProps {
   onClose: () => void;
   totalOrdersSelected: number;
   selectedOrderIds: string[];
+  onSuccess?: () => void;
 }
 
 // Define the Zod schema for the form
@@ -39,6 +40,7 @@ export function CreatePickwaveModal({
   onClose,
   totalOrdersSelected,
   selectedOrderIds,
+  onSuccess,
 }: CreatePickwaveModalProps) {
   const { mutate: createPickwave } = useCreatePickwave()
 
@@ -57,10 +59,16 @@ export function CreatePickwaveModal({
   const { handleSubmit, control, formState: { errors }, reset } = form;
 
   const handleCreateClick = (data: CreatePickwaveFormData) => {
-    // console.log('Creating pickwave with:', data);
-    createPickwave({...data, orders: selectedOrderIds, createdBy: "Ahmad",})
-    reset();
-    onClose();
+    createPickwave(
+      {...data, orders: selectedOrderIds, createdBy: "Ahmad",},
+      {
+        onSuccess: () => {
+          reset();
+          onClose();
+          onSuccess?.();
+        }
+      }
+    );
   };
 
   return (

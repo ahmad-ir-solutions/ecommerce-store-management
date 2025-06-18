@@ -81,7 +81,6 @@ export const useUpdatePickwave = () => {
     mutationFn: ({ id, data }: { id: string; data: UpdatePickwaveData }) => updatePickwave(id, data),
     onSuccess: (response, variables) => {
       console.log(response);
-      // Invalidate specific pickwave query and list queries
       queryClient.invalidateQueries({ queryKey: pickwaveKeys.detail(variables.id) })
       queryClient.invalidateQueries({ queryKey: pickwaveKeys.lists() })
       showSuccessMessage("Pickwave updated successfully!")
@@ -123,6 +122,10 @@ export const useCreatePickList = () => {
     mutationFn: (pickwaveId: string) => createPickList(pickwaveId),
     onSuccess: (response, pickwaveId) => {
       console.log(response);
+      const fileUrl = response?.data?.pdfUrl // Make sure this matches your API
+      if (fileUrl) {
+        window.open(fileUrl, '_blank')
+      }
       queryClient.invalidateQueries({ queryKey: pickwaveKeys.detail(pickwaveId) })
       queryClient.invalidateQueries({ queryKey: pickwaveKeys.picklist(pickwaveId) })
       showSuccessMessage("Pick list generated successfully!")
@@ -143,10 +146,7 @@ export const useScanProduct = () => {
       if (variables.pickwaveId) {
         queryClient.invalidateQueries({ queryKey: pickwaveKeys.detail(variables.pickwaveId) })
       }
-      if (variables.picklistId) {
-        queryClient.invalidateQueries({ queryKey: pickwaveKeys.picklist(variables.picklistId) })
-      }
-      if (response.data.success) {
+      if (response.data.message) {
         showSuccessMessage(response.data.message || "Product scanned successfully!")
       }
     },
@@ -162,7 +162,7 @@ export const useGetOrderLabel = (params: OrderLabelParams) => {
     queryKey: pickwaveKeys.label(params.orderId),
     queryFn: () => getOrderLabel(params),
     select: (data) => data.data,
-    enabled: !!params.orderId, // Only run if orderId is provided
+    enabled: !!params.orderId, // its name is orderId but this is pickwaveId
   })
 }
 

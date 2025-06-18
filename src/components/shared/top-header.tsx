@@ -31,7 +31,7 @@ export function TopHeader() {
       </Button>
 
       <div className="flex items-center justify-end h-16 px-6 gap-6">
-        <CustomTopHeaderSearch placeholder="Search for orders, products, pages, actions & help" />
+        <CustomTopHeaderSearch placeholder="Search for orders, products" />
 
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" className="text-[#172E45] relative bg-white">

@@ -84,7 +84,7 @@ export function PickwavePage() {
     }
   });
 
-  const { orders: data, isLoading, error } = useGetOrders(queryParams);
+  const { orders: data, isLoading, error, refetch } = useGetOrders(queryParams);
   const pendingOrders = data?.orders ? data.orders.filter(order => order.status === "pending") : [];
   const tableData = pendingOrders ? pendingOrders.map(transformToPickwaveOrder) : []
 
@@ -125,6 +125,11 @@ export function PickwavePage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handlePickwaveSuccess = () => {
+    table.resetRowSelection();
+    refetch();
   };
 
   if (isLoading) {
@@ -190,6 +195,7 @@ export function PickwavePage() {
         onClose={handleCloseModal}
         totalOrdersSelected={totalOrdersSelected}
         selectedOrderIds={selectedOrderIds}
+        onSuccess={handlePickwaveSuccess}
       />
     </div>
   );

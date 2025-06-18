@@ -9,7 +9,7 @@ import type {
   UpdatePickwaveData,
   PickwaveQueryParams,
   ScanProductData,
-  OrderLabelParams,
+  // OrderLabelParams,
 } from "./_modals"
 
 const PICKWAVE_URL = "/pickwave"
@@ -53,8 +53,8 @@ export function scanProduct(data: ScanProductData) {
 }
 
 // Get order label
-export function getOrderLabel(params: OrderLabelParams) {
-  return authApi.get<IOrderLabel>(LABEL_URL, { params })
+export function getOrderLabel({ orderId }: { orderId: string }) {
+  return authApi.get<IOrderLabel>(`${LABEL_URL}/${orderId}`)
 }
 
 // Mark pickwave as complete

@@ -224,7 +224,7 @@ export function SearchModal({ isOpen, onClose, searchQuery, onSearchChange }: Se
             <Input
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search for orders, products, pages, actions & help"
+              placeholder="Search for orders, products"
               className="pl-10 pr-10 border-0 focus-visible:ring-0 text-base"
               autoFocus
             />

@@ -1,7 +1,7 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@/components/ui/breadcrumb';
 import { cn } from '@/lib/utils';
 import { ChevronRightIcon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 interface DashboardHeaderProps {
   title: string;
@@ -29,15 +29,15 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
             <span key={crumb.href} className="flex items-center text-xs font-medium uppercase">
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link
-                    to={crumb.href}
+                  <div
+                    // to={crumb.href}
                     className={cn(
                       'text-gray-400 hover:text-gray-700',
                       index === breadcrumbs.length - 1 && 'text-blue-500 text-xs font-semibold whitespace-nowrap'
                     )}
                   >
                     {crumb.label}
-                  </Link>
+                  </div>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {index < breadcrumbs.length - 1 && (
