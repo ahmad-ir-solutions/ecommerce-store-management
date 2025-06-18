@@ -2,9 +2,20 @@ import { lazy } from "react";
 import MainLayout from "@/layouts/seller-layout";
 import WithSuspense from "@/routes/withSuspense";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { Navigate } from "react-router-dom";
 
-const SellerDashboardPage = lazy(() => import("@/pages/seller/dashboard"));
+// Lazy load all seller pages
+const SellerProductsPage = lazy(() => import("@/pages/seller/products/pages/master-product").then(module => ({ default: module.SellerProductsPage })));
+const AddProductPage = lazy(() => import("@/pages/seller/products/pages/add-product").then(module => ({ default: module.AddProductPage })));
+const EditProductPage = lazy(() => import("@/pages/seller/products/pages/edit-product").then(module => ({ default: module.EditProductPage })));
+const ProductDetailsPage = lazy(() => import("@/pages/seller/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
+const SellerListingsPage = lazy(() => import("@/pages/seller/listings/pages/listing").then(module => ({ default: module.SellerListingsPage })));
+const SellerOrdersPage = lazy(() => import("@/pages/seller/orders/pages/order").then(module => ({ default: module.SellerOrdersPage })));
+const OrderDetailsPage = lazy(() => import("@/pages/seller/orders/pages/order-details").then(module => ({ default: module.OrderDetailsPage })));
+const SellerPaymentPage = lazy(() => import("@/pages/seller/payments/pages/payment").then(module => ({ default: module.SellerPaymentPage })));
+const SellerShopsPage = lazy(() => import("@/pages/seller/shops/pages/shop").then(module => ({ default: module.SellerShopsPage })));
+const ShopSettingsPage = lazy(() => import("@/pages/seller/shops/pages/shop-settings").then(module => ({ default: module.ShopSettingsPage })));
+const ProfileSettingsPage = lazy(() => import("@/pages/seller/settings/pages/profile-settings"));
+const PaymentSettingsPage = lazy(() => import("@/pages/seller/settings/pages/payment-settings"));
 
 export const sellerRoutes = {
   path: "/seller",
@@ -14,8 +25,67 @@ export const sellerRoutes = {
     </ProtectedRoute>
   ),
   children: [
-    { index: true, element: <Navigate to="/seller/dashboard" replace /> },
-    { path: "dashboard", element: <WithSuspense><SellerDashboardPage /></WithSuspense> },
-    // { path: "seller/products", element: <WithSuspense><SellerProductsPage /></WithSuspense> },
+    // Products routes
+    {
+      path: "products",
+      children: [
+        { index: true, element: <WithSuspense><SellerProductsPage /></WithSuspense> },
+        { path: "add", element: <WithSuspense><AddProductPage /></WithSuspense> },
+        { path: "edit/:productId", element: <WithSuspense><EditProductPage /></WithSuspense> },
+        { path: ":productId", element: <WithSuspense><ProductDetailsPage /></WithSuspense> },
+      ]
+    },
+
+    // Listings routes
+    {
+      path: "listings",
+      children: [
+        { index: true, element: <WithSuspense><SellerListingsPage /></WithSuspense> },
+      ]
+    },
+
+    // Orders routes
+    {
+      path: "orders",
+      children: [
+        { index: true, element: <WithSuspense><SellerOrdersPage /></WithSuspense> },
+        { path: ":orderId", element: <WithSuspense><OrderDetailsPage /></WithSuspense> },
+      ]
+    },
+
+    // Shop routes
+    {
+      path: "shops",
+      children: [
+        { index: true, element: <WithSuspense><SellerShopsPage /></WithSuspense> },
+        { path: "settings", element: <WithSuspense><ShopSettingsPage /></WithSuspense> },
+      ]
+    },
+
+    // payment routes
+    {
+      path: "payments",
+      children: [
+        { index: true, element: <WithSuspense><SellerPaymentPage /></WithSuspense> },
+      ]
+    },
+
+    // // Billing routes
+    // {
+    //   path: "settings",
+    //   children: [
+    //     { path: "profile", element: <WithSuspense><ProfileSettingsPage /></WithSuspense> },
+    //     { path: "payment", element: <WithSuspense><PaymentSettingsPage /></WithSuspense> },
+    //   ]
+    // },
+
+    // Settings routes
+    {
+      path: "settings",
+      children: [
+        { path: "profile", element: <WithSuspense><ProfileSettingsPage /></WithSuspense> },
+        { path: "payment", element: <WithSuspense><PaymentSettingsPage /></WithSuspense> },
+      ]
+    },
   ],
 };
