@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom"
 import { BaseLayout } from "@/layouts/BaseLayout"
-import { CreditCard, FileText, LayoutDashboard, PackageSearch, Store, Tags } from "lucide-react";
+import { CreditCard, FileText, PackageSearch, Store, Tags } from "lucide-react";
 import { Sidebar } from "@/components/shared/sidebar";
 import { useState } from "react";
 
@@ -10,12 +10,6 @@ export default function SellerLayout() {
 
 
   const sellerNavItems = [
-    {
-      title: "Dashboard",
-      href: "/seller/dashboard",
-      icon: LayoutDashboard,
-      isActive: pathname.pathname === "/seller/dashboard" || pathname.pathname === "/seller",
-    },
     {
       title: "Products",
       href: "/seller/products",
