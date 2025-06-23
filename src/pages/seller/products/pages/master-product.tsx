@@ -265,6 +265,7 @@ import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
 import { ReusableTable } from "@/components/shared/reusableTable"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Link } from "react-router-dom"
 
 interface Product {
   _id: string
@@ -313,7 +314,14 @@ export function SellerProductsPage() {
       ),
       width: "80px",
     },
-    { key: "masterSku", title: "Master SKU", width: "140px" },
+    { key: "masterSku", 
+      title: "Master SKU",
+      render: (row: Product) => (
+        <Link to={`edit-product-info/${row._id}`} className="text-[#024AFE]">
+          {row.masterSku}
+        </Link>
+      ),
+       width: "140px" },
     { key: "name", title: "Name", width: "220px" },
     { key: "warehouse", title: "Warehouse", width: "120px" },
     { key: "cost", title: "Cost", width: "100px" },

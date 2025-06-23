@@ -5,6 +5,7 @@ import { ReusableTable } from "@/components/shared/reusableTable"
 import { Badge } from "@/components/ui/badge"
 import { Header } from "@/components/shared/header"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Link } from "react-router-dom"
 
 interface UserListing {
   _id: string
@@ -56,13 +57,18 @@ export function SellerListingsPage() {
       key: "image",
       title: "Image",
       render: (row: UserListing) => (
-          <img src={row.image || "/placeholder.svg"} alt={row.name} className="w-12 h-12 rounded object-cover" />
+        <img src={row.image || "/placeholder.svg"} alt={row.name} className="w-12 h-12 rounded object-cover" />
       ),
       width: "80px",
     },
     {
       key: "masterSku",
       title: "Master SKU",
+      render: (row: UserListing) => (
+        <Link to={`edit-listing-info/${row._id}`} className="text-[#024AFE]">
+          {row.masterSku}
+        </Link>
+      ),
       width: "140px",
     },
     {
