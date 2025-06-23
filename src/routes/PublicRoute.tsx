@@ -14,7 +14,7 @@ export const PublicRoute = ({ children }: PublicRouteProps) => {
     if (user.role === "ADMIN") {
       return <Navigate to="/admin/dashboard" replace />
     } else {
-      return <Navigate to="/seller/dashboard" replace />
+      return <Navigate to="/seller/products" replace />
     }
   }
 

@@ -1,153 +1,310 @@
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { Search, Filter, Plus } from 'lucide-react'
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { CustomSearch } from "@/components/shared/custom-search"
+import { ReusableTable } from "@/components/shared/reusableTable"
+import { Badge } from "@/components/ui/badge"
+import { Header } from "@/components/shared/header"
+import { Checkbox } from "@/components/ui/checkbox"
 
-export const SellerListingsPage = () => {
-  const [listings, setListings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [categoryFilter, setCategoryFilter] = useState('all');
+interface UserListing {
+  _id: string
+  image: string
+  masterSku: string
+  name: string
+  warehouse: string
+  channel: string
+  channelSku: string
+  quantity: number
+  inventoryPrice: string
+  channelPrice: string
+  status: string
+}
 
-  useEffect(() => {
-    // TODO: Fetch listings with pagination, search, and filters
-    const fetchListings = async () => {
-      try {
-        // const response = await api.getListings({ 
-        //   page: currentPage, 
-        //   search: searchTerm,
-        //   category: categoryFilter 
-        // });
-        // setListings(response.data.listings);
-        // setTotalPages(response.data.totalPages);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching listings:', error);
-        setLoading(false);
-      }
-    };
+export function SellerListingsPage() {
+  const [searchTerm, setSearchTerm] = useState("")
 
-    fetchListings();
-  }, [currentPage, searchTerm, categoryFilter]);
+  const handleEdit = (row: UserListing) => {
+    console.log("Edit clicked for", row)
+    // Handle edit functionality here
+  }
+
+  const userListingColumns = [
+    {
+      key: "checkbox",
+      title: "",
+      render: (
+        row: UserListing,
+        selectedRows?: string[],
+        toggleSelectRow?: (id: string) => void,
+        toggleSelectAll?: () => void,
+        isAllSelected?: boolean,
+      ) => {
+        if (row._id === "header") {
+          // This is for the header row
+          return <Checkbox checked={isAllSelected || false} onCheckedChange={toggleSelectAll} />
+        }
+        return (
+          <Checkbox
+            checked={selectedRows?.includes(row._id) || false}
+            onCheckedChange={() => toggleSelectRow?.(row._id)}
+          />
+        )
+      },
+      width: "50px",
+    },
+    {
+      key: "image",
+      title: "Image",
+      render: (row: UserListing) => (
+          <img src={row.image || "/placeholder.svg"} alt={row.name} className="w-12 h-12 rounded object-cover" />
+      ),
+      width: "80px",
+    },
+    {
+      key: "masterSku",
+      title: "Master SKU",
+      width: "140px",
+    },
+    {
+      key: "name",
+      title: "Name",
+      width: "220px",
+    },
+    {
+      key: "warehouse",
+      title: "Warehouse",
+      width: "120px",
+    },
+    {
+      key: "channel",
+      title: "Channel",
+      render: (row: UserListing) => (
+        <div className="flex items-center">
+          {row.channel === "Amazon" && <img src="/placeholder.svg?height=20&width=60" alt="Amazon" className="h-5" />}
+          {row.channel !== "Amazon" && <span className="text-sm font-medium">{row.channel}</span>}
+        </div>
+      ),
+      width: "100px",
+    },
+    {
+      key: "channelSku",
+      title: "Channel SKU",
+      width: "140px",
+    },
+    {
+      key: "quantity",
+      title: "Quantity",
+      width: "100px",
+    },
+    {
+      key: "inventoryPrice",
+      title: "Inventory Price",
+      width: "140px",
+    },
+    {
+      key: "channelPrice",
+      title: "Channel Price",
+      width: "140px",
+    },
+    {
+      key: "status",
+      title: "Status",
+      render: (row: UserListing) => (
+        <Badge
+          variant={row.status === "Binded" ? "default" : "secondary"}
+          className={row.status === "Binded" ? "bg-green-100 text-green-800" : ""}
+        >
+          {row.status}
+        </Badge>
+      ),
+      width: "100px",
+    },
+    {
+      key: "action",
+      title: "Action",
+      render: (row: UserListing) => (
+        <Button
+          size="sm"
+          variant="primary"
+          onClick={() => handleEdit(row)}
+          className="bg-blue-600 text-white hover:bg-blue-700"
+        >
+          Edit
+        </Button>
+      ),
+      width: "100px",
+    },
+  ]
+
+  const mockUserListings: UserListing[] = [
+    {
+      _id: "1",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000553",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000553",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "2",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000554",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000554",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "3",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000555",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000555",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "4",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000556",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000556",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "5",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000557",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000557",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "6",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000558",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000558",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "7",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000559",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000559",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "8",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000560",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000560",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "9",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000561",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000561",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "10",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000562",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000562",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+    {
+      _id: "11",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
+      masterSku: "805432000563",
+      name: "Xerjoff Accento EDP-S 100ml",
+      warehouse: "Default",
+      channel: "Amazon",
+      channelSku: "805432000563",
+      quantity: 546,
+      inventoryPrice: "£112.95",
+      channelPrice: "£143.95",
+      status: "Binded",
+    },
+  ]
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Listings</h1>
-        <Link
-          to="/seller/listings/create"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 flex items-center gap-2"
-        >
-          <Plus size={20} />
-          Create Listing
-        </Link>
-      </div>
+    <div>
+      {/* Header */}
+      <Header title="User Listing">
+        <CustomSearch
+          placeholder="Search by name/Master SKU/Channel SKU"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <Button variant="primary" className="rounded-lg">
+          Add New
+        </Button>
+      </Header>
 
-      <div className="bg-white shadow rounded-lg">
-        <div className="p-4 border-b">
-          <div className="flex gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  placeholder="Search listings..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
-            <select
-              className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <option value="all">All Categories</option>
-              <option value="electronics">Electronics</option>
-              <option value="clothing">Clothing</option>
-              <option value="home">Home & Garden</option>
-              <option value="beauty">Beauty</option>
-              <option value="sports">Sports</option>
-            </select>
-            <button className="px-4 py-2 border rounded-lg flex items-center gap-2 hover:bg-gray-50">
-              <Filter size={20} />
-              More Filters
-            </button>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="p-8 text-center">Loading...</div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-              {listings.map((listing: any) => (
-                <div key={listing.id} className="bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                  <div className="aspect-w-16 aspect-h-9">
-                    <img
-                      src={listing.image}
-                      alt={listing.title}
-                      className="object-cover w-full h-48"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">{listing.title}</h3>
-                    <p className="text-sm text-gray-500 mb-4 line-clamp-2">{listing.description}</p>
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <span className="text-lg font-bold text-gray-900">${listing.price}</span>
-                        <span className="text-sm text-gray-500 ml-2">/ {listing.unit}</span>
-                      </div>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        listing.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {listing.status}
-                      </span>
-                    </div>
-                    <div className="mt-4 flex justify-between items-center">
-                      <div className="text-sm text-gray-500">
-                        {listing.views} views • {listing.favorites} favorites
-                      </div>
-                      <Link
-                        to={`/seller/listings/${listing.id}`}
-                        className="text-blue-600 hover:text-blue-900 text-sm font-medium"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="px-6 py-4 border-t">
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-gray-700">
-                  Showing page {currentPage} of {totalPages}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="px-3 py-1 border rounded hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+      {/* Table */}
+      <ReusableTable
+        title="Listing On Channel"
+        data={mockUserListings}
+        columns={userListingColumns}
+        searchTerm={searchTerm}
+        itemsPerPage={10}
+        isLoading={false}
+      />
     </div>
   )
 }

@@ -38,7 +38,7 @@ export const useLogin = () => {
         showSuccessMessage(message || 'Login successful!');
         
         // Redirect based on user role
-        const dashboardPath = userData.role === UserRole.ADMIN ? '/admin/dashboard' : '/seller/dashboard';
+        const dashboardPath = userData.role === UserRole.ADMIN ? '/admin/dashboard' : '/seller/products';
         navigate(dashboardPath);
       } catch (err) {
         console.error('Failed to fetch user data:', err);

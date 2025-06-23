@@ -22,7 +22,7 @@ export const ProtectedRoute = ({
       if (user.role === "ADMIN") {
         return <Navigate to="/admin/dashboard" replace />
       } else if (user.role === "USER") {
-        return <Navigate to="/seller/dashboard" replace />
+        return <Navigate to="/seller/products" replace />
       }
       return <Navigate to="/unauthorized" replace />
     }

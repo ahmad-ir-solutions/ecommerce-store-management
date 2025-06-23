@@ -2,11 +2,12 @@ import { lazy } from "react";
 import MainLayout from "@/layouts/seller-layout";
 import WithSuspense from "@/routes/withSuspense";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { Navigate } from "react-router-dom";
 
 // Lazy load all seller pages
 const SellerProductsPage = lazy(() => import("@/pages/seller/products/pages/master-product").then(module => ({ default: module.SellerProductsPage })));
 const AddProductPage = lazy(() => import("@/pages/seller/products/pages/add-product").then(module => ({ default: module.AddProductPage })));
-const EditProductPage = lazy(() => import("@/pages/seller/products/pages/edit-product").then(module => ({ default: module.EditProductPage })));
+const EditProductInfoPage = lazy(() => import("@/pages/seller/products/pages/edit-product-info").then(module => ({ default: module.EditProductInfoPage })));
 const ProductDetailsPage = lazy(() => import("@/pages/seller/products/pages/product-details").then(module => ({ default: module.ProductDetailsPage })));
 const SellerListingsPage = lazy(() => import("@/pages/seller/listings/pages/listing").then(module => ({ default: module.SellerListingsPage })));
 const SellerOrdersPage = lazy(() => import("@/pages/seller/orders/pages/order").then(module => ({ default: module.SellerOrdersPage })));
@@ -24,14 +25,16 @@ export const sellerRoutes = {
       <MainLayout />
     </ProtectedRoute>
   ),
+  
   children: [
     // Products routes
+    { index: true, element: <Navigate to="products" replace /> },
     {
       path: "products",
       children: [
         { index: true, element: <WithSuspense><SellerProductsPage /></WithSuspense> },
-        { path: "add", element: <WithSuspense><AddProductPage /></WithSuspense> },
-        { path: "edit/:productId", element: <WithSuspense><EditProductPage /></WithSuspense> },
+        { path: "add-list", element: <WithSuspense><AddProductPage /></WithSuspense> },
+        { path: "edit-product-info/:productId", element: <WithSuspense><EditProductInfoPage /></WithSuspense> },
         { path: ":productId", element: <WithSuspense><ProductDetailsPage /></WithSuspense> },
       ]
     },
