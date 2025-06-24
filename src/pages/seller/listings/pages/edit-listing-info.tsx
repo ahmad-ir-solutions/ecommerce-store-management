@@ -1,11 +1,12 @@
+import type React from "react"
+
 import { useState, useEffect } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft } from "lucide-react"
+import { Header } from "@/components/shared/header"
+import { Loader2 } from "lucide-react"
+import { ProductFormValues } from "../../products/core/_schema"
+import ProductInformation from "../../products/components/product-info"
 
 interface Product {
   id: string
@@ -23,7 +24,7 @@ interface Product {
 const mockProducts: Product[] = [
   {
     id: "1",
-    image: "/product-1.png",
+    image: "/placeholder.svg?height=200&width=200",
     masterSku: "805432000253",
     name: "Xerjoff Accento EDP-S 100ml",
     warehouse: "Default",
@@ -34,7 +35,7 @@ const mockProducts: Product[] = [
   },
   {
     id: "2",
-    image: "/product-2.png",
+    image: "/placeholder.svg?height=200&width=200",
     masterSku: "805432000254",
     name: "Xerjoff Accento EDP-S 100ml",
     warehouse: "Default",
@@ -45,7 +46,7 @@ const mockProducts: Product[] = [
   },
   {
     id: "3",
-    image: "/product-3.png",
+    image: "/placeholder.svg?height=200&width=200",
     masterSku: "805432000255",
     name: "Xerjoff Accento EDP-S 100ml",
     warehouse: "Default",
@@ -57,11 +58,62 @@ const mockProducts: Product[] = [
 ]
 
 export function EditListingInfoPage() {
-  const { productId } = useParams<{ productId: string }>()
-  const navigate = useNavigate()
+  // For demo purposes, we'll use the first product
+  const productId = "1"
   const [isEditing, setIsEditing] = useState(false)
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
+  const [uploading, setUploading] = useState(false)
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
+
+  // Convert selected product data to form format
+  const getInitialProductData = (): ProductFormValues => {
+    if (product) {
+      return {
+        productName: product.name,
+        sku: product.masterSku,
+        price: Number.parseFloat(product.price.replace("£", "")),
+        rrp: Number.parseFloat(product.cost.replace("£", "")),
+        taxClass: 20,
+        priceIncludesVat: true,
+        inventory: product.inventory,
+        weight: 0.74,
+        length: "",
+        width: "",
+        height: "",
+        warehouse: product.warehouse === "Default" ? "Default Warehouse" : product.warehouse,
+        brand: "Xerjoff",
+        ean: "",
+        upc: "",
+        imageUrl: product.image,
+      }
+    }
+
+    return {
+      productName: "",
+      sku: "",
+      price: 0,
+      rrp: 0,
+      taxClass: 20,
+      priceIncludesVat: true,
+      inventory: 0,
+      weight: 0,
+      length: "",
+      width: "",
+      height: "",
+      warehouse: "",
+      brand: "",
+      ean: "",
+      upc: "",
+      imageUrl: "",
+    }
+  }
+
+  const { control, handleSubmit, reset, watch } = useForm<ProductFormValues>({
+    defaultValues: getInitialProductData(),
+  })
+
+  const currentProduct = watch()
 
   // Simulate API call to fetch product data
   useEffect(() => {
@@ -80,70 +132,58 @@ export function EditListingInfoPage() {
     }
   }, [productId])
 
-  // Convert selected product data to form format
-  const getInitialProductData = () => {
-    if (product) {
-      return {
-        productName: product.name,
-        masterSku: product.masterSku,
-        sku: "",
-        price: Number.parseFloat(product.price.replace("£", "")),
-        rrp: Number.parseFloat(product.cost.replace("£", "")),
-        taxClass: 20,
-        priceIncludesVat: true,
-        inventory: product.inventory,
-        weight: 0.74,
-        length: "",
-        width: "",
-        height: "",
-        warehouse: product.warehouse === "Default" ? "Default Warehouse" : product.warehouse,
-        brand: "Xerjoff",
-        ean: "",
-        upc: "",
-        image: product.image,
-      }
-    }
-
-    return null
-  }
-
-  const [productData, setProductData] = useState(getInitialProductData())
-
-  // Update product data when product changes
+  // Reset form when product changes
   useEffect(() => {
     if (product) {
-      setProductData(getInitialProductData())
+      reset(getInitialProductData())
     }
-  }, [product])
+  }, [product, reset])
 
-  const handleSave = () => {
+  const handleSave = (data: ProductFormValues) => {
     setIsEditing(false)
     // Handle save logic - in real app, make API call
-    console.log("Saving product data:", productData)
+    console.log("Saving product data:", data)
   }
 
   const handleCancel = () => {
     setIsEditing(false)
     // Reset form data to original values
-    setProductData(getInitialProductData())
+    reset(getInitialProductData())
+    setUploadedImageUrl(null)
   }
 
   const handleBack = () => {
-    navigate("/products")
+    // In real app, use router navigation
+    console.log("Navigate back to products")
+  }
+
+  const handleSkuClick = () => {
+    console.log("Build SKU clicked")
+  }
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setUploading(true)
+      // Simulate image upload
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Create a temporary URL for preview
+      const imageUrl = URL.createObjectURL(file)
+      setUploadedImageUrl(imageUrl)
+      setUploading(false)
+    }
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading product information...</p>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
 
-  if (!product || !productData) {
+  if (!product) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -158,324 +198,42 @@ export function EditListingInfoPage() {
   }
 
   return (
-    <div className="flex-1 p-6">
-    {/* Header */}
-    <div className="mb-6">
-      <div className="flex items-center space-x-2 mb-2">
-        <Button variant="ghost" size="sm" onClick={handleBack}>
-          <ArrowLeft className="w-4 h-4" />
-        </Button>
-        <h1 className="text-2xl font-semibold">Product</h1>
-        <span className="text-blue-600">{product.id}</span>
-      </div>
-      <div className="text-sm text-gray-500">
-        <span>Products</span>
-        <span className="mx-2">/</span>
-        <span className="text-blue-600">{product.masterSku}</span>
-      </div>
-    </div>
+    <div>
+      {/* Header */}
+      <Header title="Product"></Header>
 
-    {/* Product Information Card */}
-    <div className="bg-white rounded-lg shadow-sm border-2 border-blue-200">
-      <div className="p-6 border-b">
-        <h2 className="text-lg font-semibold">Product Information</h2>
-      </div>
+      <div className="mt-6">
+        {/* Product Information Component */}
+        <ProductInformation
+          currentProduct={currentProduct}
+          isEditing={isEditing}
+          control={control}
+          handleSkuClick={handleSkuClick}
+          handleImageChange={handleImageChange}
+          uploading={uploading}
+          uploadedImageUrl={uploadedImageUrl}
+        />
 
-      <div className="p-6 bg-blue-50">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Product name *</Label>
-              {isEditing ? (
-                <Input
-                  value={productData.productName}
-                  onChange={(e) => setProductData({ ...productData, productName: e.target.value })}
-                  className="bg-white"
-                />
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm">{productData.productName}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Master SKU</Label>
-              <div className="bg-white border rounded p-2 text-sm">{productData.masterSku}</div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">SKU</Label>
-              <div className="bg-white border rounded p-2 text-sm flex items-center justify-between">
-                <span>{productData.sku || productData.masterSku}</span>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs">
-                  Build
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Price *</Label>
-              {isEditing ? (
-                <Input
-                  type="number"
-                  value={productData.price}
-                  onChange={(e) => setProductData({ ...productData, price: Number.parseFloat(e.target.value) })}
-                  className="bg-white w-24"
-                />
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm w-24">£{productData.price}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">RRP</Label>
-              {isEditing ? (
-                <Input
-                  type="number"
-                  value={productData.rrp}
-                  onChange={(e) => setProductData({ ...productData, rrp: Number.parseFloat(e.target.value) })}
-                  className="bg-white w-24"
-                />
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm w-24">£{productData.rrp}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Tax class</Label>
-              {isEditing ? (
-                <Select
-                  value={productData.taxClass.toString()}
-                  onValueChange={(value) => setProductData({ ...productData, taxClass: Number.parseInt(value) })}
-                >
-                  <SelectTrigger className="bg-white w-24">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="5">5</SelectItem>
-                    <SelectItem value="0">0</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm w-24">{productData.taxClass}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Price Includes VAT</Label>
-              <Switch
-                checked={productData.priceIncludesVat}
-                onCheckedChange={(checked) => setProductData({ ...productData, priceIncludesVat: checked })}
-                disabled={!isEditing}
-                className="data-[state=checked]:bg-blue-600"
-              />
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Inventory</Label>
-              {isEditing ? (
-                <Input
-                  type="number"
-                  value={productData.inventory}
-                  onChange={(e) => setProductData({ ...productData, inventory: Number.parseInt(e.target.value) })}
-                  className="bg-white w-24"
-                />
-              ) : (
-                <div className="text-sm">{productData.inventory}</div>
-              )}
-            </div>
-          </div>
-
-          {/* Middle Column */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Weight</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={productData.weight}
-                    onChange={(e) =>
-                      setProductData({ ...productData, weight: Number.parseFloat(e.target.value) })
-                    }
-                    className="bg-white w-24"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm w-24">{productData.weight}</div>
-                )}
-                <span className="text-sm">kg</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Length</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    type="number"
-                    value={productData.length}
-                    onChange={(e) => setProductData({ ...productData, length: e.target.value })}
-                    className="bg-white w-24"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm w-24">{productData.length || ""}</div>
-                )}
-                <span className="text-sm">mm</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Width</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    type="number"
-                    value={productData.width}
-                    onChange={(e) => setProductData({ ...productData, width: e.target.value })}
-                    className="bg-white w-24"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm w-24">{productData.width || ""}</div>
-                )}
-                <span className="text-sm">mm</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Height/Depth</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    type="number"
-                    value={productData.height}
-                    onChange={(e) => setProductData({ ...productData, height: e.target.value })}
-                    className="bg-white w-24"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm w-24">{productData.height || ""}</div>
-                )}
-                <span className="text-sm">mm</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Warehouse</Label>
-              {isEditing ? (
-                <Select
-                  value={productData.warehouse}
-                  onValueChange={(value) => setProductData({ ...productData, warehouse: value })}
-                >
-                  <SelectTrigger className="bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Default Warehouse">Default Warehouse</SelectItem>
-                    <SelectItem value="Secondary Warehouse">Secondary Warehouse</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm">{productData.warehouse}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">Brand</Label>
-              {isEditing ? (
-                <Select
-                  value={productData.brand}
-                  onValueChange={(value) => setProductData({ ...productData, brand: value })}
-                >
-                  <SelectTrigger className="bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Xerjoff">Xerjoff</SelectItem>
-                    <SelectItem value="Other Brand">Other Brand</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : (
-                <div className="bg-white border rounded p-2 text-sm">{productData.brand}</div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">EAN</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    value={productData.ean}
-                    onChange={(e) => setProductData({ ...productData, ean: e.target.value })}
-                    className="bg-white flex-1"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm flex-1">{productData.ean || ""}</div>
-                )}
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                  Autofill
-                </Button>
-                <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
-                  Print
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-              <Label className="text-sm font-medium">UPC</Label>
-              <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <Input
-                    value={productData.upc}
-                    onChange={(e) => setProductData({ ...productData, upc: e.target.value })}
-                    className="bg-white flex-1"
-                  />
-                ) : (
-                  <div className="bg-white border rounded p-2 text-sm flex-1">{productData.upc || ""}</div>
-                )}
-                <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white">
-                  Print
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Product Image */}
-          <div className="flex flex-col items-center justify-center">
-            <div className="w-48 h-48 bg-white rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center mb-4">
-              <img
-                src={productData.image || "/product-1.png"}
-                alt="Product"
-                width={180}
-                height={180}
-                className="object-cover rounded"
-              />
-            </div>
-            {isEditing && <Input type="file" accept="image/*" className="bg-white w-48" />}
-          </div>
+        {/* Action Buttons */}
+        <div className="flex justify-end space-x-4 mt-6">
+          {isEditing ? (
+            <>
+              <Button variant="outline" onClick={handleCancel}>
+                Cancel
+              </Button>
+              <Button onClick={handleSubmit(handleSave)}  variant="primary" className="rounded-lg">
+                Save
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => setIsEditing(true)} variant="primary" className="rounded-lg">
+              Edit
+            </Button>
+          )}
         </div>
       </div>
     </div>
-
-    {/* Action Buttons */}
-    <div className="flex justify-end space-x-4 mt-6">
-      {isEditing ? (
-        <>
-          <Button variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} className="bg-blue-600 hover:bg-blue-700">
-            Save
-          </Button>
-        </>
-      ) : (
-        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
-          Edit
-        </Button>
-      )}
-    </div>
-  </div>
   )
 }
 
-export default EditListingInfoPage;
+export default EditListingInfoPage

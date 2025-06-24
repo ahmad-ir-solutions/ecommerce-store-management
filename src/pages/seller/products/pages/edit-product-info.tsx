@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import ProductInformation from "../components/product-info"
 import { ProductFormValues } from "../core/_schema"
 import { Header } from "@/components/shared/header"
+import { Loader2 } from "lucide-react"
 
 interface Product {
   id: string
@@ -176,11 +177,8 @@ export function EditProductInfoPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading product information...</p>
-        </div>
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
@@ -202,7 +200,7 @@ export function EditProductInfoPage() {
   return (
     <div>
       {/* Header */}
-      <Header title=""></Header>
+      <Header title="Product"></Header>
 
       <div className="mt-6">
         {/* Product Information Component */}
@@ -223,12 +221,12 @@ export function EditProductInfoPage() {
               <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button onClick={handleSubmit(handleSave)} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={handleSubmit(handleSave)}  variant="primary" className="rounded-lg">
                 Save
               </Button>
             </>
           ) : (
-            <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={() => setIsEditing(true)} variant="primary" className="rounded-lg">
               Edit
             </Button>
           )}

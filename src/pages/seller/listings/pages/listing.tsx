@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Header } from "@/components/shared/header"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Link } from "react-router-dom"
+import { AddToChannelListModal } from "../components/modal/add-to-channel-list-modal"
 
 interface UserListing {
   _id: string
@@ -22,9 +23,11 @@ interface UserListing {
 }
 
 export function SellerListingsPage() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
   const handleEdit = (row: UserListing) => {
+    setIsAddModalOpen(true)
     console.log("Edit clicked for", row)
     // Handle edit functionality here
   }
@@ -297,7 +300,7 @@ export function SellerListingsPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Button variant="primary" className="rounded-lg">
+        <Button variant="primary" className="rounded-lg"  onClick={() => setIsAddModalOpen(true)}>
           Add New
         </Button>
       </Header>
@@ -311,6 +314,8 @@ export function SellerListingsPage() {
         itemsPerPage={10}
         isLoading={false}
       />
+
+      <AddToChannelListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
     </div>
   )
 }
