@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Amazon from "@/assets/images/amazon.svg";
 
 export function ExistingMarketplace() {
-    const amazonId = "164123126545641231";
+    const marketplaceId = "164123126545641231";
 
     return (
         <div className="mt-6">
@@ -44,7 +44,7 @@ export function ExistingMarketplace() {
                                     <Switch />
                                 </TableCell>
                                 <TableCell className="text-start text-[#024AFE] p-3 underline hover:text-[#0228fe]">
-                                    <Link to={`/admin/settings/integrations/edit-payment-gateways-details/${amazonId}`}>View/Edit</Link>
+                                    <Link to={`/seller/shops/edit-marketplace/${marketplaceId}`}>View/Edit</Link>
                                 </TableCell>
                             </TableRow>
                         </TableBody>

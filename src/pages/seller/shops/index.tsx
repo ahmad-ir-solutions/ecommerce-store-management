@@ -1,4 +1,5 @@
 import SellerShopsPage from "./pages/shop";
-import ShopSettingsPage from "./pages/shop-settings";
+import EditWebstoreDetails from "./pages/edit-webstore-details";
+import EditMarketplaceDetails from "./pages/edit-marketplace-details";
 
-export { SellerShopsPage, ShopSettingsPage };
+export { SellerShopsPage, EditWebstoreDetails,EditMarketplaceDetails };

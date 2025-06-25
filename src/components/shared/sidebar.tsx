@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import {
-  HelpCircle,
-  CreditCard,
+  // HelpCircle,
+  // CreditCard,
   LogOut,
   ChevronRight,
   LucideIcon,
@@ -56,23 +56,23 @@ export function Sidebar({ isOpen,
   }
 
 
-  const bottomNavItems = [
-    // {
-    //   title: "Settings",
-    //   href: "/settings",
-    //   icon: Settings,
-    // },
-    {
-      title: "Support",
-      href: "/support",
-      icon: HelpCircle,
-    },
-    {
-      title: "Billing",
-      href: "/billing",
-      icon: CreditCard,
-    },
-  ]
+  // const bottomNavItems = [
+  //   // {
+  //   //   title: "Settings",
+  //   //   href: "/settings",
+  //   //   icon: Settings,
+  //   // },
+  //   {
+  //     title: "Support",
+  //     href: "/support",
+  //     icon: HelpCircle,
+  //   },
+  //   {
+  //     title: "Billing",
+  //     href: "/billing",
+  //     icon: CreditCard,
+  //   },
+  // ]
 
   return (
     <div
@@ -158,7 +158,7 @@ export function Sidebar({ isOpen,
       </nav>
 
       {/* Bottom navigation items */}
-      <nav className="space-y-1 px-2 mt-auto">
+      {/* <nav className="space-y-1 px-2 mt-auto">
         {bottomNavItems.map((item) => (
           <Link
             key={item.href}
@@ -172,7 +172,7 @@ export function Sidebar({ isOpen,
             {isOpen && <span className="flex-1">{item.title}</span>}
           </Link>
         ))}
-      </nav>
+      </nav> */}
       <Button className="mx-2 mt-2 mb-4 shadow-none hover:bg-[#1d293d] hover:text-white text-center cursor-pointer py-3 px-4 h-11"	 onClick={handleLogout}>
         <div className="flex items-center justify-start w-full">
           <LogOut className="h-5 w-5 mr-3" />

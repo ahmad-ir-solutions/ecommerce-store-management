@@ -19,7 +19,10 @@ const OrderDetailsPage = lazy(() => import("@/pages/seller/orders/pages/order-de
 const SellerPaymentPage = lazy(() => import("@/pages/seller/payments/pages/payment").then(module => ({ default: module.SellerPaymentPage })));
 
 const SellerShopsPage = lazy(() => import("@/pages/seller/shops/pages/shop").then(module => ({ default: module.SellerShopsPage })));
-const ShopSettingsPage = lazy(() => import("@/pages/seller/shops/pages/shop-settings").then(module => ({ default: module.ShopSettingsPage })));
+const EditMarketplaceDetails = lazy(() => import("@/pages/seller/shops/pages/edit-marketplace-details").then(module => ({ default: module.EditMarketplaceDetails })));
+const EditWebstoreDetails = lazy(() => import("@/pages/seller/shops/pages/edit-webstore-details").then(module => ({ default: module.EditWebstoreDetails })));
+
+const BillingPage = lazy(() => import("@/pages/seller/billing").then(module => ({ default: module.BillingPage })));
 
 const ProfileSettingsPage = lazy(() => import("@/pages/seller/settings/pages/profile-settings"));
 
@@ -69,7 +72,8 @@ export const sellerRoutes = {
       path: "shops",
       children: [
         { index: true, element: <WithSuspense><SellerShopsPage /></WithSuspense> },
-        { path: "settings", element: <WithSuspense><ShopSettingsPage /></WithSuspense> },
+        { path: "edit-marketplace/:marketplaceId", element: <WithSuspense><EditMarketplaceDetails /></WithSuspense> },
+        { path: "edit-webstore/:webstoreId", element: <WithSuspense><EditWebstoreDetails /></WithSuspense> },
       ]
     },
 
@@ -81,14 +85,13 @@ export const sellerRoutes = {
       ]
     },
 
-    // // Billing routes
-    // {
-    //   path: "settings",
-    //   children: [
-    //     { path: "profile", element: <WithSuspense><ProfileSettingsPage /></WithSuspense> },
-    //     { path: "payment", element: <WithSuspense><PaymentSettingsPage /></WithSuspense> },
-    //   ]
-    // },
+    // Billing routes
+    {
+      path: "billing",
+      children: [
+        { index: true, element: <WithSuspense><BillingPage /></WithSuspense> },
+      ]
+    },
 
     // Settings routes
     {

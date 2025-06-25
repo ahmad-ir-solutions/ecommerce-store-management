@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import EditShopDetails from "../../shops/pages/edit-shop-details"
+// import EditShopDetails from "../../shops/pages/edit-marketplace-details"
 import PaymentStep from "./payment-step"
 import PlatformSelection from "./platform-selection"
 import SetupConfiguration from "./setup-configuration"
@@ -67,16 +67,16 @@ export function OnboardingStepper({ isOpen, isNewUser, onClose, onComplete }: On
     onClose()
   }
 
-  const handleComplete = () => {
-    if (onComplete && selectedPlatform) {
-      onComplete({
-        platform: selectedPlatform,
-        setupData,
-        paymentData: isNewUser ? paymentData : undefined,
-      })
-    }
-    handleClose()
-  }
+  // const handleComplete = () => {
+  //   if (onComplete && selectedPlatform) {
+  //     onComplete({
+  //       platform: selectedPlatform,
+  //       setupData,
+  //       paymentData: isNewUser ? paymentData : undefined,
+  //     })
+  //   }
+  //   handleClose()
+  // }
 
   const getTitle = () => {
     switch (step) {
@@ -122,8 +122,8 @@ export function OnboardingStepper({ isOpen, isNewUser, onClose, onComplete }: On
             onNext={() => setStep("edit-shop")}
           />
         )
-      case "edit-shop":
-        return <EditShopDetails selectedPlatform={selectedPlatform} setupData={setupData} onComplete={handleComplete} />
+      // case "edit-shop":
+      //   return <EditShopDetails selectedPlatform={selectedPlatform} setupData={setupData} onComplete={handleComplete} />
       default:
         return (
           <PlatformSelection

@@ -5,7 +5,7 @@ import { Link} from "react-router-dom";
 import Shopify from "@/assets/images/shopyfy.svg";
 
 export function ExistingWebstore() {
-    const paymentGatewaysId = "164123126545641231";
+    const webstoreId = "164123126545641231";
 
   return (
     <div className="mt-6">
@@ -45,7 +45,7 @@ export function ExistingWebstore() {
                 <Switch/>
                 </TableCell>
                 <TableCell className="text-start text-[#024AFE] p-3 underline hover:text-[#0228fe]">
-                <Link to={`/admin/settings/integrations/edit-payment-gateways-details/${paymentGatewaysId}`}>View/Edit</Link>
+                <Link to={`/seller/shops/edit-webstore/${webstoreId}`}>View/Edit</Link>
                 </TableCell>
             </TableRow>
             </TableBody>

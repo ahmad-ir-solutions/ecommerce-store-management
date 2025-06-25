@@ -29,4 +29,4 @@ export function SellerShopsPage() {
     );
 }
 
-export default SellerShopsPage; 
+export default SellerShopsPage;
