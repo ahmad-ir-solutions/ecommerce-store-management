@@ -2,15 +2,36 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { CustomSelect } from '@/components/shared/custom-select'
+import { Input } from "@/components/ui/input"
+// import { Checkbox } from "@/components/ui/checkbox"
+import { Switch } from "@/components/ui/switch"
 import { z } from "zod"
+import { CustomSelect } from "@/components/shared/custom-select"
+import Amazon from "@/assets/images/amazon.svg";
+import Woocommerce from "@/assets/images/WooCommerce-Logo.png";
 
-export const profileSchema = z.object({
-  integrationType: z.string().nonempty("Integration type is required"),
-  profileName: z.string().nonempty("Profile name is required"),
-  location: z.string().optional(), // Required only if marketplace
-  grantPermission: z.boolean(),
-})
+// Dynamic schema based on platform
+const createProfileSchema = (platform: Platform | null) => {
+  const baseSchema = {
+    profileName: z.string().nonempty("Profile name is required"),
+    grantPermission: z.boolean(),
+  }
+
+  if (platform === "marketplace") {
+    return z.object({
+      ...baseSchema,
+      integrationType: z.literal("amazon"),
+      amazonStore: z.string().nonempty("Amazon store is required"),
+    })
+  } else if (platform === "webstore") {
+    return z.object({
+      ...baseSchema,
+      integrationType: z.literal("woocommerce"),
+    })
+  }
+
+  return z.object(baseSchema)
+}
 
 type Platform = "marketplace" | "webstore"
 
@@ -19,105 +40,189 @@ export interface ProfileProp {
   closeModal: () => void
 }
 
-type LocalProfileFormValues = {
-  integrationType: string;
-  profileName: string;
-  grantPermission: boolean;
-  location?: string;
-};
-
-export const SetupProfile = ({selectedPlatform, closeModal}: ProfileProp) => {
-console.log(selectedPlatform,"selectedPlatform");
+export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
+  const schema = createProfileSchema(selectedPlatform)
+  type FormType = z.infer<typeof schema>
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // control,
-  } = useForm<LocalProfileFormValues>({
-    resolver: zodResolver(profileSchema),
+    setValue,
+    watch,
+  } = useForm<FormType>({
+    resolver: zodResolver(schema),
     defaultValues: {
-      integrationType: "",
-      profileName: "",
+      integrationType: selectedPlatform === "marketplace" ? "amazon" : "woocommerce",
+      profileName: selectedPlatform === "marketplace" ? "Amazon" : "WooCommerce",
       grantPermission: false,
-      location: "",
-    },
+      ...(selectedPlatform === "marketplace" && { amazonStore: "" }),
+    } as FormType,
   })
 
-  const onSubmit = (data: LocalProfileFormValues) => {
+  const grantPermission = watch("grantPermission")
+
+  const onSubmit = (data: FormType) => {
     console.log("Form submitted:", { platform: selectedPlatform, ...data })
-    // Here you would typically send this data to your API
     closeModal()
   }
 
+  const renderMarketplaceFields = () => (
+    <>
+      {/* Integration Type */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="integrationType" className="text-sm font-medium text-gray-700">
+          Integration Type
+        </Label>
+        <div className="col-span-2 flex items-center">
+          <div className="flex items-center space-x-2">
+            <img src={Amazon} alt="Amazon" className="" />
+            {/* <span className="text-sm font-medium">Amazon</span> */}
+          </div>
+        </div>
+      </div>
+
+      {/* Profile Name */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">
+          Profile Name *
+        </Label>
+        <div className="col-span-2">
+          <Input
+            id="profileName"
+            {...register("profileName")}
+            className="w-full border-gray-300"
+            placeholder="Amazon"
+          />
+          {errors.profileName && (
+            <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Amazon Store */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="amazonStore" className="text-sm font-medium text-gray-700">
+          Amazon Store *
+        </Label>
+        <div className="col-span-2">
+          <CustomSelect
+            placeholder="Please Select..."
+            options={[
+              { id: 1, label: "Amazon US", value: "amazon-us" },
+              { id: 2, label: "Amazon UK", value: "amazon-uk" },
+              { id: 3, label: "Amazon Canada", value: "amazon-ca" },
+              { id: 4, label: "Amazon Germany", value: "amazon-de" },
+              { id: 5, label: "Amazon France", value: "amazon-fr" },
+            ]}
+            onChange={(value) => setValue("amazonStore" as any, value)}
+          />
+
+          {(errors as any).amazonStore && (
+            <p className="text-sm text-red-500 mt-1">{(errors as any).amazonStore.message}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Grant Permissions */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="grantPermission" className="text-sm font-medium text-gray-700">
+          Grant permissions to all existing users
+        </Label>
+        <div className="col-span-2">
+          <Switch
+            id="grantPermission"
+            checked={grantPermission}
+            onCheckedChange={(checked) => setValue("grantPermission", checked)}
+          />
+        </div>
+      </div>
+    </>
+  )
+
+  const renderWebstoreFields = () => (
+    <>
+      {/* Integration Type */}
+      <div className="grid grid-cols-3 items-center gap-4">
+      <Label htmlFor="integrationType" className="text-sm font-medium text-gray-700">
+          Integration Type
+        </Label>
+        <div className="col-span-2 flex items-center">
+          <div className="flex items-center space-x-2">
+            <img src={Woocommerce} alt="WooCommerce" className="h-6" />
+            {/* <span className="text-sm font-medium">WooCommerce</span> */}
+          </div>
+        </div>
+      </div>
+
+      {/* Profile Name */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">
+          Profile Name *
+        </Label>
+        <div className="col-span-2">
+          <Input
+            id="profileName"
+            {...register("profileName")}
+            className="w-full"
+            placeholder="WooCommerce"
+          />
+          {errors.profileName && (
+            <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Grant Permissions */}
+       <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="grantPermission" className="text-sm font-medium text-gray-700">
+          Grant permissions to all existing users
+        </Label>
+        <div className="col-span-2">
+          <Switch
+            id="grantPermission"
+            checked={grantPermission}
+            onCheckedChange={(checked) => setValue("grantPermission", checked)}
+          />
+        </div>
+      </div>
+      {/* <div className="grid grid-cols-3 items-start gap-4">
+        <div></div>
+        <div className="col-span-2">
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="grantPermission"
+              checked={grantPermission}
+              onCheckedChange={(checked) => setValue("grantPermission", !!checked)}
+            />
+            <Label
+              htmlFor="grantPermission"
+              className="text-sm font-medium text-gray-700 cursor-pointer"
+            >
+              Grant permissions to all existing users
+            </Label>
+          </div>
+        </div>
+      </div> */}
+    </>
+  )
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-md text-[#717171] my-2 font-medium">Setup Profile</h2>
+    <div className="space-y-4">
+      <h2>Setup Profile</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-2 text-[#4E5967]">
-        <div className="space-y-2 grid grid-cols-3 items-center justify-between">
-          <div>
-            <Label htmlFor="integrationType">Integration Type</Label>
-          </div>
-          <div className='col-span-2'>
-            <CustomSelect
-            defaultValue=""
-            placeholder="Select integration type"
-            options={[
-              { id: "amazone", label: "Amazone", value: "amazone" },
-              { id: "shopify", label: "Shopify", value: "shopify" },
-              { id: "woocommerce", label: "WooCommerce", value: "woocommerce" },
-            ]}
-            onChange={(value) => {
-              const event = {
-              target: {
-                name: "integrationType",
-                value,
-              },
-              }
-              register("integrationType").onChange(event as any)
-            }}
-            className="border-gray-200 bg-white"
-            />
-            {errors.integrationType && <p className="text-sm text-red-500">{errors.integrationType.message}</p>}
-          </div>
-            
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pb-3">
+        {selectedPlatform === "marketplace" && renderMarketplaceFields()}
+        {selectedPlatform === "webstore" && renderWebstoreFields()}
 
-        <div className="space-y-2 grid grid-cols-3 items-center justify-between">
-          <div>
-            <Label htmlFor="location">Location</Label>
-          </div>
-          <div className='col-span-2'>
-            <CustomSelect
-            defaultValue=""
-            placeholder="Select location"
-            options={[
-              { id: "amazone-australia", label: "Amazone (Australia)", value: "amazone-australia" },
-              { id: "amazone-us", label: "Amazone (US)", value: "amazone-us" },
-              { id: "amazone-uk", label: "Amazone (UK)", value: "amazone-uk" },
-            ]}
-            onChange={(value) => {
-              const event = {
-              target: {
-                name: "location",
-                value,
-              },
-              }
-              register("location").onChange(event as any)
-            }}
-            className="border-gray-200 bg-white"
-            />
-          </div>
-            
-          {errors.location && <p className="text-sm text-red-500">{errors.location.message}</p>}
+        <div className="pt-4">
+          <Button type="submit" variant="primary" className="w-full">
+            Integrate
+          </Button>
         </div>
-        <Button type="submit" variant="primary" className="w-full mb-4">
-          Integrate
-        </Button>
       </form>
     </div>
   )
 }
 
-export default SetupProfile;
+export default SetupProfile
