@@ -6,10 +6,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import {useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
+import Woocommerce from "@/assets/images/WooCommerce-Logo.png";
+import { CustomSelect } from '@/components/shared/custom-select';
 
 const webstoreSchema = z.object({
   profileName: z.string().min(1, "Profile name is required"),
@@ -87,19 +88,19 @@ export function EditWebstoreDetails() {
   return (
     <div>
       <Header title="Settings" />
-      <div className="mt-6 bg-white p-6 rounded-2xl shadow-none">
+      <div className="mt-6 bg-white p-6 rounded-2xl shadow-none text-[#4E5967]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
             {/* Integration Profile */}
-            <h1 className="text-lg font-medium">Integration Profile</h1>
+            <h1 className="text-lg font-medium text-[#11263C]">Integration Profile</h1>
             <Card className="bg-[#ECF6FF] border-none shadow-none">
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div className="flex items-center gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                       <Label className="text-sm font-medium">Integration type</Label>
                       <div className="flex items-center gap-2">
-                        <img src="/placeholder.svg?height=24&width=100" alt="WooCommerce" className="h-6" />
+                        <img src={Woocommerce} alt="WooCommerce" className="h-6" />
                       </div>
                     </div>
 
@@ -108,10 +109,12 @@ export function EditWebstoreDetails() {
                       name="profileName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Profile name *</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Profile name *</FormLabel>
+                            <FormControl>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -122,10 +125,12 @@ export function EditWebstoreDetails() {
                       name="trackingUrlTemplate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Tracking URL template</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Tracking URL template</FormLabel>
+                            <FormControl>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -133,7 +138,7 @@ export function EditWebstoreDetails() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between">
+                    <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                       <Label className="text-sm font-medium">Active</Label>
                       <FormField
                         control={form.control}
@@ -141,7 +146,9 @@ export function EditWebstoreDetails() {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              <div>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
@@ -153,17 +160,17 @@ export function EditWebstoreDetails() {
                       name="companyIdentity"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Company identity *</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Default Warehouse">Default Warehouse</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Company identity *</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -172,7 +179,7 @@ export function EditWebstoreDetails() {
                 </div>
                 {/* Test your WooCommerce Account */}
                 <div>
-                  <h1 className="text-lg font-medium">Test your WooCommerce Account</h1>
+                  <h1 className="text-lg font-medium text-[#11263C] mb-2">Test your WooCommerce Account</h1>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <FormField
@@ -180,35 +187,40 @@ export function EditWebstoreDetails() {
                         name="testProfileName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Profile name *</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
+                            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                              <FormLabel>Profile name *</FormLabel>
+                              <FormControl>
+                                <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                              </FormControl>
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      <div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <Label className="text-sm font-medium">Last Connected Successfully:</Label>
                         <div className="mt-1 text-sm text-gray-600">{form.watch("lastConnected")}</div>
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      <div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <Label className="text-sm font-medium">Amazon Store</Label>
                         <div className="mt-1 text-sm text-gray-600">{form.watch("amazonStore")}</div>
                       </div>
 
-                      <div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <Label className="text-sm font-medium">MarketplaceID</Label>
                         <div className="mt-1 text-sm text-gray-600">{form.watch("marketplaceId")}</div>
                       </div>
 
-                      <Button type="button" className="bg-blue-600 hover:bg-blue-700">
-                        Test Connection
-                      </Button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                        <span />
+                        <Button type="button" variant="primary" className="rounded-lg">
+                          Test Connection
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -216,7 +228,7 @@ export function EditWebstoreDetails() {
             </Card>
 
             {/* WooCommerce Settings */}
-            <h1 className="text-lg font-medium mt-6">WooCommerce Settings</h1>
+            <h1 className="text-lg font-medium mt-6 text-[#11263C]">WooCommerce Settings</h1>
             <Card className="bg-[#ECF6FF] border-none shadow-none">
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -226,18 +238,20 @@ export function EditWebstoreDetails() {
                       name="weightUnit"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Weight Unit</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="KG">KG</SelectItem>
-                                <SelectItem value="LB">LB</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Weight Unit</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[
+                                  { id: 'KG', label: 'KG', value: 'KG' },
+                                  { id: 'LB', label: 'LB', value: 'LB' },
+                                ]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -248,18 +262,20 @@ export function EditWebstoreDetails() {
                       name="generateSlugFrom"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Generate Slug from</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="SKU">SKU</SelectItem>
-                                <SelectItem value="Title">Title</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Generate Slug from</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[
+                                  { id: 'SKU', label: 'SKU', value: 'SKU' },
+                                  { id: 'Title', label: 'Title', value: 'Title' },
+                                ]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -272,23 +288,23 @@ export function EditWebstoreDetails() {
                       name="orderTrackingNoteSettings"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Order Tracking Note Settings</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="KG">KG</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Order Tracking Note Settings</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[{ id: 'KG', label: 'KG', value: 'KG' }]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
-                    <div className="flex items-center justify-between">
+                    <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                       <Label className="text-sm">Automatic Inventory Updates</Label>
                       <FormField
                         control={form.control}
@@ -296,7 +312,9 @@ export function EditWebstoreDetails() {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              <div>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
@@ -311,7 +329,7 @@ export function EditWebstoreDetails() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Order Processing */}
               <div className="space-y-3">
-                <h1 className="text-lg font-medium mt-6">Order Processing</h1>
+                <h1 className="text-lg font-medium mt-6 text-[#11263C]">Order Processing</h1>
                 <Card className="bg-[#ECF6FF] border-none shadow-none">
                   <CardContent className="space-y-4">
                     {[
@@ -321,7 +339,7 @@ export function EditWebstoreDetails() {
                       { name: "disableInvoicePrinting", label: "Disable Invoice Printing" },
                       { name: "enforceChannelWarehouse", label: "Enforce Channel Warehouse" },
                     ].map((item) => (
-                      <div key={item.name} className="flex items-center justify-between">
+                      <div key={item.name} className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <Label className="text-sm">{item.label}</Label>
                         <FormField
                           control={form.control}
@@ -329,7 +347,9 @@ export function EditWebstoreDetails() {
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
-                                <Switch checked={field.value as boolean} onCheckedChange={field.onChange} />
+                                <div>
+                                  <Switch checked={field.value as boolean} onCheckedChange={field.onChange} />
+                                </div>
                               </FormControl>
                             </FormItem>
                           )}
@@ -342,7 +362,7 @@ export function EditWebstoreDetails() {
 
               {/* Stock Management */}
               <div className="space-y-3">
-                <h1 className="text-lg font-medium mt-6">Stock Management</h1>
+                <h1 className="text-lg font-medium mt-6 text-[#11263C]">Stock Management</h1>
                 <Card className="bg-[#ECF6FF] border-none shadow-none">
                   <CardContent className="space-y-4">
                     {[
@@ -352,7 +372,7 @@ export function EditWebstoreDetails() {
                       { name: "uploadListings", label: "Upload Listings" },
                       { name: "downloadListings", label: "Download Listings" },
                     ].map((item) => (
-                      <div key={item.name} className="flex items-center justify-between">
+                      <div key={item.name} className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <Label className="text-sm">{item.label}</Label>
                         <FormField
                           control={form.control}
@@ -360,7 +380,9 @@ export function EditWebstoreDetails() {
                           render={({ field }) => (
                             <FormItem>
                               <FormControl>
-                                <Switch checked={field.value as boolean} onCheckedChange={field.onChange} />
+                                <div>
+                                  <Switch checked={field.value as boolean} onCheckedChange={field.onChange} />
+                                </div>
                               </FormControl>
                             </FormItem>
                           )}
@@ -373,7 +395,7 @@ export function EditWebstoreDetails() {
 
               {/* Stock Management (Right Column) */}
               <div className="space-y-3">
-                <h1 className="text-lg font-medium mt-6">Stock Management</h1>
+                <h1 className="text-lg font-medium mt-6 text-[#11263C]">Stock Management</h1>
                 <Card className="bg-[#ECF6FF] border-none shadow-none">
                   <CardContent className="space-y-4">
                     <FormField
@@ -381,23 +403,23 @@ export function EditWebstoreDetails() {
                       name="currency"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Currency *</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Default Warehouse">Default Warehouse</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Currency *</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
 
-                    <div className="flex items-center justify-between">
+                    <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                       <Label className="text-sm">Calculate Shipping Tax</Label>
                       <FormField
                         control={form.control}
@@ -405,7 +427,9 @@ export function EditWebstoreDetails() {
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              <div>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                              </div>
                             </FormControl>
                           </FormItem>
                         )}
@@ -417,17 +441,17 @@ export function EditWebstoreDetails() {
                       name="defaultPricingProfile"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Default Pricing Profile</FormLabel>
-                          <FormControl>
-                            <Select value={field.value} onValueChange={field.onChange}>
-                              <SelectTrigger>
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Default Warehouse">Default Warehouse</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Default Pricing Profile</FormLabel>
+                            <FormControl>
+                              <CustomSelect
+                                options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
+                                defaultValue={field.value}
+                                onChange={field.onChange}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -438,10 +462,12 @@ export function EditWebstoreDetails() {
                       name="channelPercentageFees"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Channel Percentage Fees</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
+                          <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                            <FormLabel>Channel Percentage Fees</FormLabel>
+                            <FormControl>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                            </FormControl>
+                          </div>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -453,10 +479,10 @@ export function EditWebstoreDetails() {
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-4 pt-6">
-              <Button type="button" variant="outline" className="px-8">
+              <Button type="button" variant="outline" className="rounded-lg px-8">
                 Cancel
               </Button>
-              <Button type="submit" className="px-8 bg-blue-600 hover:bg-blue-700">
+              <Button type="submit" variant="primary" className="rounded-lg px-8">
                 Save
               </Button>
             </div>
