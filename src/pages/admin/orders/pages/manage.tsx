@@ -21,7 +21,7 @@ import { Header } from "@/components/shared/header"
 import { CustomSearch } from "@/components/shared/custom-search"
 import { transformOrderToTableRow } from '../core/order-mapper'
 import { useGetOrders } from '../core/hooks/use-orders'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { debounce } from 'lodash'
 import { OrdersTable } from "../components/order-table"
 
@@ -34,7 +34,7 @@ export function ManageOrderPage() {
     pageIndex: 0,
     pageSize: 10,
   });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const debouncedSetSearch = useCallback(
     debounce((value: string) => {
@@ -60,9 +60,9 @@ export function ManageOrderPage() {
     setSearchInput(e.target.value);
   };
 
-  // const handleAddOrder = () => {
-  //   navigate("/admin/orders/add-order");
-  // };
+  const handleAddOrder = () => {
+    navigate("/admin/orders/add-order");
+  };
 
   const tableData = data?.orders ? data.orders.map(transformOrderToTableRow) : []
 
@@ -149,7 +149,7 @@ export function ManageOrderPage() {
           />
           <div className="flex items-center gap-4">
             <Button type='button' 
-            // onClick={handleAddOrder} 
+            onClick={handleAddOrder} 
             variant="default" size="lg" className="bg-[#024AFE] hover:bg-[#021bfe] text-white rounded-lg">
               <Plus />
               New Orders

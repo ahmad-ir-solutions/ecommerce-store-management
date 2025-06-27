@@ -17,4 +17,4 @@ export function SellerPaymentPage() {
   )
 }
 
-export default SellerPaymentPage
+export default SellerPaymentPage;
