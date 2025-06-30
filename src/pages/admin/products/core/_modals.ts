@@ -48,12 +48,12 @@ export interface IProductModel {
   ean: string
   upc: string
   supplierDetails: string
-  priorityOrder: string
-  supplierSku: string
-  unitCostPrice: string
-  cartonCostPrice: string
-  supplierStockLevel: string
-  supplierCartonQuantity: string
+  priorityOrder: number
+  supplierSku?: number
+  unitCostPrice?: number
+  cartonCostPrice?: number
+  supplierStockLevel?: number
+  supplierCartonQuantity?: number
   createdAt: string
   updatedAt: string
   __v: number
@@ -92,12 +92,12 @@ export type CreateProductData = {
   ean?: string
   upc?: string
   supplierDetails?: string,
-  priorityOrder?: string
-  supplierSku?: string,
-  unitCostPrice?: string,
-  cartonCostPrice?: string,
-  supplierStockLevel?: string,
-  supplierCartonQuantity?: string,
+  priorityOrder?: number
+  supplierSku?: number,
+  unitCostPrice?: number,
+  cartonCostPrice?: number,
+  supplierStockLevel?: number,
+  supplierCartonQuantity?: number,
 }
 
 export type UpdateProductData = Partial<CreateProductData>

@@ -404,6 +404,28 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                 </Button>
               </div>
             </div>
+
+            <div className="grid grid-cols-[150px_1fr] items-center">
+              <Label htmlFor="unitCostPrice" className="text-sm font-medium">
+                Unit Cost Price
+              </Label>
+              <div className="flex items-center gap-2">
+                {isEditing ? (
+                  <Controller
+                    name="unitCostPrice"
+                    control={control}
+                    render={({ field }) => (
+                      <Input {...field} id="unitCostPrice" type="number" className="h-9 border-gray-200 bg-white w-24" onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                    )}
+                  />
+                ) : (
+                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm w-24 h-9">
+                    {currentProduct.unitCostPrice || ""}
+                  </div>
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
         <div className="overflow-hidden flex justify-center items-center flex-col p-6">

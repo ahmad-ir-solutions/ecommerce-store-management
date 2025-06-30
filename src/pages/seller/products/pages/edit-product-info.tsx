@@ -1,236 +1,169 @@
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import ProductInformation from "../components/product-info"
-import { ProductFormValues } from "../core/_schema"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
+import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useUploadProductImage } from '@/hooks/useUploadProductImage'
+import { IProductModel } from "@/pages/admin/products/core/_modals"
+import { useGetProduct } from "@/pages/admin/products/core/hooks/useProduct"
+import { useUpdateProduct } from "@/pages/admin/products/core/hooks/useProduct"
+import { ProductFormValues } from "@/pages/admin/products/core/_schema"
+import { productSchema } from "@/pages/admin/products/core/_schema"
+import ProductInformation from "@/pages/admin/products/components/product-imformation"
 
-interface Product {
-  id: string
-  image: string
-  masterSku: string
-  name: string
-  warehouse: string
-  cost: string
-  price: string
-  inventory: number
-  status: string
-}
-
-// Mock data - in real app this would come from API
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000253",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-  {
-    id: "2",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000254",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-  {
-    id: "3",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000255",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-]
-
-export function EditProductInfoPage() {
-  // For demo purposes, we'll use the first product
-  const productId = "1"
+export const EditProductInfoPage = () => {
+  const { productId } = useParams<{ productId: string }>()
   const [isEditing, setIsEditing] = useState(false)
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [uploading, setUploading] = useState(false)
+  const [currentProduct, setCurrentProduct] = useState<ProductFormValues | null>(null)
+  const [originalProduct, setOriginalProduct] = useState<ProductFormValues | null>(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
+  // image Upload hook
+  const { mutateAsync: uploadImage, isPending: uploading } = useUploadProductImage();
+  // Fetch product data
+  const { data: productData, isLoading, error } = useGetProduct(productId || "")
+  const updateProductMutation = useUpdateProduct()
 
-  // Convert selected product data to form format
-  const getInitialProductData = (): ProductFormValues => {
-    if (product) {
-      return {
-        productName: product.name,
-        sku: product.masterSku,
-        price: Number.parseFloat(product.price.replace("£", "")),
-        rrp: Number.parseFloat(product.cost.replace("£", "")),
-        taxClass: 20,
-        priceIncludesVat: true,
-        inventory: product.inventory,
-        weight: 0.74,
-        length: "",
-        width: "",
-        height: "",
-        warehouse: product.warehouse === "Default" ? "Default Warehouse" : product.warehouse,
-        brand: "Xerjoff",
-        ean: "",
-        upc: "",
-        imageUrl: product.image,
-      }
-    }
-
-    return {
-      productName: "",
-      sku: "",
-      price: 0,
-      rrp: 0,
-      taxClass: 20,
-      priceIncludesVat: true,
-      inventory: 0,
-      weight: 0,
-      length: "",
-      width: "",
-      height: "",
-      warehouse: "",
-      brand: "",
-      ean: "",
-      upc: "",
-      imageUrl: "",
-    }
-  }
-
-  const { control, handleSubmit, reset, watch } = useForm<ProductFormValues>({
-    defaultValues: getInitialProductData(),
+  const {
+    control,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<ProductFormValues>({
+    resolver: zodResolver(productSchema),
+    defaultValues: currentProduct || undefined,
   })
+  console.log(errors, "errors");
 
-  const currentProduct = watch()
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadImage(file, {
+        onSuccess: (url) => {
+          setValue("imageUrl", url);
+          setUploadedImageUrl(url);
+        },
+      });
+    }
+  };
 
-  // Simulate API call to fetch product data
   useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true)
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
-      const foundProduct = mockProducts.find((p) => p.id === productId)
-      setProduct(foundProduct || null)
-      setLoading(false)
+    if (productData) {
+      setCurrentProduct(productData)
+      setOriginalProduct(productData)
+      reset(productData)
     }
+  }, [productData, reset])
 
-    if (productId) {
-      fetchProduct()
-    }
-  }, [productId])
-
-  // Reset form when product changes
-  useEffect(() => {
-    if (product) {
-      reset(getInitialProductData())
-    }
-  }, [product, reset])
-
-  const handleSave = (data: ProductFormValues) => {
-    setIsEditing(false)
-    // Handle save logic - in real app, make API call
-    console.log("Saving product data:", data)
-  }
-
-  const handleCancel = () => {
-    setIsEditing(false)
-    // Reset form data to original values
-    reset(getInitialProductData())
-    setUploadedImageUrl(null)
-  }
-
-  const handleBack = () => {
-    // In real app, use router navigation
-    console.log("Navigate back to products")
+  const handleEditClick = () => {
+    setIsEditing(true)
   }
 
   const handleSkuClick = () => {
-    console.log("Build SKU clicked")
-  }
-
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setUploading(true)
-      // Simulate image upload
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Create a temporary URL for preview
-      const imageUrl = URL.createObjectURL(file)
-      setUploadedImageUrl(imageUrl)
-      setUploading(false)
+    if (isEditing) {
+      setIsEditing(false)
+      setCurrentProduct(originalProduct)
+      reset(originalProduct || undefined)
     }
   }
 
-  if (loading) {
+  const onSubmit = (data: IProductModel) => {
+    console.log(data, "data.priceIncludesVat");
+    if (productId) {
+      updateProductMutation.mutate({
+        id: productId,
+        data: {
+          productName: data.productName,
+          productType: data.productType,
+          imageUrl: data.imageUrl,
+          sku: data.sku,
+          inventory: data.inventory,
+          price: data.price,
+          rrp: data.rrp,
+          taxClass: data.taxClass,
+          priceIncludesVat: data.priceIncludesVat,
+          weight: data.weight,
+          length: data.length,
+          width: data.width,
+          height: data.height,
+          warehouse: data.warehouse,
+          brand: data.brand,
+          ean: data.ean,
+          upc: data.upc,
+          unitCostPrice: data.unitCostPrice,
+        },
+      })
+      setIsEditing(false)
+    }
+  }
+
+  if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     )
   }
 
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist.</p>
-          <Button onClick={handleBack} className="bg-blue-600 hover:bg-blue-700">
-            Back to Products
-          </Button>
-        </div>
-      </div>
-    )
+
+  if (error) {
+    return <div className="p-8 flex justify-center items-center">
+      <p>Error loading product: {error.message}</p>
+    </div>
   }
+
+  if (!currentProduct) {
+    return <div className="p-8 flex justify-center items-center w-full">
+      <p>Product is not available</p>
+    </div>
+  }
+
 
   return (
     <div>
-      {/* Header */}
-      <Header title="Product"></Header>
+      <Header title="Products"></Header>
+      <div>
+        <form onSubmit={handleSubmit(onSubmit as (data: any) => void)}>
+          <div className="py-4 space-y-4">
+            <ProductInformation
+              currentProduct={currentProduct}
+              isEditing={isEditing}
+              control={control}
+              handleSkuClick={handleSkuClick}
+              handleImageChange={handleImageChange}
+              uploading={uploading}
+              uploadedImageUrl={uploadedImageUrl}
+            />
 
-      <div className="mt-6">
-        {/* Product Information Component */}
-        <ProductInformation
-          currentProduct={currentProduct}
-          isEditing={isEditing}
-          control={control}
-          handleSkuClick={handleSkuClick}
-          handleImageChange={handleImageChange}
-          uploading={uploading}
-          uploadedImageUrl={uploadedImageUrl}
-        />
-
-        {/* Action Buttons */}
-        <div className="flex justify-end space-x-4 mt-6">
-          {isEditing ? (
-            <>
-              <Button variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
-              <Button onClick={handleSubmit(handleSave)}  variant="primary" className="rounded-lg">
-                Save
-              </Button>
-            </>
-          ) : (
-            <Button onClick={() => setIsEditing(true)} variant="primary" className="rounded-lg">
-              Edit
-            </Button>
-          )}
-        </div>
+            <div className="flex justify-end gap-4">
+              {isEditing ?(
+                <>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="px-8 rounded-lg"
+                    onClick={() => {
+                      setIsEditing(false)
+                      setCurrentProduct(originalProduct)
+                      reset(originalProduct || undefined)
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="primary" className="px-8 rounded-lg">
+                    Save
+                  </Button>
+                </>
+              ):(
+                <Button variant="primary" className="px-8 rounded-lg" onClick={handleEditClick}>
+                  Edit
+                </Button>
+              )}
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   )
