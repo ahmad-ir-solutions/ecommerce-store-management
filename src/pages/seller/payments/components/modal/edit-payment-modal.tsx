@@ -8,7 +8,9 @@ import { loadStripe } from "@stripe/stripe-js"
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js"
 
 // Initialize Stripe (replace with your publishable key)
-const stripePromise = loadStripe("pk_test_51RdPrsPu2CBPBRfynVQqYSA6fwxC3Sg786KotrR8eXij0QYv8ijirgLUha4jOPXPowtsognSnztlwLsfbgxoWrdZ00O24ncHY0")
+const stripePromise = loadStripe(
+  import.meta.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_51OFrhCA8Z7XYs2EGhmpaLrnsI6NLc0u34OqER9RF0sO9R5SNeWioaqFyEnmzVRjBf0SOx7PPeT1IVVLk41vdgaJu00etitUgAj"
+)
 
 interface PaymentMethod {
   id: string

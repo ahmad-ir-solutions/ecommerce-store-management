@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils";
 import type { AxiosError } from "axios";
 import { chargeCard, createSetupIntent, deleteCard, getSavedCards, setDefaultCard } from "../_request";
+import { Stripe, StripeElements } from "@stripe/stripe-js";
 
 // Query keys
 export const stripeKeys = {
@@ -11,19 +12,56 @@ export const stripeKeys = {
 };
 
 // Create Setup Intent
-export const useCreateSetupIntent = () => {
+
+interface SetupIntentParams {
+  stripe: Stripe
+  elements: StripeElements
+  cardholderName: string
+  agreeToTerms: boolean
+  onSuccess?: () => void
+}
+
+export const useSetupIntentConfirm = () => {
   return useMutation({
-    mutationFn: createSetupIntent,
-    onSuccess: (res) => {
-      console.log(res);
-      
-      showSuccessMessage("Setup intent created");
+    mutationFn: async ({ stripe, elements, cardholderName, agreeToTerms, onSuccess }: SetupIntentParams) => {
+      if (!stripe || !elements) throw new Error("Stripe not loaded")
+      if (!agreeToTerms) throw new Error("Please agree to the terms of service")
+      if (!cardholderName.trim()) throw new Error("Cardholder name is required")
+
+      const cardElement = elements.getElement("card")
+      if (!cardElement) throw new Error("Card element not found")
+
+      // 1. Call backend for client secret
+      const response = await createSetupIntent()
+
+      const { clientSecret } = response.data
+      if (!clientSecret) throw new Error("No client secret received")
+
+      // 2. Confirm card setup
+      const result = await stripe.confirmCardSetup(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: { name: cardholderName },
+        },
+      })
+
+      if (result.error) throw new Error(result.error.message)
+
+      // Optional callback on success
+      onSuccess?.()
+
+      return result
     },
-    onError: (error: AxiosError<{ message: string }>) => {
-      showErrorMessage(error.response?.data?.message || "Failed to create setup intent");
+
+    onSuccess: () => {
+      showSuccessMessage("Card saved successfully!")
     },
-  });
-};
+
+    onError: (err: any) => {
+      showErrorMessage(err.message || "Failed to save card")
+    },
+  })
+}
 
 // Charge Card
 export const useChargeCard = () => {

@@ -5,7 +5,7 @@ import { loadStripe } from "@stripe/stripe-js"
 
 // Replace with your actual Stripe publishable key
 export const stripePromise = loadStripe(
-    import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || "pk_test_51N6c4DGFwMfBeP3SgDIkFSkQfMoZkI1doBwWMT4zA9HtFtPbub34itE9VuFaQUVzE6bwLpP0u0P2WmP83D6DAgZK00FeQpyx9R"
+  import.meta.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_51OFrhCA8Z7XYs2EGhmpaLrnsI6NLc0u34OqER9RF0sO9R5SNeWioaqFyEnmzVRjBf0SOx7PPeT1IVVLk41vdgaJu00etitUgAj"
   );
 interface StripeProviderProps {
   children: React.ReactNode

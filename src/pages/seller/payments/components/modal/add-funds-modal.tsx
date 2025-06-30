@@ -5,11 +5,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { SelectDropdown } from "@/components/shared/select-dropdown"
+// import { SelectDropdown } from "@/components/shared/select-dropdown"
+import { useChargeCard } from "../../core/hooks/useStripe"
 
 const addFundsSchema = z.object({
   amount: z.string().min(1, "Amount is required"),
-  method: z.string().min(1, "Payment method is required"),
+  // method: z.string().min(1, "Payment method is required"),
 })
 
 type AddFundsFormValues = z.infer<typeof addFundsSchema>
@@ -20,14 +21,18 @@ interface AddFundsModalProps {
   onConfirm: (amount: number) => void
 }
 
-export function AddFundsModal({ isOpen, onClose, onConfirm }: AddFundsModalProps) {
+export function AddFundsModal({ isOpen, onClose, 
+  // onConfirm 
+}: AddFundsModalProps) {
   const form = useForm<AddFundsFormValues>({
     resolver: zodResolver(addFundsSchema),
     defaultValues: {
       amount: "20,000",
-      method: "",
+      // method: "",
     },
   })
+
+  const { mutate: chargeCard } = useChargeCard()
 
   const formatAmount = (value: string) => {
     // Remove all non-numeric characters except decimal point
@@ -43,7 +48,14 @@ export function AddFundsModal({ isOpen, onClose, onConfirm }: AddFundsModalProps
   const onSubmit = (data: AddFundsFormValues) => {
     const numericAmount = Number.parseFloat(data.amount.replace(/,/g, ""))
     if (numericAmount > 0) {
-      onConfirm(numericAmount)
+      // Call the chargeCard mutation with the required payload
+      chargeCard({
+        amount: numericAmount,
+        metadata: {
+          userId: "12345", // Replace with actual userId if available
+          reason: "Wallet Top up"
+        }
+      })
       handleClose()
     }
   }
@@ -86,7 +98,7 @@ export function AddFundsModal({ isOpen, onClose, onConfirm }: AddFundsModalProps
             />
 
             {/* Payment Method Selection */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="method"
               render={({ field }) => (
@@ -108,7 +120,7 @@ export function AddFundsModal({ isOpen, onClose, onConfirm }: AddFundsModalProps
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 pt-4">

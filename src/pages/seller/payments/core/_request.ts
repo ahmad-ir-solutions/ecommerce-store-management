@@ -1,10 +1,8 @@
 // stripeApi.ts
 import authApi from '@/lib/axios';
 
-const STRIPE_BASE = '/stripe';
-
 export function createSetupIntent() {
-  return authApi.post(`/${STRIPE_BASE}/setup-intent`);
+  return authApi.post(`/stripe/setup-intent`);
 }
 
 export function chargeCard(data: {
@@ -13,20 +11,20 @@ export function chargeCard(data: {
   paymentMethodId?: string;
   metadata?: Record<string, string>;
 }) {
-  return authApi.post(`/${STRIPE_BASE}/charge`, data);
+  return authApi.post(`/stripe/charge`, data);
 }
 
 export function setDefaultCard(data: {
   customerId?: string;
   paymentMethodId: string;
 }) {
-  return authApi.post(`/${STRIPE_BASE}/set-default-card`, data);
+  return authApi.post(`/stripe/set-default-card`, data);
 }
 
 export function getSavedCards() {
-  return authApi.get(`/${STRIPE_BASE}/saved-cards`);
+  return authApi.get(`/stripe/saved-cards`);
 }
 
 export function deleteCard(data: { paymentMethodId: string }) {
-  return authApi.post(`/${STRIPE_BASE}/delete-card`, data); // POST instead of DELETE if backend expects payload
+  return authApi.delete(`/stripe/delete-card`, { data });
 }
