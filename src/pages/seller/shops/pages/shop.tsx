@@ -9,10 +9,10 @@ import { useGetConnectedAccounts } from "../core/hooks/useConnectAccount";
 export function SellerShopsPage() {
     const [isModalOpen, setModalOpen] = useState(false);
     const { data: connectedAccounts = [], isLoading } = useGetConnectedAccounts();
-
+    
     // Separate by type
-    const webstores = connectedAccounts.filter((acc: any) => acc.woocommerce);
-    const marketplaces = connectedAccounts.filter((acc: any) => acc.marketplace); // Only if marketplace field exists
+    const webstores = connectedAccounts.filter((acc: any) => acc.platformType === "webstore");
+    const marketplaces = connectedAccounts.filter((acc: any) => acc.platformType === "marketplace");
 
     return (
         <div>

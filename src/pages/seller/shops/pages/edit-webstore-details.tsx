@@ -48,10 +48,10 @@ export function EditWebstoreDetails() {
   const navigate = useNavigate();
   const { webstoreId } = useParams()
   const { mutate: updateAccountConnection } = useUpdateAccountConnection();
-  const { data: connectedAccount, isLoading: isConnectedAccountLoading } = useGetConnectedAccount(webstoreId);
-  // console.log(connectedAccount?.data?.data, "connectedAccount");
+  const { data: connectedAccount, isLoading: isConnectedAccountLoading, refetch } = useGetConnectedAccount(webstoreId);
+  // console.log(connectedAccount?.data, "connectedAccount");
 
-  const [siteUrl, setSiteUrl] = useState(""); // from the `url` input
+  const [siteUrl, setSiteUrl] = useState("");
 
   const handleTestConnection = async () => {
     try {
@@ -108,30 +108,30 @@ export function EditWebstoreDetails() {
   });
 
   useEffect(() => {
-    if (connectedAccount?.data?.data && !isConnectedAccountLoading) {
+    if (connectedAccount?.data && !isConnectedAccountLoading) {
       form.reset({
-        profileName: connectedAccount.data.data.profileName,
-        trackingUrlTemplate: connectedAccount.data.data.trackingUrlTemplate ?? "",
-        companyIdentity: connectedAccount.data.data.companyIdentity,
-        isActive: connectedAccount.data.data.isActive,
-        weightUnit: connectedAccount.data.data.weightUnit,
-        generateSlugFrom: connectedAccount.data.data.generateSlugFrom,
-        orderTrackingNoteSettings: connectedAccount.data.data.orderTrackingNoteSettings,
-        automaticInventoryUpdates: connectedAccount.data.data.automaticInventoryUpdates || false,
-        importOrders: connectedAccount.data.data.importOrders || false,
-        automaticInventoryUpdatesStock: connectedAccount.data.data.automaticInventoryUpdatesStock || false,
-        currency: connectedAccount.data.data.currency,
-        sendDispatchNotifications: connectedAccount.data.data.sendDispatchNotifications || false,
-        automaticPriceUpdates: connectedAccount.data.data.automaticPriceUpdates || false,
-        calculateShippingTax: connectedAccount.data.data.calculateShippingTax || false,
-        ignoreChannelTax: connectedAccount.data.data.ignoreChannelTax || false,
-        automaticListingsDownload: connectedAccount.data.data.automaticListingsDownload || false,
-        defaultPricingProfile: connectedAccount.data.data.defaultPricingProfile,
-        disableInvoicePrinting: connectedAccount.data.data.disableInvoicePrinting || false,
-        uploadListings: connectedAccount.data.data.uploadListings || false,
-        channelPercentageFees: connectedAccount.data.data.channelPercentageFees || "0",
-        enforceChannelWarehouse: connectedAccount.data.data.enforceChannelWarehouse || false,
-        downloadListings: connectedAccount.data.data.downloadListings || false,
+        profileName: connectedAccount.data.profileName,
+        trackingUrlTemplate: connectedAccount.data.trackingUrlTemplate ?? "",
+        companyIdentity: connectedAccount.data.companyIdentity,
+        isActive: connectedAccount.data.isActive,
+        weightUnit: connectedAccount.data.weightUnit,
+        generateSlugFrom: connectedAccount.data.generateSlugFrom,
+        orderTrackingNoteSettings: connectedAccount.data.orderTrackingNoteSettings,
+        automaticInventoryUpdates: connectedAccount.data.automaticInventoryUpdates || false,
+        importOrders: connectedAccount.data.importOrders || false,
+        automaticInventoryUpdatesStock: connectedAccount.data.automaticInventoryUpdatesStock || false,
+        currency: connectedAccount.data.currency,
+        sendDispatchNotifications: connectedAccount.data.sendDispatchNotifications || false,
+        automaticPriceUpdates: connectedAccount.data.automaticPriceUpdates || false,
+        calculateShippingTax: connectedAccount.data.calculateShippingTax || false,
+        ignoreChannelTax: connectedAccount.data.ignoreChannelTax || false,
+        automaticListingsDownload: connectedAccount.data.automaticListingsDownload || false,
+        defaultPricingProfile: connectedAccount.data.defaultPricingProfile,
+        disableInvoicePrinting: connectedAccount.data.disableInvoicePrinting || false,
+        uploadListings: connectedAccount.data.uploadListings || false,
+        channelPercentageFees: connectedAccount.data.channelPercentageFees || "0",
+        enforceChannelWarehouse: connectedAccount.data.enforceChannelWarehouse || false,
+        downloadListings: connectedAccount.data.downloadListings || false,
       });
     }
   }, [connectedAccount, form]);
@@ -141,6 +141,10 @@ export function EditWebstoreDetails() {
     updateAccountConnection({ id: webstoreId!, data: data });
     navigate("/seller/shops");
   }
+
+  useEffect(() => {
+    refetch()
+  },[])
 
   return (
     <div>

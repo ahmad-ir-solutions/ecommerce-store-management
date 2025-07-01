@@ -14,6 +14,8 @@ import {
 export const woocommerceKeys = {
   all: ["woocommerce"] as const,
   connectedAccounts: () => [...woocommerceKeys.all, "connected-accounts"] as const,
+  products: () => [...woocommerceKeys.all, "products"] as const,
+  connectedAccount: (id: string) => [...woocommerceKeys.all, "connected-account", id] as const,
 };
 
 // Create Account Connection
@@ -58,15 +60,21 @@ export const useGetConnectedAccounts = () => {
     queryKey: woocommerceKeys.connectedAccounts(),
     queryFn: getConnectedAccounts,
     select: (res) => res.data,
+    refetchOnMount: true,
+    // refetchOnWindowFocus: false, // optional: disable on tab focus
+    // refetchOnReconnect: true,
+    staleTime: 0,
   });
 };
 
 // Get Single Connected Account
 export const useGetConnectedAccount = (id?: string) =>
   useQuery({
-    queryKey: ["connected-account", id],
+    queryKey: woocommerceKeys.connectedAccount(id || ""),
     queryFn: () => getConnectedAccount(id!),
     enabled: !!id,
+    select: (res) => res.data,
+    
   });
 
 // Update Account Connection
@@ -76,12 +84,10 @@ export const useUpdateAccountConnection = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<any> }) =>
       updateAccountConnection(id, data),
-
     onSuccess: () => {
       showSuccessMessage("Account details updated");
       queryClient.invalidateQueries({ queryKey: woocommerceKeys.connectedAccounts() });
     },
-
     onError: (err: AxiosError<{ message: string }>) => {
       showErrorMessage(err.response?.data?.message || "Failed to update account details");
     },

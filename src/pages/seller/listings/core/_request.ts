@@ -1,10 +1,16 @@
-import api from '@/services/api';
-import { CaseCounts } from './_modals';
+import authApi from "@/lib/axios";
 
-
-const DASHBOARD_URL = '/dashboard';
-
-export function getDashboardData(params: any) {
-  return api.get<CaseCounts>(DASHBOARD_URL, { params }).then((response) => response);
+// WooCommerce product listing APIs
+export function deleteWoocommerceProduct(productId: string, siteUrl: string) {
+  return authApi.delete(`/woocommerce/${productId}`, {
+    data: { siteUrl },
+  });
 }
 
+export function listWoocommerceProduct(data: { masterProductId: string; sellerPrice: number, accountConnectionId: string }) {
+  return authApi.post("/woocommerce/list-product", data);
+}
+
+export function getWoocommerceProducts() {
+  return authApi.get("/woocommerce");
+}

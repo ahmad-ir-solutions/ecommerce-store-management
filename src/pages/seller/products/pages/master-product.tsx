@@ -12,6 +12,7 @@ import { debounce } from 'lodash';
 
 export function SellerProductsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<IProductModel | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [queryParams, setQueryParams] = useState<ProductQueryParams>({
     sortBy: "createdAt",
@@ -34,7 +35,7 @@ export function SellerProductsPage() {
   )
   
   const handleAdd = (row: IProductModel) => {
-    console.log("Add clicked for", row)
+    setSelectedProduct(row)
     setIsAddModalOpen(true)
   }
 
@@ -101,22 +102,21 @@ export function SellerProductsPage() {
             setSearchTerm(e.target.value)
             handleSearch(e.target.value)
           }}
+          className="w-full"
         />
-        <Button onClick={() => setIsAddModalOpen(true)} variant="primary" className="rounded-lg">
+        {/* <Button onClick={() => setIsAddModalOpen(true)} variant="primary" className="rounded-lg">
           Add to list
-        </Button>
+        </Button> */}
       </Header>
       {/* Master Inventory Section */}
       <ReusableTable
         title="Master Inventory"
         data={products}
         columns={productColumns}
-        // searchTerm={searchTerm}
         itemsPerPage={10}
         isLoading={isLoading}
       />
-
-      <AddToListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      <AddToListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} product={selectedProduct} />
     </div>
           // {/* integration */}
       // <div>
