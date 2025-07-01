@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
@@ -24,7 +24,7 @@ export const EditProductInfoPage = () => {
   // Fetch product data
   const { data: productData, isLoading, error } = useGetProduct(productId || "")
   const updateProductMutation = useUpdateProduct()
-
+  const navigate = useNavigate()
   const {
     control,
     handleSubmit,
@@ -146,8 +146,9 @@ export const EditProductInfoPage = () => {
                     className="px-8 rounded-lg"
                     onClick={() => {
                       setIsEditing(false)
-                      setCurrentProduct(originalProduct)
-                      reset(originalProduct || undefined)
+                      // setCurrentProduct(originalProduct)
+                      // reset(originalProduct || undefined)
+                      navigate("/seller/products")
                     }}
                   >
                     Cancel
@@ -157,7 +158,7 @@ export const EditProductInfoPage = () => {
                   </Button>
                 </>
               ):(
-                <Button variant="primary" className="px-8 rounded-lg" onClick={handleEditClick}>
+                <Button type="button" variant="primary" className="px-8 rounded-lg" onClick={handleEditClick}>
                   Edit
                 </Button>
               )}

@@ -3,18 +3,26 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-// import { Checkbox } from "@/components/ui/checkbox"
-import { Switch } from "@/components/ui/switch"
 import { z } from "zod"
 import { CustomSelect } from "@/components/shared/custom-select"
-import Amazon from "@/assets/images/amazon.svg";
-import Woocommerce from "@/assets/images/WooCommerce-Logo.png";
+import Amazon from "@/assets/images/amazon.svg"
+import Woocommerce from "@/assets/images/WooCommerce-Logo.png"
+import { useCreateAccountConnection } from "../core/hooks/useConnectAccount"
+import { Switch } from "@/components/ui/switch"
 
-// Dynamic schema based on platform
+type Platform = "marketplace" | "webstore"
+
+export interface ProfileProp {
+  selectedPlatform: Platform | null
+  closeModal: () => void
+}
+
+// Zod schema generator based on platform
 const createProfileSchema = (platform: Platform | null) => {
   const baseSchema = {
     profileName: z.string().nonempty("Profile name is required"),
-    grantPermission: z.boolean(),
+    integrationType: z.string().nonempty("Integration type is required"),
+    isActive: z.boolean(),
   }
 
   if (platform === "marketplace") {
@@ -23,7 +31,9 @@ const createProfileSchema = (platform: Platform | null) => {
       integrationType: z.literal("amazon"),
       amazonStore: z.string().nonempty("Amazon store is required"),
     })
-  } else if (platform === "webstore") {
+  }
+
+  if (platform === "webstore") {
     return z.object({
       ...baseSchema,
       integrationType: z.literal("woocommerce"),
@@ -33,14 +43,9 @@ const createProfileSchema = (platform: Platform | null) => {
   return z.object(baseSchema)
 }
 
-type Platform = "marketplace" | "webstore"
-
-export interface ProfileProp {
-  selectedPlatform: Platform | null
-  closeModal: () => void
-}
-
 export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
+  const { mutate: createConnection } = useCreateAccountConnection()
+
   const schema = createProfileSchema(selectedPlatform)
   type FormType = z.infer<typeof schema>
 
@@ -55,15 +60,20 @@ export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
     defaultValues: {
       integrationType: selectedPlatform === "marketplace" ? "amazon" : "woocommerce",
       profileName: selectedPlatform === "marketplace" ? "Amazon" : "WooCommerce",
-      grantPermission: false,
+      isActive: true,
       ...(selectedPlatform === "marketplace" && { amazonStore: "" }),
     } as FormType,
   })
-
-  const grantPermission = watch("grantPermission")
-
+  console.log(errors, "errors");
+  
   const onSubmit = (data: FormType) => {
-    console.log("Form submitted:", { platform: selectedPlatform, ...data })
+    console.log("Form submitted:", { platformType: selectedPlatform, ...data })
+    createConnection({
+      profileName: data.profileName,
+      integrationType: data.integrationType,
+      platformType: selectedPlatform || "marketplace",
+      isActive: data.isActive,
+      })
     closeModal()
   }
 
@@ -71,40 +81,28 @@ export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
     <>
       {/* Integration Type */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="integrationType" className="text-sm font-medium text-gray-700">
-          Integration Type
-        </Label>
-        <div className="col-span-2 flex items-center">
-          <div className="flex items-center space-x-2">
-            <img src={Amazon} alt="Amazon" className="" />
-            {/* <span className="text-sm font-medium">Amazon</span> */}
-          </div>
+        <Label className="text-sm font-medium text-gray-700">Integration Type</Label>
+        <div className="col-span-2 flex items-center space-x-2">
+          <img src={Amazon} alt="Amazon" className="h-6" />
         </div>
       </div>
 
       {/* Profile Name */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">
-          Profile Name *
-        </Label>
+        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">Profile Name *</Label>
         <div className="col-span-2">
           <Input
             id="profileName"
             {...register("profileName")}
-            className="w-full border-gray-300"
             placeholder="Amazon"
           />
-          {errors.profileName && (
-            <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>
-          )}
+          {errors.profileName && <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>}
         </div>
       </div>
 
       {/* Amazon Store */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="amazonStore" className="text-sm font-medium text-gray-700">
-          Amazon Store *
-        </Label>
+        <Label htmlFor="amazonStore" className="text-sm font-medium text-gray-700">Amazon Store *</Label>
         <div className="col-span-2">
           <CustomSelect
             placeholder="Please Select..."
@@ -117,23 +115,22 @@ export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
             ]}
             onChange={(value) => setValue("amazonStore" as any, value)}
           />
-
           {(errors as any).amazonStore && (
             <p className="text-sm text-red-500 mt-1">{(errors as any).amazonStore.message}</p>
           )}
         </div>
       </div>
 
-      {/* Grant Permissions */}
+      {/* Active Platform */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="grantPermission" className="text-sm font-medium text-gray-700">
-          Grant permissions to all existing users
+        <Label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+          Active Platform
         </Label>
         <div className="col-span-2">
           <Switch
-            id="grantPermission"
-            checked={grantPermission}
-            onCheckedChange={(checked) => setValue("grantPermission", checked)}
+            id="isActive"
+            checked={watch("isActive")}
+            onCheckedChange={(checked) => setValue("isActive", checked)}
           />
         </div>
       </div>
@@ -144,73 +141,44 @@ export const SetupProfile = ({ selectedPlatform, closeModal }: ProfileProp) => {
     <>
       {/* Integration Type */}
       <div className="grid grid-cols-3 items-center gap-4">
-      <Label htmlFor="integrationType" className="text-sm font-medium text-gray-700">
-          Integration Type
-        </Label>
-        <div className="col-span-2 flex items-center">
-          <div className="flex items-center space-x-2">
-            <img src={Woocommerce} alt="WooCommerce" className="h-6" />
-            {/* <span className="text-sm font-medium">WooCommerce</span> */}
-          </div>
+        <Label className="text-sm font-medium text-gray-700">Integration Type</Label>
+        <div className="col-span-2 flex items-center space-x-2">
+          <img src={Woocommerce} alt="WooCommerce" className="h-6" />
         </div>
       </div>
 
       {/* Profile Name */}
       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">
-          Profile Name *
-        </Label>
+        <Label htmlFor="profileName" className="text-sm font-medium text-gray-700">Profile Name *</Label>
         <div className="col-span-2">
           <Input
             id="profileName"
             {...register("profileName")}
-            className="w-full"
             placeholder="WooCommerce"
           />
-          {errors.profileName && (
-            <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>
-          )}
+          {errors.profileName && <p className="text-sm text-red-500 mt-1">{errors.profileName.message}</p>}
         </div>
       </div>
 
-      {/* Grant Permissions */}
-       <div className="grid grid-cols-3 items-center gap-4">
-        <Label htmlFor="grantPermission" className="text-sm font-medium text-gray-700">
-          Grant permissions to all existing users
+      {/* Active Platform */}
+      <div className="grid grid-cols-3 items-center gap-4">
+        <Label htmlFor="isActive" className="text-sm font-medium text-gray-700">
+          Active Platform
         </Label>
         <div className="col-span-2">
           <Switch
-            id="grantPermission"
-            checked={grantPermission}
-            onCheckedChange={(checked) => setValue("grantPermission", checked)}
+            id="isActive"
+            checked={watch("isActive")}
+            onCheckedChange={(checked) => setValue("isActive", checked)}
           />
         </div>
       </div>
-      {/* <div className="grid grid-cols-3 items-start gap-4">
-        <div></div>
-        <div className="col-span-2">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="grantPermission"
-              checked={grantPermission}
-              onCheckedChange={(checked) => setValue("grantPermission", !!checked)}
-            />
-            <Label
-              htmlFor="grantPermission"
-              className="text-sm font-medium text-gray-700 cursor-pointer"
-            >
-              Grant permissions to all existing users
-            </Label>
-          </div>
-        </div>
-      </div> */}
     </>
   )
 
   return (
     <div className="space-y-4">
       <h2>Setup Profile</h2>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 pb-3">
         {selectedPlatform === "marketplace" && renderMarketplaceFields()}
         {selectedPlatform === "webstore" && renderWebstoreFields()}

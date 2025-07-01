@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { fetchInventoryAlerts } from "@/lib/api"
 import { DataTable } from "@/components/ui/data-table"
+import { Loader2 } from "lucide-react"
 
 interface InventoryAlert {
   id: string
@@ -84,7 +85,9 @@ export function InventoryAlerts() {
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="flex justify-center py-8">Loading...</div>
+           <div className="flex justify-center items-center h-64">
+           <Loader2 className="h-8 w-8 animate-spin" />
+         </div>
         ) : (
           <DataTable columns={columns} data={alerts} />
         )}

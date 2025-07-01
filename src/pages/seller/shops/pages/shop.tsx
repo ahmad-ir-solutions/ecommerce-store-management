@@ -4,9 +4,16 @@ import ExistingMarketplace from "../components/existing-marketplace";
 import ExistingWebstore from "../components/existing-webstore";
 import { IntegratePlatformModal } from "../components/modal/integrate-platform-modal";
 import { useState } from "react";
+import { useGetConnectedAccounts } from "../core/hooks/useConnectAccount";
 
 export function SellerShopsPage() {
     const [isModalOpen, setModalOpen] = useState(false);
+    const { data: connectedAccounts = [], isLoading } = useGetConnectedAccounts();
+
+    // Separate by type
+    const webstores = connectedAccounts.filter((acc: any) => acc.woocommerce);
+    const marketplaces = connectedAccounts.filter((acc: any) => acc.marketplace); // Only if marketplace field exists
+
     return (
         <div>
             <Header title="Shop">
@@ -17,8 +24,8 @@ export function SellerShopsPage() {
                 </Button>
             </Header>
             <div className="mt-6">
-                <ExistingMarketplace />
-                <ExistingWebstore />
+                <ExistingMarketplace marketplaces={marketplaces} isLoading={isLoading} />
+                <ExistingWebstore webstores={webstores} isLoading={isLoading} />
             </div>
             {/* New Integration Modal */}
             <IntegratePlatformModal

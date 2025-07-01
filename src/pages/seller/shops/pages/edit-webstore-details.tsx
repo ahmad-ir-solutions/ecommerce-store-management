@@ -7,20 +7,21 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import Woocommerce from "@/assets/images/WooCommerce-Logo.png";
-import { CustomSelect } from '@/components/shared/custom-select';
+import { useGetConnectedAccount, useUpdateAccountConnection } from "../core/hooks/useConnectAccount";
+import { useEffect, useState } from "react"
+import { getWoocommerceConnectUrl } from "../core/_request"
+import { showErrorMessage } from "@/lib/utils/messageUtils"
+import { Loader2 } from "lucide-react"
+import { SelectDropdown } from "@/components/shared/select-dropdown"
 
 const webstoreSchema = z.object({
   profileName: z.string().min(1, "Profile name is required"),
   trackingUrlTemplate: z.string().optional(),
   companyIdentity: z.string().min(1, "Company identity is required"),
-  active: z.boolean(),
-  testProfileName: z.string().min(1, "Profile name is required"),
-  lastConnected: z.string(),
-  amazonStore: z.string(),
-  marketplaceId: z.string(),
+  isActive: z.boolean(),
   weightUnit: z.string(),
   generateSlugFrom: z.string(),
   orderTrackingNoteSettings: z.string(),
@@ -44,50 +45,109 @@ const webstoreSchema = z.object({
 type WebstoreFormData = z.infer<typeof webstoreSchema>
 
 export function EditWebstoreDetails() {
+  const navigate = useNavigate();
   const { webstoreId } = useParams()
+  const { mutate: updateAccountConnection } = useUpdateAccountConnection();
+  const { data: connectedAccount, isLoading: isConnectedAccountLoading } = useGetConnectedAccount(webstoreId);
+  // console.log(connectedAccount?.data?.data, "connectedAccount");
 
-  console.log(webstoreId, "webstoreId");
+  const [siteUrl, setSiteUrl] = useState(""); // from the `url` input
+
+  const handleTestConnection = async () => {
+    try {
+      if (!siteUrl || !webstoreId) {
+        showErrorMessage("Missing site URL or account creation ID");
+        return;
+      }
+  
+      const { data: woocommerceConnectUrl } = await getWoocommerceConnectUrl({
+        site_url: siteUrl,
+        account_creation_id: webstoreId!,
+      });
+  
+      console.log(woocommerceConnectUrl, "woocommerceConnectUrl");
+  
+      if (woocommerceConnectUrl?.siteUrl) {
+        // setConnectUrl(woocommerceConnectUrl.siteUrl);
+        window.open(woocommerceConnectUrl.siteUrl, "_blank");
+      } else {
+        showErrorMessage("Unable to get WooCommerce URL");
+      }
+    } catch (error: any) {
+      const errorMessage = error?.response?.data?.message || "Failed to generate WooCommerce URL";
+      showErrorMessage(errorMessage);
+    }
+  };
 
   const form = useForm<WebstoreFormData>({
     resolver: zodResolver(webstoreSchema),
     defaultValues: {
-      profileName: "WooCommerce Integration Profile",
-      trackingUrlTemplate: "https://track.woocommerce.com/{tracking_number}",
-      companyIdentity: "Default Warehouse",
-      active: true,
-      testProfileName: "WooCommerce Test Profile",
-      lastConnected: "14/02/2025 14:15:44",
-      amazonStore: "Amazon Australia (AU)",
-      marketplaceId: "A39ILJ37TRP1C6",
+      profileName: "",
+      trackingUrlTemplate: "",
+      companyIdentity: "",
+      isActive: true,
       weightUnit: "KG",
       generateSlugFrom: "SKU",
-      orderTrackingNoteSettings: "KG",
+      orderTrackingNoteSettings: "",
       automaticInventoryUpdates: false,
       importOrders: false,
       automaticInventoryUpdatesStock: false,
-      currency: "Default Warehouse",
+      currency: "",
       sendDispatchNotifications: false,
       automaticPriceUpdates: false,
       calculateShippingTax: false,
-      ignoreChannelTax: true,
-      automaticListingsDownload: true,
-      defaultPricingProfile: "Default Warehouse",
+      ignoreChannelTax: false,
+      automaticListingsDownload: false,
+      defaultPricingProfile: "",
       disableInvoicePrinting: false,
       uploadListings: false,
-      channelPercentageFees: "Default Warehouse",
+      channelPercentageFees: "",
       enforceChannelWarehouse: false,
       downloadListings: false,
     },
-  })
+  });
+
+  useEffect(() => {
+    if (connectedAccount?.data?.data && !isConnectedAccountLoading) {
+      form.reset({
+        profileName: connectedAccount.data.data.profileName,
+        trackingUrlTemplate: connectedAccount.data.data.trackingUrlTemplate ?? "",
+        companyIdentity: connectedAccount.data.data.companyIdentity,
+        isActive: connectedAccount.data.data.isActive,
+        weightUnit: connectedAccount.data.data.weightUnit,
+        generateSlugFrom: connectedAccount.data.data.generateSlugFrom,
+        orderTrackingNoteSettings: connectedAccount.data.data.orderTrackingNoteSettings,
+        automaticInventoryUpdates: connectedAccount.data.data.automaticInventoryUpdates || false,
+        importOrders: connectedAccount.data.data.importOrders || false,
+        automaticInventoryUpdatesStock: connectedAccount.data.data.automaticInventoryUpdatesStock || false,
+        currency: connectedAccount.data.data.currency,
+        sendDispatchNotifications: connectedAccount.data.data.sendDispatchNotifications || false,
+        automaticPriceUpdates: connectedAccount.data.data.automaticPriceUpdates || false,
+        calculateShippingTax: connectedAccount.data.data.calculateShippingTax || false,
+        ignoreChannelTax: connectedAccount.data.data.ignoreChannelTax || false,
+        automaticListingsDownload: connectedAccount.data.data.automaticListingsDownload || false,
+        defaultPricingProfile: connectedAccount.data.data.defaultPricingProfile,
+        disableInvoicePrinting: connectedAccount.data.data.disableInvoicePrinting || false,
+        uploadListings: connectedAccount.data.data.uploadListings || false,
+        channelPercentageFees: connectedAccount.data.data.channelPercentageFees || "0",
+        enforceChannelWarehouse: connectedAccount.data.data.enforceChannelWarehouse || false,
+        downloadListings: connectedAccount.data.data.downloadListings || false,
+      });
+    }
+  }, [connectedAccount, form]);
 
   const onSubmit = (data: WebstoreFormData) => {
     console.log("Form submitted:", data)
-    // Handle form submission
+    updateAccountConnection({ id: webstoreId!, data: data });
+    navigate("/seller/shops");
   }
 
   return (
     <div>
       <Header title="Settings" />
+      {isConnectedAccountLoading ? <div className="flex justify-center items-center h-screen">
+        <Loader2 className="w-6 h-6 animate-spin" />
+      </div> :
       <div className="mt-6 bg-white p-6 rounded-2xl shadow-none text-[#4E5967]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
@@ -112,10 +172,10 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Profile name *</FormLabel>
                             <FormControl>
-                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg" />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -128,10 +188,10 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Tracking URL template</FormLabel>
                             <FormControl>
-                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg" />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -142,7 +202,7 @@ export function EditWebstoreDetails() {
                       <Label className="text-sm font-medium">Active</Label>
                       <FormField
                         control={form.control}
-                        name="active"
+                        name="isActive"
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
@@ -163,7 +223,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Company identity *</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -171,7 +231,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -182,42 +242,19 @@ export function EditWebstoreDetails() {
                   <h1 className="text-lg font-medium text-[#11263C] mb-2">Test your WooCommerce Account</h1>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="testProfileName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-                              <FormLabel>Profile name *</FormLabel>
-                              <FormControl>
-                                <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
-                              </FormControl>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-                        <Label className="text-sm font-medium">Last Connected Successfully:</Label>
-                        <div className="mt-1 text-sm text-gray-600">{form.watch("lastConnected")}</div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-                        <Label className="text-sm font-medium">Amazon Store</Label>
-                        <div className="mt-1 text-sm text-gray-600">{form.watch("amazonStore")}</div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-                        <Label className="text-sm font-medium">MarketplaceID</Label>
-                        <div className="mt-1 text-sm text-gray-600">{form.watch("marketplaceId")}</div>
-                      </div>
-
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
+                          <FormLabel>URL</FormLabel>
+                          <FormControl>
+                            <Input value={siteUrl}
+                              onChange={(e) => setSiteUrl(e.target.value)} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg" />
+                          </FormControl>
+                        </div>
+                        <FormMessage className="text-red-400" />
+                      </FormItem>
                       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <span />
-                        <Button type="button" variant="primary" className="rounded-lg">
+                        <Button type="button" variant="primary" className="rounded-lg" onClick={handleTestConnection}>
                           Test Connection
                         </Button>
                       </div>
@@ -241,7 +278,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Weight Unit</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[
                                   { id: 'KG', label: 'KG', value: 'KG' },
                                   { id: 'LB', label: 'LB', value: 'LB' },
@@ -252,7 +289,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -265,7 +302,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Generate Slug from</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[
                                   { id: 'SKU', label: 'SKU', value: 'SKU' },
                                   { id: 'Title', label: 'Title', value: 'Title' },
@@ -276,7 +313,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -291,7 +328,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Order Tracking Note Settings</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[{ id: 'KG', label: 'KG', value: 'KG' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -299,7 +336,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -393,9 +430,9 @@ export function EditWebstoreDetails() {
                 </Card>
               </div>
 
-              {/* Stock Management (Right Column) */}
+              {/* Misc (Right Column) */}
               <div className="space-y-3">
-                <h1 className="text-lg font-medium mt-6 text-[#11263C]">Stock Management</h1>
+                <h1 className="text-lg font-medium mt-6 text-[#11263C]">Misc</h1>
                 <Card className="bg-[#ECF6FF] border-none shadow-none">
                   <CardContent className="space-y-4">
                     <FormField
@@ -406,7 +443,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Currency *</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -414,7 +451,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -444,7 +481,7 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Default Pricing Profile</FormLabel>
                             <FormControl>
-                              <CustomSelect
+                              <SelectDropdown
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -452,7 +489,7 @@ export function EditWebstoreDetails() {
                               />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -465,10 +502,10 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Channel Percentage Fees</FormLabel>
                             <FormControl>
-                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg"/>
+                              <Input {...field} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg" />
                             </FormControl>
                           </div>
-                          <FormMessage />
+                          <FormMessage className="text-red-400" />
                         </FormItem>
                       )}
                     />
@@ -487,8 +524,9 @@ export function EditWebstoreDetails() {
               </Button>
             </div>
           </form>
-        </Form>
-      </div>
+          </Form>
+        </div>
+      }
     </div>
   )
 }
