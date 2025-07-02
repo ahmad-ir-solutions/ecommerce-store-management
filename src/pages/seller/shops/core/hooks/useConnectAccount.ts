@@ -8,6 +8,7 @@ import {
   getConnectedAccount,
   getConnectedAccounts,
   updateAccountConnection,
+  deleteAccountConnection,
 } from "../_request";
 
 // Keys
@@ -90,6 +91,22 @@ export const useUpdateAccountConnection = () => {
     },
     onError: (err: AxiosError<{ message: string }>) => {
       showErrorMessage(err.response?.data?.message || "Failed to update account details");
+    },
+  });
+};
+
+// Delete Account Connection
+export const useDeleteAccountConnection = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteAccountConnection,
+    onSuccess: () => {
+      showSuccessMessage("Account connection deleted");
+      queryClient.invalidateQueries({ queryKey: woocommerceKeys.connectedAccounts() });
+    },
+    onError: (err: AxiosError<{ message: string }>) => {
+      showErrorMessage(err.response?.data?.message || "Failed to delete account connection");
     },
   });
 };

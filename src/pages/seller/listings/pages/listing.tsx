@@ -7,6 +7,8 @@ import { Header } from "@/components/shared/header"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Link } from "react-router-dom"
 import { AddToChannelListModal } from "../components/modal/add-to-channel-list-modal"
+import { useDeleteWoocommerceProduct, useGetWoocommerceProducts } from "../core/hooks/useListing"
+import { Trash2Icon } from "lucide-react"
 
 interface UserListing {
   _id: string
@@ -20,17 +22,50 @@ interface UserListing {
   inventoryPrice: string
   channelPrice: string
   status: string
+  siteUrl: string
 }
 
 export function SellerListingsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const { data: woocommerceProducts = [], isLoading, refetch } = useGetWoocommerceProducts();
+  const deleteProductMutation = useDeleteWoocommerceProduct()
+
+  const handleDelete = (id: string, siteUrl: string) => {
+    deleteProductMutation.mutate({
+      productId: id,
+      siteUrl: siteUrl,
+    })
+    refetch()
+  }
+  // console.log(woocommerceProducts, "woocommerceProducts");
+  
 
   const handleEdit = (row: UserListing) => {
     setIsAddModalOpen(true)
     console.log("Edit clicked for", row)
     // Handle edit functionality here
   }
+
+  const mappedListings: UserListing[] = (woocommerceProducts?.[0]?.products || []).map((product: any) => {
+    const meta = Object.fromEntries(product.meta_data.map((m: any) => [m.key, m.value]));
+  console.log(product, "product");
+  
+    return {
+      _id: String(product.id),
+      image: product.images?.[0]?.src || "/placeholder.svg",
+      masterSku: product.sku || "N/A",
+      name: product.name || "N/A",
+      warehouse: meta.warehouse || "Default",
+      channel: "WooCommerce",
+      channelSku: product.sku || "N/A",
+      quantity: product.stock_quantity ?? 0,
+      inventoryPrice: product.price ? `£${product.price}` : "N/A",
+      channelPrice: product.price ? `£${product.price}` : "N/A",
+      status: product.status === "publish" ? "Binded" : "Unbinded",
+      siteUrl: woocommerceProducts?.[0]?.siteUrl || "N/A",
+    };
+  });
 
   const userListingColumns = [
     {
@@ -131,7 +166,12 @@ export function SellerListingsPage() {
     {
       key: "action",
       title: "Action",
-      render: (row: UserListing) => (
+      render: (row: UserListing) => {
+        console.log(row, "row");
+        
+        return (
+        <>  
+        <div className="flex gap-2">
         <Button
           size="sm"
           variant="primary"
@@ -140,154 +180,18 @@ export function SellerListingsPage() {
         >
           Edit
         </Button>
-      ),
+        <Button
+          size="sm"
+          variant="primary"
+          onClick={() => handleDelete(row._id, row.siteUrl)}
+          className="bg-red-600 text-white hover:bg-red-700">
+            <Trash2Icon className="w-4 h-4" />
+          </Button>
+        </div>
+        </>
+      )
+      },
       width: "100px",
-    },
-  ]
-
-  const mockUserListings: UserListing[] = [
-    {
-      _id: "1",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000553",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000553",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "2",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000554",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000554",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "3",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000555",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000555",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "4",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000556",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000556",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "5",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000557",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000557",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "6",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000558",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000558",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "7",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000559",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000559",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "8",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000560",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000560",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "9",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000561",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000561",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "10",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000562",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000562",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
-    },
-    {
-      _id: "11",
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=100&h=100&fit=crop",
-      masterSku: "805432000563",
-      name: "Xerjoff Accento EDP-S 100ml",
-      warehouse: "Default",
-      channel: "Amazon",
-      channelSku: "805432000563",
-      quantity: 546,
-      inventoryPrice: "£112.95",
-      channelPrice: "£143.95",
-      status: "Binded",
     },
   ]
 
@@ -300,19 +204,19 @@ export function SellerListingsPage() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Button variant="primary" className="rounded-lg"  onClick={() => setIsAddModalOpen(true)}>
+        {/* <Button variant="primary" className="rounded-lg"  onClick={() => setIsAddModalOpen(true)}>
           Add New
-        </Button>
+        </Button> */}
       </Header>
 
       {/* Table */}
       <ReusableTable
         title="Listing On Channel"
-        data={mockUserListings}
+        data={mappedListings}
         columns={userListingColumns}
         searchTerm={searchTerm}
         itemsPerPage={10}
-        isLoading={false}
+        isLoading={isLoading}
       />
 
       <AddToChannelListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />

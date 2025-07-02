@@ -40,3 +40,7 @@ export function getWoocommerceConnectUrl(params: WoocommerceURLParams) {
     params,
   });
 }
+
+export function deleteAccountConnection(accountConnectionId: string) {
+  return authApi.delete(`/account-connection/delete-connection/${accountConnectionId}`);
+}

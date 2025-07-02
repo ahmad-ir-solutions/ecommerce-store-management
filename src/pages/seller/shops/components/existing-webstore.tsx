@@ -2,9 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2Icon } from "lucide-react";
 import ShopifyLogo from "@/assets/images/shopyfy.svg";
 import WoocommerceLogo from "@/assets/images/WooCommerce-Logo.png";
+import { useDeleteAccountConnection } from "../core/hooks/useConnectAccount";
+import { Button } from "@/components/ui/button";
 
 export function ExistingWebstore({ webstores, isLoading }: { webstores: any, isLoading: boolean }) {
     // const webstoreId = "164123126545641231";
@@ -21,6 +23,12 @@ export function ExistingWebstore({ webstores, isLoading }: { webstores: any, isL
         }
     };
 
+    const { mutate: deleteWebstore } = useDeleteAccountConnection();
+
+    const handleDelete = (webstoreId: string) => {
+        deleteWebstore(webstoreId);
+    }
+
     return (
         <div className="mt-6">
             <Card className="bg-white rounded-2xl border-none shadow-none gap-3">
@@ -34,13 +42,14 @@ export function ExistingWebstore({ webstores, isLoading }: { webstores: any, isL
                                 <TableHead className="p-3 rounded-tl-lg rounded-bl-lg">Name</TableHead>
                                 <TableHead className="p-3">Profile Name</TableHead>
                                 <TableHead className="p-3">Active</TableHead>
-                                <TableHead className="p-3 rounded-tr-lg rounded-br-lg w-1/2">Edit</TableHead>
+                                <TableHead className="p-3 rounded-tr-lg rounded-br-lg">Edit</TableHead>
+                                <TableHead className="p-3 rounded-tr-lg rounded-br-lg">Delete</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {isLoading ? (
                                 <TableRow>
-                                    <TableCell colSpan={4} className="text-center py-4">
+                                    <TableCell colSpan={5} className="text-center py-4">
                                         <div className="flex justify-center items-center h-64">
                                             <Loader2 className="h-8 w-8 animate-spin" />
                                         </div>
@@ -48,7 +57,7 @@ export function ExistingWebstore({ webstores, isLoading }: { webstores: any, isL
                                 </TableRow>
                             ) : webstores.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={4} className="text-center py-4">
+                                    <TableCell colSpan={5} className="text-center py-4">
                                         No connected accounts found.
                                     </TableCell>
                                 </TableRow>
@@ -72,6 +81,11 @@ export function ExistingWebstore({ webstores, isLoading }: { webstores: any, isL
                                             </TableCell>
                                             <TableCell className="text-start text-[#024AFE] p-3 underline hover:text-[#0228fe]">
                                                 <Link to={`/seller/shops/edit-webstore/${webstoreId}`}>View/Edit</Link>
+                                            </TableCell>
+                                            <TableCell className="p-3">
+                                                <Button size="sm" onClick={() => handleDelete(webstoreId)} className="bg-red-600 text-white hover:bg-red-700" disabled={webstore?.isActive}>
+                                                    <Trash2Icon className="w-4 h-4" />
+                                                </Button>
                                             </TableCell>
                                         </TableRow>
                                     );

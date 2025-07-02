@@ -146,6 +146,8 @@ export function EditWebstoreDetails() {
     refetch()
   },[])
 
+  // console.log(connectedAccount?.data?.isAccountConnected  , "connectedAccount");
+
   return (
     <div>
       <Header title="Settings" />
@@ -258,8 +260,8 @@ export function EditWebstoreDetails() {
                       </FormItem>
                       <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                         <span />
-                        <Button type="button" variant="primary" className="rounded-lg" onClick={handleTestConnection}>
-                          Test Connection
+                        <Button type="button" variant="primary" className="rounded-lg" onClick={handleTestConnection} disabled={connectedAccount?.data?.isAccountConnected}>
+                          {connectedAccount?.data?.isAccountConnected ? "Connected" : "Connect"}
                         </Button>
                       </div>
                     </div>
