@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { CustomSearch } from "@/components/shared/custom-search"
 import { ReusableTable } from "@/components/shared/reusableTable"
@@ -9,6 +9,8 @@ import { Link } from "react-router-dom"
 import { AddToChannelListModal } from "../components/modal/add-to-channel-list-modal"
 import { useDeleteWoocommerceProduct, useGetWoocommerceProducts } from "../core/hooks/useListing"
 import { Trash2Icon } from "lucide-react"
+import { debounce } from 'lodash'
+import { ProductQueryParams } from "@/pages/admin/products/core/_modals"
 
 interface UserListing {
   _id: string
@@ -28,8 +30,25 @@ interface UserListing {
 export function SellerListingsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const { data: woocommerceProducts = [], isLoading, refetch } = useGetWoocommerceProducts();
   const deleteProductMutation = useDeleteWoocommerceProduct()
+  const [queryParams, setQueryParams] = useState<ProductQueryParams>({
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  })
+  
+  const { data: woocommerceProducts = [], isLoading, refetch } = useGetWoocommerceProducts(queryParams);
+  
+  // Debounce search input
+   const handleSearch = useCallback(
+    debounce((query: string) => {
+      setQueryParams((prev) => ({
+        ...prev,
+        search: query,
+        // page: 1,
+      }))
+    }, 500),
+    []
+  )
 
   const handleDelete = (id: string, siteUrl: string) => {
     deleteProductMutation.mutate({
@@ -39,33 +58,26 @@ export function SellerListingsPage() {
     refetch()
   }
   // console.log(woocommerceProducts, "woocommerceProducts");
-  
 
-  const handleEdit = (row: UserListing) => {
-    setIsAddModalOpen(true)
-    console.log("Edit clicked for", row)
-    // Handle edit functionality here
-  }
-
-  const mappedListings: UserListing[] = (woocommerceProducts?.[0]?.products || []).map((product: any) => {
-    const meta = Object.fromEntries(product.meta_data.map((m: any) => [m.key, m.value]));
-  console.log(product, "product");
-  
-    return {
-      _id: String(product.id),
-      image: product.images?.[0]?.src || "/placeholder.svg",
-      masterSku: product.sku || "N/A",
-      name: product.name || "N/A",
-      warehouse: meta.warehouse || "Default",
-      channel: "WooCommerce",
-      channelSku: product.sku || "N/A",
-      quantity: product.stock_quantity ?? 0,
-      inventoryPrice: product.price ? `£${product.price}` : "N/A",
-      channelPrice: product.price ? `£${product.price}` : "N/A",
-      status: product.status === "publish" ? "Binded" : "Unbinded",
-      siteUrl: woocommerceProducts?.[0]?.siteUrl || "N/A",
-    };
-  });
+  const mappedListings: UserListing[] = woocommerceProducts.flatMap((site: any) =>
+    (site.products || []).map((product: any) => {
+      const meta = Object.fromEntries(product.meta_data.map((m: any) => [m.key, m.value]));
+      return {
+        _id: String(product.id),
+        image: product.images?.[0]?.src || "/placeholder.svg",
+        masterSku: product.sku || "N/A",
+        name: product.name || "N/A",
+        warehouse: meta.warehouse || "Default",
+        channel: "WooCommerce",
+        channelSku: product.sku || "N/A",
+        quantity: product.stock_quantity ?? 0,
+        inventoryPrice: product.price ? `£${product.price}` : "N/A",
+        channelPrice: product.price ? `£${product.price}` : "N/A",
+        status: product.status === "publish" ? "Binded" : "Unbinded",
+        siteUrl: site.siteUrl || "N/A",
+      };
+    })
+  );
 
   const userListingColumns = [
     {
@@ -103,7 +115,7 @@ export function SellerListingsPage() {
       key: "masterSku",
       title: "Master SKU",
       render: (row: UserListing) => (
-        <Link to={`edit-listing-info/${row._id}`} className="text-[#024AFE]">
+        <Link to={`edit-listing-info/${row._id}?siteUrl=${encodeURIComponent(row.siteUrl)}`} className="text-[#024AFE]">
           {row.masterSku}
         </Link>
       ),
@@ -170,16 +182,6 @@ export function SellerListingsPage() {
         console.log(row, "row");
         
         return (
-        <>  
-        <div className="flex gap-2">
-        <Button
-          size="sm"
-          variant="primary"
-          onClick={() => handleEdit(row)}
-          className="bg-blue-600 text-white hover:bg-blue-700"
-        >
-          Edit
-        </Button>
         <Button
           size="sm"
           variant="primary"
@@ -187,8 +189,6 @@ export function SellerListingsPage() {
           className="bg-red-600 text-white hover:bg-red-700">
             <Trash2Icon className="w-4 h-4" />
           </Button>
-        </div>
-        </>
       )
       },
       width: "100px",
@@ -198,11 +198,14 @@ export function SellerListingsPage() {
   return (
     <div>
       {/* Header */}
-      <Header title="User Listing">
+      <Header title="Seller Listings">
         <CustomSearch
           placeholder="Search by name/Master SKU/Channel SKU"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            handleSearch(e.target.value);
+          }}
         />
         {/* <Button variant="primary" className="rounded-lg"  onClick={() => setIsAddModalOpen(true)}>
           Add New
@@ -214,8 +217,7 @@ export function SellerListingsPage() {
         title="Listing On Channel"
         data={mappedListings}
         columns={userListingColumns}
-        searchTerm={searchTerm}
-        itemsPerPage={10}
+        itemsPerPage={8}
         isLoading={isLoading}
       />
 

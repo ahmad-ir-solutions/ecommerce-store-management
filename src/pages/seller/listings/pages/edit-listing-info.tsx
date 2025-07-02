@@ -7,88 +7,48 @@ import { Header } from "@/components/shared/header"
 import { Loader2 } from "lucide-react"
 import { ProductFormValues } from "../../products/core/_schema"
 import ProductInformation from "../../products/components/product-info"
-
-interface Product {
-  id: string
-  image: string
-  masterSku: string
-  name: string
-  warehouse: string
-  cost: string
-  price: string
-  inventory: number
-  status: string
-}
-
-// Mock data - in real app this would come from API
-const mockProducts: Product[] = [
-  {
-    id: "1",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000253",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-  {
-    id: "2",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000254",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-  {
-    id: "3",
-    image: "/placeholder.svg?height=200&width=200",
-    masterSku: "805432000255",
-    name: "Xerjoff Accento EDP-S 100ml",
-    warehouse: "Default",
-    cost: "£112.95",
-    price: "£143.95",
-    inventory: 546,
-    status: "-",
-  },
-]
+import { useParams, useLocation } from "react-router-dom"
+import { useGetWoocommerceProductById, useUpdateWoocommerceProduct } from "../core/hooks/useListing"
 
 export function EditListingInfoPage() {
-  // For demo purposes, we'll use the first product
-  const productId = "1"
+  const { listingId  } = useParams<{ listingId: string }>()
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const siteUrl = searchParams.get("siteUrl") || "";
   const [isEditing, setIsEditing] = useState(false)
-  const [product, setProduct] = useState<Product | null>(null)
-  const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
 
-  // Convert selected product data to form format
+  // Fetch product from API
+  const { data: product, isLoading } = useGetWoocommerceProductById(listingId, siteUrl)
+  const { mutate: updateProductMutation, isPending } = useUpdateWoocommerceProduct()
+
+  const getMetaValue = (key: string) =>
+    product?.meta_data?.find((m: any) => m.key === key)?.value || "";
+console.log(product, "product");
+
+  // Convert API product data to form format
   const getInitialProductData = (): ProductFormValues => {
     if (product) {
       return {
-        productName: product.name,
-        sku: product.masterSku,
-        price: Number.parseFloat(product.price.replace("£", "")),
-        rrp: Number.parseFloat(product.cost.replace("£", "")),
+        productName: product.name || "",
+        sku: product.sku || "N/A",
+        price: Number(product.price) || 0,
+        rrp: Number(product.regular_price) || 0,
         taxClass: 20,
         priceIncludesVat: true,
-        inventory: product.inventory,
-        weight: 0.74,
-        length: "",
-        width: "",
-        height: "",
-        warehouse: product.warehouse === "Default" ? "Default Warehouse" : product.warehouse,
-        brand: "Xerjoff",
-        ean: "",
-        upc: "",
-        imageUrl: product.image,
+        inventory: product.stock_quantity ?? 0,
+        weight: Number(product.weight) || 0,
+        length: product.dimensions?.length || "",
+        width: product.dimensions?.width || "",
+        height: product.dimensions?.height || "",
+        warehouse: getMetaValue("warehouse"),
+        brand: getMetaValue("brand"),
+        ean: getMetaValue("ean"),
+        upc: getMetaValue("upc"),
+        imageUrl: uploadedImageUrl || product.images?.[0]?.src || "",
       }
     }
-
     return {
       productName: "",
       sku: "",
@@ -115,23 +75,6 @@ export function EditListingInfoPage() {
 
   const currentProduct = watch()
 
-  // Simulate API call to fetch product data
-  useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true)
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
-      const foundProduct = mockProducts.find((p) => p.id === productId)
-      setProduct(foundProduct || null)
-      setLoading(false)
-    }
-
-    if (productId) {
-      fetchProduct()
-    }
-  }, [productId])
-
   // Reset form when product changes
   useEffect(() => {
     if (product) {
@@ -140,21 +83,34 @@ export function EditListingInfoPage() {
   }, [product, reset])
 
   const handleSave = (data: ProductFormValues) => {
+    console.log(data, "data");
     setIsEditing(false)
-    // Handle save logic - in real app, make API call
-    console.log("Saving product data:", data)
+    if (!listingId) return
+    // Prepare update payload (adapt as needed)
+    const updatePayload = {
+      name: data.productName,
+      // sku: data.sku,
+      price: String(data.price),
+      regular_price: String(data.rrp),
+      inventory: data.inventory,
+      weight: String(data.weight),
+      length: String(data.length),
+      width: String(data.width),
+      height: String(data.height),
+      warehouse: data.warehouse,
+      brand: data.brand,
+      ean: data.ean,
+      upc: data.upc,
+      image: data.imageUrl,
+    }
+    // You may need to pass siteUrl if required by your API
+    updateProductMutation({ listingId, data: updatePayload, siteUrl })
   }
 
   const handleCancel = () => {
     setIsEditing(false)
-    // Reset form data to original values
     reset(getInitialProductData())
     setUploadedImageUrl(null)
-  }
-
-  const handleBack = () => {
-    // In real app, use router navigation
-    console.log("Navigate back to products")
   }
 
   const handleSkuClick = () => {
@@ -165,34 +121,17 @@ export function EditListingInfoPage() {
     const file = e.target.files?.[0]
     if (file) {
       setUploading(true)
-      // Simulate image upload
       await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Create a temporary URL for preview
       const imageUrl = URL.createObjectURL(file)
       setUploadedImageUrl(imageUrl)
       setUploading(false)
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
-  }
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-4">Product Not Found</h2>
-          <p className="text-gray-600 mb-6">The product you're looking for doesn't exist.</p>
-          <Button onClick={handleBack} className="bg-blue-600 hover:bg-blue-700">
-            Back to Products
-          </Button>
-        </div>
       </div>
     )
   }
@@ -221,8 +160,8 @@ export function EditListingInfoPage() {
               <Button variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
-              <Button onClick={handleSubmit(handleSave)}  variant="primary" className="rounded-lg">
-                Save
+              <Button onClick={handleSubmit(handleSave)}  variant="primary" className="rounded-lg" disabled={isPending}>
+                {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
               </Button>
             </>
           ) : (

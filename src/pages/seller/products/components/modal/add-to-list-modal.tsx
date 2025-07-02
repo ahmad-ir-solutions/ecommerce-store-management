@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form"
 import { IProductModel } from "@/pages/admin/products/core/_modals"
-import { useListWoocommerceProduct } from "@/pages/seller/listings/core/hooks/useListing"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
 import { useGetConnectedAccounts } from "@/pages/seller/shops/core/hooks/useConnectAccount"
 
@@ -21,9 +20,11 @@ interface AddToListModalProps {
     isOpen: boolean
     onClose: () => void
     product: IProductModel | null
+    listProduct: (data: any) => void
+    isPending: boolean
 }
 
-export function AddToListModal({ isOpen, onClose, product }: AddToListModalProps) {
+export function AddToListModal({ isOpen, onClose, product, listProduct, isPending }: AddToListModalProps) {
     const form = useForm<AddToListFormValues>({
         resolver: zodResolver(addToListSchema),
         defaultValues: {
@@ -33,16 +34,15 @@ export function AddToListModal({ isOpen, onClose, product }: AddToListModalProps
     })
     const { data: connectedAccounts = [], isLoading } = useGetConnectedAccounts();
 
+    // Filter only connected accounts
     const connected = connectedAccounts.filter((acc: any) => acc.isAccountConnected === true);
 
+    // Format dropdown options
     const connectedAccountOptions = connected.map((acc: any) => ({
         id: acc._id,
         label: acc.profileName,
         value: acc._id,
     }));
-
-
-    const { mutate: listProduct, isPending } = useListWoocommerceProduct();
 
     const handleSubmit = (data: AddToListFormValues) => {
         console.log(data)

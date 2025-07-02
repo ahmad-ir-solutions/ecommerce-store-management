@@ -27,6 +27,8 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
   uploading,
   uploadedImageUrl,
 }) => {
+  console.log(currentProduct, "currentProduct");
+  
   return (
     <div className="bg-white rounded-xl p-6">
       <h2 className="text-lg font-semibold mb-4">Product Information</h2>
@@ -44,7 +46,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   render={({ field }) => <Input {...field} id="productName" className="h-9 border-gray-200 bg-white" />}
                 />
               ) : (
-                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9">
+                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 overflow-hidden text-ellipsis whitespace-nowrap">
                   {currentProduct.productName}
                 </div>
               )}
@@ -102,7 +104,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   )}
                 />
               ) : (
-                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-24">
+                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-24 overflow-hidden text-ellipsis whitespace-nowrap">
                   {currentProduct.price}
                 </div>
               )}
@@ -128,7 +130,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   )}
                 />
               ) : (
-                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-24">
+                <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-24 overflow-hidden text-ellipsis whitespace-nowrap">
                   {currentProduct.rrp}
                 </div>
               )}
@@ -160,7 +162,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     )}
                   />
                 ) : (
-                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-32">
+                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 w-32 overflow-hidden text-ellipsis whitespace-nowrap">
                     {currentProduct.taxClass}
                   </div>
                 )}
@@ -340,7 +342,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     )}
                   />
                 ) : (
-                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9">
+                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 overflow-hidden text-ellipsis whitespace-nowrap">
                     {currentProduct.warehouse}
                   </div>
                 )}
@@ -373,7 +375,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     )}
                   />
                 ) : (
-                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9">
+                  <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9 overflow-hidden text-ellipsis whitespace-nowrap">
                     {currentProduct.brand}
                   </div>
                 )}
@@ -392,7 +394,7 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     render={({ field }) => <Input {...field} id="ean" className="h-9 border-gray-200 bg-white" />}
                   />
                 ) : (
-                  <div className="bg-white border rounded-lg h-9 border-gray-200 p-2 px-3 text-sm  flex-1">
+                  <div className="bg-white border rounded-lg h-9 border-gray-200 p-2 px-3 text-sm  flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {currentProduct.ean || ""}
                   </div>
                 )}
@@ -427,10 +429,10 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                     render={({ field }) => <Input {...field} id="upc" className="h-9 border-gray-200 bg-white" />}
                   />
                 ) : (
-                  <div className="bg-white border rounded-lg h-9 border-gray-200 p-2 px-3 text-sm  flex-1">
+                  <div className="bg-white border rounded-lg h-9 border-gray-200 p-2 px-3 text-sm  flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
                     {currentProduct.upc || ""}
                   </div>
-                )}
+                )}  
                 <Button
                   variant="default"
                   size="sm"

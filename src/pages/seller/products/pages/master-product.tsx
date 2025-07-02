@@ -9,6 +9,7 @@ import { Link } from "react-router-dom"
 import { IProductModel, ProductQueryParams } from "@/pages/admin/products/core/_modals"
 import { useGetProducts } from "@/pages/admin/products/core/hooks/useProduct"
 import { debounce } from 'lodash';
+import { useListWoocommerceProduct } from "../../listings/core/hooks/useListing"
 
 export function SellerProductsPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -22,6 +23,7 @@ export function SellerProductsPage() {
   const { data: productsData, isLoading } = useGetProducts(queryParams)
 
   const products = productsData?.productsWithOrderCOunt || []
+  const { mutate: listProduct, isPending } = useListWoocommerceProduct();
   
   const handleSearch = useCallback(
     debounce((query: string) => {
@@ -83,8 +85,8 @@ export function SellerProductsPage() {
       key: "action",
       title: "Action",
       render: (row: IProductModel) => (
-        <Button size="sm" onClick={() => handleAdd(row)} variant="primary">
-          + Add
+          <Button size="sm" onClick={() => handleAdd(row)} variant="primary" disabled={isPending}>
+         Add to list
         </Button>
       ),
       width: "100px",
@@ -116,7 +118,7 @@ export function SellerProductsPage() {
         itemsPerPage={10}
         isLoading={isLoading}
       />
-      <AddToListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} product={selectedProduct} />
+      <AddToListModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} product={selectedProduct} listProduct={listProduct} isPending={isPending}/>
     </div>
           // {/* integration */}
       // <div>
