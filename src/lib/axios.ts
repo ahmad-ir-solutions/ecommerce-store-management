@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '@/store/authStore';
 
 const authApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://ec2-18-171-241-51.eu-west-2.compute.amazonaws.com:3000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://api.designers-collection.co.uk",
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
