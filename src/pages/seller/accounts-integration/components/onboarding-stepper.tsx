@@ -56,6 +56,8 @@ export function OnboardingStepper({ isOpen, isNewUser, onClose, onComplete }: On
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>("card")
   const [paymentData, setPaymentData] = useState<PaymentData>(initialPaymentData)
   const [setupData, setSetupData] = useState<SetupData>(initialSetupData)
+console.log(onComplete, "onComplete");
+console.log(paymentData, "paymentData");
 
   const handleClose = () => {
     // Reset state when closing

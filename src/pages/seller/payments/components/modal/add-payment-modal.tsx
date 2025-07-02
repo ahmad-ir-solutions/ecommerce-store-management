@@ -48,6 +48,8 @@ function AddPaymentForm({ onAdd, onClose }: { onAdd: () => void; onClose: () => 
       setCardError(null)
     }
   }
+   
+console.log(setIsProcessing, "setIsProcessing");
 
   const { mutate: confirmSetupIntent } = useSetupIntentConfirm()
 
