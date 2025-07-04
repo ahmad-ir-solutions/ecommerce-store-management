@@ -1,51 +1,49 @@
 import { useState } from "react"
-// import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Address, IOrder } from "../core/_modals"
-import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { EditAddressModal } from "./modal/edit-adress-modal"
-// import { Edit } from "lucide-react"
+import { Edit } from "lucide-react"
+import { useUpdateCustomer } from "@/pages/admin/customers/core/hooks/useCustomer"
 
 interface CustomerInformationProps {
   order: IOrder
+  refetch: () => void
 }
 
 export function CustomerInformation({
   order,
+  refetch,
 }: CustomerInformationProps) {
   const [isEditingBillingAddress, setIsEditingBillingAddress] = useState(false)
   const [isEditingShippingAddress, setIsEditingShippingAddress] = useState(false)
-  const [isUpdatingBilling, setIsUpdatingBilling] = useState(false)
-  const [isUpdatingShipping, setIsUpdatingShipping] = useState(false)
 
-  // const handleEditBillingAddress = () => {
-  //   setIsEditingBillingAddress(true)
-  // }
-
-  // const handleEditShippingAddress = () => {
-  //   setIsEditingShippingAddress(true)
-  // }
-
+  // const { mutate: updateOrderMutation, isPending: isUpdating } = useUpdateOrder()
+  const { mutate: updateCustomerMutation, isPending: isUpdatingCustomer } = useUpdateCustomer()
+  const handleEditBillingAddress = () => {
+    setIsEditingBillingAddress(true)  
+  }
   const handleSaveAddress = async (type: "billing" | "shipping", data: Address) => {
     console.log(data, "handleSaveAddress");
 
-    try {
       if (type === "billing") {
-        setIsUpdatingBilling(true)
-        // await onUpdateBillingAddress(data)
+        updateCustomerMutation({
+            id: order.customerDetails._id ?? "",
+          data: {
+            billingAddress: data,
+          },
+        })
         setIsEditingBillingAddress(false)
-        showSuccessMessage("The billing address has been updated successfully")
+        refetch()
       } else {
-        setIsUpdatingShipping(true)
-        // await onUpdateShippingAddress(data)
+        updateCustomerMutation({
+          id: order.customerDetails._id ?? "",
+          data: {
+            shippingAddress: data,
+          },
+        })
         setIsEditingShippingAddress(false)
-        showSuccessMessage("The shipping address has been updated successfully")
+        refetch()
       }
-    } catch (error) {
-      showErrorMessage("There was an error updating the address. Please try again.")
-    } finally {
-      setIsUpdatingBilling(false)
-      setIsUpdatingShipping(false)
-    }
   }
   // const name = `${order?.billingAddress.firstName} ${order?.billingAddress.firstName}`
   return (
@@ -71,22 +69,22 @@ export function CustomerInformation({
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium">Billing Address</h3>
-                {/* <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
                   <h2>Edit</h2>
                   <Button
                     type="button"
                     className="bg-[#024AFE] text-white w-7 h-7"
                     onClick={handleEditBillingAddress}
-                    disabled={isUpdatingBilling}>
+                    disabled={isUpdatingCustomer}>
                     <Edit className="h-4 w-4" />
                   </Button>
-                </div> */}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-y-1">
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="text-sm text-gray-500 p-2 pl-4">Name</div>
-                <div className="text-sm p-2 whitespace-nowrap">{`${order.customerDetails.billingAddress.firstName} ${order.customerDetails.billingAddress.firstName}`}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{`${order.customerDetails.billingAddress.firstName} ${order.customerDetails.billingAddress.lastName}`}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Company</div>
                 <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.company || "-"}</div>
@@ -114,43 +112,43 @@ export function CustomerInformation({
             <div>
               <div className="flex justify-between items-center mb-2">
                 <h3 className="font-medium">Shipping Address</h3>
-                {/* <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
                   <h2>Edit</h2>
                   <Button
                     type="button"
                     className="bg-[#024AFE] text-white w-7 h-7"
-                    onClick={handleEditShippingAddress}
-                    disabled={isUpdatingShipping}>
-                    <Edit className="h-4 w-4" />
+                    onClick={() => setIsEditingShippingAddress(true)}
+                    disabled={isUpdatingCustomer}>
+                    <Edit className="h-3 w-3" />
                   </Button>
-                </div> */}
+                </div>
               </div>
               <div className="grid grid-cols-2 xl:grid-cols-1 gap-y-1">
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="border-b h-[2px] w-full border-gray-300 xl:hidden"></div>
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Name</div>
-                <div className="text-sm p-2 whitespace-nowrap">{`${order?.shippingAddress.firstName} ${order?.shippingAddress.firstName}`}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{`${order?.customerDetails.shippingAddress?.firstName} ${order?.customerDetails.shippingAddress?.lastName}`}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Company</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.company || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.company || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Address 1</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.addressLine1}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.addressLine1}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Address 2</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.addressLine2 || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.addressLine2 || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">City</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.city}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.city}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Postcode</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.postalCode}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.postalCode}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Country</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.country}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.country}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Phone</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.shippingAddress.phone}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.phone}</div>
               </div>
             </div>
           </div>
@@ -161,9 +159,9 @@ export function CustomerInformation({
               isOpen={isEditingBillingAddress}
               onClose={() => setIsEditingBillingAddress(false)}
               addressType="billing"
-              initialData={order.customerDetails.billingAddress}
+              initialData={order.customerDetails.billingAddress ?? {}}
               onSave={(data) => handleSaveAddress("billing", data)}
-              isSubmitting={isUpdatingBilling}
+              isSubmitting={isUpdatingCustomer}
             />
           )}
 
@@ -172,9 +170,9 @@ export function CustomerInformation({
               isOpen={isEditingShippingAddress}
               onClose={() => setIsEditingShippingAddress(false)}
               addressType="shipping"
-              initialData={order.shippingAddress}
+              initialData={order.customerDetails.shippingAddress ?? {}}
               onSave={(data) => handleSaveAddress("shipping", data)}
-              isSubmitting={isUpdatingShipping}
+              isSubmitting={isUpdatingCustomer}
             />
           )}
         </div>

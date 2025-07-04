@@ -117,7 +117,7 @@ export const usePickwaveOrderColumns: ColumnDef<PickwaveOrder>[] = [
   },
   {
     accessorKey: "_id",
-    header: "Order Number",
+    header: "Channel Order ID",
     cell: ({ row }) => {
       const navigate = useNavigate()
 

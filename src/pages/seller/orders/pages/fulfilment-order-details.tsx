@@ -1,25 +1,24 @@
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { EditOrderFormValues } from "../core/_modals"
-import { editOrderSchema } from "../core/_schema"
-// import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 
 // Import components
-import { ActionButtons } from "../components/action-buttons"
-import { OrderInformation } from "../components/order-information"
-import { ItemsOrdered } from "../components/items-ordered"
-import { OrderTotals } from "../components/order-total"
-import { OrderNotes } from "../components/order-notes"
-import { FormActions } from "../components/form-actions"
 import { Header } from "@/components/shared/header"
 import { Loader2 } from "lucide-react"
-import { useGetOrder } from '../core/hooks/use-orders'
 import { useEffect } from 'react'
+// import { useGetFulfilmentOrders } from "../core/hooks/useWooCommerceOrders"
+import { useGetOrder } from "@/pages/admin/orders/core/hooks/use-orders"
+// import { ActionButtons } from "@/pages/admin/orders/components/action-buttons"
+import { OrderInformation } from "@/pages/admin/orders/components/order-information"
+import { ItemsOrdered } from "@/pages/admin/orders/components/items-ordered"
+import { OrderTotals } from "@/pages/admin/orders/components/order-total"
+import { OrderNotes } from "@/pages/admin/orders/components/order-notes"
+// import { FormActions } from "@/pages/admin/orders/components/form-actions"
+import type { EditOrderFormValues } from "@/pages/admin/orders/core/_modals"
+import { editOrderSchema } from "@/pages/admin/orders/core/_schema"
 
-export default function EditOrderPage() {
+export function FulfilmentOrderDetailsPage() {
   const { orderId } = useParams<{ orderId: string }>()
-  const navigate = useNavigate()
 
   const {
     order,
@@ -56,6 +55,7 @@ export default function EditOrderPage() {
       updateOrderTotal: false,
     },
   })
+  console.log(isSubmitting, "isSubmitting")
 
   // Update form when order data is loaded
   useEffect(() => {
@@ -82,19 +82,13 @@ export default function EditOrderPage() {
   console.log(errors, "errors")
 
   const onSubmit = async (data: EditOrderFormValues) => {
-    // const success = await submitForm(data)
-    // if (success) {
-    //   showSuccessMessage("The order has been updated successfully")
-    // } else {
-    //   showErrorMessage("There was an error updating the order. Please try again.")
-    // }
     console.log(data);
 
   }
 
-  const handleCancel = () => {
-    navigate("/admin/orders")
-  }
+  // const handleCancel = () => {
+  //   navigate("/seller/orders")
+  // }
 
   if (isLoading) {
     return (
@@ -111,20 +105,20 @@ export default function EditOrderPage() {
     <div className="mt-6">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header title="Order">
-          <ActionButtons
+          {/* <ActionButtons
             orderId={order._id}
           // onClone={cloneOrder}
           // onCancel={cancelOrder}
           // isCloning={isCloning}
           // isCancelling={isCancelling}
-          />
+          /> */}
         </Header>
 
         <OrderInformation
-          refetch={refetch}
           order={order}
           control={control}
           register={register}
+          refetch={refetch}
           watch={watch}
         // onUpdateBillingAddress={updateBillingAddress}
         // onUpdateShippingAddress={updateShippingAddress}
@@ -143,8 +137,23 @@ export default function EditOrderPage() {
           />
         </div>
 
-        <FormActions onCancel={handleCancel} isSubmitting={isSubmitting} />
+        <div className="flex justify-end gap-4 mt-8">
+      {/* <Button
+        type="button"
+        variant="outline"
+        className="px-8 bg-white border-gray-300"
+        onClick={handleCancel}
+        disabled={isSubmitting}
+      >
+        Cancel
+      </Button> */}
+      {/* <Button type="submit" className="bg-[#024AFE] hover:bg-[#021bfe] px-8 text-white" disabled={isSubmitting}>
+        {isSubmitting ? "Saving..." : "Save"}
+      </Button> */}
+    </div>
       </form>
     </div>
   )
 }
+
+export default FulfilmentOrderDetailsPage;

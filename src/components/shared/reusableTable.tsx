@@ -26,6 +26,7 @@ interface ReusableTableProps<T> {
   searchTerm?: string
   itemsPerPage?: number
   isLoading?: boolean
+  className?: string
 }
 
 export function ReusableTable<T extends { _id: string }>({
@@ -35,6 +36,7 @@ export function ReusableTable<T extends { _id: string }>({
   searchTerm = "",
   itemsPerPage = 2,
   isLoading = false,
+  className,
 }: ReusableTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedRows, setSelectedRows] = useState<string[]>([])
@@ -59,22 +61,22 @@ export function ReusableTable<T extends { _id: string }>({
     )
   }, [data, searchTerm, columns])
 
-  const totalItems = filteredData.length
+  const totalItems = filteredData?.length
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const currentPageData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage
-    return filteredData.slice(startIndex, startIndex + itemsPerPage)
+    return filteredData?.slice(startIndex, startIndex + itemsPerPage)
   }, [filteredData, currentPage, itemsPerPage])
 
   const toggleSelectRow = (id: string) => {
-    setSelectedRows((prev) => (prev.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]))
+    setSelectedRows((prev) => (prev?.includes(id) ? prev.filter((r) => r !== id) : [...prev, id]))
   }
 
   const toggleSelectAll = () => {
     const currentIds = currentPageData.map((r) => r._id)
-    const currentPageSelectedCount = currentIds.filter((id) => selectedRows.includes(id)).length
+    const currentPageSelectedCount = currentIds?.filter((id) => selectedRows.includes(id)).length
 
-    if (currentPageSelectedCount === currentPageData.length && currentPageData.length > 0) {
+    if (currentPageSelectedCount === currentPageData?.length && currentPageData?.length > 0) {
       // Unselect all on current page
       setSelectedRows((prev) => prev.filter((id) => !currentIds.includes(id)))
     } else {
@@ -83,11 +85,11 @@ export function ReusableTable<T extends { _id: string }>({
     }
   }
 
-  const currentPageSelectedCount = currentPageData.filter((row) => selectedRows.includes(row._id)).length
-  const isAllCurrentPageSelected = currentPageSelectedCount === currentPageData.length && currentPageData.length > 0
+  const currentPageSelectedCount = currentPageData?.filter((row) => selectedRows?.includes(row._id)).length
+  const isAllCurrentPageSelected = currentPageSelectedCount === currentPageData?.length && currentPageData?.length > 0
 
   return (
-    <div className="mt-6 bg-white rounded-2xl border-none shadow-none">
+    <div className={`mt-6 bg-white rounded-2xl border-none shadow-none ${className}`}>
       <Card className="border-none shadow-none">
         <CardHeader className="flex justify-between">
           <CardTitle className="text-lg font-medium">{title}</CardTitle>
@@ -114,14 +116,14 @@ export function ReusableTable<T extends { _id: string }>({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentPageData.length === 0 ? (
+                  {currentPageData?.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={columns.length} className="text-center py-8">
                         No data found.
                       </TableCell>
                     </TableRow>
                   ) : (
-                    currentPageData.map((row) => (
+                    currentPageData?.map((row) => (
                       <TableRow key={row._id} className="border-b-gray-100">
                         {columns.map((col) => (
                           <TableCell

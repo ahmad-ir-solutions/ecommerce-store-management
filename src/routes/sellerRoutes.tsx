@@ -14,7 +14,7 @@ const SellerListingsPage = lazy(() => import("@/pages/seller/listings/pages/list
 const EditListingInfoPage = lazy(() => import("@/pages/seller/listings/pages/edit-listing-info").then(module => ({ default: module.EditListingInfoPage })));
 
 const SellerOrdersPage = lazy(() => import("@/pages/seller/orders/pages/order").then(module => ({ default: module.SellerOrdersPage })));
-const OrderDetailsPage = lazy(() => import("@/pages/seller/orders/pages/order-details").then(module => ({ default: module.OrderDetailsPage })));
+const FulfilmentOrderDetailsPage = lazy(() => import("@/pages/seller/orders/pages/fulfilment-order-details").then(module => ({ default: module.FulfilmentOrderDetailsPage })));
 
 const SellerPaymentPage = lazy(() => import("@/pages/seller/payments/pages/payment").then(module => ({ default: module.SellerPaymentPage })));
 
@@ -63,7 +63,7 @@ export const sellerRoutes = {
       path: "orders",
       children: [
         { index: true, element: <WithSuspense><SellerOrdersPage /></WithSuspense> },
-        { path: ":orderId", element: <WithSuspense><OrderDetailsPage /></WithSuspense> },
+        { path: "fulfilment-order-details/:orderId", element: <WithSuspense><FulfilmentOrderDetailsPage /></WithSuspense> },
       ]
     },
 

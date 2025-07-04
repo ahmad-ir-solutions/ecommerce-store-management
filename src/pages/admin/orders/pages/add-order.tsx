@@ -2,9 +2,8 @@ import { useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useMutation } from "@tanstack/react-query"
 import { format } from "date-fns"
-import { CalendarIcon, Trash2, ChevronLeft } from "lucide-react"
+import { CalendarIcon, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -20,10 +19,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge"
 import { Header } from "@/components/shared/header"
 import { CustomSelect } from "@/components/shared/custom-select"
+import { useCreateOrder } from "../core/hooks/use-orders"
+import { CreateOrderData } from "../core/_modals"
+import { useGetProducts } from "../../products/core/hooks/useProduct"
 
 // Zod Schema
 const orderSchema = z.object({
-    productDetails: z.string().min(1, "Product is required"),
+    productDetails: z.string().min(1, "Product id is required"),
     customerDetails: z.object({
         firstName: z.string().min(1, "First name is required"),
         lastName: z.string().min(1, "Last name is required"),
@@ -62,7 +64,7 @@ const orderSchema = z.object({
     channelDetails: z.string().min(1, "Channel details required"),
     companyIdentity: z.string().min(1, "Company identity is required"),
     channelPurhasedFrom: z.string().min(1, "Channel purchased from is required"),
-    channelOrderNumber: z.string().min(1, "Channel order number is required"),
+    channelOrderNumber: z.string().min(1, "Channel order ID is required"),
     orderStatus: z.string().min(1, "Order status is required"),
     attentionRequired: z.boolean(),
     sellerId: z.string().min(1, "Seller ID is required"),
@@ -127,17 +129,6 @@ const orderSchema = z.object({
 type OrderFormData = z.infer<typeof orderSchema>
 
 // Mock data for dropdowns
-const mockProducts = [
-    {
-        id: "682ede94489f55805a35ca3a",
-        name: "Afman 9 PM For Men 100ml and Jaguar Classic Black EDT 100ML 2 Pack",
-        sku: "608501004472",
-        price: 17.95,
-        inventory: 73,
-    },
-    { id: "682ede94489f55805a35ca3b", name: "Sample Product 2", sku: "608501004473", price: 25.99, inventory: 45 },
-]
-
 const mockWarehouses = [
     { id: "6836ad6a7ad0996826a6e132", name: "Main Warehouse" },
     { id: "6836ad6a7ad0996826a6e133", name: "Secondary Warehouse" },
@@ -149,98 +140,105 @@ const shippingMethods = ["Royal Mail Tracked 24", "Royal Mail Tracked 48", "DPD 
 
 export function AddOrderPage() {
     const [selectedProducts, setSelectedProducts] = useState<string[]>([])
-    const [showProductSelection, setShowProductSelection] = useState(false)
+
+    const {mutate: createOrderMutation, isPending} = useCreateOrder()
+    const { data: productsData } = useGetProducts({
+        page: 1,
+        limit: 10,
+        sortBy: "createdAt",
+        sortOrder: "desc",
+    })  
+    console.log(productsData, "products");
 
     const form = useForm<OrderFormData>({
         resolver: zodResolver(orderSchema),
         defaultValues: {
-            productDetails: "",
-            customerDetails: {
-                firstName: "",
-                lastName: "",
-                email: "",
-                phoneNumber: "",
-                emailCC: "",
-                customerReference: "",
-                vatNumbers: "",
-                abn: "",
-                shippingAddress: {
-                    firstName: "",
-                    lastName: "",
-                    company: "",
-                    addressLine1: "",
-                    addressLine2: "",
-                    city: "",
-                    state: "",
-                    postalCode: "",
-                    country: "",
-                    phone: "",
-                },
-                billingAddress: {
-                    firstName: "",
-                    lastName: "",
-                    company: "",
-                    addressLine1: "",
-                    addressLine2: "",
-                    city: "",
-                    state: "",
-                    postalCode: "",
-                    country: "",
-                    phone: "",
-                },
-                channelDetails: "",
-            },
-            channelDetails: "",
-            companyIdentity: "",
-            channelPurhasedFrom: "",
-            channelOrderNumber: "",
-            orderStatus: "Processing",
-            attentionRequired: false,
-            sellerId: "",
-            quantity: 1,
-            itemOptions: 1,
-            quantityAllocated: 0,
-            unitSubtotal: 0,
-            taxRate: 0,
-            taxTotal: 0,
-            discount: 0,
-            totalPrice: 0,
-            status: "pending",
-            orderDate: new Date(),
-            shippingAndHandling: {
-                warehouse: "",
-                shippingMethod: "",
-                updateOrderTotal: true,
-                shippingCost: 0,
-                channelShippingMethod: "",
-                trackingNumber: "",
-                specialInstructions: "",
-                pickerInstructions: "",
-                orderWeight: 0,
-                overrideWeight: false,
-                packageSize: "",
-                numberOfParcels: 1,
-                airNumber: "",
+          productDetails: "",
+          customerDetails: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            emailCC: "",
+            customerReference: "",
+            vatNumbers: "",
+            abn: "",
+            shippingAddress: {
+              firstName: "",
+              lastName: "",
+              company: "",
+              addressLine1: "",
+              addressLine2: "",
+              city: "",
+              state: "",
+              postalCode: "",
+              country: "",
+              phone: "",
             },
             billingAddress: {
-                firstName: "",
-                lastName: "",
-                company: "",
-                addressLine1: "",
-                addressLine2: "",
-                city: "",
-                state: "",
-                postalCode: "",
-                country: "",
+              firstName: "",
+              lastName: "",
+              company: "",
+              addressLine1: "",
+              addressLine2: "",
+              city: "",
+              state: "",
+              postalCode: "",
+              country: "",
+              phone: "",
             },
-            notes: [],
-            refundedAmount: "",
-            pickwave: "",
-            scannedQuantity: 0,
-            royalMailLabelUrl: "",
+            channelDetails: "",
+          },
+          channelDetails: "",
+          companyIdentity: "",
+          channelPurhasedFrom: "",
+          channelOrderNumber: "",
+          orderStatus: "Processing",
+          attentionRequired: false,
+          sellerId: "",
+          quantity: 1,
+          itemOptions: 1,
+          quantityAllocated: 0,
+          unitSubtotal: 0,
+          taxRate: 0,
+          taxTotal: 0,
+          discount: 0,
+          totalPrice: 0,
+          status: "pending",
+          orderDate: new Date(),
+          importedFromChannelOn: new Date(),
+          assignedToPickerOn: new Date(),
+          dispatchedOn: new Date(),
+          dispatchSentToChannel: new Date(),
+          paymentId: "",
+          deliveredOn: new Date(),    
+          manifestedOn: new Date(),
+          designatedPicker: "",
+          designatedPacker: "",
+          signedForBy: "",
+          shippingAndHandling: {
+            warehouse: "",
+            shippingMethod: "",
+            updateOrderTotal: true,
+            shippingCost: 0,
+            channelShippingMethod: "",
+            trackingNumber: "",
+            specialInstructions: "",
+            pickerInstructions: "",
+            orderWeight: 0,
+            overrideWeight: false,
+            packageSize: "",
+            numberOfParcels: 1,
+            airNumber: "",
+          },
+          notes: [],
+          refundedAmount: "",
+          pickwave: "",
+          scannedQuantity: 0,
+          royalMailLabelUrl: "",
         },
-    })
-
+      });
+    
     const {
         fields: noteFields,
         append: appendNote,
@@ -252,31 +250,25 @@ export function AddOrderPage() {
 
     console.log(form.formState.errors, "form.formState.errors");
 
-    const createOrderMutation = useMutation({
-        mutationFn: async (data: OrderFormData) => {
-            // Mock API call
-            console.log("Creating order:", data)
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            return { success: true, orderId: "ORD-" + Date.now() }
-        },
-        onSuccess: (data) => {
-            console.log("Order created successfully:", data)
-            // Reset form or redirect
-        },
-        onError: (error) => {
-            console.error("Error creating order:", error)
-        },
-    })
+    // const createOrderMutation = useMutation({
+    //     mutationFn: async (data: OrderFormData) => {
+    //         // Mock API call
+    //         console.log("Creating order:", data)
+    //         await new Promise((resolve) => setTimeout(resolve, 1000))
+    //         return { success: true, orderId: "ORD-" + Date.now() }
+    //     },
+    //     onSuccess: (data) => {
+    //         console.log("Order created successfully:", data)
+    //         // Reset form or redirect
+    //     },
+    //     onError: (error) => {
+    //         console.error("Error creating order:", error)
+    //     },
+    // })
 
     const onSubmit = (data: OrderFormData) => {
-        // Add selected product IDs to the payload
-        console.log(data, "sdfkhkj");
-
-        const orderData = {
-            ...data,
-            productDetails: selectedProducts[0] || data.productDetails,
-        }
-        createOrderMutation.mutate(orderData)
+        console.log(data, "data");
+        createOrderMutation(data as unknown as CreateOrderData)
     }
 
     const copyBillingToShipping = () => {
@@ -293,107 +285,6 @@ export function AddOrderPage() {
             country: billingAddress.country,
             phone: "",
         })
-    }
-
-    if (showProductSelection) {
-        return (
-            <div className="container mx-auto p-6 space-y-6">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <Button variant="outline" size="icon" onClick={() => setShowProductSelection(false)}>
-                            <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <h1 className="text-2xl font-bold">Select Products</h1>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline">Clear Filters</Button>
-                        <Button onClick={() => setShowProductSelection(false)}>+ Add Selected Products</Button>
-                    </div>
-                </div>
-
-                <Card className="bg-[#ECF6FF] border-none rounded-2xl shadow-none">
-                    <CardContent className="p-0">
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-12">Select</TableHead>
-                                    <TableHead>Qty</TableHead>
-                                    <TableHead>SKU</TableHead>
-                                    <TableHead>Product Name</TableHead>
-                                    <TableHead>MPN</TableHead>
-                                    <TableHead>EAN</TableHead>
-                                    <TableHead>Inventory</TableHead>
-                                    <TableHead>Price</TableHead>
-                                    <TableHead>Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {mockProducts.map((product) => (
-                                    <TableRow key={product.id}>
-                                        <TableCell>
-                                            <Checkbox
-                                                checked={selectedProducts.includes(product.id)}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) {
-                                                        setSelectedProducts([...selectedProducts, product.id])
-                                                    } else {
-                                                        setSelectedProducts(selectedProducts.filter((id) => id !== product.id))
-                                                    }
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>
-                                            <Input type="number" defaultValue="0.00" className="w-20" />
-                                        </TableCell>
-                                        <TableCell>{product.sku}</TableCell>
-                                        <TableCell>{product.name}</TableCell>
-                                        <TableCell>6.43</TableCell>
-                                        <TableCell>020714001940</TableCell>
-                                        <TableCell>{product.inventory}</TableCell>
-                                        <TableCell>£ {product.price}</TableCell>
-                                        <TableCell>
-                                            <Button variant="link" size="sm">
-                                                View
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </CardContent>
-                </Card>
-
-                <div className="flex justify-center gap-2">
-                    <Button variant="outline" size="sm">
-                        First
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        Previous
-                    </Button>
-                    <Button variant="default" size="sm">
-                        1
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        2
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        3
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        4
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        8
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        Next
-                    </Button>
-                    <Button variant="outline" size="sm">
-                        Last
-                    </Button>
-                </div>
-            </div>
-        )
     }
 
     return (
@@ -419,9 +310,9 @@ export function AddOrderPage() {
                                                 name="channelOrderNumber"
                                                 render={({ field }) => (
                                                     <FormItem className="flex flex-row items-center gap-2">
-                                                        <FormLabel className="w-40">Order Numbers</FormLabel>
+                                                        <FormLabel className="w-40">Channel Order ID</FormLabel>
                                                         <FormControl>
-                                                            <Input {...field} placeholder="Enter order number" className="bg-white border-gray-300 rounded-lg" />
+                                                            <Input {...field} placeholder="Enter order ID" className="bg-white border-gray-300 rounded-lg" />
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
@@ -1223,14 +1114,12 @@ export function AddOrderPage() {
                         <Card className="bg-white border-none rounded-2xl shadow-none">
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <CardTitle>Items Ordered</CardTitle>
-                                <Button type="button" variant="outline" onClick={() => setShowProductSelection(true)}>
-                                    + Add Products
-                                </Button>
                             </CardHeader>
                             <CardContent>
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
+                                            <TableHead className="w-12">Select</TableHead>
                                             <TableHead>Product SKU</TableHead>
                                             <TableHead>Name</TableHead>
                                             <TableHead>Quantity</TableHead>
@@ -1245,13 +1134,25 @@ export function AddOrderPage() {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {selectedProducts.length > 0 ? (
-                                            selectedProducts.map((productId) => {
-                                                const product = mockProducts.find((p) => p.id === productId)
+                                        {(productsData?.productsWithOrderCOunt?.length ?? 0) > 0 ? (
+                                            (productsData?.productsWithOrderCOunt ?? []).map((product) => {
+                                                const isSelected = selectedProducts.includes(product._id)
                                                 return (
-                                                    <TableRow key={productId}>
-                                                        <TableCell>{product?.sku}</TableCell>
-                                                        <TableCell>{product?.name}</TableCell>
+                                                    <TableRow key={product._id} className="border-b border-gray-200">
+                                                        <TableCell>
+                                                            <Checkbox
+                                                                checked={isSelected}
+                                                                onCheckedChange={(checked) => {
+                                                                    if (checked) {
+                                                                        setSelectedProducts([...selectedProducts, product._id])
+                                                                    } else {
+                                                                        setSelectedProducts(selectedProducts.filter((id) => id !== product._id))
+                                                                    }
+                                                                }}
+                                                            />
+                                                        </TableCell>
+                                                        <TableCell>{product.sku}</TableCell>
+                                                        <TableCell>{product.productName}</TableCell>
                                                         <TableCell>
                                                             <FormField
                                                                 control={form.control}
@@ -1262,7 +1163,8 @@ export function AddOrderPage() {
                                                                         className="w-20 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
-                                                                  />
+                                                                        disabled={!isSelected}
+                                                                    />
                                                                 )}
                                                             />
                                                         </TableCell>
@@ -1276,6 +1178,7 @@ export function AddOrderPage() {
                                                                         className="w-20 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1290,6 +1193,7 @@ export function AddOrderPage() {
                                                                         className="w-20 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1305,6 +1209,7 @@ export function AddOrderPage() {
                                                                         className="w-24 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1320,6 +1225,7 @@ export function AddOrderPage() {
                                                                         className="w-20 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1335,6 +1241,7 @@ export function AddOrderPage() {
                                                                         className="w-24 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1350,6 +1257,7 @@ export function AddOrderPage() {
                                                                         className="w-24 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1365,6 +1273,7 @@ export function AddOrderPage() {
                                                                         className="w-24 bg-white border-gray-300 rounded-lg"
                                                                         {...field}
                                                                         onChange={(e) => field.onChange(Number.parseFloat(e.target.value) || 0)}
+                                                                        disabled={!isSelected}
                                                                     />
                                                                 )}
                                                             />
@@ -1377,8 +1286,8 @@ export function AddOrderPage() {
                                             })
                                         ) : (
                                             <TableRow>
-                                                <TableCell colSpan={11} className="text-center text-muted-foreground">
-                                                    No products selected. Click "Add Products" to select items.
+                                                <TableCell colSpan={12} className="text-center text-muted-foreground">
+                                                    No products found.
                                                 </TableCell>
                                             </TableRow>
                                         )}
@@ -1496,8 +1405,8 @@ export function AddOrderPage() {
                             <Button type="button" variant="outline">
                                 Cancel
                             </Button>
-                            <Button type="submit" disabled={createOrderMutation.isPending}>
-                                {createOrderMutation.isPending ? "Creating..." : "Save"}
+                            <Button type="submit" disabled={isPending}>
+                                {isPending ? "Creating..." : "Save"}
                             </Button>
                         </div>
                     </form>

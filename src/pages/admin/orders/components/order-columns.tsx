@@ -110,38 +110,38 @@ export const useOrderColumns: ColumnDef<Order>[] = [
       return date >= from && date <= to
     },
   },
-  {
-    accessorKey: "dispatchDate",
-    header: "Dispatch Date",
-    cell: ({ row }) => {
-      const date = row.getValue("dispatchDate") as Date | null
-      return date ? (
-        <div>
-          {format(date, "MM/dd/yyyy")}
-          <br />
-          {format(date, "HH:mm")}
-        </div>
-      ) : (
-        <div>-</div>
-      )
-    },
-  },
-  {
-    accessorKey: "channelDispatchDate",
-    header: "Channel Dispatch Date",
-    cell: ({ row }) => {
-      const date = row.getValue("channelDispatchDate") as Date | null
-      return date ? (
-        <div>
-          {format(date, "MM/dd/yyyy")}
-          <br />
-          {format(date, "HH:mm")}
-        </div>
-      ) : (
-        <div>-</div>
-      )
-    },
-  },
+  // {
+  //   accessorKey: "dispatchDate",
+  //   header: "Dispatch Date",
+  //   cell: ({ row }) => {
+  //     const date = row.getValue("dispatchDate") as Date | null
+  //     return date ? (
+  //       <div>
+  //         {format(date, "MM/dd/yyyy")}
+  //         <br />
+  //         {format(date, "HH:mm")}
+  //       </div>
+  //     ) : (
+  //       <div>-</div>
+  //     )
+  //   },
+  // },
+  // {
+  //   accessorKey: "channelDispatchDate",
+  //   header: "Channel Dispatch Date",
+  //   cell: ({ row }) => {
+  //     const date = row.getValue("channelDispatchDate") as Date | null
+  //     return date ? (
+  //       <div>
+  //         {format(date, "MM/dd/yyyy")}
+  //         <br />
+  //         {format(date, "HH:mm")}
+  //       </div>
+  //     ) : (
+  //       <div>-</div>
+  //     )
+  //   },
+  // },
   {
     accessorKey: "customerName",
     header: "Customer Name",

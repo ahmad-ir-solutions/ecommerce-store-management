@@ -18,9 +18,9 @@ import {
 } from "../_request"
 import { useNavigate } from "react-router-dom"
 import type {
-  CreateOrderData,
+  // CreateOrderData,
   OrderQueryParams,
-  UpdateOrderData,
+  // UpdateOrderData,
   BulkStatusUpdateData,
   BulkExportData,
   BulkAssignData,
@@ -89,7 +89,7 @@ export const useCreateOrder = () => {
   const navigate = useNavigate()
 
   return useMutation({
-    mutationFn: (data: CreateOrderData) => createOrder(data),
+    mutationFn: (data: any) => createOrder(data),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
       showSuccessMessage(response.data.message || "Order created successfully!")
@@ -113,7 +113,7 @@ export const useUpdateOrder = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateOrderData }) => updateOrder(id, data),
+    mutationFn: ({ id, data }: { id: string; data: any }) => updateOrder(id, data),
     onSuccess: (response, variables) => {
       // Invalidate specific order query and list queries
       queryClient.invalidateQueries({ queryKey: orderKeys.detail(variables.id) })

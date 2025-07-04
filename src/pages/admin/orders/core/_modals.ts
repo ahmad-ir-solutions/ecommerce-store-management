@@ -28,7 +28,7 @@ export interface IproductDetails {
 }
 
 export interface ICustomerDetails {
-  // _id?: string
+  _id?: string
   firstName: string
   lastName: string
   email: string
@@ -37,13 +37,16 @@ export interface ICustomerDetails {
   customerReference?: string
   vatNumbers?: string
   abn?: string
-  shippingAddress?: Address
+  shippingAddress: Address
   billingAddress: Address
   channelDetails?: string
 }
 
 export interface IShippingHandling {
-  warehouse?: string
+  warehouse?: {
+    warehouseName: string
+    _id: string
+  }
   shippingMethod: string
   updateOrderTotal?: boolean
   shippingCost: number
@@ -59,8 +62,8 @@ export interface IShippingHandling {
 }
 
 export interface Note {
-  note: string;
   subject: string;
+  note: string; 
 };
 
 
@@ -286,7 +289,7 @@ export interface CreateOrderData {
   orderDate: string
   shippingAndHandling?: IShippingHandling
   billingAddress?: Address
-  notes?: string
+  notes?: Note[]
 }
 
 export interface UpdateOrderData {
@@ -311,7 +314,7 @@ export interface UpdateOrderData {
   orderDate?: string
   shippingAndHandling?: Partial<IShippingHandling>
   billingAddress?: Partial<Address>
-  notes?: string
+  notes?: Note[]
 }
 
 // Bulk operation types

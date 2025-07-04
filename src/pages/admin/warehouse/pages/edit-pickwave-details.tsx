@@ -323,7 +323,7 @@ export function EditPickwaveDetailsPage() {
                     />
                   </TableHead>
                   <TableHead className="p-3">Ordered SKU</TableHead>
-                  <TableHead className="p-3">Order Number</TableHead>
+                  <TableHead className="p-3">Channel Order ID</TableHead>
                   <TableHead className="p-3">Product Name</TableHead>
                   <TableHead className="p-3">Stock Locations</TableHead>
                   <TableHead className="p-3">Quantity Ordered</TableHead>
@@ -336,7 +336,7 @@ export function EditPickwaveDetailsPage() {
                     <Input placeholder="Filter SKU" className="w-full bg-white border-gray-200 rounded-md h-8" />
                   </TableCell>
                   <TableCell className="p-3 text-start">
-                    <Input placeholder="Filter Order Number" className="w-full bg-white border-gray-200 rounded-md h-8" />
+                    <Input placeholder="Filter Channel Order ID" className="w-full bg-white border-gray-200 rounded-md h-8" />
                   </TableCell>
                   <TableCell className="p-3 text-start">
                     <Input placeholder="Filter Product Name" className="w-full bg-white border-gray-200 rounded-md h-8" />

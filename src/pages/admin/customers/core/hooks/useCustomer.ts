@@ -90,6 +90,7 @@ export const useUpdateCustomer = () => {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateCustomerData }) => updateCustomer(id, data),
+    // mutationFn: (data: UpdateCustomerData) => updateCustomer(data._id, data),
     onSuccess: (response, variables) => {
       // Invalidate specific customer query and list queries
       queryClient.invalidateQueries({ queryKey: customerKeys.detail(variables.id) })

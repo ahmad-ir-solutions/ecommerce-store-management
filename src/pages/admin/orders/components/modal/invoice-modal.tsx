@@ -111,12 +111,12 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
             </div>
             <div>
               <h4 className="font-semibold mb-2">Ship To:</h4>
-              <p>{`${order.shippingAddress?.firstName || "-"} ${order.shippingAddress?.lastName || "-"}`}</p>
-              {order.shippingAddress?.company && <p>{order.shippingAddress?.company}</p>}
-              <p>{order.shippingAddress?.addressLine1}</p>
-              {order.shippingAddress?.addressLine2 && <p>{order.shippingAddress?.addressLine2}</p>}
-              <p>{order.shippingAddress?.postalCode}</p>
-              <p>{order.shippingAddress?.country}</p>
+              <p>{`${order.customerDetails.shippingAddress?.firstName || "-"} ${order.customerDetails.shippingAddress?.lastName || "-"}`}</p>
+              {order.customerDetails.shippingAddress?.company && <p>{order.customerDetails.shippingAddress?.company}</p>}
+              <p>{order.customerDetails.shippingAddress?.addressLine1}</p>
+              {order.customerDetails.shippingAddress?.addressLine2 && <p>{order.customerDetails.shippingAddress?.addressLine2}</p>}
+              <p>{order.customerDetails.shippingAddress?.postalCode}</p>
+              <p>{order.customerDetails.shippingAddress?.country}</p>
             </div>
           </div>
 

@@ -231,7 +231,7 @@ export function CustomerOverview({
                     </div>
                     <div className="flex justify-between w-full">
                       <div>
-                        <p className="text-xs text-muted-foreground">Order number</p>
+                        <p className="text-xs text-muted-foreground">Channel Order ID</p>
                         <p>19923422</p>
                       </div>
                       <div className="w-0.5 h-8 bg-gray-200 bg-opacity-50 border-dashed"></div>

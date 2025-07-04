@@ -42,6 +42,7 @@ export function EditAddressModal({
   console.log(initialData, "initialDatainitialData");
 
   const onSubmit = (data: AddressFormValues) => {
+    console.log(data, "data");
     onSave(data)
   }
 

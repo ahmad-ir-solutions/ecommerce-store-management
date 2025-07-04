@@ -53,7 +53,7 @@ export const orderSchema = z.object({
   channelDetails: z.string().min(1, "Channel details are required"),
   companyIdentity: z.string().optional(),
   channelPurhasedFrom: z.string().optional(),
-  channelOrderNumber: z.string().min(1, "Channel order number is required"),
+  channelOrderNumber: z.string().min(1, "Channel order ID is required"),
   orderStatus: z.string().min(1, "Order status is required"),
   attentionRequired: z.boolean().default(false),
   sellerId: z.string().optional(),
@@ -93,8 +93,9 @@ export const csvOrderFormSchema = z.object({
 })
 
 export const editOrderSchema = z.object({
+  warehouse: z.string().optional(),
   orderStatus: z.string().min(1, "Order status is required"),
-  attentionRequired: z.boolean(), // not optional
+  attentionRequired: z.boolean(),
   shippingMethod: z.string().min(1, "Shipping method is required"),
   shippingCost: z.string().min(1, "Shipping cost is required"),
   channelShippingMethod: z.string().optional(),
@@ -105,13 +106,13 @@ export const editOrderSchema = z.object({
   packageSize: z.string().optional(),
   numberOfParcels: z.number().nonnegative(),
   airNumber: z.string().optional(),
-  overrideWeight: z.boolean(), // required
-  updateOrderTotal: z.boolean(), // required
+  overrideWeight: z.boolean(),
+  updateOrderTotal: z.boolean(),
 })
 
 // Basic order details schema
 export const basicOrderDetailsSchema = z.object({
-  channelOrderNumber: z.string().min(1, "Channel order number is required"),
+  channelOrderNumber: z.string().min(1, "Channel order ID is required"),
   orderStatus: z.string().min(1, "Order status is required"),
   attentionRequired: z.boolean().default(false),
   quantity: z.number().min(1, "Quantity must be at least 1"),

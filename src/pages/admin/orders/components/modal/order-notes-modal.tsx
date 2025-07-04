@@ -4,17 +4,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { X, Check } from "lucide-react"
-import { CustomSelect } from "@/components/shared/custom-select"
+// import { CustomSelect } from "@/components/shared/custom-select"
 
 interface OrderNoteModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (note: { type: string; subject: string; note: string }) => void
+  onSave: (note: { subject: string; note: string }) => void
   isSubmitting?: boolean
 }
 
 export function OrderNoteModal({ isOpen, onClose, onSave, isSubmitting = false }: OrderNoteModalProps) {
-  const [noteType, setNoteType] = useState("Complete (Ready to pick)")
+  // const [noteType, setNoteType] = useState("Complete (Ready to pick)")
   const [subject, setSubject] = useState("")
   const [noteBody, setNoteBody] = useState("")
 
@@ -24,13 +24,13 @@ export function OrderNoteModal({ isOpen, onClose, onSave, isSubmitting = false }
     }
 
     onSave({
-      type: noteType,
+      // type: noteType,
       subject,
       note: noteBody,
     })
 
     // Reset form
-    setNoteType("Complete (Ready to pick)")
+    // setNoteType("Complete (Ready to pick)")
     setSubject("")
     setNoteBody("")
   }
@@ -65,13 +65,13 @@ export function OrderNoteModal({ isOpen, onClose, onSave, isSubmitting = false }
             </div>
           </div>
           <div className="space-y-4">
-            <div className="grid grid-cols-[100px_1fr]">
+            {/* <div className="grid grid-cols-[100px_1fr]">
               <div>
                 <label className="text-sm font-medium whitespace-nowrap">Note Type</label>
               </div>
               <div>
                 <CustomSelect
-                  defaultValue={noteType}
+                  // defaultValue={noteType}
                   placeholder="Select note type"
                   options={[
                     { id: "Complete (Ready to pick)", label: "Complete (Ready to pick)", value: "Complete (Ready to pick)" },
@@ -83,7 +83,7 @@ export function OrderNoteModal({ isOpen, onClose, onSave, isSubmitting = false }
                   className="border-gray-200 bg-white"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-[100px_1fr]">
               <label className="text-sm font-medium whitespace-nowrap">Subject</label>

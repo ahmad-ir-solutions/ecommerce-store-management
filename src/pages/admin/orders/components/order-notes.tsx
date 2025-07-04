@@ -2,8 +2,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { IOrder, OrderNote } from "../core/_modals"
-import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils"
 import { OrderNoteModal } from "./modal/order-notes-modal"
+import { useUpdateOrder } from "../core/hooks/use-orders"
 
 
 interface OrderNotesProps {
@@ -15,27 +15,22 @@ export function OrderNotes({ order }: OrderNotesProps) {
   const [isAddingNote, setIsAddingNote] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const { mutate: updateOrderMutation } = useUpdateOrder()
+
   const handleAddNote = () => {
     setIsAddingNote(true)
   }
 
-  const handleSaveNote = async (note: { type: string; subject: string; note: string }) => {
-    try {
-      console.log(note);
-
-      setIsSubmitting(true)
-      // await onAddNote({
-      //   subject: note.subject,
-      //   note: note.note,
-      //   createdBy: "Current User",
-      // })
-      setIsAddingNote(false)
-      showSuccessMessage("Your note has been added to the order")
-    } catch (error) {
-      showErrorMessage("There was an error adding the note. Please try again.")
-    } finally {
-      setIsSubmitting(false)
-    }
+    const handleSaveNote = async (note: { subject: string; note: string }) => {
+    console.log(note);
+    updateOrderMutation({
+      id: order._id,
+      data: { 
+        notes: [{ subject: note.subject, note: note.note }]
+      }
+    });
+    setIsSubmitting(true)
+    setIsAddingNote(false)
   }
 
   return (

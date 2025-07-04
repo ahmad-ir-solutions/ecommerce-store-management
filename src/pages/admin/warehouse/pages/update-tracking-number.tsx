@@ -33,8 +33,8 @@ export function UpdateTrackingNumberPage() {
           orderId: order._id,
           orderNumber: order.channelOrderNumber,
           channelOrderId: order.channelOrderNumber,
-          shippingName: order.shippingAddress?.firstName + " " + order.shippingAddress?.lastName,
-          shippingPostCode: order.shippingAddress?.postalCode,
+          shippingName: order.customerDetails.shippingAddress?.firstName + " " + order.customerDetails.shippingAddress?.lastName,
+          shippingPostCode: order.customerDetails.shippingAddress?.postalCode,
           trackingNumber: order.shippingAndHandling?.trackingNumber || "",
           carrierName: order.shippingAndHandling?.carrierName || "",
         }))
@@ -72,8 +72,8 @@ export function UpdateTrackingNumberPage() {
     //       orderId: order._id,
     //       orderNumber: order.channelOrderNumber,
     //       channelOrderId: order.channelOrderNumber,
-    //       shippingName: order.shippingAddress?.firstName + " " + order.shippingAddress?.lastName,
-    //       shippingPostCode: order.shippingAddress?.postalCode,
+    //       shippingName: order.customerDetails.shippingAddress?.firstName + " " + order.customerDetails.shippingAddress?.lastName,
+    //       shippingPostCode: order.customerDetails.shippingAddress?.postalCode,
     //       trackingNumber: order.shippingAndHandling?.trackingNumber || "",
     //       carrierName: order.shippingAndHandling?.carrierName || "",
     //     }))
@@ -95,7 +95,7 @@ export function UpdateTrackingNumberPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
-                  <TableHead className="p-3 rounded-tl-lg rounded-bl-lg">Order Number</TableHead>
+                  <TableHead className="p-3 rounded-tl-lg rounded-bl-lg">Channel Order ID</TableHead>
                   <TableHead className="p-3">Channel Order ID</TableHead>
                   <TableHead className="p-3">Shipping Name</TableHead>
                   <TableHead className="p-3">Post Code</TableHead>
