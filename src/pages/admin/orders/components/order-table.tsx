@@ -56,7 +56,7 @@ export function OrdersTable({
   }
 
   const filterOptions = {
-    ordersFlags: ["All", "Pending", "Shipped", "Cancelled"],
+    ordersFlags: ["All", "pending", "shipped", "cancelled"],  
     channel: ["All", "TikTok", "Amazon", "eBay", "Shopify"],
     shippingCountry: ["All", "UNITED KINGDOM", "UNITED STATES", "GERMANY", "FRANCE", "AUSTRALIA"],
     shippingMethod: ["All", "Tracked 24", "Tracked 48", "Standard", "Express"],

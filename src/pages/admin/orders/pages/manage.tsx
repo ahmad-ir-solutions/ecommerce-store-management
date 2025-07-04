@@ -92,13 +92,13 @@ export function ManageOrderPage() {
   //   channel: "checkbox-list",
   //   orderDate: "date-range",
   //   dispatchDate: "date-range",
-  //   channelDispatchDate: "date-range",
+  //   channelDispatchDate: "date-range",   
   //   shippingCountry: "checkbox-list",
   //   shippingMethod: "checkbox-list",
   // }
 
   // const filterOptions = {
-  //   ordersFlags: ["All", "Pending", "Shipped", "Cancelled"],
+  //   ordersFlags: ["All", "pending", "shipped", "cancelled"],
   //   channel: ["All", "TikTok", "Amazon", "eBay", "Shopify"],
   //   shippingCountry: ["All", "UNITED KINGDOM", "UNITED STATES", "GERMANY", "FRANCE", "AUSTRALIA"],
   //   shippingMethod: ["All", "Tracked 24", "Tracked 48", "Standard", "Express"],

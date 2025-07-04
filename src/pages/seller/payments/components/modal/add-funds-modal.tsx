@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 // import { SelectDropdown } from "@/components/shared/select-dropdown"
 import { useChargeCard } from "../../core/hooks/useStripe"
+import { showErrorMessage } from "@/lib/utils/messageUtils"
 
 const addFundsSchema = z.object({
   amount: z.string().min(1, "Amount is required"),
@@ -19,20 +20,22 @@ interface AddFundsModalProps {
   isOpen: boolean
   onClose: () => void
   onConfirm: (amount: number) => void
+  refetch: () => void
 }
 
 export function AddFundsModal({ isOpen, onClose, 
   // onConfirm 
+  refetch
 }: AddFundsModalProps) {
   const form = useForm<AddFundsFormValues>({
     resolver: zodResolver(addFundsSchema),
     defaultValues: {
-      amount: "20,000",
+      amount: "",
       // method: "",
     },
   })
 
-  const { mutate: chargeCard } = useChargeCard()
+  const { mutateAsync: chargeCard, isPending } = useChargeCard()
 
   const formatAmount = (value: string) => {
     // Remove all non-numeric characters except decimal point
@@ -45,18 +48,20 @@ export function AddFundsModal({ isOpen, onClose,
     return parts.join(".")
   }
 
-  const onSubmit = (data: AddFundsFormValues) => {
+  const onSubmit = async (data: AddFundsFormValues) => {
     const numericAmount = Number.parseFloat(data.amount.replace(/,/g, ""))
     if (numericAmount > 0) {
-      // Call the chargeCard mutation with the required payload
-      chargeCard({
-        amount: numericAmount,
-        metadata: {
-          userId: "12345", // Replace with actual userId if available
-          reason: "Wallet Top up"
-        }
-      })
-      handleClose()
+      try {
+        await chargeCard({
+          amount: numericAmount,
+          metadata: { reason: "Wallet Top up" }
+        })
+        console.log("Funds added successfully")
+        await refetch()
+        handleClose()
+      } catch (error) {
+          showErrorMessage(error as string)
+      }
     }
   }
 
@@ -128,11 +133,11 @@ export function AddFundsModal({ isOpen, onClose,
                 type="button"
                 variant="outline"
                 onClick={handleClose}
-                className="flex-1 h-12 border-gray-300 text-gray-700 hover:bg-gray-50 text-base"
+                className="flex-1 rounded-lg"
               >
                 Cancel
               </Button>
-              <Button type="submit" className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white text-base">
+              <Button type="submit" className="flex-1 rounded-lg" variant="primary" disabled={isPending}>
                 Confirm
               </Button>
             </div>

@@ -70,9 +70,9 @@ export function OrderInformation({ order, control, register, refetch, watch }: O
                     placeholder="Please Select"
                     options={[
                       { id: "confirmed", label: "Confirmed (Ready to pick)", value: "confirmed" },
-                      { id: "Pending", label: "Pending", value: "Pending" },
-                      { id: "Shipped", label: "Shipped", value: "Shipped" },
-                      { id: "Cancelled", label: "Cancelled", value: "Cancelled" },
+                      { id: "pending", label: "Pending", value: "pending" },  
+                      { id: "shipped", label: "Shipped", value: "shipped" },
+                      { id: "cancelled", label: "Cancelled", value: "cancelled" },
                     ]}
                     onChange={field.onChange}
                     className="border-gray-200 bg-white max-w-48"

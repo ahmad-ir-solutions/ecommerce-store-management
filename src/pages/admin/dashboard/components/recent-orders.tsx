@@ -86,7 +86,7 @@ export function RecentOrders() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Orders</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>  
               <SelectItem value="processing">Processing</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>

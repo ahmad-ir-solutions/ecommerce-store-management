@@ -7,6 +7,7 @@ import { Eye, Package } from "lucide-react"
 import { useCreateOrder } from "@/pages/admin/orders/core/hooks/use-orders"
 import { showErrorMessage } from "@/lib/utils/messageUtils"
 import { useAuthStore } from "@/store/authStore"
+import { useUpdateWooCommerceOrderStatus } from "../core/hooks/useWoocommerceOrders"
 
 
 export interface OrderPayload {
@@ -95,16 +96,6 @@ export interface OrderPayload {
     subject: string;
     note: string;
   }
-  
-
-
-
-
-
-
-
-
-
 
 interface WooCommerceOrder {
   _id: string
@@ -130,6 +121,7 @@ interface PlatformOrdersTabProps {
 
 export function PlatformOrdersTab({ orders, isLoading, onRefresh }: PlatformOrdersTabProps) {
   const { mutate: createOrder, isPending: isCreatingOrder } = useCreateOrder()
+  const { mutate: updateWooCommerceOrderStatus } = useUpdateWooCommerceOrderStatus()
   const authStore = useAuthStore()
   // Map WooCommerce orders to display format
   const mappedOrders: WooCommerceOrder[] = orders.map((order: any) => ({
@@ -295,8 +287,9 @@ export function PlatformOrdersTab({ orders, isLoading, onRefresh }: PlatformOrde
       
 
       await createOrder(payload)
+      await updateWooCommerceOrderStatus({orderId: orderData.id, data: {siteUrl: orderData.siteUrl, newStatus: "pending" }})
+         onRefresh()
 
-      onRefresh()
     } catch (error) {
       console.error("Error placing order:", error)
       showErrorMessage("Failed to place order for fulfilment")
@@ -402,6 +395,7 @@ export function PlatformOrdersTab({ orders, isLoading, onRefresh }: PlatformOrde
           <Button
             size="sm"
             variant="default"
+            type="button"
             onClick={() => handlePlaceOrder(row._id)}
             disabled={isCreatingOrder}
             className="p-2 bg-green-600 hover:bg-green-700 text-white"

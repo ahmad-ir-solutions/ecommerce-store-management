@@ -60,11 +60,11 @@ const fetchOutstandingOrders = async (filters: any): Promise<OutstandingOrder[]>
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 500));
 
-  const dummyOutstandingOrders: OutstandingOrder[] = [
-    { id: 1, select: false, purchaseOrderId: "PO-001", supplier: "Supplier A", warehouse: "Warehouse 1", dateRaised: "2023-10-26", status: "Pending", totalValue: "100.00", totalLines: 5 },
-    { id: 2, select: false, purchaseOrderId: "PO-002", supplier: "Supplier B", warehouse: "Warehouse 2", dateRaised: "2023-10-25", status: "Completed", totalValue: "250.00", totalLines: 10 },
-    { id: 3, select: false, purchaseOrderId: "PO-003", supplier: "Supplier A", warehouse: "Warehouse 1", dateRaised: "2023-11-01", status: "Pending", totalValue: "150.00", totalLines: 7 },
-    { id: 4, select: false, purchaseOrderId: "PO-004", supplier: "Supplier C", warehouse: "Warehouse 2", dateRaised: "2023-11-05", status: "Completed", totalValue: "300.00", totalLines: 12 },
+  const dummyOutstandingOrders: OutstandingOrder[] = [  
+    { id: 1, select: false, purchaseOrderId: "PO-001", supplier: "Supplier A", warehouse: "Warehouse 1", dateRaised: "2023-10-26", status: "pending", totalValue: "100.00", totalLines: 5 },
+    { id: 2, select: false, purchaseOrderId: "PO-002", supplier: "Supplier B", warehouse: "Warehouse 2", dateRaised: "2023-10-25", status: "completed", totalValue: "250.00", totalLines: 10 },
+    { id: 3, select: false, purchaseOrderId: "PO-003", supplier: "Supplier A", warehouse: "Warehouse 1", dateRaised: "2023-11-01", status: "pending", totalValue: "150.00", totalLines: 7 },
+    { id: 4, select: false, purchaseOrderId: "PO-004", supplier: "Supplier C", warehouse: "Warehouse 2", dateRaised: "2023-11-05", status: "completed", totalValue: "300.00", totalLines: 12 },
   ];
 
   // Apply filtering based on the received filters (simulating server-side)
@@ -125,8 +125,8 @@ const supplierOptions = [
 
 const statusOptions = [
   { id: "all", label: "All", value: "all" },
-  { id: "pending", label: "Pending", value: "Pending" },
-  { id: "completed", label: "Completed", value: "Completed" },
+  { id: "pending", label: "Pending", value: "pending" },
+  { id: "completed", label: "Completed", value: "completed" },
 ];
 
 // Dummy stock location options

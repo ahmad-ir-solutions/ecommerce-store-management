@@ -133,6 +133,7 @@ export function EditWebstoreDetails() {
         enforceChannelWarehouse: connectedAccount.data.enforceChannelWarehouse || false,
         downloadListings: connectedAccount.data.downloadListings || false,
       });
+      setSiteUrl(connectedAccount.data.siteUrl);
     }
   }, [connectedAccount, form]);
 
@@ -252,7 +253,10 @@ export function EditWebstoreDetails() {
                         <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                           <FormLabel>URL</FormLabel>
                           <FormControl>
-                            <Input value={siteUrl}
+                            <Input
+                              value={siteUrl}
+                              disabled={connectedAccount?.data?.isAccountConnected}
+                                defaultValue={connectedAccount?.data?.siteUrl}
                               onChange={(e) => setSiteUrl(e.target.value)} className="bg-white text-[#11263C] border-gray-300 shadow-none rounded-lg" />
                           </FormControl>
                         </div>

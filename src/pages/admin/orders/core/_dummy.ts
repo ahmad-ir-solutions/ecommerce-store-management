@@ -44,7 +44,7 @@
 //       emailAddress: "Marwanroozafzay@hotmail.com",
 //       total: 12.79,
 //       shippingMethod: "Tracked 24",
-//       status: "Pending",
+//       status: "pending", 
 //       flagType: "P"
 //     },
 //     {
@@ -64,7 +64,7 @@
 //       emailAddress: "example@amazon.co.uk",
 //       total: 23.49,
 //       shippingMethod: "Tracked 24",
-//       status: "Complete",
+//       status: "completed",
 //       flagType: "P"
 //     },
 //     {
@@ -84,7 +84,7 @@
 //       emailAddress: "example@ebay.com",
 //       total: 23.99,
 //       shippingMethod: "Tracked 24",
-//       status: "Complete"
+//       status: "completed"
 //     },
 //     {
 //       id: "5",
@@ -103,7 +103,7 @@
 //       emailAddress: "Not Available",
 //       total: 31.49,
 //       shippingMethod: "Tracked 24",
-//       status: "Awaiting Payment"
+//       status: "awaiting payment"
 //     },
 //   ]
 // }

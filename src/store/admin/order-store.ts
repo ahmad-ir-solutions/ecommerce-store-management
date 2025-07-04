@@ -132,7 +132,7 @@
 //             taxRate: 20, // Default tax rate
 //             taxTotal: product.price * 0.2, // 20% tax
 //             discount: 0,
-//             status: "Pending",
+//             status: "pending",
 //             quantityAllocated: 0,
 //             options: "",
 //           }))

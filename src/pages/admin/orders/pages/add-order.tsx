@@ -134,7 +134,7 @@ const mockWarehouses = [
     { id: "6836ad6a7ad0996826a6e133", name: "Secondary Warehouse" },
 ]
 
-const orderStatuses = ["Processing", "Complete (Ready to pick)", "Pending", "Shipped", "Delivered", "Cancelled"]
+const orderStatuses = ["processing", "confirmed", "shipped", "delivered", "cancelled"]
 
 const shippingMethods = ["Royal Mail Tracked 24", "Royal Mail Tracked 48", "DPD Next Day", "Standard Delivery"]
 

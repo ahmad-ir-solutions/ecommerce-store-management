@@ -144,7 +144,7 @@ export function FulfilmentOrdersTab() {
     },
     {
       key: "orderStatus",
-      title: "Order Flags",
+      title: "Order Status",
       render: (row: FulfilmentOrder) => (
         <Badge variant="secondary" className={`capitalize ${getStatusColor(row.orderStatus)}`}>
           {row.orderStatus.replace("-", " ")}

@@ -86,23 +86,26 @@ export const useGetOrder = (id: string) => {
 // Create a new order
 export const useCreateOrder = () => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return useMutation({
     mutationFn: (data: any) => createOrder(data),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: orderKeys.lists() })
       showSuccessMessage(response.data.message || "Order created successfully!")
-      const newOrderId = response.data?._id
-      navigate(`/admin/orders/${newOrderId}`)
+      // const newOrderId = response.data?._id
+      // navigate(`/admin/orders/${newOrderId}`)
     },
-    onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
-      if (error.response?.data.errors) {
-        Object.values(error.response.data.errors).forEach((errorMessage) => {
-          showErrorMessage(errorMessage)
-        })
+    onError: (error: AxiosError<{ message: string | string[]; errors?: { [key: string]: string } }>) => {
+      const data = error.response?.data;
+      if (Array.isArray(data?.message)) {
+        data.message.forEach((msg) => showErrorMessage(msg));
+      } else if (data?.errors) {
+        Object.values(data.errors).forEach((errorMessage) => {
+          showErrorMessage(errorMessage);
+        });
       } else {
-        showErrorMessage(error.response?.data?.message || "Failed to create order. Please try again.")
+        showErrorMessage(data?.message || "Failed to create order. Please try again.");
       }
     },
   })

@@ -433,9 +433,9 @@ export const SupplierDetailsPage = () => {
                       defaultValue={form.getValues("poChangeToStatus")}
                       placeholder="Please Select"
                       options={[
-                        { id: "Pending", label: "Pending", value: "Pending" },
-                        { id: "Processing", label: "Processing", value: "Processing" },
-                        { id: "Completed", label: "Completed", value: "Completed" },
+                        { id: "pending", label: "Pending", value: "pending" },
+                        { id: "processing", label: "Processing", value: "processing" },
+                        { id: "completed", label: "Completed", value: "completed" },
                       ]}
                       onChange={(value) => form.setValue("poChangeToStatus", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"
@@ -494,9 +494,9 @@ export const SupplierDetailsPage = () => {
                       defaultValue={form.getValues("dropShipChangeToStatus")}
                       placeholder="Select status"
                       options={[
-                        { id: "Pending", label: "Pending", value: "Pending" },
-                        { id: "Processing", label: "Processing", value: "Processing" },
-                        { id: "Completed", label: "Completed", value: "Completed" },
+                        { id: "pending", label: "Pending", value: "pending" },
+                        { id: "processing", label: "Processing", value: "processing" },
+                        { id: "completed", label: "Completed", value: "completed" },
                       ]}
                       onChange={(value) => form.setValue("dropShipChangeToStatus", String(value), { shouldValidate: true })}
                       className="border-[#BBC2CB] bg-white max-w-52"

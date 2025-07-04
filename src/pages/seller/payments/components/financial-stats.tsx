@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, Minus } from "lucide-react"
-import { WithdrawFundsModal } from "./modal/withdraw-funds"
+import { Plus } from "lucide-react"
+// import { WithdrawFundsModal } from "./modal/withdraw-funds"
 import { AddFundsModal } from "./modal/add-funds-modal"
+import { useGetAvailableBalance } from "../core/hooks/useStripe"
 
 interface FinancialData {
   availableBalance: number
@@ -11,12 +12,14 @@ interface FinancialData {
 }
 
 export function FinancialStats() {
+  const { data: availableBalance, refetch } = useGetAvailableBalance()
+
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
-  const [showWithdrawModal, setShowWithdrawModal] = useState(false)
+  // const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [financialData, setFinancialData] = useState<FinancialData>({
-    availableBalance: 5423.56,
-    toBePaid: 4139.87,
-    paid: 4139.87,
+    availableBalance: availableBalance || 0,
+    toBePaid: 0,
+    paid: 0,
   })
 
   const formatCurrency = (amount: number) => {
@@ -26,6 +29,16 @@ export function FinancialStats() {
     }).format(amount)
   }
 
+  useEffect(() => {
+    if (typeof availableBalance === "number" && !isNaN(availableBalance)) {
+      setFinancialData((prev) => ({
+        ...prev,
+        availableBalance,
+      }))
+    }
+  }, [availableBalance])
+
+  // console.log(availableBalance , "availableBalance")
   const handleAddFunds = (amount: number) => {
     setFinancialData((prev) => ({
       ...prev,
@@ -34,13 +47,13 @@ export function FinancialStats() {
     setShowAddFundsModal(false)
   }
 
-  const handleWithdrawFunds = (amount: number) => {
-    setFinancialData((prev) => ({
-      ...prev,
-      availableBalance: Math.max(0, prev.availableBalance - amount),
-    }))
-    setShowWithdrawModal(false)
-  }
+  // const handleWithdrawFunds = (amount: number) => {
+  //   setFinancialData((prev) => ({
+  //     ...prev,
+  //     availableBalance: Math.max(0, prev.availableBalance - amount),
+  //   }))
+  //   setShowWithdrawModal(false)
+  // }
 
   return (
     <>
@@ -78,14 +91,14 @@ export function FinancialStats() {
             <span>Add Funds</span>
           </Button>
 
-          <Button
+          {/* <Button
             onClick={() => setShowWithdrawModal(true)}
             variant="primary"
             className="rounded-lg"
           >
             <Minus className="w-4 h-4" />
             <span>Withdraw Funds</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -122,14 +135,14 @@ export function FinancialStats() {
             <span>Add Funds</span>
           </Button>
 
-          <Button
+          {/* <Button
             onClick={() => setShowWithdrawModal(true)}
             variant="outline"
             className="border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-2 rounded-lg flex items-center space-x-2"
           >
             <Minus className="w-4 h-4" />
             <span>Withdraw Funds</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -167,14 +180,14 @@ export function FinancialStats() {
             <span className="text-sm">Add Funds</span>
           </Button>
 
-          <Button
+          {/* <Button
             onClick={() => setShowWithdrawModal(true)}
             variant="outline"
             className="border-gray-300 text-gray-700 hover:bg-gray-50 py-3 rounded-lg flex items-center justify-center space-x-2"
           >
             <Minus className="w-4 h-4" />
             <span className="text-sm">Withdraw</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -183,13 +196,14 @@ export function FinancialStats() {
         isOpen={showAddFundsModal}
         onClose={() => setShowAddFundsModal(false)}
         onConfirm={handleAddFunds}
+        refetch={refetch}
       />
 
-      <WithdrawFundsModal
+      {/* <WithdrawFundsModal
         isOpen={showWithdrawModal}
         onClose={() => setShowWithdrawModal(false)}
         onConfirm={handleWithdrawFunds}
-      />
+      /> */}
     </>
   )
 }

@@ -28,3 +28,7 @@ export function getSavedCards() {
 export function deleteCard(data: { paymentMethodId: string }) {
   return authApi.delete(`/stripe/delete-card`, { data });
 }
+
+export function getAvailableBalance() {
+  return authApi.get(`/user/balance`);
+}

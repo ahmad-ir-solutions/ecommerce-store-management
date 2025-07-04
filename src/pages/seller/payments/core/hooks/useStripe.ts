@@ -2,7 +2,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { showErrorMessage, showSuccessMessage } from "@/lib/utils/messageUtils";
 import type { AxiosError } from "axios";
-import { chargeCard, createSetupIntent, deleteCard, getSavedCards, setDefaultCard } from "../_request";
+import { chargeCard, createSetupIntent, deleteCard, getAvailableBalance, getSavedCards, setDefaultCard } from "../_request";
 import { Stripe, StripeElements } from "@stripe/stripe-js";
 
 // Query keys
@@ -113,5 +113,15 @@ export const useDeleteCard = () => {
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || "Failed to delete card");
     },
+  });
+};
+
+// Get Available Balance
+export const useGetAvailableBalance = () => {
+  return useQuery({
+    queryKey: ["available-balance"],
+    queryFn: getAvailableBalance,
+    select: (res) => res.data,
+    refetchOnWindowFocus: true,
   });
 };
