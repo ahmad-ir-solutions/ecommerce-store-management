@@ -1,7 +1,6 @@
 import authApi from "@/lib/axios"
 import {
   type  IAuthResponse,
-  type IGetAllUsersResponse,
   type IUserModel,
 } from "./_models"
 
@@ -12,7 +11,7 @@ const UPDATE_USER_URL = "/user"
 const GET_USER_URL = "/user"
 
 export function getAllUsers() {
-  return authApi.get<{ data: IGetAllUsersResponse }>(GET_ALL_USERS_URL)
+  return authApi.get<{ data: any }>(GET_ALL_USERS_URL)
 }
 
 export function addUser(body: any) {

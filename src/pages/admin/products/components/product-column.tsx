@@ -17,7 +17,7 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
             to={`/admin/products/${row.original._id}`}
             className="text-[#024AFE] hover:text-[#0228fe] hover:underline"
           >
-            {row.original.sku  || "-"}
+            {row.original.sku || "-"}
           </Link>
         </div>
 
@@ -73,12 +73,12 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "image",
       header: "Image",
-      cell: ({row}) => (
+      cell: ({ row }) => (
         <Avatar className="h-12 w-12 bg-gray-300 rounded-sm">
           <AvatarImage
-          src={
-            row.original.imageUrl || 'https://picsum.photos/400/300'}
-             alt="Product img" />
+            src={
+              row.original.imageUrl || 'https://picsum.photos/400/300'}
+            alt="Product img" />
           <AvatarFallback>img</AvatarFallback>
         </Avatar>
       ),
@@ -104,24 +104,24 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
       header: "Inventory",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.inventory  || "-"}</div>
+          <div className="font-medium">{row.original.inventory || "-"}</div>
         </div>
       ),
     },
     {
       accessorKey: "price",
       header: "Price",
-      cell: ({ row }) => <div>${row?.original?.price?.toFixed(2)  || "-"}</div>,
+      cell: ({ row }) => <div>${row?.original?.price?.toFixed(2) || "-"}</div>,
     },
     {
       accessorKey: "rrp",
       header: "RRP",
-      cell: ({ row }) => <div>${row?.original?.rrp?.toFixed(2)  || "-"}</div>,
+      cell: ({ row }) => <div>${row?.original?.rrp?.toFixed(2) || "-"}</div>,
     },
     {
       accessorKey: "taxClass",
       header: "Tax Class",
-      cell: ({ row }) => <div>{row.original.taxClass  || "-"}%</div>,
+      cell: ({ row }) => <div>{row.original.taxClass || "-"}%</div>,
     },
     {
       accessorKey: "priceIncludesVat",
@@ -131,46 +131,46 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "weight",
       header: "Weight",
-      cell: ({ row }) => <div>{row.original.weight  || "-"} kg</div>,
+      cell: ({ row }) => <div>{row.original.weight || "-"} kg</div>,
     },
     {
       accessorKey: "length",
       header: "Length",
-      cell: ({ row }) => <div>{row.original.length  || "-"} mm</div>,
+      cell: ({ row }) => <div>{row.original.length || "-"} mm</div>,
     },
     {
       accessorKey: "width",
       header: "Width",
-      cell: ({ row }) => <div>{row.original.width  || "-"} mm</div>,
+      cell: ({ row }) => <div>{row.original.width || "-"} mm</div>,
     },
     {
       accessorKey: "height",
       header: "Height/Depth",
-      cell: ({ row }) => <div>{row.original.height  || "-"} mm</div>,
+      cell: ({ row }) => <div>{row.original.height || "-"} mm</div>,
     },
     {
       accessorKey: "warehouse",
       header: "Warehouse",
       cell: ({ row }) => (
         <div>
-          <div className="font-medium">{row.original.warehouse  || "-"}</div>
+          <div className="font-medium">{row.original.warehouse || "-"}</div>
         </div>
       ),
     },
     {
       accessorKey: "brand",
       header: "Brand",
-      cell: ({ row }) => <div>{row.original.brand  || "-"}</div>,
+      cell: ({ row }) => <div>{row.original.brand || "-"}</div>,
     },
     {
       accessorKey: "ean",
       header: "EAN",
-      cell: ({ row }) => <div>{row.original.ean  || "-"}</div>,
+      cell: ({ row }) => <div>{row.original.ean || "-"}</div>,
     },
     {
       accessorKey: "upc",
       header: "UPC",
-      cell: ({ row }) => <div>{row.original.upc  || "-"}</div>,
+      cell: ({ row }) => <div>{row.original.upc || "-"}</div>,
     },
   ]
 }

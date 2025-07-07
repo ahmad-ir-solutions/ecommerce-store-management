@@ -62,7 +62,7 @@ export function CustomerInformation({
             <div className="text-sm p-2">{order.customerDetails.email}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Email CC (comma-separated)</div>
-            <div className="text-sm p-2">{order.channelOrderNumber}</div>
+            <div className="text-sm p-2">{order.customerDetails.emailCC || "-"}</div>
           </div>
 
           <div className="grid xl:grid-cols-2 gap-24">

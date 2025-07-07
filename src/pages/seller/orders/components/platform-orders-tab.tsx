@@ -165,7 +165,6 @@ export function PlatformOrdersTab({ orders, isLoading, onRefresh }: PlatformOrde
   const handlePlaceOrder = async (orderId: string) => {
     const orderData = orders.find((order) => String(order.id) === orderId)
 
-
     try {
       // Calculate totals
       const subtotal =
@@ -284,7 +283,6 @@ export function PlatformOrdersTab({ orders, isLoading, onRefresh }: PlatformOrde
           }
         ]
       }
-      
 
       await createOrder(payload)
       await updateWooCommerceOrderStatus({orderId: orderData.id, data: {siteUrl: orderData.siteUrl, newStatus: "pending" }})

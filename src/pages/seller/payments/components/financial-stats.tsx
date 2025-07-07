@@ -7,8 +7,7 @@ import { useGetAvailableBalance } from "../core/hooks/useStripe"
 
 interface FinancialData {
   availableBalance: number
-  toBePaid: number
-  paid: number
+ paid: number
 }
 
 export function FinancialStats() {
@@ -17,11 +16,10 @@ export function FinancialStats() {
   const [showAddFundsModal, setShowAddFundsModal] = useState(false)
   // const [showWithdrawModal, setShowWithdrawModal] = useState(false)
   const [financialData, setFinancialData] = useState<FinancialData>({
-    availableBalance: availableBalance || 0,
-    toBePaid: 0,
-    paid: 0,
+    availableBalance: availableBalance?.totalBalance || 0,
+    paid: availableBalance?.total || 0,
   })
-
+  console.log(availableBalance,"availableBalance");
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -67,12 +65,6 @@ export function FinancialStats() {
             <p className="text-3xl font-semibold text-gray-900">{formatCurrency(financialData.availableBalance)}</p>
           </div>
 
-          {/* To be Paid */}
-          <div>
-            <p className="text-sm text-gray-500 mb-1">To be Paid</p>
-            <p className="text-3xl font-semibold text-gray-900">{formatCurrency(financialData.toBePaid)}</p>
-          </div>
-
           {/* Paid */}
           <div>
             <p className="text-sm text-gray-500 mb-1">Paid</p>
@@ -110,12 +102,6 @@ export function FinancialStats() {
           <div className="text-center">
             <p className="text-sm text-gray-500 mb-1">Available Balance</p>
             <p className="text-2xl font-semibold text-gray-900">{formatCurrency(financialData.availableBalance)}</p>
-          </div>
-
-          {/* To be Paid */}
-          <div className="text-center">
-            <p className="text-sm text-gray-500 mb-1">To be Paid</p>
-            <p className="text-2xl font-semibold text-gray-900">{formatCurrency(financialData.toBePaid)}</p>
           </div>
 
           {/* Paid */}
@@ -156,18 +142,10 @@ export function FinancialStats() {
             <p className="text-xl font-semibold text-gray-900">{formatCurrency(financialData.availableBalance)}</p>
           </div>
 
-          {/* To be Paid and Paid */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="text-center bg-gray-50 py-3 px-3 rounded-lg">
-              <p className="text-xs text-gray-500 mb-1">To be Paid</p>
-              <p className="text-lg font-semibold text-gray-900">{formatCurrency(financialData.toBePaid)}</p>
-            </div>
-
             <div className="text-center bg-gray-50 py-3 px-3 rounded-lg">
               <p className="text-xs text-gray-500 mb-1">Paid</p>
               <p className="text-lg font-semibold text-gray-900">{formatCurrency(financialData.paid)}</p>
             </div>
-          </div>
         </div>
 
         {/* Action Buttons */}
