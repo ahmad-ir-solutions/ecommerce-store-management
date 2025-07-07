@@ -1,30 +1,32 @@
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@/components/ui/breadcrumb';
-import { cn } from '@/lib/utils';
-import { ChevronRightIcon } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+// import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from '@/components/ui/breadcrumb';
+// import { cn } from '@/lib/utils';
+// import { ChevronRightIcon } from 'lucide-react';
+// import { useLocation } from 'react-router-dom';
 
 interface DashboardHeaderProps {
   title: string;
   children?: React.ReactNode;
-  customLabels?: Record<string, string>; // Optional: map route segments to display names
+  // customLabels?: Record<string, string>; // Optional: map route segments to display names
 }
 
-export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderProps) => {
-  const location = useLocation();
-  const segments = location.pathname.split('/').filter(Boolean);
+export const CustomBreadcrumb = ({ title, 
+  // customLabels = {} 
+}: DashboardHeaderProps) => {
+  // const location = useLocation();
+  // const segments = location.pathname.split('/').filter(Boolean);
 
   // Build up breadcrumbs
-  const breadcrumbs = segments.map((segment: string, index: number) => {
-    const href = '/' + segments.slice(0, index + 1).join('/');
-    const label = customLabels[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  // const breadcrumbs = segments.map((segment: string, index: number) => {
+  //   const href = '/' + segments.slice(0, index + 1).join('/');
+  //   const label = customLabels[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 
-    return { label, href };
-  });
+  //   return { label, href };
+  // });
 
   return (
       <div>
         <h1 className="text-3xl font-semibold mb-1 text-[#11263C]">{title}</h1>
-        <Breadcrumb className='flex items-center text-sm font-medium flex-now-wrap'>
+        {/* <Breadcrumb className='flex items-center text-sm font-medium flex-now-wrap'>
           {breadcrumbs.map((crumb, index) => (
             <span key={crumb.href} className="flex items-center text-xs font-medium uppercase">
               <BreadcrumbItem>
@@ -45,7 +47,7 @@ export const CustomBreadcrumb = ({ title, customLabels = {} }: DashboardHeaderPr
               )}
             </span>
           ))}
-        </Breadcrumb>
+        </Breadcrumb> */}
       </div>
   );
 };
