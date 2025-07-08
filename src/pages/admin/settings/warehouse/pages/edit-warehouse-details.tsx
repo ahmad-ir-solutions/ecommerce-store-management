@@ -23,12 +23,20 @@ import {
   useUpdateWarehouse,
 } from "../core/hooks/useWarehouse"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
+import { CustomPagination } from "@/components/shared/custom-pagination"
 
 export function EditWarehouseDetails() {
   const { warehouseId } = useParams<{ warehouseId: string }>()
   const navigate = useNavigate()
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false)
-  const { data: warehouseZonesData } = useGetWarehouseZones()
+  const [queryParams, setQueryParams] = useState<any>({
+    // sortBy: "createdAt",
+    sortOrder: "desc",
+    search: "",
+    limit: 10,
+    page: 1,
+  })
+  const { data: warehouseZonesData } = useGetWarehouseZones(queryParams)
   const warehouseZonesList = warehouseZonesData?.data?.map((zone: any) => ({
     id: zone._id,
     warehouseZoneName: zone.warehouseZoneName,
@@ -113,6 +121,16 @@ export function EditWarehouseDetails() {
       deleteWarehouseZoneMutation.mutate(id)
     }
   }
+
+  const handlePageChange = (page: number) => {
+    setQueryParams((prev: any) => ({
+      ...prev,
+      page,
+    }))
+  }
+
+  const totalPages = warehouseZonesData?.total ? Math.ceil(warehouseZonesData.total / (queryParams.limit || 10)) : 0
+  const currentPage = queryParams.page
 
   if (isLoading) {
     return (
@@ -533,6 +551,13 @@ export function EditWarehouseDetails() {
                     </div>
                   )}
                 </CardContent>
+                <CustomPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={warehouseZonesData?.total || 0}
+                  itemsPerPage={queryParams.limit}
+                  onPageChange={handlePageChange}
+                />
               </Card>
             </TabsContent>
           </Tabs>

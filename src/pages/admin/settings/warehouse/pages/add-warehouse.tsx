@@ -21,15 +21,24 @@ import {
   useGetWarehouseZones,
 } from "../core/hooks/useWarehouse"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
-// import { CustomPagination } from "@/components/shared/custom-pagination"
+import { CustomPagination } from "@/components/shared/custom-pagination"
 
 export function AddWarehouse() {
   const navigate = useNavigate()
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false)
   const [zoneToEdit, setZoneToEdit] = useState<any>(null)
 
+  const [queryParams, setQueryParams] = useState<any>({
+    sortBy: "createdAt",
+    sortOrder: "desc",
+    search: "",
+    limit: 10, 
+    page: 1,
+  })
+
   // Create warehouse mutation
-  const { data: warehouseZonesData } = useGetWarehouseZones()
+  const { data: warehouseZonesData } = useGetWarehouseZones(queryParams)
+
   const warehouseZonesList =
     warehouseZonesData?.data?.map((zone: any) => ({
       id: zone._id,
@@ -99,6 +108,17 @@ export function AddWarehouse() {
       setZoneToEdit(null)
     }, 100)
   }
+
+  const handlePageChange = (page: number) => {
+    setQueryParams((prev: any) => ({ 
+      ...prev,
+      page,
+    }))
+  }
+
+  const totalPages = warehouseZonesData?.total ? Math.ceil(warehouseZonesData.total / (queryParams.limit || 10)) : 0
+  const currentPage = queryParams.page
+    
 
   return (
     <div>
@@ -483,13 +503,13 @@ export function AddWarehouse() {
                     )}
                   </div>
                 </CardContent>
-                {/* <CustomPagination
-                  currentPage={1}
-                  totalPages={warehouseZonesList?.length || 0}
-                  totalItems={warehouseZonesList?.length || 0}
-                  itemsPerPage={10}
-                  onPageChange={() => {}}
-                /> */}
+                <CustomPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={warehouseZonesData?.total || 0}
+                  itemsPerPage={queryParams.limit}
+                  onPageChange={handlePageChange}
+                />
               </Card>
             </TabsContent>
           </Tabs>

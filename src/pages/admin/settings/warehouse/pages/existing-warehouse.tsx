@@ -18,7 +18,7 @@ export function ExistingWarehouse() {
     limit: 10,
     page: 1,
   })
-  const { data: warehousesData, isLoading, error } = useGetWarehouses(queryParams)
+  const { data: warehousesData, isLoading } = useGetWarehouses(queryParams)
   const deleteWarehouseMutation = useDeleteWarehouse()
 
   const debouncedSearch = useCallback(
@@ -58,6 +58,9 @@ export function ExistingWarehouse() {
     }))
   }
 
+  const totalPages = warehousesData?.total ? Math.ceil(warehousesData.total / (queryParams.limit || 10)) : 0
+  const currentPage = queryParams.page || 1
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -66,13 +69,13 @@ export function ExistingWarehouse() {
     )
   }
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p className="text-red-500">{(error instanceof Error ? error.message : error) || "Error loading warehouses. Please try again."}</p>
-      </div>
-    )
-  }
+  // if (error) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64">
+  //       <p className="text-red-500">{(error instanceof Error ? error.message : error) || "Error loading warehouses. Please try again."}</p>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
@@ -158,8 +161,8 @@ export function ExistingWarehouse() {
             </Table>
           </CardContent>
           <CustomPagination
-            currentPage={queryParams.page}
-            totalPages={Math.ceil((warehousesData?.total || 0) / queryParams.limit)}
+            currentPage={currentPage}
+            totalPages={totalPages}
             totalItems={warehousesData?.total || 0}
             itemsPerPage={queryParams.limit}
             onPageChange={handlePageChange}
