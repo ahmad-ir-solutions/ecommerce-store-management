@@ -68,7 +68,7 @@ export function SuppliersPage() {
             placeholder="Search suppliers..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-[25rem]"
+            // className="w-[25rem]"
           />
           <Button
             variant="default"

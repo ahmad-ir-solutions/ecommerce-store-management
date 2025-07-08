@@ -82,7 +82,7 @@ export function ExistingWarehouse() {
             placeholder="Search warehouses..."
             value={searchTerm}
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-[25rem]"
+            // className="max-w-[25rem]"
           />
           <Button
             variant="default"
