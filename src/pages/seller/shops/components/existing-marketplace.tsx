@@ -48,7 +48,7 @@ export function ExistingMarketplace({ marketplaces, isLoading }: { marketplaces:
                                 <TableRow>
                                     <TableCell colSpan={5} className="text-center py-4">
                                         <div className="flex justify-center items-center h-64">
-                                            <Loader2 className="h-8 w-8 animate-spin" />
+                                            <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
                                         </div>
                                     </TableCell>
                                 </TableRow>

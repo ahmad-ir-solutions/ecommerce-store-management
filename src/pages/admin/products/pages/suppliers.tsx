@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Loader2, Trash2 } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import {
-  useDeleteSupplier, 
+  useDeleteSupplier,
   useGetSuppliers
 } from '../core/hooks/useSupplier'
 import { useCallback, useState } from 'react'
@@ -22,7 +22,7 @@ export function SuppliersPage() {
     limit: 8,
     page: 1,
   })
-  const { data: suppliersResponse, isLoading, } = useGetSuppliers(queryParams)
+  const { data: suppliersResponse, isLoading, error } = useGetSuppliers(queryParams)
   const deleteSupplierMutation = useDeleteSupplier()
   const [search, setSearch] = useState("")
   const navigate = useNavigate()
@@ -62,13 +62,13 @@ export function SuppliersPage() {
 
   return (
     <div>
-         <Header title="Suppliers">
+      <Header title="Suppliers">
         <div className="flex items-center justify-end h-16 px-6 gap-6">
-          <CustomSearch 
+          <CustomSearch
             placeholder="Search suppliers..."
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            // className="w-[25rem]"
+          // className="w-[25rem]"
           />
           <Button
             variant="default"
@@ -88,70 +88,61 @@ export function SuppliersPage() {
             <CardTitle className="text-lg font-semibold">Existing Suppliers</CardTitle>
           </CardHeader>
           <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
-                    <TableHead className="p-3 rounded-tl-lg rounded-bl-lg">Name</TableHead>
-                    <TableHead className="p-3">Email</TableHead>
-                    <TableHead className="p-3">City</TableHead>
-                    <TableHead className="p-3">Country</TableHead>
-                    <TableHead className="p-3">Currency</TableHead>
-                    <TableHead className="p-3 rounded-tr-lg rounded-br-lg">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {isLoading ? (
-                      <TableRow>
-                      <TableCell colSpan={5} className="text-center py-4">
-                        <div className="flex justify-center items-center h-64">
-                          <Loader2 className="h-8 w-8 animate-spin" />
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ) : suppliers.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-4">
-                        <p className="text-gray-500">No suppliers found. Add your first supplier to get started.</p>
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                  suppliers.map((supplier) => (
-                    <TableRow key={supplier._id} className="text-[#11263C] text-sm border-b border-gray-200">
-                      <TableCell className="p-3 text-start font-medium">{supplier.supplierName}</TableCell>
-                      <TableCell className="p-3 text-start">{supplier.supplierEmailAddress}</TableCell>
-                      <TableCell className="p-3 text-start">{supplier.city}</TableCell>
-                      <TableCell className="p-3 text-start">{supplier.country}</TableCell>
-                      <TableCell className="p-3 text-start">{supplier.supplierCurrency}</TableCell>
-                      <TableCell className="p-3 text-start">
-                        <div className="flex items-center gap-2">
-                          <Link
-                            to={`/admin/products/supplier-details/${supplier._id}`}
-                            className="text-[#024AFE] hover:text-[#0228fe] underline flex items-center gap-1"
-                          >
-                            View/Edit Supplier
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="lg"
-                            onClick={() => handleDeleteSupplier(supplier._id)}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1"
-                          >
-                            <Trash2 className="w-5 h-5" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )))}
-                </TableBody>
-              </Table>
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
+                  <TableHead className="p-3 rounded-tl-lg rounded-bl-lg">Name</TableHead>
+                  <TableHead className="p-3">Email</TableHead>
+                  <TableHead className="p-3">City</TableHead>
+                  <TableHead className="p-3">Country</TableHead>
+                  <TableHead className="p-3">Currency</TableHead>
+                  <TableHead className="p-3 rounded-tr-lg rounded-br-lg">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {error && <TableRow><TableCell colSpan={7}><div className="flex justify-center items-center h-64">
+                  Error loading suppliers: {(error as Error).message}
+                </div></TableCell></TableRow>}
+                {isLoading && <TableRow><TableCell colSpan={7}><div className="flex justify-center items-center h-64">
+                  <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
+                </div></TableCell></TableRow>}
+                {suppliers.length > 0 && suppliers.map((supplier) => (
+                <TableRow key={supplier._id} className="text-[#11263C] text-sm border-b border-gray-200">
+                  <TableCell className="p-3 text-start font-medium">{supplier.supplierName}</TableCell>
+                  <TableCell className="p-3 text-start">{supplier.supplierEmailAddress}</TableCell>
+                  <TableCell className="p-3 text-start">{supplier.city}</TableCell>
+                  <TableCell className="p-3 text-start">{supplier.country}</TableCell>
+                  <TableCell className="p-3 text-start">{supplier.supplierCurrency}</TableCell>
+                  <TableCell className="p-3 text-start">
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to={`/admin/products/supplier-details/${supplier._id}`}
+                        className="text-[#024AFE] hover:text-[#0228fe] underline flex items-center gap-1"
+                      >
+                        View/Edit Supplier
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="lg"
+                        onClick={() => handleDeleteSupplier(supplier._id)}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={suppliersResponse?.total || 0}
-              itemsPerPage={queryParams.limit || 10}
-              onPageChange={handlePageChange}
-            />
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            totalItems={suppliersResponse?.total || 0}
+            itemsPerPage={queryParams.limit || 10}
+            onPageChange={handlePageChange}
+          />
         </Card>
       </div>
     </div>

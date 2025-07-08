@@ -153,7 +153,7 @@ export function EditWebstoreDetails() {
     <div>
       <Header title="Settings" />
       {isConnectedAccountLoading ? <div className="flex justify-center items-center h-screen">
-        <Loader2 className="w-6 h-6 animate-spin" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#024AFE]" />
       </div> :
       <div className="mt-6 bg-white p-6 rounded-2xl shadow-none text-[#4E5967]">
         <Form {...form}>

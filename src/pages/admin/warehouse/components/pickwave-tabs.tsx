@@ -39,7 +39,7 @@ export function PickwaveTabs() {
             <TabsContent value="open">
                 <div className="py-4">
                     {isLoading ? <div className="flex justify-center items-center h-64">
-                        <Loader2 className="h-8 w-8 animate-spin" />
+                        <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
                     </div> : <PickwaveTable data={openPickwaves} />}
                 </div>
             </TabsContent>
@@ -47,7 +47,7 @@ export function PickwaveTabs() {
             <TabsContent value="completed">
                 <div className="py-4">
                     {isLoading ? <div className="flex justify-center items-center h-64">
-                        <Loader2 className="h-8 w-8 animate-spin" />
+                        <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
                     </div> : <PickwaveTable data={completedPickwaves} />}
                 </div>
             </TabsContent>

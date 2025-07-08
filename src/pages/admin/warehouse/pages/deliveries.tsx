@@ -426,7 +426,7 @@ export function DeliveriesPage() {
         </CardHeader>
         <CardContent>
           {isLoading && <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
           </div>}
           {error && <div>Error loading orders.</div>}
 
@@ -463,7 +463,7 @@ export function DeliveriesPage() {
                   <TableRow>
                     <TableCell colSpan={table.getAllColumns().length} className="h-64">
                       <div className="flex justify-center items-center h-full">
-                        <Loader2 className="h-8 w-8 animate-spin" />
+                        <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
                       </div>
                     </TableCell>
                   </TableRow>

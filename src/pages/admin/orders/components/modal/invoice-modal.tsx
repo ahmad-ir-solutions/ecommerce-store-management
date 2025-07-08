@@ -29,7 +29,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
   // if (isLoading) {
   //   return (
   //     <div className="flex justify-center items-center h-64">
-  //       <Loader2 className="h-8 w-8 animate-spin" />
+  //       <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
   //     </div>
   //   )
   // }
@@ -42,7 +42,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
         <DialogTitle></DialogTitle>
         <DialogContent className="sm:max-w-[800px] bg-white">
           <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
           </div>
         </DialogContent>
       </Dialog>

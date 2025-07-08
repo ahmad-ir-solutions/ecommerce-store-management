@@ -18,7 +18,7 @@ export function ExistingWarehouse() {
     limit: 10,
     page: 1,
   })
-  const { data: warehousesData, isLoading } = useGetWarehouses(queryParams)
+  const { data: warehousesData, isLoading, error } = useGetWarehouses(queryParams)
   const deleteWarehouseMutation = useDeleteWarehouse()
 
   const debouncedSearch = useCallback(
@@ -61,13 +61,13 @@ export function ExistingWarehouse() {
   const totalPages = warehousesData?.total ? Math.ceil(warehousesData.total / (queryParams.limit || 10)) : 0
   const currentPage = queryParams.page || 1
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    )
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-64">
+  //       <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
+  //     </div>
+  //   )
+  // }
 
   // if (error) {
   //   return (
@@ -117,6 +117,12 @@ export function ExistingWarehouse() {
                 </TableRow>
               </TableHeader>
               <TableBody>
+              {error && <TableRow><TableCell colSpan={7}><div className="flex justify-center items-center h-64">
+            Error loading warehouses: {(error as Error).message}
+            </div></TableCell></TableRow>}
+            {isLoading && <TableRow><TableCell colSpan={7}><div className="flex justify-center items-center h-64">
+              <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
+            </div></TableCell></TableRow>}
                 {warehousesData?.data?.map((warehouse) => (
                   <TableRow key={warehouse._id} className="border-b border-gray-200">
                     <TableCell className="py-3 font-medium">{warehouse.warehouseName}</TableCell>
@@ -150,13 +156,6 @@ export function ExistingWarehouse() {
                     </TableCell>
                   </TableRow>
                 ))}
-                {(!warehousesData?.data || warehousesData.data.length === 0) && (
-                  <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
-                      No warehouses found. Create your first warehouse to get started.
-                    </TableCell>
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </CardContent>

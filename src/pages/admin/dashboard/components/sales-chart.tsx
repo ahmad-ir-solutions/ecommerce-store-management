@@ -269,7 +269,7 @@ export function SalesChart({ chartType, unitSold, dateRange, activeChannels }: S
     <div className="w-full h-64">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
-          <Loader2 className="h-8 w-8 animate-spin" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#024AFE]" />
         </div>
       ) : isError ? (
         <p>Error loading chart data.</p>
