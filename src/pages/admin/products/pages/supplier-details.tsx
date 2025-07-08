@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 import { Header } from "@/components/shared/header"
@@ -12,11 +12,13 @@ import { Label } from "@/components/ui/label"
 // import { Checkbox } from "@/components/ui/checkbox"
 // import { showInfoMessage } from "@/lib/utils/messageUtils"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
-import { Loader2, Plus } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import {
   useGetSupplier, useUpdateSupplier
 } from '../core/hooks/useSupplier'
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
+import { useGetCountries } from "../../common-api/countries/core/_hooks"
+import { CardFooter } from "@/components/ui/card"
 
 export const SupplierDetailsPage = () => {
   // Support both /:id and /:supplierId route params for flexibility
@@ -25,6 +27,13 @@ export const SupplierDetailsPage = () => {
   // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [currentSupplier, setCurrentSupplier] = useState<SupplierFormValues | null>(null)
   const { data: supplierResponse, isLoading } = useGetSupplier(id!)
+  const { data: countries } = useGetCountries()
+  const countriesList = countries?.data?.map((country: any) => ({
+    id: country.name.common,
+    label: country.name.common,
+    value: country.name.common
+  }))
+
   const updateSupplierMutation = useUpdateSupplier()
   const navigate = useNavigate()
   const form = useForm<SupplierFormValues>({
@@ -74,20 +83,20 @@ export const SupplierDetailsPage = () => {
   return (
     <div>
       <Header title="Suppliers">
-        <Link
+        {/* <Link
           to="/admin/products/add-supplier"
           className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Supplier
-        </Link>
+        </Link> */}
       </Header>
       <div className="mt-6">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-[#4E5967]">
           {/* Order Information */}
           <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-[#11263C]">Order Information</CardTitle>
+              <CardTitle className="text-[#11263C] text-lg font-medium">Order Information</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
               <div className="space-y-4">
@@ -283,12 +292,7 @@ export const SupplierDetailsPage = () => {
                     <SelectDropdown
                       defaultValue={form.getValues("country")}
                       placeholder="Select country"
-                      options={[
-                        { id: "UK", label: "UK", value: "UK" },
-                        { id: "US", label: "US", value: "US" },
-                        { id: "Canada", label: "Canada", value: "Canada" },
-                        { id: "Australia", label: "Australia", value: "Australia" },
-                      ]}
+                      options={countriesList}
                       onChange={(value) => form.setValue("country", String(value), { shouldValidate: true })}
                       // onChange={(value) => form.setValue("country", String(value))}
                       className="border-[#BBC2CB] bg-white max-w-52"
@@ -384,6 +388,17 @@ export const SupplierDetailsPage = () => {
                 </div> */}
               </div>
             </CardContent>
+            <CardFooter className="flex justify-end gap-4"> 
+               {/* Action Buttons */}
+          <div className="flex justify-end gap-4">
+            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={updateSupplierMutation.isPending} variant="primary" className="rounded-lg">
+              {updateSupplierMutation.isPending ? "Updating..." : "Update"}
+            </Button>
+          </div>
+            </CardFooter>
           </Card>
 
           {/* Purchase Order / Drop Shipment Information */}
@@ -621,16 +636,6 @@ export const SupplierDetailsPage = () => {
               </CardContent>
             </Card>
           </div> */}
-
-          {/* Action Buttons */}
-          <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={updateSupplierMutation.isPending} variant="primary" className="rounded-lg">
-              {updateSupplierMutation.isPending ? "Updating..." : "Update"}
-            </Button>
-          </div>
         </form>
       </div>
     </div>

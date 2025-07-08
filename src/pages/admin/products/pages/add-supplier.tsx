@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 // import { Switch } from "@/components/ui/switch"
@@ -391,6 +391,29 @@ export const AddSupplierPage = () => {
                 </div> */}
               </div>
             </CardContent>
+            <CardFooter className="flex justify-end gap-4">
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-4">
+                <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="rounded-lg"
+                  disabled={createSupplierMutation.isPending}
+                >
+                  {createSupplierMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    "Save"
+                  )}
+                </Button>
+              </div>
+            </CardFooter>
           </Card>
 
           {/* Purchase Order / Drop Shipment Information */}
@@ -629,27 +652,6 @@ export const AddSupplierPage = () => {
             </Card>
           </div> */}
 
-          {/* Action Buttons */}
-          <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              className="rounded-lg"
-              disabled={createSupplierMutation.isPending}
-            >
-              {createSupplierMutation.isPending ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          </div>
         </form>
       </div>
     </div>
