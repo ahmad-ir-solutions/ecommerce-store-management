@@ -21,6 +21,7 @@ import {
   useGetWarehouseZones,
 } from "../core/hooks/useWarehouse"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
+// import { CustomPagination } from "@/components/shared/custom-pagination"
 
 export function AddWarehouse() {
   const navigate = useNavigate()
@@ -123,7 +124,7 @@ export function AddWarehouse() {
             <TabsContent value="warehouse-information">
               <Card className="border-none bg-white shadow-none px-0 rounded-2xl">
                 <CardContent className="p-6">
-                  <h2 className="text-lg font-medium mb-6">Integration Profile</h2>
+                  <h2 className="text-lg font-medium mb-6">Warehouse Information</h2>
 
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -419,7 +420,7 @@ export function AddWarehouse() {
 
             <TabsContent value="warehouse-zone">
               <Card className="bg-white rounded-2xl border-none shadow-none">
-                <CardContent className="p-6">
+                <CardContent className="">
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-medium">Warehouse Zones</h3>
                     <Button variant="primary" size="lg" className="rounded-xl" onClick={handleAddNewZone}>
@@ -428,7 +429,7 @@ export function AddWarehouse() {
                     </Button>
                   </div>
 
-                  <div className="p-6 rounded-lg">
+                  <div className="rounded-lg">
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
@@ -482,6 +483,13 @@ export function AddWarehouse() {
                     )}
                   </div>
                 </CardContent>
+                {/* <CustomPagination
+                  currentPage={1}
+                  totalPages={warehouseZonesList?.length || 0}
+                  totalItems={warehouseZonesList?.length || 0}
+                  itemsPerPage={10}
+                  onPageChange={() => {}}
+                /> */}
               </Card>
             </TabsContent>
           </Tabs>

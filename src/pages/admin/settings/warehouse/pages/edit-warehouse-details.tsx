@@ -155,8 +155,8 @@ export function EditWarehouseDetails() {
 
             <TabsContent value="warehouse-information">
               <Card className="border-none bg-white shadow-none px-0 rounded-2xl">
-                <CardContent className="p-6">
-                  <h2 className="text-lg font-medium mb-6">Integration Profile</h2>
+                <CardContent className="">
+                  <h2 className="text-lg font-medium mb-6">Warehouse Information</h2>
 
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
