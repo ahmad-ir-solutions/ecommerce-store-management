@@ -24,17 +24,13 @@ import {
 } from "../core/hooks/useWarehouse"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
 import { CustomPagination } from "@/components/shared/custom-pagination"
-import { useGetCountries } from "../../../common-api/countries/core/_hooks"
+import { useGetCountriesList } from "../../../common-api/countries/core/_hooks"
 
 export function EditWarehouseDetails() {
   const { warehouseId } = useParams<{ warehouseId: string }>()
     const navigate = useNavigate()
-  const { data: countries } = useGetCountries()
-  const countriesList = countries?.data?.map((country: any) => ({
-    id: country.name.common,
-    label: country.name.common,
-    value: country.name.common
-  }))
+  const { data: countriesList } = useGetCountriesList()
+
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false)
   const [queryParams, setQueryParams] = useState<any>({
     // sortBy: "createdAt",
@@ -347,7 +343,7 @@ export function EditWarehouseDetails() {
                                     <SelectDropdown
                                       defaultValue={field.value}
                                       placeholder="Select a country"
-                                      options={countriesList}
+                                      options={countriesList || []}
                                       onChange={field.onChange}
                                       className="border-gray-200 bg-white"
                                     />

@@ -17,7 +17,7 @@ import {
   useGetSupplier, useUpdateSupplier
 } from '../core/hooks/useSupplier'
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
-import { useGetCountries } from "../../common-api/countries/core/_hooks"
+import { useGetCountriesList } from "../../common-api/countries/core/_hooks"
 import { CardFooter } from "@/components/ui/card"
 
 export const SupplierDetailsPage = () => {
@@ -27,12 +27,7 @@ export const SupplierDetailsPage = () => {
   // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [currentSupplier, setCurrentSupplier] = useState<SupplierFormValues | null>(null)
   const { data: supplierResponse, isLoading } = useGetSupplier(id!)
-  const { data: countries } = useGetCountries()
-  const countriesList = countries?.data?.map((country: any) => ({
-    id: country.name.common,
-    label: country.name.common,
-    value: country.name.common
-  }))
+  const { data: countriesList } = useGetCountriesList()
 
   const updateSupplierMutation = useUpdateSupplier()
   const navigate = useNavigate()
@@ -292,7 +287,7 @@ export const SupplierDetailsPage = () => {
                     <SelectDropdown
                       defaultValue={form.getValues("country")}
                       placeholder="Select country"
-                      options={countriesList}
+                      options={countriesList || []}
                       onChange={(value) => form.setValue("country", String(value), { shouldValidate: true })}
                       // onChange={(value) => form.setValue("country", String(value))}
                       className="border-[#BBC2CB] bg-white max-w-52"
@@ -302,7 +297,7 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
-                  <Input placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  <Input placeholder="Phone" type="number" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -389,16 +384,16 @@ export const SupplierDetailsPage = () => {
                 </div> */}
               </div>
             </CardContent>
-            <CardFooter className="flex justify-end gap-4"> 
-               {/* Action Buttons */}
-          <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={updateSupplierMutation.isPending} variant="primary" className="rounded-lg">
-              {updateSupplierMutation.isPending ? "Updating..." : "Update"}
-            </Button>
-          </div>
+            <CardFooter className="flex justify-end gap-4">
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-4">
+                <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={updateSupplierMutation.isPending} variant="primary" className="rounded-lg">
+                  {updateSupplierMutation.isPending ? "Updating..." : "Update"}
+                </Button>
+              </div>
             </CardFooter>
           </Card>
 

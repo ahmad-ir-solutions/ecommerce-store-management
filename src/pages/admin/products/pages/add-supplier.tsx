@@ -14,17 +14,11 @@ import { CustomSelect } from "@/components/shared/custom-select"
 import { useCreateSupplier } from '../core/hooks/useSupplier'
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
 import { Loader2 } from "lucide-react"
-import { useGetCountries } from "../../common-api/countries/core/_hooks"
+import { useGetCountriesList } from "../../common-api/countries/core/_hooks"
 
 export const AddSupplierPage = () => {
   const createSupplierMutation = useCreateSupplier()
-  const { data: countries } = useGetCountries()
-
-  const countriesList = countries?.data?.map((country: any) => ({
-    id: country.name.common,
-    label: country.name.common,
-    value: country.name.common
-  }))
+  const { data: countriesList } = useGetCountriesList()
 
   const navigate = useNavigate()
   const form = useForm<SupplierFormValues>({
@@ -297,7 +291,7 @@ export const AddSupplierPage = () => {
                     <CustomSelect
                       defaultValue={form.getValues("country")}
                       placeholder="Select country"
-                      options={countriesList}
+                      options={countriesList || []}
                       onChange={(value) => form.setValue("country", String(value))}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
@@ -306,7 +300,7 @@ export const AddSupplierPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
-                  <Input placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  <Input type="number" placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
                   {form.formState.errors.phone && (
                     <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
                   )}

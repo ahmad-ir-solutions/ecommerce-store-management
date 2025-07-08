@@ -51,6 +51,12 @@ export const supplierSchema = z.object({
   address2: z.string().optional(),  
   countryState: z.string().optional(),
   phone: z.string().optional(),
+  // phone: z
+  // .string()
+  // .refine((val) => val === "" || /^\d+$/.test(val), {
+  //   message: "Phone must contain only numbers",
+  // })
+  // .optional(),
   supplierCode: z.string().optional(),
   supplierReference: z.string().optional(),
   // commaDelimitedEmails: z.string().optional(),
