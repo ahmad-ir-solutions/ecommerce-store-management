@@ -16,7 +16,7 @@ export function SellerProductsPage() {
   const [selectedProduct, setSelectedProduct] = useState<IProductModel | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [queryParams, setQueryParams] = useState<ProductQueryParams>({
-    sortBy: "createdAt",
+    // sortBy: "createdAt",
     sortOrder: "desc",
   })
 

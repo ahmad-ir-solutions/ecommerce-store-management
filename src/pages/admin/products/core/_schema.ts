@@ -48,7 +48,7 @@ export const supplierSchema = z.object({
   // excludeOutOfStockManualReorderLevel: z.boolean(),
   // includeInRequisitions: z.boolean(),
   // consolidateDropShipEmails: z.boolean(),
-  address2: z.string().optional(),
+  address2: z.string().optional(),  
   countryState: z.string().optional(),
   phone: z.string().optional(),
   supplierCode: z.string().optional(),

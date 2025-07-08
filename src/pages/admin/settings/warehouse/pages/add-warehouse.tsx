@@ -36,7 +36,7 @@ export function AddWarehouse() {
   const [zoneToEdit, setZoneToEdit] = useState<any>(null)
 
   const [queryParams, setQueryParams] = useState<any>({
-    sortBy: "createdAt",
+    // sortBy: "createdAt",
     sortOrder: "desc",
     search: "",
     limit: 10, 
@@ -65,7 +65,7 @@ export function AddWarehouse() {
       contactName: "",
       warehouseName: "",
       address: "",
-      address1: "",
+      // address1: "",
       address2: "",
       city: "",
       state: "",
@@ -204,7 +204,7 @@ export function AddWarehouse() {
                               name="address"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
-                                  <FormLabel className="text-sm text-gray-600">Address *</FormLabel>
+                                  <FormLabel className="text-sm text-gray-600">Address Line 1 *</FormLabel>
                                   <div className="col-span-2">
                                     <FormControl>
                                       <Input
@@ -219,7 +219,7 @@ export function AddWarehouse() {
                               )}
                             />
 
-                            <FormField
+                            {/* <FormField
                               control={form.control}
                               name="address1"
                               render={({ field }) => (
@@ -237,14 +237,14 @@ export function AddWarehouse() {
                                   </div>
                                 </FormItem>
                               )}
-                            />
+                            /> */}
 
                             <FormField
                               control={form.control}
                               name="address2"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
-                                  <FormLabel className="text-sm text-gray-600">Address 2</FormLabel>
+                                  <FormLabel className="text-sm text-gray-600">Address Line 2</FormLabel>
                                   <div className="col-span-2">
                                     <FormControl>
                                       <Input

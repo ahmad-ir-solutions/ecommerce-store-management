@@ -11,7 +11,7 @@ export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormVa
         contactName: "",
         warehouseName: "",
         address: "",
-        address1: "",
+        // address1: "",
         address2: "",
         city: "",
         state: "",
@@ -20,8 +20,8 @@ export const fetchWarehouseDetails = async (id: string): Promise<WarehouseFormVa
         country: "UNITED KINGDOME",
         countryCode: "GB",
         handlingTimeInDays: 1,
-        warehouseType: "Default Warehouse",
-        freeProduct: "Search For Product",
+        // warehouseType: "Default Warehouse",
+        // freeProduct: "Search For Product",
       })
     }, 500)
   })

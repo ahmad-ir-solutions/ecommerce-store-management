@@ -32,7 +32,7 @@ export function SellerListingsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const deleteProductMutation = useDeleteWoocommerceProduct()
   const [queryParams, setQueryParams] = useState<ProductQueryParams>({
-    sortBy: "createdAt",
+    // sortBy: "createdAt",
     sortOrder: "desc",
   })
   

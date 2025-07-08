@@ -91,7 +91,7 @@ export function EditWarehouseDetails() {
       contactName: "",
       warehouseName: "",
       address: "",
-      address1: "",
+      // address1: "",
       address2: "",
       city: "",
       state: "",
@@ -227,7 +227,7 @@ export function EditWarehouseDetails() {
                               name="address"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
-                                  <FormLabel className="text-sm text-gray-600">Address *</FormLabel>
+                                  <FormLabel className="text-sm text-gray-600">Address Line 1 *</FormLabel>
                                   <div className="col-span-2">
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
@@ -238,9 +238,9 @@ export function EditWarehouseDetails() {
                               )}
                             />
 
-                            <FormField
+                            {/* <FormField
                               control={form.control}
-                              name="address1"
+                                name="address1"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
                                   <FormLabel className="text-sm text-gray-600">Address 1</FormLabel>
@@ -252,14 +252,14 @@ export function EditWarehouseDetails() {
                                   </div>
                                 </FormItem>
                               )}
-                            />
+                            /> */}
 
                             <FormField
                               control={form.control}
                               name="address2"
                               render={({ field }) => (
                                 <FormItem className="grid grid-cols-3 items-center gap-4">
-                                  <FormLabel className="text-sm text-gray-600">Address 2</FormLabel>
+                                  <FormLabel className="text-sm text-gray-600">Address Line 2</FormLabel>
                                   <div className="col-span-2">
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />

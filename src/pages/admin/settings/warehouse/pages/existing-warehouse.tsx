@@ -120,7 +120,7 @@ export function ExistingWarehouse() {
                 {warehousesData?.data?.map((warehouse) => (
                   <TableRow key={warehouse._id} className="border-b border-gray-200">
                     <TableCell className="py-3 font-medium">{warehouse.warehouseName}</TableCell>
-                    <TableCell className="py-3">{warehouse.address}</TableCell>
+                    <TableCell className="py-3">{warehouse.address || "-"}</TableCell>
                     <TableCell className="py-3">{warehouse.address2 || "-"}</TableCell>
                     <TableCell className="py-3">{warehouse.city}</TableCell>
                     <TableCell className="py-3">{warehouse.postcode}</TableCell>

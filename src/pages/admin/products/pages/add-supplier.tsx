@@ -117,8 +117,8 @@ export const AddSupplierPage = () => {
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="address2">Address 2</Label>
-                  <Input placeholder="Address 2" className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
+                  <Label htmlFor="address2">Address Line 2</Label>
+                  <Input placeholder="Address Line 2" className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -158,6 +158,9 @@ export const AddSupplierPage = () => {
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="supplierCode">Supplier Code</Label>
                   <Input placeholder="Supplier Code" className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
+                  {form.formState.errors.supplierCode && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierCode.message}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -255,10 +258,10 @@ export const AddSupplierPage = () => {
 
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="address">Address *</Label>
+                  <Label htmlFor="address">Address Line 1 *</Label>
                   <div>
                     <Input
-                      placeholder="Address"
+                      placeholder="Address Line 1"
                       id="address"
                       {...form.register("address")}
                       className={
@@ -304,6 +307,9 @@ export const AddSupplierPage = () => {
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
                   <Input placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  {form.formState.errors.phone && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.phone.message}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -313,7 +319,10 @@ export const AddSupplierPage = () => {
                     className="border-[#BBC2CB] max-w-52"
                     id="supplierReference"
                     {...form.register("supplierReference")}
-                  />
+                    />
+                  {form.formState.errors.supplierReference && (
+                    <p className="text-red-500 text-sm mt-1">{form.formState.errors.supplierReference.message}</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">

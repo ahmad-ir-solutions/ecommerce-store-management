@@ -12,7 +12,7 @@ export function SellerOrdersPage() {
     const [searchTerm, setSearchTerm] = useState("")
     const [activeTab, setActiveTab] = useState("platform")
     const [queryParams, setQueryParams] = useState<ProductQueryParams>({
-        sortBy: "createdAt",
+        // sortBy: "createdAt",
         sortOrder: "desc",
     })
 

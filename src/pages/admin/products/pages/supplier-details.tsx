@@ -117,8 +117,8 @@ export const SupplierDetailsPage = () => {
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="address2">Address 2</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
+                  <Label htmlFor="address2">Address Line 2</Label>
+                  <Input placeholder="Address Line 2" className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -156,7 +156,7 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="supplierCode">Supplier Code</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
+                  <Input placeholder="Supplier Code" className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -255,7 +255,7 @@ export const SupplierDetailsPage = () => {
 
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
-                  <Label htmlFor="address">Address *</Label>
+                  <Label htmlFor="address">Address Line 1 *</Label>
                   <div>
                     <Input
                       id="address"
@@ -302,12 +302,13 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  <Input placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="supplierReference">Suppliers Reference</Label>
                   <Input
+                    placeholder="Suppliers Reference"
                     className="border-[#BBC2CB] max-w-52"
                     id="supplierReference"
                     {...form.register("supplierReference")}

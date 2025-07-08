@@ -230,7 +230,8 @@ export function EditWebstoreDetails() {
                           <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-4">
                             <FormLabel>Company identity *</FormLabel>
                             <FormControl>
-                              <SelectDropdown
+                              <SelectDropdown 
+                                placeholder="Select Company Identity"
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -289,6 +290,7 @@ export function EditWebstoreDetails() {
                             <FormLabel>Weight Unit</FormLabel>
                             <FormControl>
                               <SelectDropdown
+                                placeholder="Select Weight Unit"
                                 options={[
                                   { id: 'KG', label: 'KG', value: 'KG' },
                                   { id: 'LB', label: 'LB', value: 'LB' },
@@ -339,6 +341,7 @@ export function EditWebstoreDetails() {
                             <FormLabel>Order Tracking Note Settings</FormLabel>
                             <FormControl>
                               <SelectDropdown
+                                placeholder="Select Order Tracking Note Settings"
                                 options={[{ id: 'KG', label: 'KG', value: 'KG' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -454,6 +457,7 @@ export function EditWebstoreDetails() {
                             <FormLabel>Currency *</FormLabel>
                             <FormControl>
                               <SelectDropdown
+                                placeholder="Select Currency"
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
@@ -492,6 +496,7 @@ export function EditWebstoreDetails() {
                             <FormLabel>Default Pricing Profile</FormLabel>
                             <FormControl>
                               <SelectDropdown
+                                placeholder="Select Default Pricing Profile"
                                 options={[{ id: 'Default Warehouse', label: 'Default Warehouse', value: 'Default Warehouse' }]}
                                 defaultValue={field.value}
                                 onChange={field.onChange}
