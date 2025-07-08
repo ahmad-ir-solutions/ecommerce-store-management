@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
 import { Header } from "@/components/shared/header"
@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/ui/checkbox"
+// import { Switch } from "@/components/ui/switch"
+// import { Checkbox } from "@/components/ui/checkbox"
 // import { showInfoMessage } from "@/lib/utils/messageUtils"
 import { SelectDropdown } from "@/components/shared/select-dropdown"
 import { Loader2, Plus } from "lucide-react"
@@ -24,14 +24,14 @@ export const SupplierDetailsPage = () => {
   const id = params.supplierId
   // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [currentSupplier, setCurrentSupplier] = useState<SupplierFormValues | null>(null)
-  const { data: supplierResponse, isLoading, error } = useGetSupplier(id!)
+  const { data: supplierResponse, isLoading } = useGetSupplier(id!)
   const updateSupplierMutation = useUpdateSupplier()
-
+  const navigate = useNavigate()
   const form = useForm<SupplierFormValues>({
     resolver: zodResolver(supplierSchema),
     defaultValues: currentSupplier || undefined,
   })
-  console.log(form.getValues("templateType"));
+  // console.log(form.getValues("templateType"));
 
   useEffect(() => {
     if (supplierResponse) {
@@ -50,10 +50,10 @@ export const SupplierDetailsPage = () => {
 
       const safeData = {
         ...data,
-        minimumOrderValue: data.minimumOrderValue == null ? undefined : data.minimumOrderValue,
-        leadTime: data.leadTime == null ? undefined : data.leadTime,
-        totalDropShipCost: data.totalDropShipCost == null ? undefined : data.totalDropShipCost,
-        totalPoShippingCost: data.totalPoShippingCost == null ? undefined : data.totalPoShippingCost,
+        // minimumOrderValue: data.minimumOrderValue == null ? undefined : data.minimumOrderValue,
+        // leadTime: data.leadTime == null ? undefined : data.leadTime,
+        // totalDropShipCost: data.totalDropShipCost == null ? undefined : data.totalDropShipCost,
+        // totalPoShippingCost: data.totalPoShippingCost == null ? undefined : data.totalPoShippingCost,
       }
       updateSupplierMutation.mutate({ id, data: safeData })
     }
@@ -71,21 +71,9 @@ export const SupplierDetailsPage = () => {
     )
   }
 
-
-  if (error) {
-    return (
-      <div>
-        <Header title="Products" />
-        <div className="mt-6 flex justify-center">
-          <p className="text-red-500">Error loading supplier details. Please try again.</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div>
-      <Header title="Products">
+      <Header title="Suppliers">
         <Link
           to="/admin/products/add-supplier"
           className="rounded-xl flex items-center bg-[#024AFE] px-3 py-2.5 text-white font-normal hover:bg-[#0228fe]"
@@ -181,7 +169,7 @@ export const SupplierDetailsPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                {/* <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="commaDelimitedEmails">Comma Delimited Email Addresses To Send To</Label>
                   <Input
                     className="border-[#BBC2CB] max-w-52"
@@ -253,7 +241,7 @@ export const SupplierDetailsPage = () => {
                       }
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="space-y-4">
@@ -339,7 +327,7 @@ export const SupplierDetailsPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                {/* <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="leadTime">Lead Time</Label>
                   <Input className="border-[#BBC2CB] max-w-52" id="leadTime"
                     type="number"
@@ -393,13 +381,13 @@ export const SupplierDetailsPage = () => {
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.contactEmail.message}</p>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </CardContent>
           </Card>
 
           {/* Purchase Order / Drop Shipment Information */}
-          <Card className="bg-white border-0 shadow-xs rounded-2xl">
+          {/* <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
               <CardTitle className="text-[#11263C]">Purchase Order / Drop Shipment Information</CardTitle>
             </CardHeader>
@@ -526,10 +514,10 @@ export const SupplierDetailsPage = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Export Templates and CSV Export Configuration */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-white border-0 shadow-xs rounded-2xl">
               <CardHeader>
                 <CardTitle className="text-[#11263C] text-xl">Export Templates</CardTitle>
@@ -632,11 +620,11 @@ export const SupplierDetailsPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
               Cancel
             </Button>
             <Button type="submit" disabled={updateSupplierMutation.isPending} variant="primary" className="rounded-lg">

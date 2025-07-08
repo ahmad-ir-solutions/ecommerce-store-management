@@ -48,11 +48,13 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "checked",
       header: ({ table }) => (
+        <div className="flex items-center justify-center">  
         <Checkbox
           checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
+        </div>
       ),
       cell: ({ row }) => (
         <Checkbox
@@ -65,11 +67,11 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
       enableSorting: false,
       enableHiding: false,
     },
-    {
-      accessorKey: "type",
-      header: "Type",
-      cell: ({ row }) => <div key={row.id}></div>,
-    },
+    // {
+    //   accessorKey: "type",
+    //   header: "Type",
+    //   cell: ({ row }) => <div key={row.id}></div>,
+    // },
     {
       accessorKey: "image",
       header: "Image",

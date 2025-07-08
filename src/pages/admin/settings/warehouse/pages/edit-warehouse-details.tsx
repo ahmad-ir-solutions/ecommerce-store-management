@@ -11,26 +11,62 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { warehouseSchema } from "../core/_schema"
 import { Header } from "@/components/shared/header"
-import { Loader2, Plus, Trash2 } from "lucide-react"
+import { Loader2, Pencil, Plus, Trash2 } from "lucide-react"
 import type { WarehouseFormValues } from "../core/_modal"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { AddWarehouseZoneModal } from "../components/modal/add-warehouse-zone-modal"
-import { useGetWarehouse, useUpdateWarehouse } from "../core/hooks/useWarehouse"
-import { SelectDropdown } from '@/components/shared/select-dropdown'
+import {
+  useDeleteWarehouseZone,
+  useGetWarehouse,
+  useGetWarehouseZones,
+  useUpdateWarehouse,
+} from "../core/hooks/useWarehouse"
+import { SelectDropdown } from "@/components/shared/select-dropdown"
 
 export function EditWarehouseDetails() {
   const { warehouseId } = useParams<{ warehouseId: string }>()
   const navigate = useNavigate()
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false)
-  const [warehouseZones, setWarehouseZones] = useState<string[]>([])
+  const { data: warehouseZonesData } = useGetWarehouseZones()
+  const warehouseZonesList = warehouseZonesData?.data?.map((zone: any) => ({
+    id: zone._id,
+    warehouseZoneName: zone.warehouseZoneName,
+    warehouseName: zone.warehouse.warehouseName,
+  }))
+
+  // Add these state variables after the existing useState declarations
+  const [zoneToEdit, setZoneToEdit] = useState<any>(null)
 
   // Fetch warehouse details
   const { data: warehouseData, isLoading, error } = useGetWarehouse(warehouseId || "")
-  console.log(warehouseData, "warehouseData");
 
   // Update warehouse mutation
   const updateWarehouseMutation = useUpdateWarehouse()
+  const deleteWarehouseZoneMutation = useDeleteWarehouseZone()
+
+  // Update the handleUpdateZone function:
+  const handleUpdateZone = (zone: any) => {
+    setZoneToEdit({
+      _id: zone.id,
+      warehouseZoneName: zone.warehouseZoneName,
+      warehouse: zone.warehouse,
+    })
+    setIsZoneModalOpen(true)
+  }
+
+  // Add handlers for modal management:
+  const handleAddNewZone = () => {
+    setZoneToEdit(null)
+    setIsZoneModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsZoneModalOpen(false)
+    setTimeout(() => {
+      setZoneToEdit(null)
+    }, 100)
+  }
 
   // Initialize form with react-hook-form
   const form = useForm<WarehouseFormValues>({
@@ -48,8 +84,8 @@ export function EditWarehouseDetails() {
       country: "",
       countryCode: "",
       handlingTimeInDays: 1,
-      warehouseType: "",
-      freeProduct: "",
+      // warehouseType: "",
+      // freeProduct: "",
     },
   })
 
@@ -72,9 +108,10 @@ export function EditWarehouseDetails() {
     navigate("/admin/settings/warehouse")
   }
 
-  const handleAddZone = (zoneName: string) => {
-    setWarehouseZones([...warehouseZones, zoneName])
-    // In a real app, you would make an API call to save the zone
+  const handleDeleteZone = (id: string) => {
+    if (window.confirm("Are you sure you want to delete this zone?")) {
+      deleteWarehouseZoneMutation.mutate(id)
+    }
   }
 
   if (isLoading) {
@@ -104,13 +141,13 @@ export function EditWarehouseDetails() {
             <TabsList className="mb-4 space-x-4">
               <TabsTrigger
                 value="warehouse-information"
-                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
+                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-base font-normal"
               >
                 Warehouse Information
               </TabsTrigger>
               <TabsTrigger
                 value="warehouse-zone"
-                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-md"
+                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-base font-normal"
               >
                 Warehouse Zone
               </TabsTrigger>
@@ -137,7 +174,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -153,7 +190,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -169,7 +206,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -185,7 +222,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -201,7 +238,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -217,7 +254,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -233,7 +270,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -252,7 +289,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -268,7 +305,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -293,7 +330,7 @@ export function EditWarehouseDetails() {
                                       onChange={field.onChange}
                                       className="border-gray-200 bg-white"
                                     />
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -309,7 +346,7 @@ export function EditWarehouseDetails() {
                                     <FormControl>
                                       <Input {...field} className="bg-white border-gray-300 rounded-md" />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -330,13 +367,13 @@ export function EditWarehouseDetails() {
                                         onChange={(e) => field.onChange(Number.parseInt(e.target.value) || 1)}
                                       />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
                             />
 
-                            <FormField
+                            {/* <FormField
                               control={form.control}
                               name="warehouseType"
                               render={({ field }) => (
@@ -366,7 +403,7 @@ export function EditWarehouseDetails() {
                                       onChange={field.onChange}
                                       className="border-gray-200 bg-white"
                                     />
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
@@ -394,17 +431,23 @@ export function EditWarehouseDetails() {
                                       onChange={field.onChange}
                                       className="border-gray-200 bg-white"
                                     />
-                                    <FormMessage />
+                                    <FormMessage className="text-red-500" />
                                   </div>
                                 </FormItem>
                               )}
-                            />
+                            /> */}
                           </div>
                         </div>
                       </div>
 
                       <div className="flex justify-end gap-4">
-                        <Button variant="outline" type="button" className="rounded-lg" size="lg" onClick={handleCancel}>
+                        <Button
+                          variant="outline"
+                          type="button"
+                          className="rounded-lg bg-transparent"
+                          size="lg"
+                          onClick={handleCancel}
+                        >
                           Cancel
                         </Button>
                         <Button
@@ -434,7 +477,7 @@ export function EditWarehouseDetails() {
               <Card className="bg-white rounded-2xl border-none shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-lg font-medium">Warehouse Zones</CardTitle>
-                  <Button variant="primary" size="lg" className="rounded-xl" onClick={() => setIsZoneModalOpen(true)}>
+                  <Button variant="primary" size="lg" className="rounded-xl" onClick={handleAddNewZone}>
                     <Plus className="mr-2 h-4 w-4" />
                     Add New Zone
                   </Button>
@@ -447,31 +490,44 @@ export function EditWarehouseDetails() {
                           <Checkbox className="border-gray-400" />
                         </TableHead>
                         <TableHead className="p-3">Zone Name</TableHead>
-                        <TableHead className="p-3">Created Date</TableHead>
+                        <TableHead className="p-3">Warehouse</TableHead>
                         <TableHead className="p-3 rounded-r-lg">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {/* Display warehouse zones when available */}
-                      {warehouseZones.length > 0
-                        ? warehouseZones.map((zone, index) => (
-                          <TableRow key={index} className="border-gray-200 border-b">
-                            <TableHead className="p-3">
-                              <Checkbox className="border-gray-400" />
-                            </TableHead>
-                            <TableHead className="p-3">{zone}</TableHead>
-                            <TableHead className="p-3">{new Date().toLocaleDateString()}</TableHead>
-                            <TableHead className="p-3">
-                              <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-700 p-1">
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </TableHead>
-                          </TableRow>
-                        ))
+                      {warehouseZonesList && warehouseZonesList.length > 0
+                        ? warehouseZonesList.map((zone, index) => (
+                            <TableRow key={index} className="border-gray-200 border-b">
+                              <TableHead className="p-3">
+                                <Checkbox className="border-gray-400" />
+                              </TableHead>
+                              <TableHead className="p-3">{zone.warehouseZoneName}</TableHead>
+                              <TableHead className="p-3">{zone.warehouseName}</TableHead>
+                              <TableHead className="p-3">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-[#024AFE] hover:text-blue-700 pl-1"
+                                  onClick={() => handleUpdateZone(zone)}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-500 hover:text-red-700 p-1"
+                                  onClick={() => handleDeleteZone(zone.id)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </TableHead>
+                            </TableRow>
+                          ))
                         : null}
                     </TableBody>
                   </Table>
-                  {warehouseZones.length === 0 && (
+                  {warehouseZonesList && warehouseZonesList.length === 0 && (
                     <div className="flex items-center justify-center py-10 text-gray-500">
                       There are no Warehouse Zones to display.
                     </div>
@@ -485,8 +541,8 @@ export function EditWarehouseDetails() {
       {/* Add Warehouse Zone Modal */}
       <AddWarehouseZoneModal
         isOpen={isZoneModalOpen}
-        onClose={() => setIsZoneModalOpen(false)}
-        onSave={handleAddZone}
+        onClose={handleCloseModal}
+        zoneToEdit={zoneToEdit}
       />
     </div>
   )

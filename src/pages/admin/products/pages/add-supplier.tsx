@@ -1,21 +1,32 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Checkbox } from "@/components/ui/checkbox"
+// import { Switch } from "@/components/ui/switch"
+// import { Checkbox } from "@/components/ui/checkbox"
 // import { showInfoMessage } from "@/lib/utils/messageUtils"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { useCreateSupplier } from '../core/hooks/useSupplier'
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
+import { Loader2 } from "lucide-react"
+import { useGetCountries } from "../../common-api/countries/core/_hooks"
 
 export const AddSupplierPage = () => {
   const createSupplierMutation = useCreateSupplier()
+  const { data: countries } = useGetCountries()
 
+  const countriesList = countries?.data?.map((country: any) => ({
+    id: country.name.common,
+    label: country.name.common,
+    value: country.name.common
+  }))
+
+  const navigate = useNavigate()
   const form = useForm<SupplierFormValues>({
     resolver: zodResolver(supplierSchema),
     defaultValues: {
@@ -25,50 +36,51 @@ export const AddSupplierPage = () => {
       country: "",
       postcode: "",
       supplierCurrency: "",
-      isManufacturer: false,
-      sendEmailBelowReorderLevel: false,
-      sendEmailBelowOutOfStockThreshold: false,
-      includeProductsAtReorderLevel: false,
-      excludeOutOfStockManualReorderLevel: false,
-      includeInRequisitions: false,
-      consolidateDropShipEmails: false,
+      // isManufacturer: false,
+      // sendEmailBelowReorderLevel: false,
+      // sendEmailBelowOutOfStockThreshold: false,
+      // includeProductsAtReorderLevel: false,
+      // excludeOutOfStockManualReorderLevel: false,
+      // includeInRequisitions: false,
+      // consolidateDropShipEmails: false,
       address2: "",
       countryState: "",
       phone: "",
       supplierCode: "",
       supplierReference: "",
-      commaDelimitedEmails: "",
-      minimumOrderValue: undefined,
+      // commaDelimitedEmails: "",
+      // minimumOrderValue: undefined,
       supplierEmailAddress: "",
-      contactEmail: "",
-      leadTime: undefined,
-      purchaseOrderMode: "",
-      poShippingCostType: "",
-      poChangeToStatus: "",
-      totalDropShipCost: undefined,
-      dropShipShippingCostType: "",
-      dropShipChangeToStatus: "",
-      totalPoShippingCost: undefined,
-      transferMethod: "",
-      exportMethod: "",
-      templateType: "",
-      isDefaultExportMethod: false,
-      exportDelimiter: "",
-      exportHeaders: false
+      // contactEmail: "",
+      // leadTime: undefined,
+      // purchaseOrderMode: "",
+      // poShippingCostType: "",
+      // poChangeToStatus: "",
+      // totalDropShipCost: undefined,
+      // dropShipShippingCostType: "",
+      // dropShipChangeToStatus: "",
+      // totalPoShippingCost: undefined,
+      // transferMethod: "",
+      // exportMethod: "",
+      // templateType: "",
+      // isDefaultExportMethod: false,
+      // exportDelimiter: "",
+      // exportHeaders: false
     },
   })
 
   const onSubmit = (data: SupplierFormValues) => {
     console.log(data, "data");
 
-    createSupplierMutation.mutate({
-      ...data,
-      minimumOrderValue: data.minimumOrderValue == null ? undefined : data.minimumOrderValue,
-      leadTime: data.leadTime == null ? undefined : data.leadTime,
-      totalDropShipCost: data.totalDropShipCost == null ? undefined : data.totalDropShipCost,
-      totalPoShippingCost: data.totalPoShippingCost == null ? undefined : data.totalPoShippingCost,
-      // commaDelimitedEmails: emailArray,
-    })
+    // createSupplierMutation.mutate({
+    //   ...data,
+    //   // minimumOrderValue: data.minimumOrderValue == null ? undefined : data.minimumOrderValue,
+    //   // leadTime: data.leadTime == null ? undefined : data.leadTime,
+    //   // totalDropShipCost: data.totalDropShipCost == null ? undefined : data.totalDropShipCost,
+    //   // totalPoShippingCost: data.totalPoShippingCost == null ? undefined : data.totalPoShippingCost,
+    //   // commaDelimitedEmails: emailArray,
+    // })
+    createSupplierMutation.mutate(data);
   }
 
   // const findEmail = () => {
@@ -77,13 +89,13 @@ export const AddSupplierPage = () => {
 
   return (
     <div>
-      <Header title="Products" />
+      <Header title="Add Supplier" />
       <div className="mt-6">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 text-[#4E5967]">
           {/* Order Information */}
           <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-[#11263C]">Order Information</CardTitle>
+              <CardTitle className="text-[#11263C] text-lg font-semibold">Supplier Information</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
               <div className="space-y-4">
@@ -91,6 +103,7 @@ export const AddSupplierPage = () => {
                   <Label htmlFor="supplierName">Supplier Name *</Label>
                   <div>
                     <Input
+                      placeholder="Supplier Name"
                       id="supplierName"
                       {...form.register("supplierName")}
                       className={
@@ -105,12 +118,12 @@ export const AddSupplierPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="address2">Address 2</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
+                  <Input placeholder="Address 2" className="border-[#BBC2CB] max-w-52" id="address2" {...form.register("address2")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="countryState">Country/State</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="countryState" {...form.register("countryState")} />
+                  <Input placeholder="Country/State" className="border-[#BBC2CB] max-w-52" id="countryState" {...form.register("countryState")} />
                 </div>
 
                 <div className="flex items-end gap-2">
@@ -120,6 +133,7 @@ export const AddSupplierPage = () => {
                       <div className="flex items-center gap-3">
                         <Input
                           id="postcode"
+                          placeholder="Postcode/Zip Code"
                           {...form.register("postcode")}
                           className={
                             form.formState.errors.postcode ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"
@@ -143,7 +157,7 @@ export const AddSupplierPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="supplierCode">Supplier Code</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
+                  <Input placeholder="Supplier Code" className="border-[#BBC2CB] max-w-52" id="supplierCode" {...form.register("supplierCode")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
@@ -153,7 +167,7 @@ export const AddSupplierPage = () => {
                   <div>
                     <CustomSelect
                       defaultValue={form.getValues("supplierCurrency")}
-                      placeholder="Select currency"
+                      placeholder="Select Currency"
                       options={[
                         { id: "GBP", label: "British Pound", value: "British Pound" },
                         { id: "USD", label: "US Dollar", value: "US Dollar" },
@@ -165,7 +179,7 @@ export const AddSupplierPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                {/* <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="commaDelimitedEmails">Comma Delimited Email Addresses To Send To</Label>
                   <Input
                     className="border-[#BBC2CB] max-w-52"
@@ -236,7 +250,7 @@ export const AddSupplierPage = () => {
                       }
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div className="space-y-4">
@@ -244,6 +258,7 @@ export const AddSupplierPage = () => {
                   <Label htmlFor="address">Address *</Label>
                   <div>
                     <Input
+                      placeholder="Address"
                       id="address"
                       {...form.register("address")}
                       className={
@@ -260,6 +275,7 @@ export const AddSupplierPage = () => {
                   <Label htmlFor="city">City *</Label>
                   <div>
                     <Input
+                      placeholder="City"
                       id="city"
                       {...form.register("city")}
                       className={form.formState.errors.city ? "border-red-500 max-w-52" : "border-[#BBC2CB] max-w-52"}
@@ -278,12 +294,7 @@ export const AddSupplierPage = () => {
                     <CustomSelect
                       defaultValue={form.getValues("country")}
                       placeholder="Select country"
-                      options={[
-                        { id: "UK", label: "UK", value: "UK" },
-                        { id: "US", label: "US", value: "US" },
-                        { id: "Canada", label: "Canada", value: "Canada" },
-                        { id: "Australia", label: "Australia", value: "Australia" },
-                      ]}
+                      options={countriesList}
                       onChange={(value) => form.setValue("country", String(value))}
                       className="border-[#BBC2CB] bg-white max-w-52"
                     />
@@ -292,12 +303,13 @@ export const AddSupplierPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
-                  <Input className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  <Input placeholder="Phone" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="supplierReference">Suppliers Reference</Label>
                   <Input
+                    placeholder="Supplier Reference"
                     className="border-[#BBC2CB] max-w-52"
                     id="supplierReference"
                     {...form.register("supplierReference")}
@@ -308,6 +320,7 @@ export const AddSupplierPage = () => {
                   <Label htmlFor="supplierEmailAddress">Supplier E-mail Address</Label>
                   <div>
                     <Input
+                      placeholder="example@example.com"
                       id="supplierEmailAddress"
                       type="email"
                       {...form.register("supplierEmailAddress")}
@@ -321,7 +334,7 @@ export const AddSupplierPage = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
+                {/* <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="leadTime">Lead Time</Label>
                   <Input className="border-[#BBC2CB] max-w-52" id="leadTime"
                     // {...form.register("leadTime")} 
@@ -375,13 +388,13 @@ export const AddSupplierPage = () => {
                       <p className="text-red-500 text-sm mt-1">{form.formState.errors.contactEmail.message}</p>
                     )}
                   </div>
-                </div>
+                </div> */}
               </div>
             </CardContent>
           </Card>
 
           {/* Purchase Order / Drop Shipment Information */}
-          <Card className="bg-white border-0 shadow-xs rounded-2xl">
+          {/* <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
               <CardTitle className="text-[#11263C]">Purchase Order / Drop Shipment Information</CardTitle>
             </CardHeader>
@@ -508,10 +521,10 @@ export const AddSupplierPage = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Export Templates and CSV Export Configuration */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-white border-0 shadow-xs rounded-2xl">
               <CardHeader>
                 <CardTitle className="text-[#11263C] text-xl">Export Templates</CardTitle>
@@ -614,15 +627,27 @@ export const AddSupplierPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+          </div> */}
 
           {/* Action Buttons */}
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline">
+            <Button type="button" variant="outline" onClick={() => navigate("/admin/products/suppliers")}>
               Cancel
             </Button>
-            <Button type="submit" disabled={createSupplierMutation.isPending} variant="primary" className="rounded-lg">
-              {createSupplierMutation.isPending ? "Saving..." : "Save"}
+            <Button
+              type="submit"
+              variant="primary"
+              className="rounded-lg"
+              disabled={createSupplierMutation.isPending}
+            >
+              {createSupplierMutation.isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save"
+              )}
             </Button>
           </div>
         </form>

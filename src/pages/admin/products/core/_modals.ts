@@ -122,36 +122,36 @@ export interface ISupplier {
   country: string
   postcode: string
   supplierCurrency: string
-  isManufacturer: boolean
-  sendEmailBelowReorderLevel: boolean
-  sendEmailBelowOutOfStockThreshold: boolean
-  includeProductsAtReorderLevel: boolean
-  excludeOutOfStockManualReorderLevel: boolean
-  includeInRequisitions: boolean
-  consolidateDropShipEmails: boolean
+  // isManufacturer: boolean
+  // sendEmailBelowReorderLevel: boolean
+  // sendEmailBelowOutOfStockThreshold: boolean
+  // includeProductsAtReorderLevel: boolean
+  // excludeOutOfStockManualReorderLevel: boolean
+  // includeInRequisitions: boolean
+  // consolidateDropShipEmails: boolean
   address2?: string
   countryState?: string
   phone?: string
   supplierCode?: string
   supplierReference?: string
-  commaDelimitedEmails?: string
-  minimumOrderValue?: number
+  // commaDelimitedEmails?: string
+  // minimumOrderValue?: number
   supplierEmailAddress?: string
-  contactEmail?: string
-  leadTime?: number
-  purchaseOrderMode?: string
-  poShippingCostType?: string
-  poChangeToStatus?: string
-  totalDropShipCost?: number
-  dropShipShippingCostType?: string
-  dropShipChangeToStatus?: string
-  totalPoShippingCost?: number
-  transferMethod?: string
-  exportMethod?: string
-  templateType?: string
-  isDefaultExportMethod?: boolean
-  exportDelimiter?: string
-  exportHeaders?: boolean
+  // contactEmail?: string
+  // leadTime?: number
+  // purchaseOrderMode?: string
+  // poShippingCostType?: string
+  // poChangeToStatus?: string
+  // totalDropShipCost?: number
+  // dropShipShippingCostType?: string
+  // dropShipChangeToStatus?: string
+  // totalPoShippingCost?: number
+  // transferMethod?: string
+  // exportMethod?: string
+  // templateType?: string
+  // isDefaultExportMethod?: boolean
+  // exportDelimiter?: string
+  // exportHeaders?: boolean
   createdAt?: string
   updatedAt?: string
 }

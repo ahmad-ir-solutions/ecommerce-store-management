@@ -31,7 +31,7 @@ export const CustomSelect = ({
   title,
 }: CustomSelectProps) => {
   const handleChange = (val: string) => {
-    const selected = options.find((opt) => String(opt.value) === val);
+    const selected = options?.find((opt) => String(opt.value) === val);
     if (onChange && selected) {
       onChange(selected.value); // Maintain original type
     }
@@ -49,7 +49,7 @@ export const CustomSelect = ({
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent className="w-full border-gray-100 bg-white">
-          {options.map((opt) => (
+          {options?.map((opt) => (
             <SelectItem key={opt.value} value={String(opt.value)}>
               {opt.label}
             </SelectItem>

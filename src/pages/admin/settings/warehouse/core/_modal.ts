@@ -12,12 +12,9 @@ export interface IWarehouseResponse {
 export interface IWarehousesResponse {
   success: boolean
   data: Array<WarehouseFormValues & { _id: string; createdAt: string; updatedAt: string }>
-  pagination: {
     page: number
     limit: number
     total: number
-    totalPages: number
-  }
 }
 
 export interface WarehouseQueryParams {
@@ -41,4 +38,36 @@ export interface WarehouseZone {
   warehouseId: string
   createdAt: string
   updatedAt: string
+}
+
+export interface IWarehouseZoneModel extends WarehouseZone {
+  warehouseZoneName: string
+  warehouse: string
+  _id: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+  message?: string
+}
+
+export interface IWarehouseZonesResponse {
+  success: boolean
+  data: Array<WarehouseZone & { _id: string; createdAt: string; updatedAt: string }>
+  page: number
+  limit: number
+  total: number
+  
+}
+
+export interface CreateWarehouseZoneData {
+  warehouseZoneName: string
+  warehouse: string
+}
+
+export interface UpdateWarehouseZoneData extends Partial<CreateWarehouseZoneData> {}
+
+export interface WarehouseZoneQueryParams {
+  page?: number
+  limit?: number
+  search?: string
 }

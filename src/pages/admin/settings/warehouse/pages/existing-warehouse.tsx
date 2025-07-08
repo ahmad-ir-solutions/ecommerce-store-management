@@ -8,6 +8,7 @@ import { CustomSearch } from "@/components/shared/custom-search"
 import { Loader2, Plus, Trash2 } from "lucide-react"
 import { useGetWarehouses, useDeleteWarehouse } from "../core/hooks/useWarehouse"
 import { debounce } from 'lodash'
+import { CustomPagination } from "@/components/shared/custom-pagination"
 
 export function ExistingWarehouse() {
   const navigate = useNavigate()
@@ -48,6 +49,13 @@ export function ExistingWarehouse() {
     if (window.confirm("Are you sure you want to delete this warehouse?")) {
       deleteWarehouseMutation.mutate(warehouseId)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      page,
+    }))
   }
 
   if (isLoading) {
@@ -101,7 +109,7 @@ export function ExistingWarehouse() {
                   <TableHead className="p-3">Address Line 2</TableHead>
                   <TableHead className="p-3">City</TableHead>
                   <TableHead className="p-3">Post Code</TableHead>
-                  <TableHead className="p-3">Default</TableHead>
+                  {/* <TableHead className="p-3">Default</TableHead> */}
                   <TableHead className="p-3 rounded-r-lg">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -113,9 +121,9 @@ export function ExistingWarehouse() {
                     <TableCell className="py-3">{warehouse.address2 || "-"}</TableCell>
                     <TableCell className="py-3">{warehouse.city}</TableCell>
                     <TableCell className="py-3">{warehouse.postcode}</TableCell>
-                    <TableCell className="py-3">
+                    {/* <TableCell className="py-3">
                       {warehouse.warehouseType === "Default Warehouse" ? "Yes" : "No"}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell className="py-3">
                       <div className="flex items-center gap-2">
                         <Button
@@ -149,6 +157,13 @@ export function ExistingWarehouse() {
               </TableBody>
             </Table>
           </CardContent>
+          <CustomPagination
+            currentPage={queryParams.page}
+            totalPages={Math.ceil((warehousesData?.total || 0) / queryParams.limit)}
+            totalItems={warehousesData?.total || 0}
+            itemsPerPage={queryParams.limit}
+            onPageChange={handlePageChange}
+          />
         </Card>
       </div>
     </div>

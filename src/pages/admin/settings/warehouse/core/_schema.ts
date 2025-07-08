@@ -14,6 +14,6 @@ export const warehouseSchema = z.object({
   collectionPoint: z.string().optional(),
   country: z.string(),
   countryCode: z.string(),
-  warehouseType: z.string(),
-  freeProduct: z.string().optional(),
+  // warehouseType: z.string(),
+  // freeProduct: z.string().optional(),
 });

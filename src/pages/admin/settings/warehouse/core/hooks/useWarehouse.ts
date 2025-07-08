@@ -8,8 +8,12 @@ import {
   createWarehouse,
   updateWarehouse,
   deleteWarehouse,
+  createWarehouseZone,
+  getAllWarehouseZones,
+  updateWarehouseZone,
+  deleteWarehouseZone,
 } from "../_request"
-import type { WarehouseQueryParams, CreateWarehouseData, UpdateWarehouseData } from "../_modal"
+import type { WarehouseQueryParams, CreateWarehouseData, UpdateWarehouseData, CreateWarehouseZoneData, WarehouseZoneQueryParams, UpdateWarehouseZoneData } from "../_modal"
 
 // Query keys
 export const warehouseKeys = {
@@ -18,6 +22,12 @@ export const warehouseKeys = {
   list: (filters: WarehouseQueryParams) => [...warehouseKeys.lists(), filters] as const,
   details: () => [...warehouseKeys.all, "detail"] as const,
   detail: (id: string) => [...warehouseKeys.details(), id] as const,
+}
+
+export const warehouseZoneKeys = {
+  all: ["warehouse-zones"] as const,
+  lists: () => [...warehouseZoneKeys.all, "list"] as const,
+  list: (filters: WarehouseZoneQueryParams) => [...warehouseZoneKeys.lists(), filters] as const,
 }
 
 // Get all warehouses with optional filtering
@@ -100,6 +110,59 @@ export const useDeleteWarehouse = () => {
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || "Failed to delete warehouse. Please try again.")
+    },
+  })
+}
+
+
+// warehouse zone
+
+export const useCreateWarehouseZone = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (data: CreateWarehouseZoneData) => createWarehouseZone(data),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: warehouseZoneKeys.lists() })
+      showSuccessMessage(response.data.message || "Warehouse zone created successfully!")
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      showErrorMessage(error.response?.data?.message || "Failed to create warehouse zone. Please try again.")
+    },
+  })
+}
+
+export const useGetWarehouseZones = (params?: WarehouseZoneQueryParams) => {
+  return useQuery({
+    queryKey: warehouseZoneKeys.list(params || {}),
+    queryFn: () => getAllWarehouseZones(params),
+    select: (data) => data.data,
+  })
+}
+
+export const useUpdateWarehouseZone = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateWarehouseZoneData }) => updateWarehouseZone(id, data),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: warehouseZoneKeys.lists() })
+        showSuccessMessage(response.data.message || "Warehouse zone updated successfully!")
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      showErrorMessage(error.response?.data?.message || "Failed to update warehouse zone. Please try again.")
+    },
+  })
+}
+
+export const useDeleteWarehouseZone = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => deleteWarehouseZone(id),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: warehouseZoneKeys.lists() })
+      showSuccessMessage(response.data.message || "Warehouse zone deleted successfully!")
+    },
+    onError: (error: AxiosError<{ message: string }>) => {
+      showErrorMessage(error.response?.data?.message || "Failed to delete warehouse zone. Please try again.")
     },
   })
 }
