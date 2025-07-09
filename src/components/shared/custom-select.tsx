@@ -6,6 +6,7 @@ import {
   SelectItem,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { forwardRef } from 'react';
 
 interface Option {
   id: string | number;
@@ -21,9 +22,10 @@ interface CustomSelectProps {
   className?: string;
   title?: string;
   disabled?: boolean;
+  width?: string;
 }
 
-export const CustomSelect = ({
+export const CustomSelect = forwardRef<HTMLDivElement, CustomSelectProps>(({
   placeholder,
   defaultValue,
   options,
@@ -31,7 +33,8 @@ export const CustomSelect = ({
   className,
   title,
   disabled,
-}: CustomSelectProps) => {
+  width,
+}, ref) => {
   const handleChange = (val: string) => {
     const selected = options?.find((opt) => String(opt.value) === val);
     if (onChange && selected) {
@@ -40,12 +43,8 @@ export const CustomSelect = ({
   };
 
   return (
-    <div className="space-y-1">
-      {title && (
-        <div className="text-sm font-normal text-gray-500 whitespace-nowrap">
-          {title}
-        </div>
-      )}
+    <div className={`space-y-1 ${width}`} ref={ref}>  
+      {title && <div className="text-sm font-normal text-gray-500 whitespace-nowrap">{title}</div>}
       <Select defaultValue={String(defaultValue)} onValueChange={handleChange} disabled={disabled}>
         <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
           <SelectValue placeholder={placeholder} />
@@ -60,4 +59,4 @@ export const CustomSelect = ({
       </Select>
     </div>
   );
-};
+});
