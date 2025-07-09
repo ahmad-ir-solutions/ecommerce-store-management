@@ -13,3 +13,9 @@
 body {
   font-size: 80%;
 }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

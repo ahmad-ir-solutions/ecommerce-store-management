@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -24,10 +24,11 @@ import { Avatar } from "@/components/ui/avatar"
 import { AvatarImage } from "@radix-ui/react-avatar"
 import { AvatarFallback } from "@radix-ui/react-avatar"
 import { showInfoMessage } from "@/lib/utils/messageUtils"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useGetAllUsers } from "../../settings/users/core/hooks/use-user"
 import type { IUserModel } from "../../settings/users/core/_models"
 import { useGetAllChannels } from "../../common-api/channels/core/_hooks"
+import { useGetCustomer } from "../../customers/core/hooks/useCustomer"
 
 // Zod Schema
 const orderSchema = z.object({
@@ -135,9 +136,12 @@ const orderStatuses = ["processing", "confirmed", "shipped", "delivered", "cance
 const shippingMethods = ["Royal Mail Tracked 24", "Royal Mail Tracked 48", "DPD Next Day", "Standard Delivery"]
 
 export function AddOrderPage() {
+    const location = useLocation();
+    const customerId = location.state?.customerId ?? null;
     // const [selectedProducts, setSelectedProducts] = useState<string[]>([])
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
-
+    const { data: customerData,refetch, isLoading: isCustomerLoading } = useGetCustomer(customerId ?? "");
+    
     const {
         data: productsData,
         isLoading: productsLoading,
@@ -247,6 +251,52 @@ export function AddOrderPage() {
         },
     })
 
+    useEffect(() => {
+        if (customerData) {
+            form.reset({
+                ...form.getValues(),
+                customerDetails: {
+                    firstName: customerData.firstName || "",
+                    lastName: customerData.lastName || "",
+                    email: customerData.email || "",
+                    phoneNumber: customerData.phoneNumber || "",
+                    emailCC: customerData.emailCC || "",
+                    customerReference: customerData.customerReference || "",
+                    vatNumbers: customerData.vatNumber || "",
+                    // airn: customerData.airn || "",
+                    shippingAddress: {
+                        firstName: customerData.shippingAddress?.firstName || "",
+                        lastName: customerData.shippingAddress?.lastName || "",
+                        company: customerData.shippingAddress?.company || "",
+                        addressLine1: customerData.shippingAddress?.addressLine1 || "",
+                        addressLine2: customerData.shippingAddress?.addressLine2 || "",
+                        city: customerData.shippingAddress?.city || "",
+                        state: customerData.shippingAddress?.state || "",
+                        postalCode: customerData.shippingAddress?.postalCode || "",
+                        country: customerData.shippingAddress?.country || "",
+                        phone: customerData.shippingAddress?.phone || "",
+                    },
+                    billingAddress: {
+                        firstName: customerData.billingAddress?.firstName || "",
+                        lastName: customerData.billingAddress?.lastName || "",
+                        company: customerData.billingAddress?.company || "",
+                        addressLine1: customerData.billingAddress?.addressLine1 || "",
+                        addressLine2: customerData.billingAddress?.addressLine2 || "",
+                        city: customerData.billingAddress?.city || "",
+                        state: customerData.billingAddress?.state || "",
+                        postalCode: customerData.billingAddress?.postalCode || "",
+                        country: customerData.billingAddress?.country || "",
+                        phone: customerData.billingAddress?.phone || "",
+                    },
+                    channelDetails: customerData.channelDetails?._id || "",
+                },
+                channelDetails: customerData.channelDetails?._id || "",
+                channelPurhasedFrom: customerData.channelDetails?.channelName || "",
+                // Optionally prefill other fields if needed
+            });
+        }
+    }, [customerData]);
+
     const {
         fields: noteFields,
         append: appendNote,
@@ -277,6 +327,9 @@ export function AddOrderPage() {
             createOrderMutation({ ...data, quantity: 1 })
             form.reset()
             navigate("/admin/orders")
+            if(customerId){
+               refetch()
+            }
         } catch (error) {
             console.log(error, "error")
         }
@@ -294,9 +347,20 @@ export function AddOrderPage() {
             state: billingAddress?.state || "",
             postalCode: billingAddress?.postalCode || "",
             country: billingAddress?.country || "",
-            phone: "",
+            phone: billingAddress?.phone || "",
         })
     }
+
+    if(isCustomerLoading){
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader2 className="w-10 h-10 animate-spin text-[#11263C]" />
+            </div>
+        )
+    }
+
+    // Add a helper variable at the top of the component after customerData is loaded
+    const isPrefilled = !!customerData;
 
     return (
         <div>
@@ -362,6 +426,7 @@ export function AddOrderPage() {
                                                                 {...field}
                                                                 placeholder="Enter channel"
                                                                 className="bg-white border-gray-300 rounded-lg"
+                                                                disabled={isPrefilled}
                                                             />
                                                         </FormControl>
                                                         <FormMessage />
@@ -452,12 +517,12 @@ export function AddOrderPage() {
 
                                         <FormField
                                             control={form.control}
-                                            name="customerDetails.channelDetails"
+                                            name="channelDetails"
                                             render={({ field }) => (
                                                 <FormItem className="flex flex-row items-center gap-2">
                                                     <FormLabel className="w-40">Channel <span className="text-red-500">*</span></FormLabel>
                                                     <CustomSelect
-                                                        defaultValue={field.value}
+                                                        defaultValue={field.value || (customerData?.channelDetails?._id ?? "")}
                                                         placeholder="Select channel"
                                                         options={(channelsData?.data ?? []).map((channel: any) => ({
                                                             id: channel._id,
@@ -466,10 +531,11 @@ export function AddOrderPage() {
                                                         }))}
                                                         onChange={(val) => {
                                                             field.onChange(val);
-                                                            form.setValue("customerDetails.channelDetails", val as string);
                                                             form.setValue("channelDetails", val as string);
+                                                            form.setValue("customerDetails.channelDetails", val as string);
                                                         }}
                                                         className=" bg-white w-full"
+                                                        disabled={isPrefilled}
                                                     />
                                                     <FormMessage />
                                                 </FormItem>
@@ -683,6 +749,7 @@ export function AddOrderPage() {
                                                             {...field}
                                                             placeholder="Enter first name"
                                                             className="bg-white border-gray-300 rounded-lg"
+                                                            disabled={isPrefilled}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -700,6 +767,7 @@ export function AddOrderPage() {
                                                             {...field}
                                                             placeholder="Enter last name"
                                                             className="bg-white border-gray-300 rounded-lg"
+                                                            disabled={isPrefilled}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -720,6 +788,7 @@ export function AddOrderPage() {
                                                             {...field}
                                                             placeholder="Enter phone number"
                                                             className="bg-white border-gray-300 rounded-lg"
+                                                            disabled={isPrefilled}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -738,6 +807,7 @@ export function AddOrderPage() {
                                                             type="email"
                                                             placeholder="Enter email"
                                                             className="bg-white border-gray-300 rounded-lg"
+                                                            disabled={isPrefilled}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -757,6 +827,7 @@ export function AddOrderPage() {
                                                             {...field}
                                                             placeholder="Enter CC emails"
                                                             className="bg-white border-gray-300 rounded-lg"
+                                                            disabled={isPrefilled}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -784,6 +855,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="First name"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -801,6 +873,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="Last name"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -820,6 +893,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Company name"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -838,6 +912,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Address line 1"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -856,6 +931,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Address line 2"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -875,6 +951,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="City"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -908,6 +985,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="Country"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -925,6 +1003,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="Postal code"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -961,6 +1040,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Phone Number"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -980,6 +1060,7 @@ export function AddOrderPage() {
                                                         size="sm"
                                                         onClick={copyBillingToShipping}
                                                         className="text-xs bg-transparent"
+                                                        disabled={isPrefilled}
                                                     >
                                                         Copy from Billing
                                                     </Button>
@@ -997,6 +1078,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="First name"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1014,6 +1096,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Last name"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1033,6 +1116,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Company name"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1051,6 +1135,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Address line 1"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1069,6 +1154,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Address line 2"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1088,6 +1174,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="City"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1121,6 +1208,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="Country"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -1138,6 +1226,7 @@ export function AddOrderPage() {
                                                                             {...field}
                                                                             placeholder="Postal code"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            disabled={isPrefilled}
                                                                         />
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -1157,6 +1246,7 @@ export function AddOrderPage() {
                                                                         {...field}
                                                                         placeholder="Phone number"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        disabled={isPrefilled}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />

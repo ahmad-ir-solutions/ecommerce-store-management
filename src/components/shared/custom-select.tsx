@@ -20,6 +20,7 @@ interface CustomSelectProps {
   onChange?: (value: string | number) => void;
   className?: string;
   title?: string;
+  disabled?: boolean;
 }
 
 export const CustomSelect = ({
@@ -29,6 +30,7 @@ export const CustomSelect = ({
   onChange,
   className,
   title,
+  disabled,
 }: CustomSelectProps) => {
   const handleChange = (val: string) => {
     const selected = options?.find((opt) => String(opt.value) === val);
@@ -44,7 +46,7 @@ export const CustomSelect = ({
           {title}
         </div>
       )}
-      <Select defaultValue={String(defaultValue)} onValueChange={handleChange}>
+      <Select defaultValue={String(defaultValue)} onValueChange={handleChange} disabled={disabled}>
         <SelectTrigger className={cn("w-full border-gray-300 rounded-lg", className)}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

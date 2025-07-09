@@ -11,6 +11,7 @@ const AddOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({
 const OrdersCsvPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.OrdersCsvPage })));
 const EditOrderPage = lazy(() => import("@/pages/admin/orders").then(module => ({ default: module.EditOrderPage })));
 const AdminCustomersPage = lazy(() => import("@/pages/admin/customers").then(module => ({ default: module.AdminCustomersPage })));
+const AddCustomerPage = lazy(() => import("@/pages/admin/customers/pages/add-customer").then(module => ({ default: module.AddCustomerPage })));
 const CustomerDetails = lazy(() => import("@/pages/admin/customers/pages/customer-details").then(module => ({ default: module.CustomerDetails })));
 const PickwavePage = lazy(() => import("@/pages/admin/warehouse/pages/pickwave").then(module => ({ default: module.PickwavePage })));
 const EditPickwaveDetailsPage = lazy(() => import("@/pages/admin/warehouse/pages/edit-pickwave-details").then(module => ({ default: module.EditPickwaveDetailsPage })));
@@ -66,6 +67,7 @@ export const adminRoutes = {
     { path: "customers", element: <WithSuspense><AdminCustomersPage /></WithSuspense> },
     // Dynamic customer route
     { path: "customer-details/:customerId", element: <WithSuspense><CustomerDetails /></WithSuspense> },
+    { path: "customers/add-customer", element: <WithSuspense><AddCustomerPage /></WithSuspense> },
 
     // Warehouse routes
     {

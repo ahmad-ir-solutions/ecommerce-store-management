@@ -11,7 +11,8 @@ export const addressSchema = z.object({
   state: z.string().min(1, "State is required"),
   postalCode: z.string().min(1, "Postal code is required"),
   country: z.string().min(1, "Country is required"),
-})
+  phone: z.string().min(1, "Phone is required"), 
+  })
 
 // Define Zod schema for customer validation
 export const customerSchema = z.object({
@@ -19,10 +20,10 @@ export const customerSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
   phoneNumber: z.string().optional(),
-  emailCC: z.string().email("Invalid email address").optional().or(z.literal("")),
+  // emailCC: z.string().email("Invalid email address").optional().or(z.literal("")),
   customerReference: z.string().optional(),
   vatNumber: z.string().optional(),
-  abn: z.string().optional(),
+  airn: z.string().optional(),
   shippingAddress: addressSchema.optional(),
   billingAddress: addressSchema.optional(),
   tags: z.array(z.string()).optional(),
@@ -35,10 +36,10 @@ export const basicDetailsSchema = z.object({
   lastName: z.string().min(1, "Last name is required"),
   phoneNumber: z.string().optional(),
   email: z.string().email("Invalid email address"),
-  emailCC: z.string().email("Invalid email address").optional().or(z.literal("")),
+  // emailCC: z.string().email("Invalid email address").optional().or(z.literal("")),
   customerReference: z.string().optional(),
   vatNumber: z.string().optional(),
-  abn: z.string().optional(),
+  airn: z.string().optional(),
 })
 
 export type CustomerFormValues = z.infer<typeof customerSchema>

@@ -262,9 +262,10 @@ export interface OrderQueryParams {
   page?: number
   limit?: number
   search?: string
-  sort?: string
-  order?: "asc" | "desc"
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
   filters?: any
+  customerDetails?: string
 }
 
 export interface CreateOrderData {

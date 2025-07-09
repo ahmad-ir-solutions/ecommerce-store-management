@@ -4,6 +4,10 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ICustomer } from "../core/_modals"
+import {  Trash2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useNavigate } from "react-router-dom"
+import { useDeleteCustomer } from "../core/hooks/useCustomer"
 
 export const columns: ColumnDef<ICustomer>[] = [
     {
@@ -13,6 +17,7 @@ export const columns: ColumnDef<ICustomer>[] = [
                 checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
                 onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
                 aria-label="Select all"
+                className="mx-5"
             />
         ),
         cell: ({ row }) => (
@@ -21,6 +26,7 @@ export const columns: ColumnDef<ICustomer>[] = [
                 onCheckedChange={(value) => row.toggleSelected(!!value)}
                 aria-label="Select row"
                 onClick={(e) => e.stopPropagation()}
+                className="mx-5"
             />
         ),
         enableSorting: false,
@@ -116,15 +122,13 @@ export const columns: ColumnDef<ICustomer>[] = [
         accessorKey: "channel",
         header: "Channel",
         cell: ({ row }) => {
-            console.log(row.original, "row.original in channel");
-
-            const channel = row.original.channel
+            const channel = row.original.channelDetails?.channelName || "-"
             return (
                 <div className="flex items-center gap-2">
                     <Avatar className="h-8 w-8 bg-green-500 text-white">
-                        <AvatarFallback>AM</AvatarFallback>
+                        <AvatarFallback>{channel?.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
-                    <span className="underline">{channel}</span>
+                    <span>{channel}</span>
                 </div>
             )
         },
@@ -156,6 +160,25 @@ export const columns: ColumnDef<ICustomer>[] = [
             return (
                 <div className="flex items-center gap-2">
                     <span>{row.original.notes || "-"}</span>
+                </div>
+            )
+        },
+    },
+    {
+        accessorKey: "actions",
+        header: "Actions",
+        cell: ({ row }) => {
+            const navigate = useNavigate()
+            const { mutate: deleteCustomerHandler } = useDeleteCustomer()
+            const handleDelete = () => {
+                if (window.confirm("Are you sure you want to delete this customer?")) {
+                    deleteCustomerHandler(row.original._id)
+                }
+            }
+            return (
+                <div className="flex items-center gap-2">
+                    <Button variant="link" className="text-[#024AFE] underline" onClick={() => navigate(`/admin/customer-details/${row.original._id}`)}>Edit/View</Button>
+                    <Button variant="link" className="text-[#FF0000]" onClick={handleDelete}><Trash2 className="h-4 w-4" /></Button>
                 </div>
             )
         },

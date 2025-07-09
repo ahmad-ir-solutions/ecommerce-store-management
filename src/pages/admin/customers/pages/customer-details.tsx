@@ -7,6 +7,7 @@ import { CustomerBasicDetails } from '../components/customer-basic-details'
 import { CustomerAddresses } from '../components/customer-adresses'
 import { Header } from '@/components/shared/header'
 import { Loader2 } from 'lucide-react'
+import { ICustomer } from "../core/_modals"
 
 export function CustomerDetails() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -52,10 +53,6 @@ export function CustomerDetails() {
     return <div>Error loading customer: {(error as Error).message}</div>
   }
 
-  if (!customer) {
-    return <div>Customer not found</div>
-  }
-
   return (
     <div>
       <Header title="Customers" />
@@ -87,7 +84,7 @@ export function CustomerDetails() {
 
             <TabsContent value="overview" className="mt-4">
               <CustomerOverview
-                customer={customer}
+                customer={customer as ICustomer}
                 setActiveTab={setActiveTab}
                 onAddTag={addTag}
                 onRemoveTag={removeTag}
@@ -97,12 +94,12 @@ export function CustomerDetails() {
             </TabsContent>
 
             <TabsContent value="basic-details" className="mt-4">
-              <CustomerBasicDetails customer={customer} onUpdate={updateBasicDetails} />
+              <CustomerBasicDetails customer={customer as ICustomer} onUpdate={updateBasicDetails} setActiveTab={setActiveTab}  />
             </TabsContent>
 
             <TabsContent value="addresses" className="mt-4">
               <CustomerAddresses
-                customer={customer}
+                customer={customer as ICustomer}
                 onUpdateShippingAddress={updateShippingAddress}
                 onUpdateBillingAddress={updateBillingAddress}
               />

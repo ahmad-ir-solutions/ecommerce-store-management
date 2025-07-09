@@ -504,7 +504,7 @@ export function EditWarehouseDetails() {
                     <TableHeader>
                       <TableRow className="bg-[#ECF6FF] border-none rounded-lg">
                         <TableHead className="p-3 rounded-l-lg">
-                          <Checkbox className="border-gray-400" />
+                          <Checkbox className="border-gray-400 mx-5" />
                         </TableHead>
                         <TableHead className="p-3">Zone Name</TableHead>
                         <TableHead className="p-3">Warehouse</TableHead>
@@ -517,7 +517,7 @@ export function EditWarehouseDetails() {
                         ? warehouseZonesList.map((zone, index) => (
                             <TableRow key={index} className="border-gray-200 border-b">
                               <TableHead className="p-3">
-                                <Checkbox className="border-gray-400" />
+                                <Checkbox className="border-gray-400 mx-5" />
                               </TableHead>
                               <TableHead className="p-3">{zone.warehouseZoneName}</TableHead>
                               <TableHead className="p-3">{zone.warehouseName}</TableHead>

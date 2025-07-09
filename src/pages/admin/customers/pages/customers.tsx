@@ -1,16 +1,22 @@
 import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { Filter, Settings, RotateCw } from "lucide-react"
+// import { Filter, Settings, RotateCw } from "lucide-react"
 import { CustomersTable } from "../components/customers-table"
 import type { CustomerQueryParams } from "../core/_modals"
 import { Header } from "@/components/shared/header"
 import { useGetCustomers } from '../core/hooks/useCustomer'
 import { CustomSearch } from "@/components/shared/custom-search"
 import { debounce } from 'lodash'
+import { Plus } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 
 export function Customers() {
+  const navigate = useNavigate()
   const [searchText, setSearchText] = useState("")
   const [queryParams, setQueryParams] = useState<CustomerQueryParams>({
+    sortBy: "createdAt",
+    sortOrder: "desc",
+    search: "",
     limit: 10,
     page: 1,
   })
@@ -27,19 +33,29 @@ export function Customers() {
     }, 500),
     []
   )
+ 
+  const handleCreateCustomer = () => {
+    navigate("/admin/customers/add-customer")  
+  }
 
-  // const handleCreateCustomer = () => {
-  //   navigate("/admin/customers/new")
+  const handlePageChange = (page: number) => {
+    setQueryParams((prev) => ({
+      ...prev,
+      page,
+    }))
+  }
+
+  const totalPages = data?.total ? Math.ceil(data.total / (queryParams.limit || 6)) : 0
+  const currentPage = queryParams.page || 1
+
+  // const handleRefresh = () => {
+  //   // Refetch the current data
+  //   setQueryParams({ ...queryParams })
   // }
 
-  const handleRefresh = () => {
-    // Refetch the current data
-    setQueryParams({ ...queryParams })
-  }
-
-  if (error) {
-    return <div className="p-8">Error loading customers: {(error as Error).message}</div>
-  }
+  // if (error) {
+  //   return <div className="p-8">Error loading customers: {(error as Error).message}</div>
+  // }
 
   return (
     <div>
@@ -53,9 +69,8 @@ export function Customers() {
               handleSearch(e.target.value)
             }}
             onEnter={handleSearch}
-            className="w-[25rem]"
           />
-          {/* <Button
+          <Button
             variant="default"
             size="lg"
             className="bg-[#024AFE] hover:bg-[#1b02fe] text-white rounded-lg"
@@ -63,13 +78,13 @@ export function Customers() {
           >
             <Plus className="mr-2 h-4 w-4" />
             New Customer
-          </Button> */}
+          </Button>
         </div>
       </Header>
 
       <div className="mt-6">
-        <div className="space-y-4 bg-white rounded-2xl p-5">
-          <div className="flex flex-col sm:flex-row justify-between gap-4">
+        <div className="bg-white rounded-2xl p-5 border-none shadow-none">
+          {/* <div className="flex flex-col sm:flex-row justify-between gap-4">
             <div className="flex flex-wrap gap-2">
               <Button variant="filter" size="sm" className="h-9">
                 <Filter className="mr-2 h-4 w-4" />
@@ -82,14 +97,19 @@ export function Customers() {
                 <Settings className="h-4 w-4" />
               </Button>
             </div>
-          </div>
+          </div> */}
+            <h1 className="text-lg font-medium mb-6">Existing Customers</h1>
 
           <CustomersTable
             customers={data?.orders || []}
             isLoading={isLoading}
-            onPageChange={(page) => setQueryParams({ ...queryParams, page })}
-            totalPages={Math.ceil((data?.total || 0) / (queryParams.limit || 10))}
-            currentPage={queryParams.page || 1}
+            onPageChange={handlePageChange}
+            totalItems={data?.total || 0}
+            totalPages={totalPages}
+            itemsPerPage={queryParams.limit || 10}
+            currentPage={currentPage}
+            error={error}
+            search={searchText}
           />
         </div>
       </div>

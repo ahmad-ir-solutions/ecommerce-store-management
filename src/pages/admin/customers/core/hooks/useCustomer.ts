@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { showSuccessMessage, showErrorMessage } from "@/lib/utils/messageUtils"
 import type { AxiosError } from "axios"
 import { createCustomer, deleteCustomer, getAllCustomers, getSpecificCustomer, updateCustomer } from "../_request"
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 import { useState } from "react"
 import { CreateCustomerData, CustomerQueryParams, ICustomer, UpdateCustomerData } from '../_modals'
 import { AddressFormValues, BasicDetailsFormValues } from '../_schema'
@@ -22,6 +22,7 @@ export const useGetCustomers = (params?: CustomerQueryParams) => {
     queryKey: customerKeys.list(params || {}),
     queryFn: () => getAllCustomers(params),
     select: (data) => data.data,
+    refetchOnWindowFocus: false,
   })
 }
 
@@ -43,18 +44,23 @@ export const useGetCustomer = (id: string) => {
         emailCC: customer.emailCC,
         customerReference: customer.customerReference,
         vatNumber: customer.vatNumber,
-        abn: customer.abn,
+        airn: customer.airn,
         shippingAddress: customer.shippingAddress,
         billingAddress: customer.billingAddress,
         tags: customer.tags,
         notes: customer.notes,
         orders: [],
-        channel: customer.channel,
+        channelDetails: customer.channelDetails,
         createdAt: customer.createdAt,
         updatedAt: customer.updatedAt,
         __v: customer.__v,
+        totalOrders: customer.totalOrders,
+        totalReturns: customer.totalReturns,
+        totalSpend: customer.totalSpend,
+        averageOrderValue: customer.averageOrderValue,
       } as ICustomer
     },
+    refetchOnWindowFocus: false,
     enabled: !!id, // Only run if ID is provided
   })
 }
@@ -62,15 +68,15 @@ export const useGetCustomer = (id: string) => {
 // Create a new customer
 export const useCreateCustomer = () => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return useMutation({
     mutationFn: (data: CreateCustomerData) => createCustomer(data),
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: customerKeys.lists() })
       showSuccessMessage(response.data.message || "Customer created successfully!")
-      const newCustomerId = response.data?._id
-      navigate(`/admin/customers/${newCustomerId}`)
+      // const newCustomerId = response.data?._id
+      // navigate(`/admin/customers/${newCustomerId}`)
     },
     onError: (error: AxiosError<{ message: string; errors?: { [key: string]: string } }>) => {
       if (error.response?.data.errors) {
@@ -112,7 +118,7 @@ export const useUpdateCustomer = () => {
 // Delete a customer
 export const useDeleteCustomer = () => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   return useMutation({
     mutationFn: (id: string) => deleteCustomer(id),
@@ -120,7 +126,7 @@ export const useDeleteCustomer = () => {
       // Invalidate list queries after deletion
       queryClient.invalidateQueries({ queryKey: customerKeys.lists() })
       showSuccessMessage(response.data.message || "Customer deleted successfully!")
-      navigate("/admin/customers")
+      // navigate("/admin/customers")
     },
     onError: (error: AxiosError<{ message: string }>) => {
       showErrorMessage(error.response?.data?.message || "Failed to delete customer. Please try again.")
@@ -131,7 +137,7 @@ export const useDeleteCustomer = () => {
 // Custom hook for managing a specific customer with all its operations
 export const useCustomer = (customerId: string) => {
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [isUpdating, setIsUpdating] = useState(false)
 
   // Fetch customer data
@@ -145,15 +151,6 @@ export const useCustomer = (customerId: string) => {
     },
   })
 
-  // Delete customer mutation
-  const deleteCustomerMutation = useMutation({
-    mutationFn: () => deleteCustomer(customerId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: customerKeys.lists() })
-      navigate("/admin/customers")
-    },
-  })
-
   // Update basic details
   const updateBasicDetails = async (data: BasicDetailsFormValues) => {
     setIsUpdating(true)
@@ -163,10 +160,10 @@ export const useCustomer = (customerId: string) => {
         lastName: data.lastName,
         email: data.email,
         phoneNumber: data.phoneNumber,
-        emailCC: data.emailCC,
+        // emailCC: data.emailCC,
         customerReference: data.customerReference,
         vatNumber: data.vatNumber,
-        abn: data.abn,
+        airn: data.airn,
       })
       setIsUpdating(false)
       showSuccessMessage("Basic details updated successfully")
@@ -195,6 +192,7 @@ export const useCustomer = (customerId: string) => {
           state: data.state,
           postalCode: data.postalCode,
           country: data.country,
+          phone: data.phone,
         },
       })
       setIsUpdating(false)
@@ -222,6 +220,7 @@ export const useCustomer = (customerId: string) => {
           state: data.state,
           postalCode: data.postalCode,
           country: data.country,
+          phone: data.phone,
         },
       })
       setIsUpdating(false)
@@ -295,18 +294,6 @@ export const useCustomer = (customerId: string) => {
     }
   }
 
-  // Delete customer
-  const deleteCustomerHandler = async () => {
-    try {
-      await deleteCustomerMutation.mutateAsync()
-      showSuccessMessage("Customer deleted successfully")
-      return true
-    } catch (error) {
-      showErrorMessage("Failed to delete customer")
-      return false
-    }
-  }
-
   return {
     customer,
     isLoading,
@@ -318,6 +305,6 @@ export const useCustomer = (customerId: string) => {
     addTag,
     removeTag,
     updateNotes,
-    deleteCustomer: deleteCustomerHandler,
+    // deleteCustomer: deleteCustomerHandler,
   }
 }

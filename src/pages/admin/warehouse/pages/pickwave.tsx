@@ -35,9 +35,10 @@ interface ExtendedOrderQueryParams {
   page?: number;
   limit?: number;
   search?: string;
-  sort?: string;
-  order?: "asc" | "desc";
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
   'warehouse[]'?: string | string[];
+  customerDetails?: string
   [key: string]: any;
 }
 
@@ -69,8 +70,8 @@ export function PickwavePage() {
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     search: searchTerm,
-    sort: sorting.length > 0 ? sorting[0].id : undefined,
-    order: sorting.length > 0 ? (sorting[0].desc ? "desc" : "asc") : undefined,
+    sortBy: sorting.length > 0 ? sorting[0].id : undefined,
+    sortOrder: sorting.length > 0 ? (sorting[0].desc ? "desc" : "asc") : undefined,
   };
 
   // Handle special cases for filters

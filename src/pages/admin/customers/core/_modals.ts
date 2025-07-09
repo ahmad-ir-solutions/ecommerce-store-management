@@ -9,6 +9,7 @@ export interface IAddress {
   state: string
   postalCode: string
   country: string
+  phone: string
 }
 
 export interface ICustomer {
@@ -20,8 +21,11 @@ export interface ICustomer {
   emailCC?: string
   customerReference?: string
   vatNumber?: string
-  abn?: string
-  channel?: string
+  airn?: string
+  channelDetails?: {
+    channelName: string
+    _id: string
+  }
   shippingAddress?: IAddress
   billingAddress?: IAddress
   tags?: string[]
@@ -32,6 +36,10 @@ export interface ICustomer {
   createdAt: string
   updatedAt: string
   __v: number
+  totalOrders?: number
+  totalReturns?: number
+  totalSpend?: number
+  averageOrderValue?: number
 }
 
 export interface ICustomerResponse {
@@ -43,7 +51,7 @@ export interface ICustomerResponse {
   emailCC?: string
   customerReference?: string
   vatNumber?: string
-  abn?: string
+  airn?: string
   shippingAddress?: IAddress
   billingAddress?: IAddress
   tags?: string[]
@@ -74,7 +82,7 @@ export interface CreateCustomerData {
   emailCC?: string
   customerReference?: string
   vatNumber?: string
-  abn?: string
+  airn?: string
   shippingAddress?: IAddress
   billingAddress?: IAddress
   tags?: string[]
@@ -89,11 +97,15 @@ export interface UpdateCustomerData {
   emailCC?: string
   customerReference?: string
   vatNumber?: string
-  abn?: string
+  airn?: string
   shippingAddress?: Partial<IAddress>
   billingAddress?: Partial<IAddress>
   tags?: string[]
   notes?: string
+  totalOrders?: number
+  totalReturns?: number
+  totalSpend?: number
+  averageOrderValue?: number
 }
 
 export interface AddressFormValues {
@@ -106,4 +118,5 @@ export interface AddressFormValues {
   state: string
   postalCode: string
   country: string
-}
+  phone: string
+  }

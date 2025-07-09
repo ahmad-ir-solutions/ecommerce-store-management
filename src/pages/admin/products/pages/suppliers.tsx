@@ -19,7 +19,7 @@ export function SuppliersPage() {
     sortBy: "createdAt",
     sortOrder: "desc",
     search: "",
-    limit: 8,
+    limit: 10,
     page: 1,
   })
   const { data: suppliersResponse, isLoading, error } = useGetSuppliers(queryParams)

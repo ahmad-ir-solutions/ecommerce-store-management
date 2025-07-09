@@ -49,13 +49,13 @@ export function ManageOrderPage() {
   }, [searchInput, debouncedSetSearch]);
 
 
-  const { orders: data, isLoading, error } = useGetOrders({
+  const { orders: orderData, isLoading, error } = useGetOrders({
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     search: searchTerm,
   });
-
-
+  
+  
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
   };
@@ -64,12 +64,12 @@ export function ManageOrderPage() {
     navigate("/admin/orders/add-order");
   };
 
-  const tableData = data?.orders ? data.orders.map(transformOrderToTableRow) : []
+  const tableData = orderData?.orders ? orderData.orders.map(transformOrderToTableRow) : []
 
   const table = useReactTable({
     data: tableData,
     columns,
-    pageCount: data?.pagination?.pages ?? -1,
+    pageCount: orderData?.pagination?.pages ?? -1,
     state: {
       columnFilters,
       pagination,
@@ -129,7 +129,7 @@ export function ManageOrderPage() {
   // }
 
   // Calculate total pages
-  const totalPages = data?.pagination?.pages || 1
+  const totalPages = orderData?.pagination?.pages || 1
   const currentPage = pagination.pageIndex + 1
 
   // Handle page change
@@ -169,7 +169,7 @@ export function ManageOrderPage() {
           totalPages={totalPages}
           handlePageChange={handlePageChange}
           pagination={pagination}
-          data={data}
+          data={orderData}
           columns={columns}
         />
       </div>

@@ -14,6 +14,7 @@ export interface WooCommerceOrderQueryParams {
   limit?: number
   page?: number
   search?: string
+  customerId?: string
 }
 
 // Query Keys

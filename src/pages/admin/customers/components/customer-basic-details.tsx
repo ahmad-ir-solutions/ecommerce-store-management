@@ -11,9 +11,11 @@ import { BasicDetailsFormValues, basicDetailsSchema } from '../core/_schema'
 export function CustomerBasicDetails({
   customer,
   onUpdate,
+  setActiveTab,
 }: {
   customer: ICustomer
   onUpdate: (data: BasicDetailsFormValues) => Promise<boolean>
+  setActiveTab: (tab: string) => void
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -24,10 +26,10 @@ export function CustomerBasicDetails({
       lastName: customer.lastName || "",
       phoneNumber: customer.phoneNumber || "",
       email: customer.email || "",
-      emailCC: customer.emailCC || "",
+      // emailCC: customer.emailCC || "",
       customerReference: customer.customerReference || "",
       vatNumber: customer.vatNumber || "",
-      abn: customer.abn || "",
+      airn: customer.airn || "",
     },
   })
 
@@ -49,7 +51,7 @@ export function CustomerBasicDetails({
         <div className="grid grid-cols-3 gap-4">
           <Card className="col-span-2 bg-white border-none rounded-2xl shadow-none">
             <CardHeader>
-              <CardTitle>Name & contact details</CardTitle>
+              <CardTitle className="text-xl font-medium">Name & contact details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -58,11 +60,11 @@ export function CustomerBasicDetails({
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>First name</FormLabel>
+                      <FormLabel>First name *</FormLabel>
                       <FormControl>
                         <Input {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -75,7 +77,7 @@ export function CustomerBasicDetails({
                       <FormControl>
                         <Input {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -84,11 +86,11 @@ export function CustomerBasicDetails({
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone number</FormLabel>
+                      <FormLabel>Phone</FormLabel>
                       <FormControl>
-                        <Input {...field} className="border-gray-300" />
+                        <Input type="number" {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -101,11 +103,11 @@ export function CustomerBasicDetails({
                       <FormControl>
                         <Input {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="emailCC"
                   render={({ field }) => (
@@ -117,7 +119,7 @@ export function CustomerBasicDetails({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <FormField
                   control={form.control}
                   name="customerReference"
@@ -127,7 +129,7 @@ export function CustomerBasicDetails({
                       <FormControl>
                         <Input {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -138,7 +140,7 @@ export function CustomerBasicDetails({
           <div>
             <Card className="bg-white border-none rounded-2xl shadow-none h-fit">
               <CardHeader>
-                <CardTitle>Tax & customs</CardTitle>
+                <CardTitle className="text-xl font-medium">Tax & customs</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 gap-6">
@@ -151,20 +153,20 @@ export function CustomerBasicDetails({
                         <FormControl>
                           <Input {...field} className="border-gray-300" />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs text-red-500" />
                       </FormItem>
                     )}
                   />
                   <FormField
                     control={form.control}
-                    name="abn"
+                    name="airn"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>EORI</FormLabel>
+                        <FormLabel>AIRN</FormLabel>
                         <FormControl>
                           <Input {...field} className="border-gray-300" />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-xs text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -174,10 +176,10 @@ export function CustomerBasicDetails({
           </div>
         </div>
         <div className="flex justify-end gap-4 w-full mt-9">
-          <Button type="button" variant="outline" className="rounded-lg" size="lg">
+          <Button type="button" variant="outline" className="rounded-lg" onClick={() => setActiveTab("overview")}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting} className="rounded-lg bg-[#024AFE] hover:bg-[#1b02fe]" size="lg">
+          <Button variant="primary" type="submit" disabled={isSubmitting} className="rounded-lg">
             {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
