@@ -6,7 +6,7 @@ export const addUserSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),
   confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
   name: z.string().min(1, "Name is required"),
-  role: z.enum(["ADMIN", "USER"]),
+  role: z.enum(["ADMIN", "USER", "SELLER"]),
   designatedPicker: z.boolean(),
   accountOwner: z.boolean(),
   notifyMe: z.boolean(),
@@ -21,7 +21,7 @@ export const addUserSchema = z.object({
 
 export const editUserSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  // role: z.enum(["ADMIN", "USER"]),
+  // role: z.enum(["ADMIN", "USER", "SELLER"]),
   designatedPicker: z.boolean(),
   accountOwner: z.boolean(),
   notifyMe: z.boolean(),

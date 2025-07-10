@@ -21,7 +21,7 @@ export const ProtectedRoute = ({
       // Redirect to appropriate dashboard based on role
       if (user.role === "ADMIN") {
         return <Navigate to="/admin/dashboard" replace />
-      } else if (user.role === "USER") {
+      } else if (user.role === "SELLER") {
         return <Navigate to="/seller/products" replace />
       }
       return <Navigate to="/unauthorized" replace />

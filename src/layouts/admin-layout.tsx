@@ -52,6 +52,7 @@ export default function AdminLayout() {
         { title: "CSV", href: "/admin/products/csv" },
       ],
     },
+    { title: "Sellers", href: "/admin/sellers", icon: Users },
     {
       title: "Settings",
       key: "settings",

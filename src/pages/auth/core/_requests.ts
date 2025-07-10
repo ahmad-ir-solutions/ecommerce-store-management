@@ -16,7 +16,7 @@ export function login(body: LoginFormData) {
 export function register(body: RegisterFormData) {
   const registerData = {
     ...body,
-    role: UserRole.USER, 
+    role: UserRole.SELLER, 
   };
   return authApi.post<IRegisterResponse>(REGISTER_URL, registerData);
 }

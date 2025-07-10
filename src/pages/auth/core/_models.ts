@@ -25,7 +25,7 @@ export interface IUserResponse {
   _id: string;
   email: string;
   name: string;
-  role: "ADMIN" | "USER";
+  role: "ADMIN" | "USER" | "SELLER";
   createdAt: string;
   updatedAt: string;
 }
@@ -38,7 +38,8 @@ export interface IUserModel extends IUserResponse {
 // Possible user roles - matching API exactly
 export enum UserRole {
   ADMIN = "ADMIN",
-  USER = "USER"
+  USER = "USER",
+  SELLER = "SELLER"
 }
 
 //---------------- login types

@@ -30,7 +30,7 @@ export function AddUser() {
       password: "",
       confirmPassword: "",
       name: "",
-      role: "USER",
+      role: "SELLER",
       designatedPicker: false,
       accountOwner: false,
       notifyMe: true,
@@ -44,7 +44,7 @@ export function AddUser() {
         email: data.email,
         password: data.password,
         name: data.name,
-        role: "ADMIN",
+        role: "SELLER",
         designatedPicker: data.designatedPicker,
         accountOwner: data.accountOwner,
       }),
@@ -174,6 +174,8 @@ export function AddUser() {
                               options={[
                                 { id: "1", label: "Admin", value: "ADMIN" },
                                 { id: "2", label: "User", value: "USER" },
+                                { id: "3", label: "Seller", value: "SELLER" },
+
                               ]}
                               defaultValue={field.value}
                               onChange={field.onChange}

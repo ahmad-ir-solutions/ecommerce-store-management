@@ -158,8 +158,8 @@ export function AddOrderPage() {
     const navigate = useNavigate()
     // console.log(sellersData.data, "sellersData");
 
-    // Filter sellers to only show users with role "USER"
-    const sellers = sellersData?.data?.filter((user: IUserModel) => user.role === "USER") || []
+    // Filter sellers to only show users with role "SELLER"
+    const sellers = sellersData?.data?.filter((user: IUserModel) => user.role === "SELLER") || []
     console.log(productsData, "products")
 
     const form = useForm<OrderFormData>({

@@ -31,7 +31,7 @@ const PaymentSettingsPage = lazy(() => import("@/pages/seller/settings/pages/pay
 export const sellerRoutes = {
   path: "/seller",
   element: (
-    <ProtectedRoute allowedRoles={["USER"]}>
+    <ProtectedRoute allowedRoles={["SELLER"]}>
       <MainLayout />
     </ProtectedRoute>
   ),

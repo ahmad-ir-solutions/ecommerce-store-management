@@ -138,11 +138,11 @@ export const columns: ColumnDef<ICustomer>[] = [
         header: "Tags",
         cell: ({ row }) => (
             row.original.tags && row.original.tags.length > 0 ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 max-w-[150px] whitespace-wrap overflow-auto scrollbar-hide">
                     {row.original.tags.map((tag, index) => (
                         <span
                             key={index}
-                            className="px-2 py-1 bg-gray-200 rounded-full text-xs text-gray-700 truncate"
+                            className="px-2 py-1 bg-gray-200 rounded-full text-xs text-gray-700"
                         >
                             {tag}
                         </span>
@@ -158,8 +158,8 @@ export const columns: ColumnDef<ICustomer>[] = [
         header: "Notes",
         cell: ({ row }) => {
             return (
-                <div className="flex items-center gap-2">
-                    <span>{row.original.notes || "-"}</span>
+                <div className="flex items-center gap-2 max-w-[150px]">
+                    <span className="truncate">{row.original.notes || "-"}</span>
                 </div>
             )
         },

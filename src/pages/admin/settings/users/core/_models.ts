@@ -14,6 +14,7 @@ export interface IAuthResponse {
 export enum UserRole {
   ADMIN = "ADMIN",
   USER = "USER",
+  SELLER = "SELLER",
 }
 
 export interface IUserModel {
