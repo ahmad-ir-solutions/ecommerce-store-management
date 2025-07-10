@@ -15,9 +15,9 @@ export function useGetTopSellingProducts(limit?: number) {
 }
 
 // Hook to fetch order stats
-export function useGetOrderStats() {
+export function useGetOrderStats(sellerId?: string) {
     return useQuery({
         queryKey: DASHBOARD_KEYS.orderStats,
-        queryFn: getOrderStats,
+        queryFn: () => getOrderStats(sellerId || ""),
     });
 } 

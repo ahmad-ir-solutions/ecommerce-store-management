@@ -89,9 +89,9 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
               <p className="text-sm text-gray-500">Date: {new Date().toLocaleDateString()}</p>
             </div>
             <div className="text-right">
-              <h3 className="font-bold">{order.customerDetails.billingAddress.company}</h3>
+              <h3 className="font-bold">{order?.customerDetails?.billingAddress?.company}</h3>
               <p className="text-sm">123 </p>
-              <p className="text-sm">{`${order.shippingAddress?.city}, ${order.shippingAddress?.country}, ${order.shippingAddress?.postalCode}`}</p>
+              <p className="text-sm">{`${order?.shippingAddress?.city}, ${order?.shippingAddress?.country}, ${order?.shippingAddress?.postalCode}`}</p>
               <p className="text-sm">VAT: GB123456789</p>
             </div>
           </div>
@@ -99,24 +99,24 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div>
               <h4 className="font-semibold mb-2">Bill To:</h4>
-              <p>{`${order.customerDetails.billingAddress.firstName} ${order.customerDetails.billingAddress.lastName}`}</p>
-              {order.customerDetails.billingAddress.company && <p>{order.customerDetails.billingAddress.company}</p>}
-              <p>{order.customerDetails.billingAddress.addressLine1}</p>
-              {order.customerDetails.billingAddress.addressLine2 && <p>{order.customerDetails.billingAddress.addressLine2}</p>}
+              <p>{`${order?.customerDetails?.billingAddress?.firstName} ${order?.customerDetails?.billingAddress?.lastName}`}</p>
+              {order?.customerDetails?.billingAddress?.company && <p>{order?.customerDetails?.billingAddress?.company}</p>}
+              <p>{order?.customerDetails?.billingAddress?.addressLine1}</p>
+              {order?.customerDetails?.billingAddress?.addressLine2 && <p>{order?.customerDetails?.billingAddress?.addressLine2}</p>}
               <p>
-                {order.customerDetails.billingAddress.city}, {order.customerDetails.billingAddress.country}
+                {order?.customerDetails?.billingAddress?.city}, {order?.customerDetails?.billingAddress?.country}
               </p>
-              <p>{order.customerDetails.billingAddress.postalCode}</p>
-              <p>{order.customerDetails.billingAddress.country}</p>
+              <p>{order?.customerDetails?.billingAddress?.postalCode}</p>
+              <p>{order?.customerDetails?.billingAddress?.country}</p>
             </div>
             <div>
               <h4 className="font-semibold mb-2">Ship To:</h4>
-              <p>{`${order.customerDetails.shippingAddress?.firstName || "-"} ${order.customerDetails.shippingAddress?.lastName || "-"}`}</p>
-              {order.customerDetails.shippingAddress?.company && <p>{order.customerDetails.shippingAddress?.company}</p>}
-              <p>{order.customerDetails.shippingAddress?.addressLine1}</p>
-              {order.customerDetails.shippingAddress?.addressLine2 && <p>{order.customerDetails.shippingAddress?.addressLine2}</p>}
-              <p>{order.customerDetails.shippingAddress?.postalCode}</p>
-              <p>{order.customerDetails.shippingAddress?.country}</p>
+              <p>{`${order?.customerDetails?.shippingAddress?.firstName || "-"} ${order?.customerDetails?.shippingAddress?.lastName || "-"}`}</p>
+              {order?.customerDetails?.shippingAddress?.company && <p>{order?.customerDetails?.shippingAddress?.company}</p>}
+              <p>{order?.customerDetails?.shippingAddress?.addressLine1}</p>
+              {order?.customerDetails?.shippingAddress?.addressLine2 && <p>{order?.customerDetails?.shippingAddress?.addressLine2}</p>}
+              <p>{order?.customerDetails?.shippingAddress?.postalCode}</p>
+              <p>{order?.customerDetails?.shippingAddress?.country}</p>
             </div>
           </div>
 
@@ -132,10 +132,10 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
             <tbody>
               {/* {order.map((item, index) => ( */}
               <tr className="border-b">
-                <td className="py-2">{order.productDetails.productName}</td>
-                <td className="text-right py-2">{order.quantity}</td>
-                <td className="text-right py-2">£{order.unitSubtotal}</td>
-                <td className="text-right py-2">£{(order.unitSubtotal * order.quantity).toFixed(2)}</td>
+                <td className="py-2">{order?.productDetails?.productName}</td>
+                <td className="text-right py-2">{order?.quantity}</td>
+                <td className="text-right py-2">£{order?.unitSubtotal}</td>
+                <td className="text-right py-2">£{(order?.unitSubtotal * order?.quantity).toFixed(2)}</td>
               </tr>
               {/* ))} */}
             </tbody>
@@ -145,7 +145,7 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
             <div className="w-64">
               <div className="flex justify-between py-1">
                 <span>Subtotal:</span>
-                <span>£{order.unitSubtotal.toFixed(2)}</span>
+                <span>£{order?.unitSubtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between py-1">
                 <span>Shipping:</span>
@@ -155,15 +155,15 @@ export function InvoiceModal({ isOpen, onClose, orderId }: InvoiceModalProps) {
                 <span>Tax:</span>
                 <span>£{order.taxTotal || "-"}</span>
               </div>
-              {order.discount > 0 && (
+              {order?.discount > 0 && (
                 <div className="flex justify-between py-1">
                   <span>Discount:</span>
-                  <span>-£{order.discount}</span>
+                  <span>-£{order?.discount}</span>
                 </div>
               )}
               <div className="flex justify-between py-1 font-bold border-t mt-2 pt-2">
                 <span>Total:</span>
-                <span>£{order.totalPrice}</span>
+                <span>£{order?.totalPrice}</span>
               </div>
             </div>
           </div>

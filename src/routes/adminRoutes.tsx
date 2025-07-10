@@ -36,6 +36,10 @@ const EditWarehouseDetails = lazy(() => import('@/pages/admin/settings/warehouse
 const AddWarehouse = lazy(() => import('@/pages/admin/settings/warehouse/pages/add-warehouse').then(module => ({ default: module.AddWarehouse })));
 const EditCourierDetails = lazy(() => import("@/pages/admin/settings/integrations/pages/edit-courier-details").then(module => ({ default: module.EditCourierDetails })));
 const EditPaymentGatewaysDetail = lazy(() => import("@/pages/admin/settings/integrations/pages/edit-payment-gateways-details").then(module => ({ default: module.EditPaymentGatewaysDetail })));
+const AdminSellersPage = lazy(() => import("@/pages/admin/sellers").then(module => ({ default: module.AdminSellersPage })));
+const AddSellerPage = lazy(() => import("@/pages/admin/sellers/pages/add-seller").then(module => ({ default: module.AddSellerPage })));
+const SellerDetails = lazy(() => import("@/pages/admin/sellers/pages/seller-details").then(module => ({ default: module.SellerDetails })));
+// const EditSellerPage = lazy(() => import("@/pages/admin/sellers/pages/edit-seller").then(module => ({ default: module.EditSellerPage })));
 
 export const adminRoutes = {
   path: "/admin",
@@ -98,6 +102,21 @@ export const adminRoutes = {
         { path: "supplier-details/:supplierId", element: <WithSuspense><SupplierDetailsPage /></WithSuspense> },
       ]
     },
+    {
+      path: "sellers",
+      children: [
+        { index: true, element: <Navigate to="/admin/sellers/existing-sellers" replace /> },
+        { path: "existing-sellers", element: <WithSuspense><AdminSellersPage /></WithSuspense> },
+        { path: "seller-details/:sellerId", element: <WithSuspense><SellerDetails /></WithSuspense> },
+        { path: "add-seller", element: <WithSuspense><AddSellerPage /></WithSuspense> },
+      ]
+    },
+    // // Sellers route
+    // { path: "sellers", element: <WithSuspense><AdminSellersPage /></WithSuspense> },
+    // // Dynamic seller route
+    // { path: "seller-details/:sellerId", element: <WithSuspense><SellerDetails /></WithSuspense> },
+    // { path: "add-seller", element: <WithSuspense><AddSellerPage /></WithSuspense> },
+    // { path: "sellers/edit-seller/:sellerId", element: <WithSuspense><EditSellerPage /></WithSuspense> },
 
     // settings routes
     {

@@ -18,6 +18,11 @@ export function getConnectedAccounts() {
   return authApi.get("/account-connection/woocommerce-accounts");
 }
 
+// GET: Get Connected Accounts of single seller
+export function getConnectedAccountsBySellerId(sellerId: string) {
+  return authApi.get(`/account-connection/woocommerce-accounts/${sellerId}`);
+}
+
 // GET: Get connected Account
 export function getConnectedAccount(id: string) {
   return authApi.get(`/account-connection/woocommerce-account/${id}`);
@@ -42,5 +47,5 @@ export function getWoocommerceConnectUrl(params: WoocommerceURLParams) {
 }
 
 export function deleteAccountConnection(accountConnectionId: string) {
-  return authApi.delete(`/account-connection/delete-connection/${accountConnectionId}`);
+  return authApi.delete(`/account-connection/${accountConnectionId}`);
 }

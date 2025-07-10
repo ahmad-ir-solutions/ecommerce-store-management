@@ -13,6 +13,6 @@ export function getTopSellingProducts(limit?: number) {
 }
 
 // Get order stats
-export function getOrderStats() {
-    return authApi.get<IOrderStat[]>(`${ORDERS_URL}/get-orders-stats`);
+export function getOrderStats(sellerId?: string) {
+    return authApi.get<IOrderStat[]>(`${ORDERS_URL}/get-orders-stats`, { params: { sellerId } });
 } 

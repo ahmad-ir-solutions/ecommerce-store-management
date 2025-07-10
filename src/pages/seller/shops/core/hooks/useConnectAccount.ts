@@ -5,8 +5,9 @@ import type { AxiosError } from "axios";
 import {
   createAccountConnection,
   generateWoocommerceUrl,
-  getConnectedAccount,
   getConnectedAccounts,
+  getConnectedAccountsBySellerId,
+  getConnectedAccount,
   updateAccountConnection,
   deleteAccountConnection,
 } from "../_request";
@@ -60,6 +61,19 @@ export const useGetConnectedAccounts = () => {
   return useQuery({
     queryKey: woocommerceKeys.connectedAccounts(),
     queryFn: getConnectedAccounts,
+    select: (res) => res.data,
+    refetchOnMount: true,
+    // refetchOnWindowFocus: false, // optional: disable on tab focus
+    // refetchOnReconnect: true,
+    staleTime: 0,
+  });
+};
+
+// Get all Connected Accounts of single seller
+export const useGetConnectedAccountsBySellerId = (sellerId: string) => {
+  return useQuery({
+    queryKey: woocommerceKeys.connectedAccounts(),
+    queryFn: () => getConnectedAccountsBySellerId(sellerId),
     select: (res) => res.data,
     refetchOnMount: true,
     // refetchOnWindowFocus: false, // optional: disable on tab focus

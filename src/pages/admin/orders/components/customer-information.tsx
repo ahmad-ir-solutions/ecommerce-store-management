@@ -45,6 +45,8 @@ export function CustomerInformation({
         refetch()
       }
   }
+    // if (!order?.customerDetails) return <div className="text-sm text-gray-500 flex justify-center items-center h-1/2">No customer details found</div>
+
   // const name = `${order?.billingAddress.firstName} ${order?.billingAddress.firstName}`
   return (
     <div className="bg-white rounded-2xl overflow-hidden mb-4">
@@ -53,16 +55,16 @@ export function CustomerInformation({
         <div className="bg-[#ECF6FF] rounded-xl p-4">
           <div className="grid grid-cols-2 gap-y-1 mb-6">
             <div className="text-sm text-gray-500 p-2 pl-4">Customer</div>
-            <div className="text-sm p-2"> {`${order.customerDetails.firstName} ${order.customerDetails.lastName}`}</div>
+            <div className="text-sm p-2"> {`${order?.customerDetails?.firstName} ${order?.customerDetails?.lastName}`}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Phone</div>
-            <div className="text-sm p-2">{order.customerDetails.billingAddress.phone}</div>
+            <div className="text-sm p-2">{order?.customerDetails?.billingAddress?.phone}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Email</div>
-            <div className="text-sm p-2">{order.customerDetails.email}</div>
+            <div className="text-sm p-2">{order?.customerDetails?.email}</div>
 
             <div className="text-sm text-gray-500 p-2 pl-4">Email CC (comma-separated)</div>
-            <div className="text-sm p-2">{order.customerDetails.emailCC || "-"}</div>
+            <div className="text-sm p-2">{order?.customerDetails?.emailCC || "-"}</div>
           </div>
 
           <div className="grid xl:grid-cols-2 gap-24">
@@ -84,28 +86,28 @@ export function CustomerInformation({
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="text-sm text-gray-500 p-2 pl-4">Name</div>
-                <div className="text-sm p-2 whitespace-nowrap">{`${order.customerDetails.billingAddress.firstName} ${order.customerDetails.billingAddress.lastName}`}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{`${order?.customerDetails?.billingAddress?.firstName} ${order?.customerDetails?.billingAddress?.lastName}`}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Company</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.company || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.company || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Address 1</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.addressLine1}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.addressLine1}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Address 2</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.addressLine2 || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.addressLine2 || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">City</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.city}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.city}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Postcode</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.postalCode}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.postalCode}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Country</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.country}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.country}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4">Phone</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.billingAddress.phone}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.billingAddress?.phone}</div>
               </div>
             </div>
 
@@ -127,28 +129,28 @@ export function CustomerInformation({
                 <div className="border-b h-[2px] w-full border-gray-300"></div>
                 <div className="border-b h-[2px] w-full border-gray-300 xl:hidden"></div>
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Name</div>
-                <div className="text-sm p-2 whitespace-nowrap">{`${order?.customerDetails.shippingAddress?.firstName} ${order?.customerDetails.shippingAddress?.lastName}`}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{`${order?.customerDetails?.shippingAddress?.firstName} ${order?.customerDetails?.shippingAddress?.lastName}`}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Company</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.company || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.company || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Address 1</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.addressLine1}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.addressLine1}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Address 2</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.addressLine2 || "-"}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.addressLine2 || "-"}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">City</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.city}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.city}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Postcode</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.postalCode}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.postalCode}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Country</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.country}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.country}</div>
 
                 <div className="text-sm text-gray-500 p-2 pl-4 xl:hidden">Phone</div>
-                <div className="text-sm p-2 whitespace-nowrap">{order.customerDetails.shippingAddress?.phone}</div>
+                <div className="text-sm p-2 whitespace-nowrap">{order?.customerDetails?.shippingAddress?.phone}</div>
               </div>
             </div>
           </div>
@@ -159,7 +161,7 @@ export function CustomerInformation({
               isOpen={isEditingBillingAddress}
               onClose={() => setIsEditingBillingAddress(false)}
               addressType="billing"
-              initialData={order.customerDetails.billingAddress ?? {}}
+              initialData={order?.customerDetails?.billingAddress ?? {}}
               onSave={(data) => handleSaveAddress("billing", data)}
               isSubmitting={isUpdatingCustomer}
             />
@@ -170,7 +172,7 @@ export function CustomerInformation({
               isOpen={isEditingShippingAddress}
               onClose={() => setIsEditingShippingAddress(false)}
               addressType="shipping"
-              initialData={order.customerDetails.shippingAddress ?? {}}
+              initialData={order?.customerDetails?.shippingAddress ?? {}}
               onSave={(data) => handleSaveAddress("shipping", data)}
               isSubmitting={isUpdatingCustomer}
             />
