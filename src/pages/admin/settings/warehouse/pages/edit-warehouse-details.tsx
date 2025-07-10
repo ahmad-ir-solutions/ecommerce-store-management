@@ -28,7 +28,7 @@ import { useGetCountriesList } from "../../../common-api/countries/core/_hooks"
 
 export function EditWarehouseDetails() {
   const { warehouseId } = useParams<{ warehouseId: string }>()
-    const navigate = useNavigate()
+  const navigate = useNavigate()
   const { data: countriesList } = useGetCountriesList()
 
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false)
@@ -159,23 +159,24 @@ export function EditWarehouseDetails() {
       </Header>
       <div className="mt-6">
         <div>
-          <Tabs defaultValue="warehouse-information">
-            <TabsList className="mb-4 space-x-4">
-              <TabsTrigger
-                value="warehouse-information"
-                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-base font-normal"
-              >
-                Warehouse Information
-              </TabsTrigger>
-              <TabsTrigger
-                value="warehouse-zone"
-                className="data-[state=active]:bg-[#024AFE] bg-white data-[state=active]:text-white p-6 rounded-2xl text-base font-normal"
-              >
-                Warehouse Zone
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="warehouse-information">
+          <Tabs defaultValue="warehouse-information" className="w-full">
+            <div className="rounded-xl bg-white px-4 py-2 shadow-none">
+              <TabsList className="justify-start rounded-none">
+                <TabsTrigger
+                  value="warehouse-information"
+                  className="py-6 px-4 text-base rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] data-[state=active]:shadow-none"
+                >
+                  Warehouse Information
+                </TabsTrigger>
+                <TabsTrigger
+                  value="warehouse-zone"
+                  className="py-6 px-4 text-base rounded-none data-[state=active]:border-b-2 data-[state=active]:border-b-[#024AFE] data-[state=active]:text-[#024AFE] data-[state=active]:shadow-none"
+                >
+                  Warehouse Zones
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="warehouse-information" className="mt-2">
               <Card className="border-none bg-white shadow-none px-0 rounded-2xl">
                 <CardContent className="">
                   <h2 className="text-lg font-medium mb-6">Warehouse Information</h2>
@@ -490,7 +491,7 @@ export function EditWarehouseDetails() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="warehouse-zone">
+            <TabsContent value="warehouse-zone" className="mt-2">
               <Card className="bg-white rounded-2xl border-none shadow-none">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-lg font-medium">Warehouse Zones</CardTitle>
@@ -515,32 +516,32 @@ export function EditWarehouseDetails() {
                       {/* Display warehouse zones when available */}
                       {warehouseZonesList && warehouseZonesList.length > 0
                         ? warehouseZonesList.map((zone, index) => (
-                            <TableRow key={index} className="border-gray-200 border-b">
-                              <TableHead className="p-3">
-                                <Checkbox className="border-gray-400 mx-5" />
-                              </TableHead>
-                              <TableHead className="p-3">{zone.warehouseZoneName}</TableHead>
-                              <TableHead className="p-3">{zone.warehouseName}</TableHead>
-                              <TableHead className="p-3">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-[#024AFE] hover:text-blue-700 pl-1"
-                                  onClick={() => handleUpdateZone(zone)}
-                                >
-                                  <Pencil className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-red-500 hover:text-red-700 p-1"
-                                  onClick={() => handleDeleteZone(zone.id)}
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </TableHead>
-                            </TableRow>
-                          ))
+                          <TableRow key={index} className="border-gray-200 border-b">
+                            <TableHead className="p-3">
+                              <Checkbox className="border-gray-400 mx-5" />
+                            </TableHead>
+                            <TableHead className="p-3">{zone.warehouseZoneName}</TableHead>
+                            <TableHead className="p-3">{zone.warehouseName}</TableHead>
+                            <TableHead className="p-3">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-[#024AFE] hover:text-blue-700 pl-1"
+                                onClick={() => handleUpdateZone(zone)}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-500 hover:text-red-700 p-1"
+                                onClick={() => handleDeleteZone(zone.id)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </TableHead>
+                          </TableRow>
+                        ))
                         : null}
                     </TableBody>
                   </Table>

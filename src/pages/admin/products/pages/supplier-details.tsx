@@ -91,7 +91,7 @@ export const SupplierDetailsPage = () => {
           {/* Order Information */}
           <Card className="bg-white border-0 shadow-xs rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-[#11263C] text-lg font-medium">Order Information</CardTitle>
+              <CardTitle className="text-[#11263C] text-lg font-medium">Supplier Information</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-5">
               <div className="space-y-4">

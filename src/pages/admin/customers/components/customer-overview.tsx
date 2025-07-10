@@ -94,8 +94,8 @@ export function CustomerOverview({
               size="sm"
               variant="ghost"
               onClick={() => {
-                // Navigate to addresses tab and focus on shipping form
-                setActiveTab("addresses")
+                // Navigate to basic-details tab and focus on shipping form
+                setActiveTab("basic-details")
                 setAddressFormFocus("shipping")
               }}
             >
