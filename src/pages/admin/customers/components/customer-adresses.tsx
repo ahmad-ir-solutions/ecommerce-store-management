@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import type { ICustomer } from "../core/_modals"
 import { useState } from "react"
 import { AddressFormValues, addressSchema } from '../core/_schema'
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 export function CustomerAddresses({
   customer,
@@ -142,7 +143,7 @@ export function CustomerAddresses({
                       <FormControl>
                         <Input {...field} className="border-gray-300" />
                       </FormControl>
-                      <FormMessage className="text-xs text-red-500"   />
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -168,9 +169,13 @@ export function CustomerAddresses({
                     <FormItem>
                       <FormLabel>Phone *</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} className="border-gray-300" placeholder="Enter phone number" />
+                        <PhoneInput
+                          placeholder="Phone"
+                          className="border-[#BBC2CB]"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormMessage className="text-xs text-red-500"/>
+                      <FormMessage className="text-xs text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -227,7 +232,7 @@ export function CustomerAddresses({
                         <FormControl>
                           <Input {...field} className="border-gray-300" />
                         </FormControl>
-                        <FormMessage className="text-xs text-red-500"   />
+                        <FormMessage className="text-xs text-red-500" />
                       </FormItem>
                     )}
                   />
@@ -332,7 +337,11 @@ export function CustomerAddresses({
                     <FormItem>
                       <FormLabel>Phone *</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} className="border-gray-300" placeholder="Enter phone number" />
+                        <PhoneInput
+                          placeholder="Phone"
+                          className="border-[#BBC2CB]"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage className="text-xs text-red-500" />
                     </FormItem>

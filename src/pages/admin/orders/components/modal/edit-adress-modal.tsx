@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { AddressFormValues } from "../../core/_modals"
 import { addressSchema } from "../../core/_schema"
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 interface EditAddressModalProps {
   isOpen: boolean
@@ -119,7 +120,12 @@ export function EditAddressModal({
               <Label htmlFor="phone" className="text-right text-gray-500">
                 Phone
               </Label>
-              <Input id="phone" {...register("phone")} className="col-span-3" disabled={isSubmitting} />
+              <PhoneInput
+                placeholder="Phone"
+                className="col-span-3"
+                disabled={isSubmitting}
+                {...register("phone")}
+              />
               {errors.phone && <p className="col-span-3 col-start-2 text-sm text-red-500">{errors.phone.message}</p>}
             </div>
           </div>

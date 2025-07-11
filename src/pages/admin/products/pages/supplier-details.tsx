@@ -19,6 +19,7 @@ import {
 import { SupplierFormValues, supplierSchema } from '../core/_schema'
 import { useGetCountriesList } from "../../common-api/countries/core/_hooks"
 import { CardFooter } from "@/components/ui/card"
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 export const SupplierDetailsPage = () => {
   // Support both /:id and /:supplierId route params for flexibility
@@ -297,7 +298,12 @@ export const SupplierDetailsPage = () => {
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">
                   <Label htmlFor="phone">Phone</Label>
-                  <Input placeholder="Phone" type="number" className="border-[#BBC2CB] max-w-52" id="phone" {...form.register("phone")} />
+                  <PhoneInput
+                    placeholder="Phone"
+                    className="border-[#BBC2CB] max-w-52"
+                    {...form.register("phone")}
+                  />
+
                 </div>
 
                 <div className="grid grid-cols-[1fr_1fr] items-center gap-4">

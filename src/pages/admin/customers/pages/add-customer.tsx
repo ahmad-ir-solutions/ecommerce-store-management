@@ -13,6 +13,7 @@ import { useCreateCustomer } from "../core/hooks/useCustomer"
 import { useGetCountriesList } from "../../common-api/countries/core/_hooks"
 import { CreateCustomerFormValues, createCustomerSchema } from "../core/_schema"
 import { useNavigate } from "react-router-dom"
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 export function AddCustomerPage() {
     const { data: channelsData } = useGetAllChannels();
@@ -224,11 +225,10 @@ export function AddCustomerPage() {
                                                                     Phone Number <span className="text-red-500">*</span>
                                                                 </FormLabel>
                                                                 <FormControl className="flex-1">
-                                                                    <Input
-                                                                        type="number"
-                                                                        {...field}
-                                                                        placeholder="Enter phone number"
+                                                                    <PhoneInput
+                                                                        placeholder="Phone"
                                                                         className="bg-white border-gray-300 rounded-lg"
+                                                                        {...field}
                                                                     />
                                                                 </FormControl>
                                                             </FormItem>
@@ -553,11 +553,10 @@ export function AddCustomerPage() {
                                                                 <FormItem className="flex flex-col sm:flex-row sm:items-center gap-4">
                                                                     <FormLabel className="text-sm font-medium text-[#4E5967] sm:w-32">Phone</FormLabel>
                                                                     <FormControl className="flex-1">
-                                                                        <Input
-                                                                            type="number"
-                                                                            {...field}
-                                                                            placeholder="Phone number"
+                                                                        <PhoneInput
+                                                                            placeholder="Phone"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            {...field}
                                                                         />
                                                                     </FormControl>
                                                                 </FormItem>
@@ -785,11 +784,10 @@ export function AddCustomerPage() {
                                                                 <FormItem className="flex flex-col sm:flex-row sm:items-center gap-4">
                                                                     <FormLabel className="text-sm font-medium text-[#4E5967] sm:w-32">Phone</FormLabel>
                                                                     <FormControl className="flex-1">
-                                                                        <Input
-                                                                            type="number"
-                                                                            {...field}
-                                                                            placeholder="Phone number"
+                                                                        <PhoneInput
+                                                                            placeholder="Phone"
                                                                             className="bg-white border-gray-300 rounded-lg"
+                                                                            {...field}
                                                                         />
                                                                     </FormControl>
                                                                 </FormItem>

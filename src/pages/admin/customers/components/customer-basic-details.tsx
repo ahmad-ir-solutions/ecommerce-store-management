@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import type { ICustomer } from "../core/_modals"
 import { useState } from "react"
 import { BasicDetailsFormValues, basicDetailsSchema } from '../core/_schema'
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 export function CustomerBasicDetails({
   customer,
@@ -88,7 +89,11 @@ export function CustomerBasicDetails({
                     <FormItem>
                       <FormLabel>Phone</FormLabel>
                       <FormControl>
-                        <Input type="number" {...field} className="border-gray-300" />
+                        <PhoneInput
+                          placeholder="Phone"
+                          className="border-[#BBC2CB]"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage className="text-xs text-red-500" />
                     </FormItem>

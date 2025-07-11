@@ -29,6 +29,7 @@ import { useGetAllUsers } from "../../settings/users/core/hooks/use-user"
 import type { IUserModel } from "../../settings/users/core/_models"
 import { useGetAllChannels } from "../../common-api/channels/core/_hooks"
 import { useGetCustomer } from "../../customers/core/hooks/useCustomer"
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 // Zod Schema
 const orderSchema = z.object({
@@ -140,8 +141,8 @@ export function AddOrderPage() {
     const customerId = location.state?.customerId ?? null;
     // const [selectedProducts, setSelectedProducts] = useState<string[]>([])
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
-    const { data: customerData,refetch, isLoading: isCustomerLoading } = useGetCustomer(customerId ?? "");
-    
+    const { data: customerData, refetch, isLoading: isCustomerLoading } = useGetCustomer(customerId ?? "");
+
     const {
         data: productsData,
         isLoading: productsLoading,
@@ -327,8 +328,8 @@ export function AddOrderPage() {
             createOrderMutation({ ...data, quantity: 1 })
             form.reset()
             navigate("/admin/orders")
-            if(customerId){
-               refetch()
+            if (customerId) {
+                refetch()
             }
         } catch (error) {
             console.log(error, "error")
@@ -351,7 +352,7 @@ export function AddOrderPage() {
         })
     }
 
-    if(isCustomerLoading){
+    if (isCustomerLoading) {
         return (
             <div className="flex justify-center items-center h-screen">
                 <Loader2 className="w-10 h-10 animate-spin text-[#11263C]" />
@@ -372,7 +373,7 @@ export function AddOrderPage() {
                             {/* Left Column - Order Information */}
                             <div className="space-y-6 bg-white rounded-2xl p-6">
                                 <div className="flex items-center gap-2">
-                                <h2 className="text-lg text-[#11263C] font-semibold">Order Information</h2>
+                                    <h2 className="text-lg text-[#11263C] font-semibold">Order Information</h2>
                                     {/* <span className="text-sm text-muted-foreground">eBay</span> */}
                                 </div>
                                 <Card className="bg-[#ECF6FF] border-none rounded-2xl shadow-none">
@@ -784,11 +785,11 @@ export function AddOrderPage() {
                                                 <FormItem className="flex flex-col sm:flex-row sm:items-center gap-2">
                                                     <FormLabel className="sm:w-32 md:w-40 text-sm">Phone</FormLabel>
                                                     <FormControl className="flex-1">
-                                                        <Input
-                                                            {...field}
-                                                            placeholder="Enter phone number"
+                                                        <PhoneInput
+                                                            placeholder="Phone"
                                                             className="bg-white border-gray-300 rounded-lg"
                                                             disabled={isPrefilled}
+                                                            {...field}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -1018,11 +1019,12 @@ export function AddOrderPage() {
                                                             <FormItem className="flex flex-col lg:flex-row lg:items-center gap-2">
                                                                 <FormLabel className="lg:w-24 xl:w-32 text-sm xl:hidden">Phone</FormLabel>
                                                                 <FormControl className="flex-1">
-                                                                    <Input
-                                                                        {...field}
-                                                                        placeholder="Phone"
-                                                                        className="bg-white border-gray-300 rounded-lg"
-                                                                    />
+                                                                    <PhoneInput
+                placeholder="Phone"
+                className="bg-white border-gray-300 rounded-lg"
+                disabled={isPrefilled}
+                {...field}
+              />
                                                                 </FormControl>
                                                                 <FormMessage />
                                                             </FormItem>
@@ -1036,11 +1038,11 @@ export function AddOrderPage() {
                                                             <FormItem className="flex flex-col lg:flex-row lg:items-center gap-2">
                                                                 <FormLabel className="lg:w-24 xl:w-32 text-sm">Phone</FormLabel>
                                                                 <FormControl className="flex-1">
-                                                                    <Input
-                                                                        {...field}
-                                                                        placeholder="Phone Number"
-                                                                        className="bg-white border-gray-300 rounded-lg"
+                                                                    <PhoneInput
+                                                                        placeholder="Phone"
+                                                                       className="bg-white border-gray-300 rounded-lg"
                                                                         disabled={isPrefilled}
+                                                                        {...field}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1242,11 +1244,11 @@ export function AddOrderPage() {
                                                             <FormItem className="flex flex-col lg:flex-row lg:items-center gap-2">
                                                                 <FormLabel className="lg:w-24 xl:w-32 text-sm xl:hidden">Phone</FormLabel>
                                                                 <FormControl className="flex-1">
-                                                                    <Input
-                                                                        {...field}
-                                                                        placeholder="Phone number"
-                                                                        className="bg-white border-gray-300 rounded-lg"
+                                                                     <PhoneInput
+                                                                        placeholder="Phone"
+                                                                       className="bg-white border-gray-300 rounded-lg"
                                                                         disabled={isPrefilled}
+                                                                        {...field}
                                                                     />
                                                                 </FormControl>
                                                                 <FormMessage />
@@ -1558,7 +1560,7 @@ export function AddOrderPage() {
 
                                 {/* Shipping & Handling */}
                                 <Card className="bg-white border-none rounded-2xl shadow-none">
-                                    <CardHeader>    
+                                    <CardHeader>
                                         <CardTitle className="text-lg text-[#11263C] font-semibold">Shipping & Handling</CardTitle>
                                     </CardHeader>
                                     <CardContent className="space-y-4">

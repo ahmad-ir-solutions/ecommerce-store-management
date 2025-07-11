@@ -16,6 +16,7 @@ import { companySchema } from "../core/_schema"
 import type { Company } from "../core/_modal"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { useCreateCompany } from "../core/hooks/useCompany"
+import { PhoneInput } from "@/components/shared/custom-phone-input"
 
 export const AddCompany = () => {
   const navigate = useNavigate()
@@ -277,10 +278,10 @@ export const AddCompany = () => {
                           <FormLabel className="text-xs text-[#4E5967]">Contact Phone Number *</FormLabel>
                           <div className="col-span-2">
                             <FormControl>
-                              <Input
-                                placeholder="Enter phone number"
-                                {...field}
+                              <PhoneInput
+                                placeholder="Phone"
                                 className="bg-white border-gray-300 rounded-lg max-w-52"
+                                {...field}
                               />
                             </FormControl>
                             <FormMessage className="text-red-400" />
