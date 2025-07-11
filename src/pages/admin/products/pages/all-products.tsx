@@ -15,6 +15,7 @@ export function AllProductsPage() {
     sortOrder: "desc",
     limit: 10,
     page: 1,
+    search: "",
   })
 
   const handleAddProductModalOpen = () => {

@@ -67,11 +67,11 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
       enableSorting: false,
       enableHiding: false,
     },
-    // {
-    //   accessorKey: "type",
-    //   header: "Type",
-    //   cell: ({ row }) => <div key={row.id}></div>,
-    // },
+    {
+      accessorKey: "type",
+      header: "Type",
+      cell: ({ row }) => <div key={row.id}></div>,
+    },
     {
       accessorKey: "image",
       header: "Image",
@@ -153,11 +153,14 @@ export function useProductColumns(): ColumnDef<IProductModel>[] {
     {
       accessorKey: "warehouse",
       header: "Warehouse",
-      cell: ({ row }) => (
-        <div>
-          <div className="font-medium">{row.original.warehouse || "-"}</div>
-        </div>
-      ),
+      cell: ({ row }) => {
+        console.log(row.original, "row.original.warehouse");
+        return (
+          <div>
+            <div className="font-medium">{row.original.warehouse?.warehouseName || "-"}</div>
+          </div>
+        )
+      },
     },
     {
       accessorKey: "brand",

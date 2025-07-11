@@ -1,5 +1,4 @@
-import type React from "react"
-
+import React, { useMemo } from "react"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Controller } from "react-hook-form"
@@ -7,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { CustomSelect } from "@/components/shared/custom-select"
 import { ProductFormValues } from '../core/_schema'
+import { useGetWarehouses } from "../../settings/warehouse/core/hooks/useWarehouse"
 
 interface ProductInformationProps {
   currentProduct: ProductFormValues
@@ -27,6 +27,18 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
   uploading,
   uploadedImageUrl
 }) => {
+  const { data: warehouseData} = useGetWarehouses()
+
+  const warehousesList = useMemo(() => {
+    return (
+      warehouseData?.data?.map((warehouse: any) => ({
+        id: warehouse._id,
+        label: warehouse.warehouseName,
+        value: warehouse._id,
+      })) || []
+    )
+  }, [warehouseData])
+
   return (
     <div className="bg-white rounded-xl p-6">
       <h2 className="text-lg font-semibold mb-4">Product Information</h2>
@@ -301,23 +313,21 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                   <Controller
                     name="warehouse"
                     control={control}
-                    render={({ field }) => (
-                      <CustomSelect
-                        defaultValue={field.value}
-                        placeholder="Select warehouse"
-                        options={[
-                          { id: "20", label: "Default Warehouse", value: "Default Warehouse" },
-                          { id: "5", label: "5", value: "5" },
-                          { id: "0", label: "0", value: "0" },
-                        ]}
-                        onChange={field.onChange}
-                        className="border-gray-200 bg-white w-full"
-                      />
-                    )}
+                    render={({ field }) => {
+                      return (
+                        <CustomSelect
+                          defaultValue={(field.value as any)?._id}
+                          placeholder="Select warehouse"
+                          options={warehousesList}
+                          onChange={field.onChange}
+                          className="border-gray-200 bg-white w-full"
+                        />
+                      )
+                    }}
                   />
                 ) : (
                   <div className="bg-white border rounded-lg border-gray-200 p-2 px-3 text-sm h-9">
-                    {currentProduct.warehouse}
+                {(currentProduct?.warehouse as any)?.warehouseName || ""}
                   </div>
                 )}
               </div>
@@ -339,9 +349,9 @@ export const ProductInformation: React.FC<ProductInformationProps> = ({
                         defaultValue={field.value}
                         placeholder="Select brand"
                         options={[
-                          { id: "20", label: "Xerjoff", value: "Xerjoff" },
-                          { id: "5", label: "5", value: "5" },
-                          { id: "0", label: "dfgdfg", value: "dfgdfg" },
+                          { id: "20", label: "Apple", value: "apple" },
+                          { id: "5", label: "Samsung", value: "samsung" },
+                          { id: "0", label: "Nokia", value: "nokia" },
                         ]}
                         onChange={field.onChange}
                         className="border-gray-200 bg-white w-full"

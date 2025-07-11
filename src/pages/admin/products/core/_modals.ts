@@ -43,7 +43,10 @@ export interface IProductModel {
   length: number
   width: number
   height: number
-  warehouse: string
+  warehouse: {
+    _id: string
+    warehouseName: string
+  }
   brand: string
   ean: string
   upc: string

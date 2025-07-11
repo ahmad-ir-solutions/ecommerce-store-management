@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Header } from "@/components/shared/header"
 import { Button } from "@/components/ui/button"
-import { FileCheck, Loader2, Printer, Trash2 } from "lucide-react"
+import { Loader2, Pencil } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import ProductListOverview from "../components/product-list-overview"
+// import ProductListOverview from "../components/product-list-overview"
 import SupplierInformation from "../components/supplier-information"
 import type { IProductModel } from "../core/_modals"
 import { useGetProduct, useUpdateProduct } from '../core/hooks/useProduct'
@@ -51,9 +51,9 @@ export const ProductDetailsPage = () => {
 
   useEffect(() => {
     if (productData) {
-      setCurrentProduct(productData)
-      setOriginalProduct(productData)
-      reset(productData)
+      setCurrentProduct(productData as any)
+      setOriginalProduct(productData as any)
+      reset(productData as any)
     }
   }, [productData, reset])
 
@@ -88,7 +88,7 @@ export const ProductDetailsPage = () => {
           length: data.length,
           width: data.width,
           height: data.height,
-          warehouse: data.warehouse,
+          warehouse: data.warehouse as any,
           brand: data.brand,
           ean: data.ean,
           upc: data.upc,
@@ -124,31 +124,25 @@ export const ProductDetailsPage = () => {
     <div>
       <Header title="Products">
         <div className="flex items-center justify-end h-16 px-6 gap-3">
-          <Button variant="filter" size="lg" className="rounded-lg">
-            <Printer className="h-4 w-4 mr-2" />
+          <Button variant="filter" className="rounded-lg">
             Discontinue Product
           </Button>
-          <Button variant="filter" size="lg" className="rounded-lg">
-            <Printer className="h-4 w-4 mr-2" />
+          <Button variant="filter" className="rounded-lg">
             Archive Products
-          </Button>
-          <Button variant="primary" size="lg" className="bg-[#024AFE] hover:bg-[#0228fe] text-white rounded-lg">
-            <Trash2 className="h-4 w-4" />
           </Button>
           <Button
             variant="primary"
-            size="lg"
             className="bg-[#024AFE] hover:bg-[#0228fe] text-white rounded-lg"
             onClick={handleEditClick}
           >
-            <FileCheck className="h-4 w-4" />
+            <Pencil className="h-4 w-4" />
           </Button>
         </div>
       </Header>
       <div>
         <form onSubmit={handleSubmit(onSubmit as (data: any) => void)}>
           <div className="py-4 space-y-4">
-            <ProductListOverview />
+            {/* <ProductListOverview /> */}
             <ProductInformation
               currentProduct={currentProduct}
               isEditing={isEditing}
